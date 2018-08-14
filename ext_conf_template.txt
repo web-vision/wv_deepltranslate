@@ -1,0 +1,8 @@
+# cat=Settings/O; type=string; label= Deepl API Key
+apiKey =
+# cat=Settings/O; type=string; label= Deepl API Url
+apiUrl = https://api.deepl.com/v1/translate
+
+
+
+

@@ -1,0 +1,74 @@
+/*
+* This file is part of the TYPO3 CMS project.
+*
+* It is free software; you can redistribute it and/or modify it under
+* the terms of the GNU General Public License, either version 2
+* of the License, or any later version.
+*
+* For the full copyright and license information, please read the
+* LICENSE.txt file that was distributed with this source code.
+*
+* The TYPO3 project - inspiring people to share!
+*/
+input.deepl-button {
+display:none !important;
+}
+input.deepl-button + span
+{
+position: relative  !important;
+top: 4px !important;
+background: url(../Icons/actions-localize-deepl.svg) !important;
+background-size: contain !important;
+height: 20px !important;
+width: 26px !important;
+display: inline-block !important;
+padding: 0 0 0px 0px !important;
+margin-top: 0px  !important;
+background-position-y: 2px !important;
+background-repeat: no-repeat !important;
+opacity: 0.5 !important;
+margin-bottom:5px;
+}
+input.deepl-button:checked + span
+{
+position: relative  !important;
+top: 4px !important;
+background: url('../Icons/actions-localize-deepl.svg') !important;
+background-size: contain !important;
+height: 20px !important;
+width: 26px !important;
+display: inline-block !important;
+padding: 0 0 0px 0px !important;
+margin-top: 0px !important;
+background-position-y: 2px !important;
+background-repeat: no-repeat !important;
+opacity:1 !important;
+margin-bottom:5px;
+}
+.deepl-btn-wrap{
+padding:0px;
+}
+
+/**Backend Module**/
+.module-deepl{
+    font-family: 'Open Sans', sans-serif !important;
+}
+body{
+margin: 0px;
+}
+.pull-left{
+float: left;
+}
+.pull-right{
+float: right;
+}
+.module-header{
+height: 65px; border-bottom: #c3c3c3 1px solid; background-color: #eeeeee;
+}
+.module-header img{
+margin-top:15px;
+}
+.languageAssigned{
+  width: 50px;
+  padding: 7px;  
+}
