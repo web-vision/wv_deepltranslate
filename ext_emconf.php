@@ -11,9 +11,9 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Deepl',
+    'title' => 'Deepl Translate',
     'description' => 'This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages.',
-    'category' => 'plugin',
+    'category' => 'module',
     'author' => 'Ricky Mathew Kuruvilla, Anu Bhuvanendran Nair',
     'author_email' => 'ricky.mk@pitsolutions.com, anu.bn@pitsolutions.com',
     'state' => 'stable',
@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = [
     'uploadfolder' => '0',
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '1.0.0',
+    'version' => '1.0.1',
     'constraints' => [
         'depends' => [
             'typo3' => '8.5.1-8.7.99',
