@@ -186,7 +186,7 @@ class TranslateHook
         }
         //override Localization.js
         if (is_array($hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization'])) {
-            $hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization']['code'] = 'require(["TYPO3/CMS/Deepltranslate/Localization"]); ';
+            $hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization']['code'] = 'require(["TYPO3/CMS/Deepltranslate/Localization"]);';
         }
         //inline js for adding deepl button on records list.
         $hook['jsInline']['RecordListInlineJS']['code'] .= "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";

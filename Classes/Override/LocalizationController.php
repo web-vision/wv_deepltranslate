@@ -1,4 +1,5 @@
 <?php
+declare (strict_types = 1);
 namespace PITS\Deepl\Override;
 
 /*
@@ -19,35 +20,40 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Http\JsonResponse;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Versioning\VersionState;
-use TYPO3\CMS\Core\Page\PageRenderer;
+
 /**
  * LocalizationController handles the AJAX requests for record localization
+ *
+ * @internal
  */
 class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\LocalizationController
 {
 
     /**
-     * @const string
+     * @var string
      */
     const ACTION_LOCALIZEDEEPL = 'localizedeepl';
-    
+
     /**
-     * @const string
+     * @var string
      */
-    
+
     const ACTION_LOCALIZEDEEPL_AUTO = 'localizedeeplauto';
-    
+
     /**
-     * @const string
+     * @var string
      */
-    
+
     const ACTION_LOCALIZEGOOGLE = 'localizegoogle';
-    
+
     /**
-     * @const string
+     * @var string
      */
     const ACTION_LOCALIZEGOOGLE_AUTO = 'localizegoogleauto';
     /**
@@ -65,8 +71,8 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      * @var \TYPO3\CMS\Core\Page\PageRenderer
      */
     protected $pageRenderer;
-    
-     /**
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -77,31 +83,149 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
     }
 
     /**
-     * localizeRecords
+     * Get used languages in a page
+     *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return type
+     * @return ResponseInterface
      */
-    public function localizeRecords(ServerRequestInterface $request, ResponseInterface $response)
+    public function getUsedLanguagesInPage(ServerRequestInterface $request): ResponseInterface
     {
-       
+        $params = $request->getQueryParams();
+        if (!isset($params['pageId'], $params['languageId'])) {
+            return new JsonResponse(null, 400);
+        }
+
+        $pageId     = (int) $params['pageId'];
+        $languageId = (int) $params['languageId'];
+        $mode       = $params['mode'];
+        /** @var TranslationConfigurationProvider $translationProvider */
+        $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
+        $systemLanguages     = $translationProvider->getSystemLanguages($pageId);
+
+        $availableLanguages = [];
+
+        // First check whether column has localized records
+        $elementsInColumnCount = $this->localizationRepository->getLocalizedRecordCount($pageId, $languageId);
+
+        if ($elementsInColumnCount === 0) {
+            $fetchedAvailableLanguages = $this->localizationRepository->fetchAvailableLanguages($pageId, $languageId);
+            $availableLanguages[]      = $systemLanguages[0];
+
+            foreach ($fetchedAvailableLanguages as $language) {
+                if (isset($systemLanguages[$language['uid']])) {
+                    $availableLanguages[] = $systemLanguages[$language['uid']];
+                }
+            }
+        } else {
+            $result               = $this->localizationRepository->fetchOriginLanguage($pageId, $languageId);
+            $availableLanguages[] = $systemLanguages[$result['sys_language_uid']];
+        }
+        //for deepl and google auto modes
+        if (!empty($availableLanguages)) {
+            if ($mode == 'localizedeeplauto' || $mode == 'localizegoogleauto') {
+                foreach ($availableLanguages as &$availableLanguage) {
+                    $availableLanguage['uid']     = 'auto-' . $availableLanguage['uid'];
+                    $availableLanguage['ISOcode'] = 'AUT';
+                }
+            }
+        }
+        // Pre-render all flag icons
+        foreach ($availableLanguages as &$language) {
+            if ($language['flagIcon'] === 'empty-empty') {
+                $language['flagIcon'] = '';
+            } else {
+                $language['flagIcon'] = $this->iconFactory->getIcon($language['flagIcon'], Icon::SIZE_SMALL)->render();
+            }
+        }
+
+        return (new JsonResponse())->setPayload($availableLanguages);
+    }
+
+    /**
+     * Get a prepared summary of records being translated
+     *
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     */
+    public function getRecordLocalizeSummary(ServerRequestInterface $request): ResponseInterface
+    {
+        $params = $request->getQueryParams();
+        if (!isset($params['pageId'], $params['destLanguageId'], $params['languageId'])) {
+            return new JsonResponse(null, 400);
+        }
+
+        $pageId         = (int) $params['pageId'];
+        $destLanguageId = (int) $params['destLanguageId'];
+        //getting source language id
+        $langParam = explode('-', $params['languageId']);
+        if (count($langParam) > 1) {
+            $params['languageId'] = $langParam[1];
+        } else {
+            $params['languageId'] = $langParam[0];
+        }
+        $languageId = (int) $params['languageId'];
+
+        $records = [];
+        $result  = $this->localizationRepository->getRecordsToCopyDatabaseResult(
+            $pageId,
+            $destLanguageId,
+            $languageId,
+            '*'
+        );
+
+        while ($row = $result->fetch()) {
+            BackendUtility::workspaceOL('tt_content', $row, -99, true);
+            if (!$row || VersionState::cast($row['t3ver_state'])->equals(VersionState::DELETE_PLACEHOLDER)) {
+                continue;
+            }
+            $colPos = $row['colPos'];
+            if (!isset($records[$colPos])) {
+                $records[$colPos] = [];
+            }
+            $records[$colPos][] = [
+                'icon'  => $this->iconFactory->getIconForRecord('tt_content', $row, Icon::SIZE_SMALL)->render(),
+                'title' => $row[$GLOBALS['TCA']['tt_content']['ctrl']['label']],
+                'uid'   => $row['uid'],
+            ];
+        }
+
+        return (new JsonResponse())->setPayload([
+            'records' => $records,
+            'columns' => $this->getPageColumns($pageId),
+        ]);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     */
+    public function localizeRecords(ServerRequestInterface $request): ResponseInterface
+    {
         $params = $request->getQueryParams();
 
         if (!isset($params['pageId'], $params['srcLanguageId'], $params['destLanguageId'], $params['action'], $params['uidList'])) {
-            $response = $response->withStatus(400);
-            return $response;
+            return new JsonResponse(null, 400);
         }
+
         //additional constraint ACTION_LOCALIZEDEEPL
         if ($params['action'] !== static::ACTION_COPY && $params['action'] !== static::ACTION_LOCALIZE && $params['action'] !== static::ACTION_LOCALIZEDEEPL && $params['action'] !== static::ACTION_LOCALIZEDEEPL_AUTO && $params['action'] !== static::ACTION_LOCALIZEGOOGLE && $params['action'] !== static::ACTION_LOCALIZEGOOGLE_AUTO) {
+
+            $response = new Response('php://temp', 400, ['Content-Type' => 'application/json; charset=utf-8']);
             $response->getBody()->write('Invalid action "' . $params['action'] . '" called.');
-            $response = $response->withStatus(400);
             return $response;
         }
+
+        // Filter transmitted but invalid uids
+        $params['uidList'] = $this->filterInvalidUids(
+            (int) $params['pageId'],
+            (int) $params['destLanguageId'],
+            (int) $params['srcLanguageId'],
+            $params['uidList']
+        );
 
         $this->process($params);
 
-        $response->getBody()->write(json_encode([]));
-        return $response;
+        return (new JsonResponse())->setPayload([]);
     }
 
     /**
@@ -109,9 +233,10 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      *
      * @param array $params
      */
-    protected function process($params)
+    protected function process($params): void
     {
         $destLanguageId = (int) $params['destLanguageId'];
+
         // Build command map
         $cmd = [
             'tt_content' => [],
@@ -127,10 +252,9 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
                     if ($params['action'] === static::ACTION_LOCALIZEDEEPL || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO) {
                         $cmd['localization']['custom']['mode']          = 'deepl';
                         $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
-                    }
-                    else if($params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO){
-                         $cmd['localization']['custom']['mode']          = 'google';
-                         $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
+                    } else if ($params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO) {
+                        $cmd['localization']['custom']['mode']          = 'google';
+                        $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
                     }
                 } else {
                     $cmd['tt_content'][$currentUid] = [
@@ -146,116 +270,6 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
     }
 
     /**
-     * Get used languages in a colPos of a page
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
-     */
-    public function getUsedLanguagesInPageAndColumn(ServerRequestInterface $request, ResponseInterface $response)
-    {
-        $params = $request->getQueryParams();
-        if (!isset($params['pageId'], $params['colPos'], $params['languageId'])) {
-            $response = $response->withStatus(400);
-            return $response;
-        }
-        $pageId     = (int) $params['pageId'];
-        $colPos     = (int) $params['colPos'];
-        $languageId = (int) $params['languageId'];
-        $mode       = $params['mode'];
-        /** @var TranslationConfigurationProvider $translationProvider */
-        $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
-        $systemLanguages     = $translationProvider->getSystemLanguages($pageId);
-
-        $availableLanguages = [];
-        
-        // First check whether column has localized records
-        $elementsInColumnCount = $this->localizationRepository->getLocalizedRecordCount($pageId, $colPos, $languageId);
-        
-        if ($elementsInColumnCount === 0) {
-            $fetchedAvailableLanguages = $this->localizationRepository->fetchAvailableLanguages($pageId, $colPos, $languageId);
-            $availableLanguages[]      = $systemLanguages[0];
-            
-            foreach ($fetchedAvailableLanguages as $language) {
-                if (isset($systemLanguages[$language['uid']])) {
-                    $availableLanguages[] = $systemLanguages[$language['uid']];
-                }
-            }
-        } else {
-            $result = $this->localizationRepository->fetchOriginLanguage($pageId, $colPos, $languageId);
-            $availableLanguages[] = $systemLanguages[$result['sys_language_uid']];
-        }
-        
-        //$availableLanguages      = array_filter($availableLanguages);
-        if (!empty($availableLanguages)) {
-            if ($mode == 'localizedeeplauto' || $mode == 'localizegoogleauto') {
-                foreach ($availableLanguages as &$availableLanguage) {
-                    $availableLanguage['uid'] = 'auto-' . $availableLanguage['uid'];
-                    $availableLanguage['ISOcode'] = 'AUT';
-                }
-            }
-        }
-        // Pre-render all flag icons
-        foreach ($availableLanguages as &$language) {
-            if ($language['flagIcon'] === 'empty-empty') {
-                $language['flagIcon'] = '';
-            } else {
-                $language['flagIcon'] = $this->iconFactory->getIcon($language['flagIcon'], Icon::SIZE_SMALL)->render();
-            }
-        }
-
-        $response->getBody()->write(json_encode($availableLanguages));
-        return $response;
-    }
-
-    /**
-     * Get a prepared summary of records being translated
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
-     */
-    public function getRecordLocalizeSummary(ServerRequestInterface $request, ResponseInterface $response)
-    {
-        $params = $request->getQueryParams();
-        if (!isset($params['pageId'], $params['colPos'], $params['destLanguageId'], $params['languageId'])) {
-            $response = $response->withStatus(400);
-            return $response;
-        }
-
-        $records = [];
-        //getting source language id
-        $langParam = explode('-', $params['languageId']);
-        if (count($langParam) > 1) {
-            $params['languageId'] = $langParam[1];
-        } else {
-            $params['languageId'] = $langParam[0];
-        }
-        //get content element
-        $result = $this->localizationRepository->getRecordsToCopyDatabaseResult(
-            $params['pageId'],
-            $params['colPos'],
-            $params['destLanguageId'],
-            $params['languageId'],
-            '*'
-        );
-        while ($row = $result->fetch()) {
-            BackendUtility::workspaceOL('tt_content', $row, -99, true);
-            if (!$row || VersionState::cast($row['t3ver_state'])->equals(VersionState::DELETE_PLACEHOLDER)) {
-                continue;
-            }
-            $records[] = [
-                'icon'  => $this->iconFactory->getIconForRecord('tt_content', $row, Icon::SIZE_SMALL)->render(),
-                'title' => $row[$GLOBALS['TCA']['tt_content']['ctrl']['label']],
-                'uid'   => $row['uid'],
-            ];
-        }
-
-        $response->getBody()->write(json_encode($records));
-        return $response;
-    }
-
-    /**
      * check deepl Settings (url,apikey).
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -263,9 +277,9 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      */
     public function checkdeeplSettings(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->deeplService    = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PITS\\Deepl\\Service\\DeeplService');
-        $result                = [];
-        $extConf               = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
+        $this->deeplService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PITS\\Deepl\\Service\\DeeplService');
+        $result             = [];
+        $extConf            = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
         if ($this->deeplService->apiKey != null && $this->deeplService->apiUrl != null) {
             $result['status'] = 'true';
         } else {
