@@ -1,0 +1,29 @@
+{
+  "name": "pits/deepltranslate",
+  "description" : "This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages using Deepl and Googletranslate Api services.",
+  "license": "GPL-2.0+",
+  "autoload": {
+        "psr-4": {
+            "PITS\\Deepltranslate\\": "Classes"
+        }
+    },
+  "keywords": [
+        "TYPO3",
+        "extension",
+        "pits",
+        "translate",
+        "deepl",
+        "googletranslate"
+    ],
+  "authors": [
+        {
+            "name": "Ricky Mathew",
+            "role": "Developer"
+        },
+        {
+            "name": "Anu Bhuvanendran Nair",
+            "role": "Developer"
+        }
+   ],
+  "type": "typo3-cms-extension"
+}

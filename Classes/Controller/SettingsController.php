@@ -24,8 +24,8 @@ namespace PITS\Deepltranslate\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use PITS\Deepl\Domain\Repository\DeeplSettingsRepository;
-use PITS\Deepl\Service\DeeplService;
+use PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
+use PITS\Deepltranslate\Service\DeeplService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
@@ -41,13 +41,13 @@ class SettingsController extends ActionController
     protected $pageRenderer;
 
     /**
-     * @var \PITS\Deepl\Domain\Repository\DeeplSettingsRepository
+     * @var \PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository
      * @inject
      */
     protected $deeplSettingsRepository;
 
     /**
-     * @var \PITS\Deepl\Service\DeeplService
+     * @var \PITS\Deepltranslate\Service\DeeplService
      * @inject
      */
     protected $deeplService;

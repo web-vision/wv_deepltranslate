@@ -1,5 +1,5 @@
 <?php
-namespace PITS\Deepl\Service;
+namespace PITS\Deepltranslate\Service;
 
 /***************************************************************
  *  Copyright notice
