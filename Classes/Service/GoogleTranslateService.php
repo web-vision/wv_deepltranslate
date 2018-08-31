@@ -1,5 +1,5 @@
 <?php
-namespace PITS\Deepl\Service;
+namespace PITS\Deepltranslate\Service;
 
 /***************************************************************
  *  Copyright notice
@@ -41,12 +41,25 @@ class GoogleTranslateService
     public $requestFactory;
 
     /**
+     * @var string
+     */
+    public $apiKey;
+
+    /**
+     * @var string
+     */
+    public $apiUrl;
+
+    /**
      * Description
      * @return type
      */
     public function __construct()
     {
         $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
+        $extConf              = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
+        $this->apiUrl         = $extConf['googleapiUrl'];
+        $this->apiKey         = $extConf['googleapiKey'];
     }
     /**
      * Passes translate request and formats response returned on request
@@ -60,7 +73,7 @@ class GoogleTranslateService
         // Request translation
         $response = $this->request($source, $target, $text);
         // Get translated text from response
-        $translation = self::getTranslation($response);
+        $translation = $this->getTranslation($response);
 
         return $translation;
     }
@@ -74,23 +87,33 @@ class GoogleTranslateService
      */
     protected function request($source, $target, $text)
     {
-        //translate URL
-        $url = "https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
+        //translate request with api key(non free mode - recommended)
+        if ($this->apiKey != '' && $this->apiUrl != '') {
+            $url    = $this->apiUrl . '?key=' . $this->apiKey;
+            $fields = array(
+                'source' => urlencode($source),
+                'target' => urlencode($target),
+                'q'      => $text,
+            );
+        }
+        //translate request without apikey(free mode)
+        else {
+            $url = "https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
 
-        $fields = array(
-            'sl' => urlencode($source),
-            'tl' => urlencode($target),
-            'q'  => $text,
-        );
-        $result = [];
-        //checks for number of characters
-        if (strlen($fields['q']) >= 5000) {
-            //throw new \Exception("Maximum number of characters exceeded: 5000");
-            $result['status']  = 'false';
-            $result['message'] = "Maximum number of characters exceeded: 5000";
-            $result            = json_encode($result);
-            echo $result;
-            exit;
+            $fields = array(
+                'sl' => urlencode($source),
+                'tl' => urlencode($target),
+                'q'  => $text,
+            );
+            $result = [];
+            //checks for number of characters
+            if (strlen($fields['q']) >= 5000) {
+                $result['status']  = 'false';
+                $result['message'] = "Maximum number of characters exceeded: 5000";
+                $result            = json_encode($result);
+                echo $result;
+                exit;
+            }
         }
 
         // URL-ify the data for the POST
@@ -108,11 +131,17 @@ class GoogleTranslateService
             ]);
         } catch (ClientException $e) {
             $result['status']  = 'false';
-            $result['message'] = $e->getMessage();
+            if($e->getCode() == 404){
+              $result['message'] = "Google Api url not reachable.Check whether the Api url provided in extension configuration is valid(non freemode).";
+            }
+            else{
+              $result['message'] = $e->getMessage();
+            }
             $result            = json_encode($result);
             echo $result;
             exit;
         }
+
         return json_decode($response->getBody()->getContents(), true);
     }
 
@@ -121,12 +150,16 @@ class GoogleTranslateService
      * @param string $response
      * @return string
      */
-    protected static function getTranslation($response)
+    protected function getTranslation($response)
     {
         $translation = "";
-        foreach ($response["sentences"] as $text) {
-            $text = self::googleTranslationPostprocess($text);
-            $translation .= isset($text["trans"]) ? $text["trans"] : '';
+        if ($this->apiKey != '' && $this->apiUrl != '') {
+            $translation = $response['data']['translations'][0]['translatedText'];
+        } else {
+            foreach ($response["sentences"] as $text) {
+                $text = self::googleTranslationPostprocess($text);
+                $translation .= isset($text["trans"]) ? $text["trans"] : '';
+            }
         }
         return $translation;
     }

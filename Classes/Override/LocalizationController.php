@@ -1,7 +1,6 @@
 <?php
 declare (strict_types = 1);
-namespace PITS\Deepl\Override;
-
+namespace PITS\Deepltranslate\Override;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -277,9 +276,9 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      */
     public function checkdeeplSettings(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->deeplService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PITS\\Deepl\\Service\\DeeplService');
-        $result             = [];
-        $extConf            = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
+        $this->deeplService    = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PITS\\Deepltranslate\\Service\\DeeplService');
+        $result                = [];
+        $extConf               = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
         if ($this->deeplService->apiKey != null && $this->deeplService->apiUrl != null) {
             $result['status'] = 'true';
         } else {

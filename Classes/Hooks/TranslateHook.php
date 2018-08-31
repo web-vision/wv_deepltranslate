@@ -1,5 +1,5 @@
 <?php
-namespace PITS\Deepl\Hooks;
+namespace PITS\Deepltranslate\Hooks;
 
 /***************************************************************
  *  Copyright notice
@@ -30,9 +30,9 @@ namespace PITS\Deepl\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use PITS\Deepl\Domain\Repository\DeeplSettingsRepository;
-use PITS\Deepl\Service\DeeplService;
-use PITS\Deepl\Service\GoogleTranslateService;
+use PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
+use PITS\Deepltranslate\Service\DeeplService;
+use PITS\Deepltranslate\Service\GoogleTranslateService;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -40,17 +40,17 @@ class TranslateHook
 {
 
     /**
-     * @var \PITS\Deepl\Service\DeeplService
+     * @var \PITS\Deepltranslate\Service\DeeplService
      */
     protected $deeplService;
 
     /**
-     * @var \PITS\Deepl\Service\GoogleTranslateService
+     * @var \PITS\Deepltranslate\Service\GoogleTranslateService
      */
     protected $googleService;
 
     /**
-     * @var \PITS\Deepl\Domain\Repository\DeeplSettingsRepository
+     * @var \PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository
      * @inject
      */
     protected $deeplSettingsRepository;

@@ -1,5 +1,5 @@
 <?php
-namespace PITS\Deepl\Service;
+namespace PITS\Deepltranslate\Service;
 
 /***************************************************************
  *  Copyright notice
@@ -30,7 +30,7 @@ namespace PITS\Deepl\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use GuzzleHttp\Exception\ClientException;
-use PITS\Deepl\Domain\Repository\DeeplSettingsRepository;
+use PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -63,7 +63,7 @@ class DeeplService
     public $requestFactory;
 
     /**
-     * @var \PITS\Deepl\Domain\Repository\DeeplSettingsRepository
+     * @var \PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository
      */
     protected $deeplSettingsRepository;
 
