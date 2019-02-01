@@ -27,6 +27,7 @@ namespace PITS\Deepltranslate\Controller;
 use PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
 use PITS\Deepltranslate\Service\DeeplService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Annotation\Inject;
 
 /**
  * Class SettingsController
@@ -36,19 +37,19 @@ class SettingsController extends ActionController
     /**
      * pageRenderer
      * @var \TYPO3\CMS\Core\Page\PageRenderer
-     * @inject
+     * @Inject
      */
     protected $pageRenderer;
 
     /**
      * @var \PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository
-     * @inject
+     * @Inject
      */
     protected $deeplSettingsRepository;
 
     /**
      * @var \PITS\Deepltranslate\Service\DeeplService
-     * @inject
+     * @Inject
      */
     protected $deeplService;
 

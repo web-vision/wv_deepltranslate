@@ -1,6 +1,7 @@
 <?php
 declare (strict_types = 1);
 namespace PITS\Deepltranslate\Override;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -156,13 +157,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         $pageId         = (int) $params['pageId'];
         $destLanguageId = (int) $params['destLanguageId'];
         //getting source language id
-        $langParam = explode('-', $params['languageId']);
-        if (count($langParam) > 1) {
-            $params['languageId'] = $langParam[1];
-        } else {
-            $params['languageId'] = $langParam[0];
-        }
-        $languageId = (int) $params['languageId'];
+        $languageId = $this->getSourceLanguageid($params['languageId']);
 
         $records = [];
         $result  = $this->localizationRepository->getRecordsToCopyDatabaseResult(
@@ -218,7 +213,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         $params['uidList'] = $this->filterInvalidUids(
             (int) $params['pageId'],
             (int) $params['destLanguageId'],
-            (int) $params['srcLanguageId'],
+            $this->getSourceLanguageid($params['srcLanguageId']),
             $params['uidList']
         );
 
@@ -276,9 +271,9 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      */
     public function checkdeeplSettings(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->deeplService    = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PITS\\Deepltranslate\\Service\\DeeplService');
-        $result                = [];
-        $extConf               = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
+        $this->deeplService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('PITS\\Deepltranslate\\Service\\DeeplService');
+        $result             = [];
+        $extConf            = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
         if ($this->deeplService->apiKey != null && $this->deeplService->apiUrl != null) {
             $result['status'] = 'true';
         } else {
@@ -288,5 +283,20 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         $result = json_encode($result);
         echo $result;
         exit;
+    }
+
+    /**
+     * Return source language Id from source language string
+     * @param string $srcLanguage
+     * @return int
+     */
+    public function getSourceLanguageid($srcLanguage)
+    {
+        $langParam = explode('-', $srcLanguage);
+        if (count($langParam) > 1) {
+            return (int) $langParam[1];
+        } else {
+            return (int) $langParam[0];
+        }
     }
 }

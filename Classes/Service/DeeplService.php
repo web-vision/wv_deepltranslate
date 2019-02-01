@@ -55,7 +55,7 @@ class DeeplService
      * Default supported languages
      * @var array
      */
-    public $apiSupportedLanguages = ['EN', 'DE', 'FR', 'ES', 'IT', 'NL', 'PL'];
+    public $apiSupportedLanguages = ['EN', 'DE', 'FR', 'ES', 'IT', 'NL', 'PL' ,'RU', 'PT'];
 
     /**
      * @var RequestFactory
