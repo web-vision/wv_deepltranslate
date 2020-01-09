@@ -1,11 +1,11 @@
 <?php
-namespace PITS\Deepltranslate\Hooks;
+namespace WebVision\Deepltranslate\Hooks;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2018 Ricky Mathew <ricky.mk@pitsolutions.com>, PIT Solutions
- *      Anu Bhuvanendran Nair <anu.bn@pitsolutions.com>, PIT Solutions
+ *  (c) 2020 Ricky Mathew <ricky@web-vision.de>, web-vision GmbH
+ *      Anu Bhuvanendran Nair <anu@web-vision.de>, web-vision GmbH
  *
  *  You may not remove or change the name of the author above. See:
  *  http://www.gnu.org/licenses/gpl-faq.html#IWantCredit
@@ -30,9 +30,9 @@ namespace PITS\Deepltranslate\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
-use PITS\Deepltranslate\Service\DeeplService;
-use PITS\Deepltranslate\Service\GoogleTranslateService;
+use WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\Deepltranslate\Service\DeeplService;
+use WebVision\Deepltranslate\Service\GoogleTranslateService;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -40,17 +40,17 @@ class TranslateHook
 {
 
     /**
-     * @var \PITS\Deepltranslate\Service\DeeplService
+     * @var \WebVision\Deepltranslate\Service\DeeplService
      */
     protected $deeplService;
 
     /**
-     * @var \PITS\Deepltranslate\Service\GoogleTranslateService
+     * @var \WebVision\Deepltranslate\Service\GoogleTranslateService
      */
     protected $googleService;
 
     /**
-     * @var \PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository
      * @inject
      */
     protected $deeplSettingsRepository;

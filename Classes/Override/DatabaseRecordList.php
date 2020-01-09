@@ -1,5 +1,5 @@
 <?php
-namespace PITS\Deepltranslate\Override;
+namespace WebVision\Deepltranslate\Override;
 
 /*
  * This file is part of the TYPO3 CMS project.

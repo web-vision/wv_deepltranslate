@@ -1,10 +1,10 @@
 <?php
-namespace PITS\Deepltranslate\Controller;
+namespace WebVision\Deepltranslate\Controller;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2018 Ricky Mathew <ricky.mk@pitsolutions.com>
+ *  (c) 2020 Ricky Mathew <ricky@web-vision.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,8 +24,8 @@ namespace PITS\Deepltranslate\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
-use PITS\Deepltranslate\Service\DeeplService;
+use WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\Deepltranslate\Service\DeeplService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Annotation\Inject;
 
@@ -42,13 +42,13 @@ class SettingsController extends ActionController
     protected $pageRenderer;
 
     /**
-     * @var \PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository
      * @Inject
      */
     protected $deeplSettingsRepository;
 
     /**
-     * @var \PITS\Deepltranslate\Service\DeeplService
+     * @var \WebVision\Deepltranslate\Service\DeeplService
      * @Inject
      */
     protected $deeplService;
