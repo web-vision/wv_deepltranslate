@@ -1,11 +1,11 @@
 <?php
-namespace PITS\Deepltranslate\Service;
+namespace WebVision\Deepltranslate\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2018 Ricky Mathew <ricky.mk@pitsolutions.com>, PIT Solutions
- *      Anu Bhuvanendran Nair <anu.bn@pitsolutions.com>, PIT Solutions
+ *  (c) 2020 Ricky Mathew <ricky@web-vision.de>, web-vision GmbH
+ *      Anu Bhuvanendran Nair <anu@web-vision.de>, web-vision GmbH
  *
  *  You may not remove or change the name of the author above. See:
  *  http://www.gnu.org/licenses/gpl-faq.html#IWantCredit
@@ -30,7 +30,7 @@ namespace PITS\Deepltranslate\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use GuzzleHttp\Exception\ClientException;
-use PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -63,7 +63,7 @@ class DeeplService
     public $requestFactory;
 
     /**
-     * @var \PITS\Deepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository
      */
     protected $deeplSettingsRepository;
 

@@ -26,7 +26,7 @@ $iconRegistry->registerIcon(
 
 //register backend module
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-    'PITS.Deepltranslate',
+    'WebVision.Deepltranslate',
     'Deepl',
     '',
     '',
@@ -39,7 +39,7 @@ $iconRegistry->registerIcon(
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-    'PITS.Deepltranslate',
+    'WebVision.Deepltranslate',
     'Deepl',
     'Settings',
     '',

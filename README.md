@@ -7,7 +7,7 @@ For both Deepl translate and Google translate, there are two modes-normal and au
 ## Installation
 You can install the extension using: 
 - Extension manager or 
-- composer  ``` composer req pits/deepltranslate ```
+- composer  ``` composer req web-vision/wv_deepltranslate ```
 
 Once installed ,there appears a Deepl back end module with a settings tab.
 ## Requirements

@@ -10,6 +10,6 @@ return [
     // Localize the records
     'records_localizedeepl' => [
         'path' => '/records/localizedeepl',
-        'target' => PITS\Deepltranslate\Override\LocalizationController::class . '::checkdeeplSettings'
+        'target' => WebVision\Deepltranslate\Override\LocalizationController::class . '::checkdeeplSettings'
     ]
 ];

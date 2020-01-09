@@ -27,16 +27,16 @@ Deepl Translate
 		This extension provides option to translate content element, and tca record fields to Deepl supported languages and provides fallback of google translate on Deepl unsupported languages.
 
 	:Keywords:
-		pitsolutions,deepl,translation,google translate,deepltranslate
+		web-vision,deepl,translation,google translate,deepltranslate
 
 	:Copyright:
-		2018
+		2020
 
 	:Author:
 		Ricky Mathew, Anu Bhuvanendran Nair
 
 	:Email:
-		ricky.mk@pitsolutions.com,		anu.bn@pitsolutions.com
+		ricky@web-vision.de,		anu@web-vision.de
 
 	:License:
 		This document is published under the Open Content License
