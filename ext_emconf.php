@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Deepl Translate',
-    'description' => 'This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages.',
+    'description' => 'Fork of deepltranslate from pitsolutions.This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages.',
     'category' => 'module',
     'author' => 'Ricky Mathew Kuruvilla, Anu Bhuvanendran Nair',
     'author_email' => 'ricky@web-vision.de, anu@web-vision.de',
