@@ -1,7 +1,7 @@
 # cat=Settings/O; type=string; label= Deepl API Key
 apiKey =
 # cat=Settings/O; type=string; label= Deepl API Url
-apiUrl = https://api.deepl.com/v1/translate
+apiUrl = https://api.deepl.com/v2/translate
 # cat=Settings/O; type=string; label= Google translate API Key(Non freemode)
 googleapiKey =
 # cat=Settings/O; type=string; label= Google translate API Url(Non freemode)
