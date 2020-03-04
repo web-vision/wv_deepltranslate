@@ -1,5 +1,5 @@
 <?php
-namespace WebVision\Deepltranslate\Controller;
+namespace WebVision\WvDeepltranslate\Controller;
 
 /***************************************************************
  *  Copyright notice
@@ -24,8 +24,8 @@ namespace WebVision\Deepltranslate\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
-use WebVision\Deepltranslate\Service\DeeplService;
+use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\WvDeepltranslate\Service\DeeplService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Annotation\Inject;
 
@@ -42,13 +42,13 @@ class SettingsController extends ActionController
     protected $pageRenderer;
 
     /**
-     * @var \WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
      * @Inject
      */
     protected $deeplSettingsRepository;
 
     /**
-     * @var \WebVision\Deepltranslate\Service\DeeplService
+     * @var \WebVision\WvDeepltranslate\Service\DeeplService
      * @Inject
      */
     protected $deeplService;

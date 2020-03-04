@@ -1,5 +1,5 @@
 <?php
-namespace WebVision\Deepltranslate\Hooks;
+namespace WebVision\WvDeepltranslate\Hooks;
 
 /***************************************************************
  *  Copyright notice
@@ -30,27 +30,29 @@ namespace WebVision\Deepltranslate\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
-use WebVision\Deepltranslate\Service\DeeplService;
-use WebVision\Deepltranslate\Service\GoogleTranslateService;
+use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TranslateHook
 {
 
     /**
-     * @var \WebVision\Deepltranslate\Service\DeeplService
+     * @var \WebVision\WvDeepltranslate\Service\DeeplService
      */
     protected $deeplService;
 
     /**
-     * @var \WebVision\Deepltranslate\Service\GoogleTranslateService
+     * @var \WebVision\WvDeepltranslate\Service\GoogleTranslateService
      */
     protected $googleService;
 
     /**
-     * @var \WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
      * @inject
      */
     protected $deeplSettingsRepository;
@@ -98,9 +100,26 @@ class TranslateHook
             }
 
             if ($sourceLanguage == null) {
+                // Make good defaults
                 $sourceLanguageIso = 'en';
                 //choose between default and autodetect
                 $deeplSourceIso = ($sourceLanguageCode == 'auto' ? null : 'EN');
+                
+                // Try to find the default language from the site configuration
+                if (isset($tablename) && isset($currectRecordId)) {
+                    $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
+                    $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+                    try {
+                        $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
+                        $language = $site->getDefaultLanguage();
+                        $sourceLanguageIso = strtolower($language->getTwoLetterIsoCode());
+                        if ($sourceLanguageCode !== 'auto') {
+                            $deeplSourceIso = strtoupper($sourceLanguageIso);
+                        }
+                    } catch (SiteNotFoundException $exception) {
+                        // Ignore, use defaults
+                    }
+                }
             } else {
                 $sourceLanguageMapping = $this->deeplSettingsRepository->getMappings($sourceLanguage['uid']);
                 if ($sourceLanguageMapping != null) {
@@ -172,8 +191,8 @@ class TranslateHook
     {
         //include deepl.css
         if (is_array($hook['cssFiles'])) {
-            $hook['cssFiles']['/typo3conf/ext/deepltranslate/Resources/Public/Css/deepl-min.css'] = [
-                'file'                     => '/typo3conf/ext/deepltranslate/Resources/Public/Css/deepl-min.css',
+            $hook['cssFiles']['/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css'] = [
+                'file'                     => '/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css',
                 'rel'                      => 'stylesheet',
                 'media'                    => 'all',
                 'title'                    => '',
@@ -186,7 +205,7 @@ class TranslateHook
         }
         //override Localization.js
         if (is_array($hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization'])) {
-            $hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization']['code'] = 'require(["TYPO3/CMS/Deepltranslate/Localization"]);';
+            $hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization']['code'] = 'require(["TYPO3/CMS/WvDeepltranslate/Localization"]);';
         }
         //inline js for adding deepl button on records list.
         if (TYPO3_MODE == 'BE') {

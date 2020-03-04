@@ -1,5 +1,5 @@
 <?php
-namespace WebVision\Deepltranslate\Domain\Repository;
+namespace WebVision\WvDeepltranslate\Domain\Repository;
 
 /***************************************************************
  *  Copyright notice

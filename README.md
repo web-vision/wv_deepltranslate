@@ -54,4 +54,4 @@ For example you can assign German under Austrian German sys language if you wish
 
 ## FAQ
 
-See faq [here](https://docs.typo3.org/typo3cms/extensions/deepltranslate/Faq/Index.html) 
+See faq [here](https://docs.typo3.org/typo3cms/extensions/wv_deepltranslate/Faq/Index.html) 

@@ -19,7 +19,7 @@ Installation
 
 Requirements
 -------------------
-* Typo3 8.5 to  8.7.99
+* Typo3 9.5 to  9.5.xx
 
 Extension Configuartion
 --------------------------------
@@ -67,4 +67,16 @@ For example you can assign German to Austrian German sys language if you wish. F
 	:alt: Settings
 
 
-	Module Settinxgs
+	Module Settings
+
+Translating TCA Records
+---------------------------------------
+Deepltranslate supports translation of specific fields of TCA records.It understands fields which need to be translated, only if their ``l10n_mode`` is set to ``prefixLangTitle``.
+
+For example if you need translation of some fields of ``tx_news`` (say ``teaser`` and ``bodytext``),You need to override those fields like follows:
+
+Add it to TCA/Overrides: Example : ``typo3conf/ext/theme/Configuration/TCA/Overrides/tx_news_domain_model_news.php``
+
+``$GLOBALS['TCA']['tx_news_domain_model_news']['columns']['bodytext']['l10n_mode'] = 'prefixLangTitle';``
+
+``$GLOBALS['TCA']['tx_news_domain_model_news']['columns']['teaser']['l10n_mode'] = 'prefixLangTitle';``
