@@ -1,6 +1,6 @@
 <?php
 declare (strict_types = 1);
-namespace WebVision\Deepltranslate\Override;
+namespace WebVision\WvDeepltranslate\Override;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -79,7 +79,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
     {
         parent::__construct();
         $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $this->pageRenderer->addInlineLanguageLabelFile('EXT:deepltranslate/Resources/Private/Language/locallang.xlf');
+        $this->pageRenderer->addInlineLanguageLabelFile('EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf');
     }
 
     /**
@@ -271,9 +271,9 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      */
     public function checkdeeplSettings(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->deeplService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('WebVision\\Deepltranslate\\Service\\DeeplService');
+        $this->deeplService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('WebVision\\WvDeepltranslate\\Service\\DeeplService');
         $result             = [];
-        $extConf            = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
+        $extConf            = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wv_deepltranslate']);
         if ($this->deeplService->apiKey != null && $this->deeplService->apiUrl != null) {
             $result['status'] = 'true';
         } else {

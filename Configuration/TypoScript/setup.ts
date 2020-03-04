@@ -1,11 +1,11 @@
 # Module configuration
-module.tx_deepltranslate {
+module.tx_wvdeepltranslate {
   persistence {
-    storagePid = module.tx_deepltranslate.persistence.storagePid
+    storagePid = module.tx_wvdeepltranslate.persistence.storagePid
   }
   view {
-    templateRootPaths.0 = module.tx_deepltranslate.view.templateRootPath
-    partialRootPaths.0 = module.tx_deepltranslate.view.partialRootPath
-    layoutRootPaths.0 = module.tx_deepltranslate.view.layoutRootPath
+    templateRootPaths.0 = module.tx_wvdeepltranslate.view.templateRootPath
+    partialRootPaths.0 = module.tx_wvdeepltranslate.view.partialRootPath
+    layoutRootPaths.0 = module.tx_wvdeepltranslate.view.layoutRootPath
   }
 }

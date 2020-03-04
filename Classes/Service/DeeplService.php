@@ -1,5 +1,5 @@
 <?php
-namespace WebVision\Deepltranslate\Service;
+namespace WebVision\WvDeepltranslate\Service;
 
 /***************************************************************
  *  Copyright notice
@@ -30,7 +30,7 @@ namespace WebVision\Deepltranslate\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use GuzzleHttp\Exception\ClientException;
-use WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -63,7 +63,7 @@ class DeeplService
     public $requestFactory;
 
     /**
-     * @var \WebVision\Deepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
      */
     protected $deeplSettingsRepository;
 
@@ -73,7 +73,7 @@ class DeeplService
      */
     public function __construct()
     {
-        $extConf                       = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['deepltranslate']);
+        $extConf                       = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wv_deepltranslate']);
         
         $this->deeplSettingsRepository = GeneralUtility::makeInstance(DeeplSettingsRepository::class);
         $this->requestFactory          = GeneralUtility::makeInstance(RequestFactory::class);
