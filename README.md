@@ -47,6 +47,28 @@ $GLOBALS['TCA']['tx_news_domain_model_news']['columns']['teaser']['l10n_mode'] =
 
 ```
 
+## Translating Content elements and TCA records - Editor users
+
+For the perfect working of deepltranslate with editor users , we need to make sure that the editor has some necessary permissions in ``` Access Lists ``` . Make sure editors have following permissions :
+
+* Tables (modify) - Better provide permission to all core tables and necesary thirdparty extension tables.
+* Allowed excludefields
+   1. Page Content - Atleast provide permissions to ``` Columns (colPos)  ```,``` Language (sys_language_uid)  ``` and ``` Transl.Orig (l18n_parent)  ```
+    
+    ![GitHub Logo](/Documentation/Images/UserManual/page-content.png)
+     ###### Page Content
+
+   2. Other Tca record fields
+
+    ![GitHub Logo](/Documentation/Images/UserManual/tca-fields.png)
+     ###### Other tca fields
+* Explicitly allow/deny field values
+   1. Page Content: Type - Allow all to use all CE types.
+
+   ![GitHub Logo](/Documentation/Images/UserManual/ce-types.png)
+    ###### CE types
+
+
 ## Deepl Module Settings
 The settings module helps to assign the sytem languages to either deepl supported languages or to Google supported languages.
 
