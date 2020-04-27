@@ -1,12 +1,8 @@
 <?php
 defined('TYPO3_MODE') || die('Access denied.');
 
-call_user_func(
-    function ($extKey) {
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($extKey, 'Configuration/TypoScript', 'wv_deepltranslate');
-    },
-    $_EXTKEY
-);
+//Temporary variables
+$extensionKey = 'wv_deepltranslate';
 
 //icons to icon registry
 $iconRegistry         = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
@@ -34,7 +30,7 @@ $iconRegistry->registerIcon(
     array(
         'icon'   => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
         'access' => 'user,group',
-        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xlf',
+        'labels' => 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf',
     )
 );
 
@@ -47,9 +43,9 @@ $iconRegistry->registerIcon(
         'Settings' => 'index,saveSettings',
     ),
     array(
-        'icon'   => 'EXT:wv_deepltranslate/Resources/Public/Icons/settings.svg',
+        'icon'   => 'EXT:install/Resources/Public/Icons/module-install-settings.svg',
         'access' => 'user,group',
-        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_module_settings.xlf',
+        'labels' => 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang_module_settings.xlf',
     )
 );
 

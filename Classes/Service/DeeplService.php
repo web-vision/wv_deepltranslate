@@ -33,6 +33,7 @@ use GuzzleHttp\Exception\ClientException;
 use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 
 class DeeplService
 {
@@ -73,7 +74,7 @@ class DeeplService
      */
     public function __construct()
     {
-        $extConf                       = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wv_deepltranslate']);
+        $extConf                       = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
         
         $this->deeplSettingsRepository = GeneralUtility::makeInstance(DeeplSettingsRepository::class);
         $this->requestFactory          = GeneralUtility::makeInstance(RequestFactory::class);

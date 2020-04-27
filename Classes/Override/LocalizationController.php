@@ -266,14 +266,12 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
     /**
      * check deepl Settings (url,apikey).
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
      * @return array
      */
-    public function checkdeeplSettings(ServerRequestInterface $request, ResponseInterface $response)
+    public function checkdeeplSettings(ServerRequestInterface $request)
     {
         $this->deeplService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('WebVision\\WvDeepltranslate\\Service\\DeeplService');
         $result             = [];
-        $extConf            = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wv_deepltranslate']);
         if ($this->deeplService->apiKey != null && $this->deeplService->apiUrl != null) {
             $result['status'] = 'true';
         } else {

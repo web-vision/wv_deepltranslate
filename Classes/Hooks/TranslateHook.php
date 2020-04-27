@@ -141,11 +141,7 @@ class TranslateHook
 
                     } else {
                         $currentRecord     = BackendUtility::getRecord($tablename, (int) $currectRecordId);
-                        $selectedTCAvalues = $this->getTemplateValues($currentRecord, $tablename, $field, $content);
-
-                        if (!empty($selectedTCAvalues)) {
-                            $response = $this->deeplService->translateRequest($selectedTCAvalues, $targetLanguage['language_isocode'], $sourceLanguage['language_isocode']);
-                        }
+                        $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $sourceLanguage['language_isocode']);
                     }
                     if (!empty($response) && isset($response->translations)) {
                         foreach ($response->translations as $translation) {
@@ -164,11 +160,7 @@ class TranslateHook
 
                 } else {
                     $currentRecord     = BackendUtility::getRecord($tablename, (int) $currectRecordId);
-                    $selectedTCAvalues = $this->getTemplateValues($currentRecord, $tablename, $field, $content);
-
-                    if (!empty($selectedTCAvalues)) {
-                        $response = $this->googleService->translate($sourceLanguage['language_isocode'], $targetLanguage['language_isocode'], $selectedTCAvalues);
-                    }
+                    $response = $this->googleService->translate($content, $targetLanguage['language_isocode'], $content);
                 }
                 if (!empty($response)) {
                     if ($this->isHtml($response)) {
@@ -234,32 +226,6 @@ class TranslateHook
             $content = preg_replace("/<\\/?" . $tag . "(.|\\s)*?>/", '', $content);
         }
         return $content;
-    }
-
-    /**
-     * Returns default content of records according to the typoscript setting from typoscript
-     * @param array $recorddata
-     * @param string $table
-     * @param string $field
-     * @return void
-     */
-    public function getTemplateValues($recorddata, $table, $field, $content)
-    {
-        $rootLineUtility = GeneralUtility::makeInstance('TYPO3\CMS\Core\Utility\RootlineUtility',$recorddata['pid']);
-        $rootLine = $rootLineUtility->get();
-        $TSObj           = GeneralUtility::makeInstance('TYPO3\CMS\Core\TypoScript\TemplateService');
-        $TSObj->tt_track = 0;
-        $TSObj->init();
-        $TSObj->runThroughTemplates($rootLine);
-        $TSObj->generateConfig();
-        if ($table != '') {
-            $fieldlist = $TSObj->setup['plugin.'][$table . '.']['translatableTCAvalues'];
-            if ($fieldlist != null && strpos($fieldlist, $field) !== false) {
-                $value = $this->deeplSettingsRepository->getRecordField($table, $field, $recorddata);
-            } else {
-                return $content;
-            }
-        }
     }
 
 }
