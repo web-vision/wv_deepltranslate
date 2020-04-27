@@ -32,6 +32,7 @@ namespace WebVision\WvDeepltranslate\Service;
 use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 
 class GoogleTranslateService
 {
@@ -57,7 +58,7 @@ class GoogleTranslateService
     public function __construct()
     {
         $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        $extConf              = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wv_deepltranslate']);
+        $extConf              = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
         $this->apiUrl         = $extConf['googleapiUrl'];
         $this->apiKey         = $extConf['googleapiKey'];
     }
