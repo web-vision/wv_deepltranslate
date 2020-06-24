@@ -181,27 +181,28 @@ class TranslateHook
      */
     public function executePreRenderHook(&$hook)
     {
-        //include deepl.css
-        if (is_array($hook['cssFiles'])) {
-            $hook['cssFiles']['/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css'] = [
-                'file'                     => '/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css',
-                'rel'                      => 'stylesheet',
-                'media'                    => 'all',
-                'title'                    => '',
-                'compress'                 => true,
-                'forceOnTop'               => false,
-                'allWrap'                  => '',
-                'excludeFromConcatenation' => false,
-                'splitChar'                => '|',
-            ];
-        }
-        //override Localization.js
-        if (is_array($hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization'])) {
-            $hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization']['code'] = 'require(["TYPO3/CMS/WvDeepltranslate/Localization"]);';
-        }
-        //inline js for adding deepl button on records list.
+        //assets are only needed in BE context
         if (TYPO3_MODE == 'BE') {
-          $hook['jsInline']['RecordListInlineJS']['code'] .= "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";
+            //include deepl.css
+            if (is_array($hook['cssFiles'])) {
+                $hook['cssFiles']['/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css'] = [
+                    'file'                     => '/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css',
+                    'rel'                      => 'stylesheet',
+                    'media'                    => 'all',
+                    'title'                    => '',
+                    'compress'                 => true,
+                    'forceOnTop'               => false,
+                    'allWrap'                  => '',
+                    'excludeFromConcatenation' => false,
+                    'splitChar'                => '|',
+                ];
+            }
+            //override Localization.js
+            if (is_array($hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization'])) {
+                $hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization']['code'] = 'require(["TYPO3/CMS/WvDeepltranslate/Localization"]);';
+            }
+            //inline js for adding deepl button on records list.
+            $hook['jsInline']['RecordListInlineJS']['code'] .= "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";
         }
     }
 
