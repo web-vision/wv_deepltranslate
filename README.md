@@ -12,7 +12,7 @@ You can install the extension using:
 Once installed ,there appears a Deepl back end module with a settings tab.
 ## Requirements
 - TYPO3 8.5 to 8.7.99 (V1.0.0 - 1.0.1)
-- TYPO3 9.5.1 to 9.5.99 (V1.0.2 onwards)
+- TYPO3 9.5.1 to 10.4.99 (V1.0.2 onwards)
 
 ## Extension Configuartion
 
