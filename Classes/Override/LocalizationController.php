@@ -185,7 +185,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
         return (new JsonResponse())->setPayload([
             'records' => $records,
-            'columns' => $this->getPageColumns($pageId),
+            'columns' => $this->getPageColumns($pageId, $records, $params),
         ]);
     }
 
