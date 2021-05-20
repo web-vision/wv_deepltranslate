@@ -25,5 +25,10 @@
             "role": "Developer"
         }
    ],
-  "type": "typo3-cms-extension"
+  "type": "typo3-cms-extension",
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "wv_deepltranslate"
+    }
+  }
 }
