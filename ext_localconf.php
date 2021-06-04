@@ -20,3 +20,9 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Recordlist\\RecordList\\DatabaseRecordList'] = array(
     'className' => 'WebVision\\WvDeepltranslate\\Override\\DatabaseRecordList',
 );
+
+
+//xclass PageLayoutView to make DeepL + Google translate buttons configurable
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Backend\View\PageLayoutView::class] = [
+    'className' =>  WebVision\WvDeepltranslate\Xclass\PageLayoutViewConfigureLanguageButton::class,
+];

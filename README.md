@@ -16,7 +16,28 @@ Once installed ,there appears a Deepl back end module with a settings tab.
 
 ## Extension Configuartion
 
-Once you installed the extension, you have to set the Deepl API Key under extension configuration section
+Once you installed the extension, you have to set the Deepl API Key under extension configuration section.
+
+The buttons in the translate dialog can be configured via Page TSconfig, for example:
+
+```
+mod.web_layout.localization.enableDeeplTranslate = 1
+mod.web_layout.localization.enableDeeplTranslateAuto = 0
+mod.web_layout.localization.enableGoogleTranslate = 0
+mod.web_layout.localization.enableGoogleTranslateAuto = 0
+```
+
+The already existing TYPO3 enableTranslate option must be active:
+
+```
+mod.web_layout.localization.enableTranslate = 1
+```
+
+The settings can be changed using User TSconfig (like all other Page TSconfig options):
+
+```
+page.mod.web_layout.localization.enableDeeplTranslate = 1
+```
 
 
 ## Translating content elements

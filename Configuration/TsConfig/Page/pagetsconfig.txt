@@ -1,3 +1,8 @@
 TCEMAIN {
 translateToMessage =
 }
+
+mod.web_layout.localization.enableDeeplTranslate = 1
+mod.web_layout.localization.enableDeeplTranslateAuto = 1
+mod.web_layout.localization.enableGoogleTranslate = 1
+mod.web_layout.localization.enableGoogleTranslateAuto = 1
