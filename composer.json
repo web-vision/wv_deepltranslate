@@ -30,5 +30,12 @@
     "typo3/cms": {
       "extension-key": "wv_deepltranslate"
     }
+  },
+  "require": {
+    "php": "~7.2.0 || ~7.3.0 || ~7.4.0",
+    "typo3/cms-core": "^9.5.1 || ^10.4",
+    "typo3/cms-backend": "^9.5.1 || ^10.4",
+    "typo3/cms-extbase": "^9.5.1 || ^10.4",
+    "typo3/cms-fluid": "^9.5.1 || ^10.4"
   }
 }
