@@ -1,7 +1,7 @@
 {
   "name": "web-vision/wv_deepltranslate",
   "description" : "Fork of deepltranslate from pitsolutions.This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages using Deepl and Googletranslate Api services.",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "autoload": {
         "psr-4": {
             "WebVision\\WvDeepltranslate\\": "Classes"
