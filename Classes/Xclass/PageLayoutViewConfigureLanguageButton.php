@@ -103,7 +103,7 @@ class PageLayoutViewConfigureLanguageButton extends PageLayoutView
 
                 . ' data-allow-deepl-translate="' . (int)$allowDeeplTranslate . '"'
                 . ' data-allow-deepl-translate-auto="' . (int)$allowDeeplTranslateAuto . '"'
-                . ' data-allow-ggogle-translate="' . (int)$allowGoogleTranslate . '"'
+                . ' data-allow-google-translate="' . (int)$allowGoogleTranslate . '"'
                 . ' data-allow-google-translate-auto="' . (int)$allowGoogleTranslateAuto . '"'
 
                 . ' data-table="tt_content"'

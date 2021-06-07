@@ -176,8 +176,8 @@ Localization.initialize = function() {
                 + '</div>'
             );
         }
-        var allowGoogleTranslateAuto = $triggerButton.data('allowGoogleTranslateAuto');
-        if (allowGoogleTranslateAuto == null || allowGoogleTranslateAuto) {
+        var allowGoogleTranslate = $triggerButton.data('allowGoogleTranslate');
+        if (allowGoogleTranslate == null || allowGoogleTranslate) {
             actions.push(
                 '<div class="row" id="googleTranslate">'
                 + '<div class="btn-group col-sm-3">' + Localization.actions.googletranslate[0].outerHTML + '</div>'
@@ -187,8 +187,8 @@ Localization.initialize = function() {
                 + '</div>'
             );
         }
-        var allowGoogleTranslate = $triggerButton.data('allowGoogleTranslate');
-        if (allowGoogleTranslate == null || allowGoogleTranslate) {
+        var allowGoogleTranslateAuto = $triggerButton.data('allowGoogleTranslateAuto');
+        if (allowGoogleTranslateAuto == null || allowGoogleTranslateAuto) {
             actions.push(
                 '<div class="row" id="googleTranslateAuto">'
                 + '<div class="btn-group col-sm-3">' + Localization.actions.googletranslateAuto[0].outerHTML + '</div>'
