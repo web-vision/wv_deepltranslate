@@ -151,7 +151,11 @@ Localization.initialize = function() {
             + '</div>'
         );
 
-        if ($triggerButton.data('allowDeeplTranslateAuto')) {
+        // if allowDeeplTranslateAuto (and others) is undefined, we use default of "on"
+        // (could happen if fluidBasedPageModule feature toggle is on and LanguageColumns.html partial in this extension
+        // is not used)
+        var allowDeeplTranslateAuto = $triggerButton.data('allowDeeplTranslateAuto');
+        if (allowDeeplTranslateAuto == null || allowDeeplTranslateAuto) {
             actions.push(
                 '<div class="row" id="deeplTranslateAuto">'
                 + '<div class="btn-group col-sm-3">' + Localization.actions.deepltranslateAuto[0].outerHTML + '</div>'
@@ -161,7 +165,8 @@ Localization.initialize = function() {
                 + '</div>'
             );
         }
-        if ($triggerButton.data('allowDeeplTranslate')) {
+        var allowDeeplTranslate = $triggerButton.data('allowDeeplTranslate');
+        if (allowDeeplTranslate == null || allowDeeplTranslate) {
             actions.push(
                 '<div class="row" id="deeplTranslate">'
                 + '<div class="btn-group col-sm-3">' + Localization.actions.deepltranslate[0].outerHTML + '</div>'
@@ -171,7 +176,8 @@ Localization.initialize = function() {
                 + '</div>'
             );
         }
-        if ($triggerButton.data('allowGoogleTranslateAuto')) {
+        var allowGoogleTranslateAuto = $triggerButton.data('allowGoogleTranslateAuto');
+        if (allowGoogleTranslateAuto == null || allowGoogleTranslateAuto) {
             actions.push(
                 '<div class="row" id="googleTranslate">'
                 + '<div class="btn-group col-sm-3">' + Localization.actions.googletranslate[0].outerHTML + '</div>'
@@ -181,7 +187,8 @@ Localization.initialize = function() {
                 + '</div>'
             );
         }
-        if ($triggerButton.data('allowGoogleTranslate')) {
+        var allowGoogleTranslate = $triggerButton.data('allowGoogleTranslate');
+        if (allowGoogleTranslate == null || allowGoogleTranslate) {
             actions.push(
                 '<div class="row" id="googleTranslateAuto">'
                 + '<div class="btn-group col-sm-3">' + Localization.actions.googletranslateAuto[0].outerHTML + '</div>'

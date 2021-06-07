@@ -38,6 +38,12 @@ use TYPO3\CMS\Backend\View\PageLayoutView;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * XCLASS core PageLayoutView
+ *
+ * @deprecated this is not longer required if feature toggle fluidBasedPageModule
+ *  is enabled. Can be removed in TYPO3 11.
+ */
 class PageLayoutViewConfigureLanguageButton extends PageLayoutView
 {
     /**

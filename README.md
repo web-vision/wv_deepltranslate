@@ -20,6 +20,8 @@ Once you installed the extension, you have to set the Deepl API Key under extens
 
 The buttons in the translate dialog can be configured via Page TSconfig, for example:
 
+**IMPORTANT:** This currently only works if the feature toggle *fluidBasedPageModule* is not activated.
+
 ```
 mod.web_layout.localization.enableDeeplTranslate = 1
 mod.web_layout.localization.enableDeeplTranslateAuto = 0
