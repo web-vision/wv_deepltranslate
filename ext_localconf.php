@@ -23,6 +23,9 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Recordlist\\RecordLis
 
 
 //xclass PageLayoutView to make DeepL + Google translate buttons configurable
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Backend\View\PageLayoutView::class] = [
-    'className' =>  WebVision\WvDeepltranslate\Xclass\PageLayoutViewConfigureLanguageButton::class,
-];
+// only enable if feature toggle fluidBasedPageModule is not enabled
+if (TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Configuration\Features::class)->isFeatureEnabled('fluidBasedPageModule') == false) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Backend\View\PageLayoutView::class] = [
+        'className' => WebVision\WvDeepltranslate\Xclass\PageLayoutViewConfigureLanguageButton::class,
+    ];
+}
