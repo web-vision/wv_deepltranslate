@@ -54,9 +54,10 @@ class DeeplService
 
     /**
      * Default supported languages
+     * @see https://www.deepl.com/de/docs-api/translating-text/#request
      * @var array
      */
-    public $apiSupportedLanguages = ['EN', 'DE', 'FR', 'ES', 'IT', 'NL', 'PL' ,'RU', 'PT'];
+    public $apiSupportedLanguages = ['EN', 'DE', 'FR', 'ES', 'IT', 'NL', 'PL' ,'RU', 'PT', 'DA', 'BG', 'CS', 'EL', 'ET', 'FI', 'HU', 'JA', 'LT', 'LV', 'PT', 'RO', 'SK', 'SL', 'SV', 'ZH'];
 
     /**
      * @var RequestFactory
