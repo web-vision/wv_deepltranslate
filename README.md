@@ -1,8 +1,8 @@
 
 ## What does it do?
-Fork of deepltranslate from pitsolutions.This extension provides option to translate content elements and tca record fields to desired language(supported by [Deepl](https://www.deepl.com/en/api.html)). As a fallback, Google translate option is also provided as they provide support for many languages that deepl isn’t providing.
+Fork of deepltranslate from pitsolutions.This extension provides option to translate content elements and tca record fields to desired language(supported by [Deepl](https://www.deepl.com/en/api.html)). As a fallback, Google Translate option is also provided as they provide support for many languages that deepl isn’t providing.
 
-For both Deepl translate and Google translate, there are two modes-normal and autodetect, where the later autodetects source language and translates it to the desired language.
+For both Deepl Translate and Google Translate, there are two modes-normal and autodetect, where the later autodetects source language and translates it to the desired language.
 
 ## Installation
 You can install the extension using: 
@@ -13,26 +13,27 @@ Once installed ,there appears a Deepl back end module with a settings tab.
 ## Requirements
 - TYPO3 8.5 to 8.7.99 (V1.0.0 - 1.0.1)
 - TYPO3 9.5.1 to 9.5.99 (V1.0.2 onwards)
+- TYPO3 9.5.1 to 10.4.99 (V1.1.2 onwards)
 
-## Extension Configuartion
+## Extension Configuration
 
-Once you installed the extension, you have to set the Deepl API Key under extension configuration section
+Once you installed the extension, you have to set the Deepl API Key under extension configuration section. Please note that with Deepl Free, the API host is different.
 
 
 ## Translating content elements
 
-Once the extension is installed and Api key provided we are good to go for translating content elements.On translating content element,There appears additional four options apart from normal tranlate and copy.
+Once the extension is installed and API key provided we are good to go for translating content elements.On translating content element,There appears additional four options apart from normal tranlate and copy.
 
-- Deepl Translate(auto detect).
+- Deepl Translate (auto detect).
 - Deepl Translate.
-- Google Translate(auto detect).
+- Google Translate (auto detect).
 - Google Translate.
 
 ## Translating TCA records
 
-Deepltranslate supports translation of specific fields of TCA records.It understands fields which need to be translated, only if their ``` l10n_mode ``` is set to ``` prefixLangTitle ```.
+Deepl Translate supports translation of specific fields of TCA records. It understands fields which need to be translated, only if their ``` l10n_mode ``` is set to ``` prefixLangTitle ```.
 
-For example if you need translation of fields of tx_news (teaser and bodytext),You need to override those fields like follows:
+For example, if you need translation of fields of tx_news (teaser and bodytext), you need to override those fields like follows:
 
 Add it to TCA/Overrides: 
 Example : ``` typo3conf/ext/theme/Configuration/TCA/Overrides/tx_news_domain_model_news.php ```
@@ -49,7 +50,7 @@ $GLOBALS['TCA']['tx_news_domain_model_news']['columns']['teaser']['l10n_mode'] =
 
 ## Translating Content elements and TCA records - Editor users
 
-For the perfect working of deepltranslate with editor users , we need to make sure that the editor has some necessary permissions in ``` Access Lists ``` . Make sure editors have following permissions :
+For the perfect working of Deepl Translate with editor users, we need to make sure that the editor has some necessary permissions in ``` Access Lists ``` . Make sure editors have following permissions :
 
 * Tables (modify) - Better provide permission to all core tables and necesary thirdparty extension tables.
 * Allowed excludefields
@@ -70,10 +71,10 @@ For the perfect working of deepltranslate with editor users , we need to make su
 
 
 ## Deepl Module Settings
-The settings module helps to assign the sytem languages to either deepl supported languages or to Google supported languages.
+The settings module helps to assign the system languages to either Deepl supported languages or to Google supported languages.
 
-For example you can assign German under Austrian German sys language if you wish. For assigning a language to a sys language you must enter it’s isocode(ISO 639-1).
+For example, you can assign German under Austrian German sys language if you wish. For assigning a language to a sys language you must enter it’s isocode (ISO 639-1).
 
 ## FAQ
 
-See faq [here](https://docs.typo3.org/typo3cms/extensions/wv_deepltranslate/Faq/Index.html) 
+See FAQ [here](https://docs.typo3.org/typo3cms/extensions/wv_deepltranslate/Faq/Index.html) 
