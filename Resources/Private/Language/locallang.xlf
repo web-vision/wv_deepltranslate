@@ -4,20 +4,16 @@
         <header/>
         <body>
             <trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
-                <source>Translating content via Deepl translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.
-                </source>
+                <source>Translating content via Deepl Translate will create a translation from source language to the language you translate to. The translated content will be from deepl translation service which is 99 percentage accurate. Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, Polish and many other languages. Unsupported languages will be ignored and will default to the normal translate operation of TYPO3.</source>
             </trans-unit>
             <trans-unit id="localize.educate.deepltranslateAuto" xml:space="preserve">
-                <source>Translating content via Deepl translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.
-                </source>
+                <source>Translating content via Deepl Translate (autodetect) will create a translation from auto detected source language to the language you translate to. The translated content will be from deepl translation service which is 99 percentage accurate. Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, Polish and many other languages. Unsupported languages will be ignored and will default to the normal translate operation of TYPO3.</source>
             </trans-unit>
             <trans-unit id="localize.educate.googleTranslate" xml:space="preserve">
-                <source>Translating content via Google Translate will create a translation  from source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.
-                </source>
+                <source>Translating content via Google Translate will create a translation from source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
             </trans-unit>
             <trans-unit id="localize.educate.googleTranslateAuto" xml:space="preserve">
-                <source>Translating content via Google Translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.
-                </source>
+                <source>Translating content via Google Translate (autodetect) will create a translation from auto detected source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
             </trans-unit>
             <trans-unit id="deepl_settings" xml:space="preserve">
                 <source>Deepl Settings</source>
@@ -38,7 +34,7 @@
                 <source>System Language</source>
             </trans-unit>
             <trans-unit id="deepliso" xml:space="preserve">
-                <source>Assigned Language(ISO Code)</source>
+                <source>Assigned Language (ISO Code)</source>
             </trans-unit>
             <trans-unit id="mlang_tabs_tab" xml:space="preserve">
                 <source>Deepl</source>
