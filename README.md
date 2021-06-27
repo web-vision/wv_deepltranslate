@@ -73,7 +73,7 @@ For the perfect working of Deepl Translate with editor users, we need to make su
 ## Deepl Module Settings
 The settings module helps to assign the system languages to either Deepl supported languages or to Google supported languages.
 
-For example, you can assign German under Austrian German sys language if you wish. For assigning a language to a sys language you must enter it’s isocode (ISO 639-1).
+For example, you can assign German under Austrian German sys language if you wish. For assigning a language to a sys language you must enter its isocode (ISO 639-1).
 
 ## FAQ
 
