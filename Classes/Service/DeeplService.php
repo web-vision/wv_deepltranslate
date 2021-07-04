@@ -71,6 +71,12 @@ class DeeplService
     public $formalitySupportedLanguages = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
 
     /**
+     * Formality supported languages
+     * @var array
+     */
+    public $formalitySupportedLanguages = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
+
+    /**
      * @var RequestFactory
      */
     public $requestFactory;
