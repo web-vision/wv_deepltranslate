@@ -2,6 +2,8 @@
 apiKey =
 # cat=Settings/O; type=string; label= Deepl API Url: Please note that with Deepl Free, the API host is https://api-free.deepl.com
 apiUrl = https://api.deepl.com/v2/translate
+# cat=Settings/O; type=string; label= Deepl Formality: Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages "DE", "FR", "IT", "ES", "NL", "PL", "PT-PT", "PT-BR" and "RU". Possible options are: "default", "more" and "less"
+deeplFormality = default
 # cat=Settings/O; type=string; label= Google Translate API Key (Non freemode)
 googleapiKey =
 # cat=Settings/O; type=string; label= Google Translate API Url (Non freemode)

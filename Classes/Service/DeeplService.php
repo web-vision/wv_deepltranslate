@@ -53,11 +53,22 @@ class DeeplService
     public $apiUrl;
 
     /**
+     * @var string
+     */
+    public $deeplFormality;
+
+    /**
      * Default supported languages
      * @see https://www.deepl.com/de/docs-api/translating-text/#request
      * @var array
      */
     public $apiSupportedLanguages = ['BG', 'CS', 'DA', 'DE', 'EL', 'EN', 'ES', 'ET', 'FI', 'FR', 'HU', 'IT', 'JA', 'LT', 'LV', 'NL', 'PL', 'PT', 'RO', 'RU', 'SK', 'SL', 'SV', 'ZH'];
+
+    /**
+     * Formality supported languages
+     * @var array
+     */
+    public $formalitySupportedLanguages = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
 
     /**
      * @var RequestFactory
@@ -82,6 +93,7 @@ class DeeplService
 
         $this->apiUrl                  = $extConf['apiUrl'];
         $this->apiKey                  = $extConf['apiKey'];
+        $this->deeplFormality          = $extConf['deeplFormality'];
         $this->apiSupportedLanguages   = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages);
     }
 
@@ -98,6 +110,9 @@ class DeeplService
             'target_lang'  => urlencode($targetLanguage),
             'tag_handling' => urlencode('xml'),
         ];
+        if (!empty($this->deeplFormality) && in_array(strtoupper($targetLanguage), $this->formalitySupportedLanguages, true)) {
+            $postFields['formality'] = $this->deeplFormality;
+        }
         //url-ify the data to get content length
         foreach ($postFields as $key => $value) {
             $postFieldString .= $key . '=' . $value . '&';
