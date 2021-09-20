@@ -12,11 +12,18 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['chec
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess']['deepl'] = 'WebVision\\WvDeepltranslate\\Hooks\\TranslateHook->executePreRenderHook';
 
 //xclass localizationcontroller for localizeRecords() and process() action
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\Page\\LocalizationController'] = array(
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\Page\\LocalizationController'] = [
     'className' => 'WebVision\\WvDeepltranslate\\Override\\LocalizationController',
-);
+];
 
 //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Recordlist\\RecordList\\DatabaseRecordList'] = array(
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Recordlist\\RecordList\\DatabaseRecordList'] = [
     'className' => 'WebVision\\WvDeepltranslate\\Override\\DatabaseRecordList',
-);
+];
+
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {
+    //xclass CommandMapPostProcessingHook for translating contents within containers
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['B13\\Container\\Hooks\\Datahandler\\CommandMapPostProcessingHook'] = [
+        'className' => 'WebVision\\WvDeepltranslate\\Override\\CommandMapPostProcessingHook',
+    ];
+}
