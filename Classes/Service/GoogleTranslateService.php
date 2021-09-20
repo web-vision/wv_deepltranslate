@@ -128,15 +128,17 @@ class GoogleTranslateService
         try {
             $response = $this->requestFactory->request($url, 'POST', [
                 'form_params' => $fields,
-                'headers'     => ['Content-Type: application/x-www-form-urlencoded', 'Content-Length:' . $contentLength, 'charset=utf-8'],
+                'headers'     => [
+                    'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',
+                    'Content-Length' => $contentLength
+                ],
             ]);
         } catch (ClientException $e) {
             $result['status']  = 'false';
-            if($e->getCode() == 404){
-              $result['message'] = "Google Api url not reachable.Check whether the Api url provided in extension configuration is valid(non freemode).";
-            }
-            else{
-              $result['message'] = $e->getMessage();
+            if ($e->getCode() == 404) {
+                $result['message'] = "Google Api url not reachable.Check whether the Api url provided in extension configuration is valid(non freemode).";
+            } else {
+                $result['message'] = $e->getMessage();
             }
             $result            = json_encode($result);
             echo $result;
