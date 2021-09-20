@@ -108,7 +108,10 @@ class DeeplService
         try {
             $response = $this->requestFactory->request($this->apiUrl, 'POST', [
                 'form_params' => $postFields,
-                'headers'     => ['Content-Type: application/x-www-form-urlencoded', 'Content-Length:' . $contentLength],
+                'headers'     => [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Content-Length' => $contentLength,
+                ],
             ]);
         } catch (ClientException $e) {
             $result            = [];

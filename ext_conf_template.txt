@@ -1,6 +1,6 @@
 # cat=Settings/O; type=string; label= Deepl API Key
 apiKey =
-# cat=Settings/O; type=string; label= Deepl API Url: Please note that with Deepl Free, the API host is https://api-free.deepl.com
+# cat=Settings/O; type=string; label= Deepl API Url: Please note that with Deepl Free, the API host is https://api-free.deepl.com. This free DeepL API Key includes 500.000 words per month.You can register for new Deepl Free API here = https://www.deepl.com/pro-checkout/account?productId=1200&yearly=false&trial=false
 apiUrl = https://api.deepl.com/v2/translate
 # cat=Settings/O; type=string; label= Google Translate API Key (Non freemode)
 googleapiKey =
