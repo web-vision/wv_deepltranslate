@@ -28,6 +28,7 @@ use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Annotation\Inject;
+use TYPO3\CMS\Core\Page\PageRenderer;
 
 /**
  * Class SettingsController
@@ -37,21 +38,42 @@ class SettingsController extends ActionController
     /**
      * pageRenderer
      * @var \TYPO3\CMS\Core\Page\PageRenderer
-     * @Inject
      */
     protected $pageRenderer;
 
     /**
+     * @param PageRenderer $pageRenderer
+     */
+    public function injectPageRenderer(PageRenderer $pageRenderer)
+    {
+        $this->pageRenderer = $pageRenderer;
+    }
+
+    /**
      * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
-     * @Inject
      */
     protected $deeplSettingsRepository;
 
     /**
+     * @param DeeplSettingsRepository $deeplSettingsRepository
+     */
+    public function injectDeeplSettingsRepository(DeeplSettingsRepository $deeplSettingsRepository)
+    {
+        $this->deeplSettingsRepository = $deeplSettingsRepository;
+    }
+
+    /**
      * @var \WebVision\WvDeepltranslate\Service\DeeplService
-     * @Inject
      */
     protected $deeplService;
+
+    /**
+     * @param DeeplService $deeplService
+     */
+    public function injectDeeplService(DeeplService $deeplService)
+    {
+        $this->deeplService = $deeplService;
+    }
 
     /**
      * Default action
@@ -103,7 +125,6 @@ class SettingsController extends ActionController
         }
         $args['redirectFrom'] = 'savesetting';
         $this->redirect('index', 'Settings', 'Deepl', $args);
-
     }
 
     /**
@@ -127,5 +148,4 @@ class SettingsController extends ActionController
         }
         return $table;
     }
-
 }
