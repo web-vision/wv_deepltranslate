@@ -31,7 +31,6 @@ namespace WebVision\WvDeepltranslate\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
