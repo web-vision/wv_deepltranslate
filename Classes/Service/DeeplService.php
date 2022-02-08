@@ -114,6 +114,7 @@ class DeeplService
             $postFields['formality'] = $this->deeplFormality;
         }
         //url-ify the data to get content length
+        $postFieldString = '';
         foreach ($postFields as $key => $value) {
             $postFieldString .= $key . '=' . $value . '&';
         }
