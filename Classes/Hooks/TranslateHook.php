@@ -1,4 +1,5 @@
 <?php
+
 namespace WebVision\WvDeepltranslate\Hooks;
 
 /***************************************************************
@@ -30,6 +31,7 @@ namespace WebVision\WvDeepltranslate\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
@@ -63,8 +65,8 @@ class TranslateHook
      */
     public function __construct()
     {
-        $this->deeplService            = GeneralUtility::makeInstance(DeeplService::class);
-        $this->googleService           = GeneralUtility::makeInstance(GoogleTranslateService::class);
+        $this->deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $this->googleService = GeneralUtility::makeInstance(GoogleTranslateService::class);
         $this->deeplSettingsRepository = GeneralUtility::makeInstance(DeeplSettingsRepository::class);
     }
 
@@ -87,12 +89,13 @@ class TranslateHook
             break;
         }
         $customMode = $cmdmap['localization']['custom']['mode'];
+
         //translation mode set to deepl or google translate
         if (!is_null($customMode)) {
-            $langParam          = explode('-', $cmdmap['localization']['custom']['srcLanguageId']);
+            $langParam = explode('-', $cmdmap['localization']['custom']['srcLanguageId']);
             $sourceLanguageCode = $langParam[0];
-            $targetLanguage     = BackendUtility::getRecord('sys_language', $languageRecord['uid']);
-            $sourceLanguage     = BackendUtility::getRecord('sys_language', (int) $sourceLanguageCode);
+            $targetLanguage = BackendUtility::getRecord('sys_language', $languageRecord['uid']);
+            $sourceLanguage = BackendUtility::getRecord('sys_language', (int)$sourceLanguageCode);
             //get target language mapping if any
             $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
             if ($targetLanguageMapping != null) {
@@ -104,7 +107,7 @@ class TranslateHook
                 $sourceLanguageIso = 'en';
                 //choose between default and autodetect
                 $deeplSourceIso = ($sourceLanguageCode == 'auto' ? null : 'EN');
-                
+
                 // Try to find the default language from the site configuration
                 if (isset($tablename) && isset($currectRecordId)) {
                     $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
@@ -126,21 +129,20 @@ class TranslateHook
                     $sourceLanguage['language_isocode'] = $sourceLanguageMapping;
                 }
                 $sourceLanguageIso = $sourceLanguage['language_isocode'];
-                $deeplSourceIso    = $sourceLanguageIso;
+                $deeplSourceIso = $sourceLanguageIso;
             }
             if ($this->isHtml($content)) {
                 $content = $this->stripSpecificTags(['br'], $content);
             }
+
             //mode deepl
             if ($customMode == 'deepl') {
                 //if target language and source language among supported languages
                 if (in_array(strtoupper($targetLanguage['language_isocode']), $this->deeplService->apiSupportedLanguages)) {
-
                     if ($tablename == 'tt_content') {
                         $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $deeplSourceIso);
-
                     } else {
-                        $currentRecord     = BackendUtility::getRecord($tablename, (int) $currectRecordId);
+                        $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
                         $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $sourceLanguage['language_isocode']);
                     }
                     if (!empty($response) && isset($response->translations)) {
@@ -152,14 +154,12 @@ class TranslateHook
                         }
                     }
                 }
-            }
-            //mode google
+            } //mode google
             elseif ($customMode == 'google') {
                 if ($tablename == 'tt_content') {
                     $response = $this->googleService->translate($deeplSourceIso, $targetLanguage['language_isocode'], $content);
-
                 } else {
-                    $currentRecord     = BackendUtility::getRecord($tablename, (int) $currectRecordId);
+                    $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
                     $response = $this->googleService->translate($content, $targetLanguage['language_isocode'], $content);
                 }
                 if (!empty($response)) {
@@ -186,21 +186,18 @@ class TranslateHook
             //include deepl.css
             if (is_array($hook['cssFiles'])) {
                 $hook['cssFiles']['/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css'] = [
-                    'file'                     => '/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css',
-                    'rel'                      => 'stylesheet',
-                    'media'                    => 'all',
-                    'title'                    => '',
-                    'compress'                 => true,
-                    'forceOnTop'               => false,
-                    'allWrap'                  => '',
+                    'file' => '/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css',
+                    'rel' => 'stylesheet',
+                    'media' => 'all',
+                    'title' => '',
+                    'compress' => true,
+                    'forceOnTop' => false,
+                    'allWrap' => '',
                     'excludeFromConcatenation' => false,
-                    'splitChar'                => '|',
+                    'splitChar' => '|',
                 ];
             }
-            //override Localization.js
-            if (is_array($hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization'])) {
-                $hook['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization']['code'] = 'require(["TYPO3/CMS/WvDeepltranslate/Localization"]);';
-            }
+
             //inline js for adding deepl button on records list.
             $hook['jsInline']['RecordListInlineJS']['code'] .= "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";
         }
@@ -228,5 +225,4 @@ class TranslateHook
         }
         return $content;
     }
-
 }

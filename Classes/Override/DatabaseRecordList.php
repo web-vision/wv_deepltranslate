@@ -1,90 +1,231 @@
 <?php
-namespace WebVision\WvDeepltranslate\Override;
 
-/*
- * This file is part of the TYPO3 CMS project.
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
+namespace WebVision\WvDeepltranslate\Hooks;
 
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) 2020 Ricky Mathew <ricky@web-vision.de>, web-vision GmbH
+ *      Anu Bhuvanendran Nair <anu@web-vision.de>, web-vision GmbH
+ *
+ *  You may not remove or change the name of the author above. See:
+ *  http://www.gnu.org/licenses/gpl-faq.html#IWantCredit
+ *
+ *  This script is part of the Typo3 project. The Typo3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *  A copy is found in the textfile GPL.txt and important notices to the license
+ *  from the author is found in LICENSE.txt distributed with these scripts.
+ *
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Class for rendering of Web>List module
- */
-class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList
+class TranslateHook
 {
+
     /**
-     * Creates the localization panel
-     *
-     * @param string $table The table
-     * @param mixed[] $row The record for which to make the localization panel.
-     * @return string[] Array with key 0/1 with content for column 1 and 2
+     * @var \WebVision\WvDeepltranslate\Service\DeeplService
      */
-    public function makeLocalizationPanel($table, $row)
+    protected $deeplService;
+
+    /**
+     * @var \WebVision\WvDeepltranslate\Service\GoogleTranslateService
+     */
+    protected $googleService;
+
+    /**
+     * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @inject
+     */
+    protected $deeplSettingsRepository;
+
+    /**
+     * Description
+     * @return type
+     */
+    public function __construct()
     {
-        $out = [
-            0 => '',
-            1 => ''
-        ];
-        // Reset translations
-        $this->translations = [];
+        $this->deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $this->googleService = GeneralUtility::makeInstance(GoogleTranslateService::class);
+        $this->deeplSettingsRepository = GeneralUtility::makeInstance(DeeplSettingsRepository::class);
+    }
 
-        // Language title and icon:
-        $out[0] = $this->languageFlag($row[$GLOBALS['TCA'][$table]['ctrl']['languageField']]);
-        // Guard clause so we can quickly return if a record is localized to "all languages"
-        // It should only be possible to localize a record off default (uid 0)
-        // Reasoning: The Parent is for ALL languages... why overlay with a localization?
-        if ((int)$row[$GLOBALS['TCA'][$table]['ctrl']['languageField']] === -1) {
-            return $out;
+    /**
+     * processTranslateTo_copyAction hook
+     * @param type &$content
+     * @param type $languageRecord
+     * @param type $dataHandler
+     * @return string
+     */
+    public function processTranslateTo_copyAction(&$content, $languageRecord, $dataHandler)
+    {
+        $cmdmap = $dataHandler->cmdmap;
+        foreach ($cmdmap as $key => $array) {
+            $tablename = $key;
+            foreach ($array as $innerkey => $innervalue) {
+                $currectRecordId = $innerkey;
+                break;
+            }
+            break;
         }
+        $customMode = $cmdmap['localization']['custom']['mode'];
 
-        $translations = $this->translateTools->translationInfo($table, $row['uid'], 0, $row, $this->selFieldList);
-        if (is_array($translations)) {
-            $this->translations = $translations['translations'];
-            // Traverse page translations and add icon for each language that does NOT yet exist:
-            $lNew = '';
-            foreach ($this->pageOverlays as $lUid_OnPage => $lsysRec) {
-                if ($this->isEditable($table) && !isset($translations['translations'][$lUid_OnPage]) && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)) {
-                    $url = $this->listURL();
-                    $href = BackendUtility::getLinkToDataHandlerAction(
-                        '&cmd[' . $table . '][' . $row['uid'] . '][localize]=' . $lUid_OnPage,
-                        $url . '&justLocalized=' . rawurlencode($table . ':' . $row['uid'] . ':' . $lUid_OnPage)
-                    );
-                    $language = BackendUtility::getRecord('sys_language', $lUid_OnPage, 'title');
-                    if ($this->languageIconTitles[$lUid_OnPage]['flagIcon']) {
-                        $lC = $this->iconFactory->getIcon($this->languageIconTitles[$lUid_OnPage]['flagIcon'], Icon::SIZE_SMALL)->render();
-                    } else {
-                        $lC = $this->languageIconTitles[$lUid_OnPage]['title'];
+        //translation mode set to deepl or google translate
+        if (!is_null($customMode)) {
+            $langParam = explode('-', $cmdmap['localization']['custom']['srcLanguageId']);
+            $sourceLanguageCode = $langParam[0];
+            $targetLanguage = BackendUtility::getRecord('sys_language', $languageRecord['uid']);
+            $sourceLanguage = BackendUtility::getRecord('sys_language', (int)$sourceLanguageCode);
+            //get target language mapping if any
+            $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
+            if ($targetLanguageMapping != null) {
+                $targetLanguage['language_isocode'] = $targetLanguageMapping;
+            }
+
+            if ($sourceLanguage == null) {
+                // Make good defaults
+                $sourceLanguageIso = 'en';
+                //choose between default and autodetect
+                $deeplSourceIso = ($sourceLanguageCode == 'auto' ? null : 'EN');
+
+                // Try to find the default language from the site configuration
+                if (isset($tablename) && isset($currectRecordId)) {
+                    $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
+                    $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+                    try {
+                        $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
+                        $language = $site->getDefaultLanguage();
+                        $sourceLanguageIso = strtolower($language->getTwoLetterIsoCode());
+                        if ($sourceLanguageCode !== 'auto') {
+                            $deeplSourceIso = strtoupper($sourceLanguageIso);
+                        }
+                    } catch (SiteNotFoundException $exception) {
+                        // Ignore, use defaults
                     }
-                    $lC = '<a href="' . htmlspecialchars($href) . '" title="'
-                        . htmlspecialchars($language['title']) . '" class="btn btn-default">' . $lC . '</a> ';
-                    $lNew .= $lC;
+                }
+            } else {
+                $sourceLanguageMapping = $this->deeplSettingsRepository->getMappings($sourceLanguage['uid']);
+                if ($sourceLanguageMapping != null) {
+                    $sourceLanguage['language_isocode'] = $sourceLanguageMapping;
+                }
+                $sourceLanguageIso = $sourceLanguage['language_isocode'];
+                $deeplSourceIso = $sourceLanguageIso;
+            }
+            if ($this->isHtml($content)) {
+                $content = $this->stripSpecificTags(['br'], $content);
+            }
+
+            //mode deepl
+            if ($customMode == 'deepl') {
+                //if target language and source language among supported languages
+                if (in_array(strtoupper($targetLanguage['language_isocode']), $this->deeplService->apiSupportedLanguages)) {
+                    if ($tablename == 'tt_content') {
+                        $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $deeplSourceIso);
+                    } else {
+                        $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
+                        $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $sourceLanguage['language_isocode']);
+                    }
+                    if (!empty($response) && isset($response->translations)) {
+                        foreach ($response->translations as $translation) {
+                            if ($translation->text != '') {
+                                $content = $translation->text;
+                                break;
+                            }
+                        }
+                    }
+                }
+            } //mode google
+            elseif ($customMode == 'google') {
+                if ($tablename == 'tt_content') {
+                    $response = $this->googleService->translate($deeplSourceIso, $targetLanguage['language_isocode'], $content);
+                } else {
+                    $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
+                    $response = $this->googleService->translate($content, $targetLanguage['language_isocode'], $content);
+                }
+                if (!empty($response)) {
+                    if ($this->isHtml($response)) {
+                        $content = preg_replace('/\/\s/', '/', $response);
+                        $content = preg_replace('/\>\s+/', '>', $content);
+                    } else {
+                        $content = $response;
+                    }
                 }
             }
-
-            if ($lNew) {
-
-                $uid = "'" . $row['uid'] . "'";
-                $table = "'$table'";
-                $lNew .= '<a data-state="hidden" href="#" data-params="data[$table][$uid][hidden]=0" ><label class="btn btn-default btn-checkbox deepl-btn-wrap"><input class="deepl-button" id="deepl-translation-enable-'.$row["uid"].'" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate('.$table.','.$uid.')" /><span></span></label></a>';
-
-                $out[1] .= $lNew;
-            }
-        } elseif ($row['l18n_parent']) {
-            $out[0] = '&nbsp;&nbsp;&nbsp;&nbsp;' . $out[0];
+            //
         }
+    }
 
-        return $out;
+    /**
+     * Execute PreRenderHook for possible manipulation:
+     * Add deepl.css,overrides localization.js
+     */
+    public function executePreRenderHook(&$hook)
+    {
+        //assets are only needed in BE context
+        if (TYPO3_MODE == 'BE') {
+            //include deepl.css
+            if (is_array($hook['cssFiles'])) {
+                $hook['cssFiles']['/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css'] = [
+                    'file' => '/typo3conf/ext/wv_deepltranslate/Resources/Public/Css/deepl-min.css',
+                    'rel' => 'stylesheet',
+                    'media' => 'all',
+                    'title' => '',
+                    'compress' => true,
+                    'forceOnTop' => false,
+                    'allWrap' => '',
+                    'excludeFromConcatenation' => false,
+                    'splitChar' => '|',
+                ];
+            }
+            //override Localization.js
+            $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
+
+
+            //inline js for adding deepl button on records list.
+            $hook['jsInline']['RecordListInlineJS']['code'] .= "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";
+        }
+    }
+
+    /**
+     * check whether the string contains html
+     * @param type $string
+     * @return boolean
+     */
+    public function isHtml($string)
+    {
+        return preg_match("/<[^<]+>/", $string, $m) != 0;
+    }
+
+    /**
+     * stripoff the tags provided
+     * @param type $tags
+     * @return string
+     */
+    public function stripSpecificTags($tags, $content)
+    {
+        foreach ($tags as $tag) {
+            $content = preg_replace("/<\\/?" . $tag . "(.|\\s)*?>/", '', $content);
+        }
+        return $content;
     }
 }
