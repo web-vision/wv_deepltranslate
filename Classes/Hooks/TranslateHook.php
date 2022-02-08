@@ -88,6 +88,11 @@ class TranslateHook
             }
             break;
         }
+
+        if (!isset($cmdmap['localization']['custom']['srcLanguageId'])){
+            $cmdmap['localization']['custom']['srcLanguageId'] = '';
+        }
+
         $customMode = $cmdmap['localization']['custom']['mode'];
 
         //translation mode set to deepl or google translate
