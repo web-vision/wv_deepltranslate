@@ -29,60 +29,62 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
      *
      * @param string $table The table
      * @param mixed[] $row The record for which to make the localization panel.
-     * @return string[] Array with key 0/1 with content for column 1 and 2
+     * @param array $translations
+     * @return string
      */
-    public function makeLocalizationPanel($table, $row)
+    public function makeLocalizationPanel($table, $row, array $translations): string
     {
-        $out = [
-            0 => '',
-            1 => ''
-        ];
-        // Reset translations
-        $this->translations = [];
-
-        // Language title and icon:
-        $out[0] = $this->languageFlag($row[$GLOBALS['TCA'][$table]['ctrl']['languageField']]);
-        // Guard clause so we can quickly return if a record is localized to "all languages"
-        // It should only be possible to localize a record off default (uid 0)
-        // Reasoning: The Parent is for ALL languages... why overlay with a localization?
-        if ((int)$row[$GLOBALS['TCA'][$table]['ctrl']['languageField']] === -1) {
-            return $out;
+        $out = '';
+        // All records excluding pages
+        $possibleTranslations = $this->possibleTranslations;
+        if ($table === 'pages') {
+            // Calculate possible translations for pages
+            $possibleTranslations = array_map(static fn($siteLanguage) => $siteLanguage->getLanguageId(), $this->languagesAllowedForUser);
+            $possibleTranslations = array_filter($possibleTranslations, static fn($languageUid) => $languageUid > 0);
         }
 
-        $translations = $this->translateTools->translationInfo($table, $row['uid'], 0, $row, $this->selFieldList);
-        if (is_array($translations)) {
-            $this->translations = $translations['translations'];
-            // Traverse page translations and add icon for each language that does NOT yet exist:
-            $lNew = '';
-            foreach ($this->pageOverlays as $lUid_OnPage => $lsysRec) {
-                if ($this->isEditable($table) && !isset($translations['translations'][$lUid_OnPage]) && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)) {
-                    $url = $this->listURL();
-                    $href = BackendUtility::getLinkToDataHandlerAction(
-                        '&cmd[' . $table . '][' . $row['uid'] . '][localize]=' . $lUid_OnPage,
-                        $url . '&justLocalized=' . rawurlencode($table . ':' . $row['uid'] . ':' . $lUid_OnPage)
-                    );
-                    $language = BackendUtility::getRecord('sys_language', $lUid_OnPage, 'title');
-                    if ($this->languageIconTitles[$lUid_OnPage]['flagIcon']) {
-                        $lC = $this->iconFactory->getIcon($this->languageIconTitles[$lUid_OnPage]['flagIcon'], Icon::SIZE_SMALL)->render();
-                    } else {
-                        $lC = $this->languageIconTitles[$lUid_OnPage]['title'];
-                    }
-                    $lC = '<a href="' . htmlspecialchars($href) . '" title="'
-                        . htmlspecialchars($language['title']) . '" class="btn btn-default">' . $lC . '</a> ';
-                    $lNew .= $lC;
-                }
+        // Traverse page translations and add icon for each language that does NOT yet exist and is included in site configuration:
+        $pageId = (int)($table === 'pages' ? $row['uid'] : $row['pid']);
+        $languageInformation = $this->translateTools->getSystemLanguages($pageId);
+
+        $lNew = '';
+        foreach ($possibleTranslations as $lUid_OnPage) {
+            if ($this->isEditable($table)
+                && !$this->isRecordDeletePlaceholder($row)
+                && !isset($translations[$lUid_OnPage])
+                && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)
+            ) {
+                $redirectUrl = (string)$this->uriBuilder->buildUriFromRoute(
+                    'record_edit',
+                    [
+                        'justLocalized' => $table . ':' . $row['uid'] . ':' . $lUid_OnPage,
+                        'returnUrl' => $this->listURL(),
+                    ]
+                );
+                $params = [];
+                $params['redirect'] = $redirectUrl;
+                $params['cmd'][$table][$row['uid']]['localize'] = $lUid_OnPage;
+                $href = (string)$this->uriBuilder->buildUriFromRoute('tce_db', $params);
+                $title = htmlspecialchars($languageInformation[$lUid_OnPage]['title'] ?? '');
+
+                $lC = ($languageInformation[$lUid_OnPage]['flagIcon'] ?? false)
+                    ? $this->iconFactory->getIcon($languageInformation[$lUid_OnPage]['flagIcon'], Icon::SIZE_SMALL)->render()
+                    : $title;
+
+                $out .= '<a href="' . htmlspecialchars($href) . '"'
+                    . '" class="btn btn-default t3js-action-localize"'
+                    . ' title="' . $title . '">'
+                    . $lC . '</a> ';
+                $lNew .= $lC;
             }
+        }
+        if ($lNew) {
 
-            if ($lNew) {
+            $uid = "'" . $row['uid'] . "'";
+            $table = "'$table'";
+            $lNew = '<a data-state="hidden" href="#" data-params="data[$table][$uid][hidden]=0" ><label class="btn btn-default btn-checkbox deepl-btn-wrap"><input class="deepl-button" id="deepl-translation-enable-' . $row["uid"] . '" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate(' . $table . ',' . $uid . ')" /><span></span></label></a>';
 
-                $uid = "'" . $row['uid'] . "'";
-                $table = "'$table'";
-                $lNew .= '<a data-state="hidden" href="#" data-params="data[$table][$uid][hidden]=0" ><label class="btn btn-default btn-checkbox deepl-btn-wrap"><input class="deepl-button" id="deepl-translation-enable-'.$row["uid"].'" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate('.$table.','.$uid.')" /><span></span></label></a>';
-
-                $out[1] .= $lNew;
-            }
-        } elseif ($row['l18n_parent']) {
-            $out[0] = '&nbsp;&nbsp;&nbsp;&nbsp;' . $out[0];
+            $out .= $lNew;
         }
 
         return $out;
