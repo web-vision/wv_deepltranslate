@@ -112,7 +112,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             $availableLanguages[]      = $systemLanguages[0];
 
             foreach ($fetchedAvailableLanguages as $language) {
-                if (isset($systemLanguages[$language['uid']])) {
+                if (isset($language['uid']) && isset($systemLanguages[$language['uid']])) {
                     $availableLanguages[] = $systemLanguages[$language['uid']];
                 }
             }

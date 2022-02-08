@@ -88,6 +88,11 @@ class TranslateHook
             }
             break;
         }
+
+        if (!isset($cmdmap['localization']['custom']['srcLanguageId'])){
+            $cmdmap['localization']['custom']['srcLanguageId'] = '';
+        }
+
         $customMode = $cmdmap['localization']['custom']['mode'];
 
         //translation mode set to deepl or google translate
@@ -199,7 +204,12 @@ class TranslateHook
             }
 
             //inline js for adding deepl button on records list.
-            $hook['jsInline']['RecordListInlineJS']['code'] .= "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";
+            $deeplButton = "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";
+            if (isset($hook['jsInline']['RecordListInlineJS']['code'])){
+                $hook['jsInline']['RecordListInlineJS']['code'] .= $deeplButton;
+            }else{
+                $hook['jsInline']['RecordListInlineJS']['code'] = $deeplButton;
+            }
         }
     }
 
