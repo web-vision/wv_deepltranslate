@@ -29,6 +29,8 @@ Once installed ,there appears a Deepl back end module with a settings tab.
 
 - TYPO3 9.5.1 to 10.4.99 (V1.0.2 onwards)
 
+- TYPO3 11.5.1 to 11.5.99 (V2.0 onwards)
+
   
 
 ## Extension Configuartion

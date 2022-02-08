@@ -27,3 +27,7 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {
         'className' => 'WebVision\\WvDeepltranslate\\Override\\CommandMapPostProcessingHook',
     ];
 }
+
+//override Localization.js
+$pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+$pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
