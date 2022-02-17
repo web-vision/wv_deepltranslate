@@ -112,7 +112,7 @@ class SettingsController extends ActionController
 
         $data = [];
         //get existing assignments if any
-        $languageAssignments = $this->deeplSettingsRepository->getAssignments($queryBuilder);
+        $languageAssignments = $this->deeplSettingsRepository->getAssignments();
         if (!empty($languages)) {
             $data['languages_assigned'] = serialize($languages);
         }
@@ -142,7 +142,7 @@ class SettingsController extends ActionController
             $option     = [];
             $option     = $sysLanguage;
             if (in_array($sysLanguage['uid'], $selectedKeys) || in_array(strtoupper($sysLanguage['language_isocode']), $this->deeplService->apiSupportedLanguages)) {
-                $option['value'] = $preselectedValues[$sysLanguage['uid']] ? $preselectedValues[$sysLanguage['uid']] : strtoupper($syslangIso);
+                $option['value'] = isset($preselectedValues[$sysLanguage['uid']]) ? $preselectedValues[$sysLanguage['uid']] : strtoupper($syslangIso);
             }
             $table[] = $option;
         }
