@@ -159,10 +159,18 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             ];
         }
 
-        return (new JsonResponse())->setPayload([
+        $response = (new JsonResponse())->setPayload([
             'records' => $records,
             'columns' => $this->getPageColumns($pageId, $records, $params),
         ]);
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {
+            // s. EXT:containers Xclass B13\Container\Xclasses\LocalizationController
+            $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class);
+            $payload = json_decode($response->getBody()->getContents(), true);
+            $payload = $recordLocalizeSummaryModifier->rebuildPayload($payload);
+            return new JsonResponse($payload);
+        }
+        return $response;
     }
 
     /**
