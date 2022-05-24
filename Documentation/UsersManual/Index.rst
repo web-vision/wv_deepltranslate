@@ -26,8 +26,8 @@ Extension Configuartion
 * Once you installed the extension, you have to set the Deepl API Key under extension configuration section
 
 .. figure:: ../Images/UserManual/configuration.png
-	:width: 700px
-	:alt: Extension configuration
+    :width: 700px
+    :alt: Extension configuration
 
 
 Translating content elements
@@ -42,18 +42,18 @@ Once the extension is installed and Api key provided we are good to go for trans
 
 
 .. figure:: ../Images/UserManual/deepl.png
-	:height: 450px
-	:alt: Deepl Options
+    :height: 450px
+    :alt: Deepl Options
 
 
-	Deepl translate options
+    Deepl translate options
 
 .. figure:: ../Images/UserManual/google.png
-	:height: 450px
-	:alt: Google Options
+    :height: 450px
+    :alt: Google Options
 
 
-	Google translate options
+    Google translate options
 
 Deepl Module Settings
 -------------------------------
@@ -63,11 +63,11 @@ The settings module helps to assign the sytem languages to either deepl supporte
 For example you can assign German to Austrian German sys language if you wish. For assigning a language to a sys language you must enter it's isocode(ISO 639-1).
 
 .. figure:: ../Images/UserManual/settings.png
-	:width: 800px
-	:alt: Settings
+    :width: 800px
+    :alt: Settings
 
 
-	Module Settings
+    Module Settings
 
 Translating TCA Records
 ---------------------------------------
