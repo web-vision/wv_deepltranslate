@@ -24,11 +24,10 @@ namespace WebVision\WvDeepltranslate\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Annotation\Inject;
-use TYPO3\CMS\Core\Page\PageRenderer;
 
 /**
  * Class SettingsController
@@ -77,14 +76,13 @@ class SettingsController extends ActionController
 
     /**
      * Default action
-     * @return void
      */
     public function indexAction()
     {
         $args = $this->request->getArguments();
         if (!empty($args) && $args['redirectFrom'] == 'savesetting') {
             $successMessage = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('settings_success', 'Deepl');
-            $this->pageRenderer->addJsInlineCode("success", "top.TYPO3.Notification.success('Saved', '" . $successMessage . "');");
+            $this->pageRenderer->addJsInlineCode('success', "top.TYPO3.Notification.success('Saved', '" . $successMessage . "');");
         }
 
         $sysLanguages = $this->deeplSettingsRepository->getSysLanguages();
@@ -101,7 +99,6 @@ class SettingsController extends ActionController
 
     /**
      * save language assignments
-     * @return void
      */
     public function saveSettingsAction()
     {
@@ -142,7 +139,7 @@ class SettingsController extends ActionController
             $option     = [];
             $option     = $sysLanguage;
             if (in_array($sysLanguage['uid'], $selectedKeys) || in_array(strtoupper($sysLanguage['language_isocode']), $this->deeplService->apiSupportedLanguages)) {
-                $option['value'] = isset($preselectedValues[$sysLanguage['uid']]) ? $preselectedValues[$sysLanguage['uid']] : strtoupper($syslangIso);
+                $option['value'] = $preselectedValues[$sysLanguage['uid']] ?? strtoupper($syslangIso);
             }
             $table[] = $option;
         }

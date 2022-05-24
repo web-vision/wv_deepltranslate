@@ -31,13 +31,13 @@ namespace WebVision\WvDeepltranslate\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
-use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 
 class TranslateHook
 {
@@ -88,7 +88,7 @@ class TranslateHook
             break;
         }
 
-        if (!isset($cmdmap['localization']['custom']['srcLanguageId'])){
+        if (!isset($cmdmap['localization']['custom']['srcLanguageId'])) {
             $cmdmap['localization']['custom']['srcLanguageId'] = '';
         }
 
@@ -204,9 +204,9 @@ class TranslateHook
 
             //inline js for adding deepl button on records list.
             $deeplButton = "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";
-            if (isset($hook['jsInline']['RecordListInlineJS']['code'])){
+            if (isset($hook['jsInline']['RecordListInlineJS']['code'])) {
                 $hook['jsInline']['RecordListInlineJS']['code'] .= $deeplButton;
-            }else{
+            } else {
                 $hook['jsInline']['RecordListInlineJS']['code'] = $deeplButton;
             }
         }
@@ -215,11 +215,11 @@ class TranslateHook
     /**
      * check whether the string contains html
      * @param type $string
-     * @return boolean
+     * @return bool
      */
     public function isHtml($string)
     {
-        return preg_match("/<[^<]+>/", $string, $m) != 0;
+        return preg_match('/<[^<]+>/', $string, $m) != 0;
     }
 
     /**
@@ -230,7 +230,7 @@ class TranslateHook
     public function stripSpecificTags($tags, $content)
     {
         foreach ($tags as $tag) {
-            $content = preg_replace("/<\\/?" . $tag . "(.|\\s)*?>/", '', $content);
+            $content = preg_replace('/<\\/?' . $tag . '(.|\\s)*?>/', '', $content);
         }
         return $content;
     }

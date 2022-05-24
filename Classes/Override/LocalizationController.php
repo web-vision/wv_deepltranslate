@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 namespace WebVision\WvDeepltranslate\Override;
 
 /*
@@ -38,24 +38,22 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
     /**
      * @var string
      */
-    const ACTION_LOCALIZEDEEPL = 'localizedeepl';
+    public const ACTION_LOCALIZEDEEPL = 'localizedeepl';
 
     /**
      * @var string
      */
-
-    const ACTION_LOCALIZEDEEPL_AUTO = 'localizedeeplauto';
-
-    /**
-     * @var string
-     */
-
-    const ACTION_LOCALIZEGOOGLE = 'localizegoogle';
+    public const ACTION_LOCALIZEDEEPL_AUTO = 'localizedeeplauto';
 
     /**
      * @var string
      */
-    const ACTION_LOCALIZEGOOGLE_AUTO = 'localizegoogleauto';
+    public const ACTION_LOCALIZEGOOGLE = 'localizegoogle';
+
+    /**
+     * @var string
+     */
+    public const ACTION_LOCALIZEGOOGLE_AUTO = 'localizegoogleauto';
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -95,8 +93,8 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             return new JsonResponse(null, 400);
         }
 
-        $pageId     = (int) $params['pageId'];
-        $languageId = (int) $params['languageId'];
+        $pageId     = (int)$params['pageId'];
+        $languageId = (int)$params['languageId'];
         $mode       = $params['mode'];
         /** @var TranslationConfigurationProvider $translationProvider */
         $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
@@ -154,8 +152,8 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             return new JsonResponse(null, 400);
         }
 
-        $pageId         = (int) $params['pageId'];
-        $destLanguageId = (int) $params['destLanguageId'];
+        $pageId         = (int)$params['pageId'];
+        $destLanguageId = (int)$params['destLanguageId'];
         //getting source language id
         $languageId = $this->getSourceLanguageid($params['languageId']);
 
@@ -203,7 +201,6 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
         //additional constraint ACTION_LOCALIZEDEEPL
         if ($params['action'] !== static::ACTION_COPY && $params['action'] !== static::ACTION_LOCALIZE && $params['action'] !== static::ACTION_LOCALIZEDEEPL && $params['action'] !== static::ACTION_LOCALIZEDEEPL_AUTO && $params['action'] !== static::ACTION_LOCALIZEGOOGLE && $params['action'] !== static::ACTION_LOCALIZEGOOGLE_AUTO) {
-
             $response = new Response('php://temp', 400, ['Content-Type' => 'application/json; charset=utf-8']);
             $response->getBody()->write('Invalid action "' . $params['action'] . '" called.');
             return $response;
@@ -211,8 +208,8 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
         // Filter transmitted but invalid uids
         $params['uidList'] = $this->filterInvalidUids(
-            (int) $params['pageId'],
-            (int) $params['destLanguageId'],
+            (int)$params['pageId'],
+            (int)$params['destLanguageId'],
             $this->getSourceLanguageid($params['srcLanguageId']),
             $params['uidList']
         );
@@ -229,7 +226,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      */
     protected function process($params): void
     {
-        $destLanguageId = (int) $params['destLanguageId'];
+        $destLanguageId = (int)$params['destLanguageId'];
 
         // Build command map
         $cmd = [
@@ -246,7 +243,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
                     if ($params['action'] === static::ACTION_LOCALIZEDEEPL || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO) {
                         $cmd['localization']['custom']['mode']          = 'deepl';
                         $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
-                    } else if ($params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO) {
+                    } elseif ($params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO) {
                         $cmd['localization']['custom']['mode']          = 'google';
                         $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
                     }
@@ -292,9 +289,8 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
     {
         $langParam = explode('-', $srcLanguage);
         if (count($langParam) > 1) {
-            return (int) $langParam[1];
-        } else {
-            return (int) $langParam[0];
+            return (int)$langParam[1];
         }
+        return (int)$langParam[0];
     }
 }

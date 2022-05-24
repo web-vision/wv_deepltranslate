@@ -43,12 +43,11 @@ class TCEmainHook implements DataHandlerCheckModifyAccessListHookInterface
      * @param bool &$accessAllowed Whether the user has access to modify a table
      * @param string $table The name of the table to be modified
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parent The calling parent object
-     * @return void
      */
-    public function checkModifyAccessList(&$accessAllowed, $table, \TYPO3\CMS\Core\DataHandling\DataHandler $parent) {
-        if($table=='localization'){
+    public function checkModifyAccessList(&$accessAllowed, $table, \TYPO3\CMS\Core\DataHandling\DataHandler $parent)
+    {
+        if ($table=='localization') {
             $accessAllowed = true;
         }
     }
-
 }

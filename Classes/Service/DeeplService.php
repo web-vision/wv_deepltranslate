@@ -30,10 +30,10 @@ namespace WebVision\WvDeepltranslate\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use GuzzleHttp\Exception\ClientException;
-use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
 
 class DeeplService
 {
@@ -87,7 +87,7 @@ class DeeplService
     public function __construct()
     {
         $extConf                       = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
-        
+
         $this->deeplSettingsRepository = GeneralUtility::makeInstance(DeeplSettingsRepository::class);
         $this->requestFactory          = GeneralUtility::makeInstance(RequestFactory::class);
 
