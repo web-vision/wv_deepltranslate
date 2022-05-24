@@ -1,0 +1,20 @@
+includes:
+  - ../.Build/vendor/saschaegerer/phpstan-typo3/extension.neon
+
+parameters:
+  level: 8
+  paths:
+    - ../Classes
+    - ../ext_emconf.php
+    - ../ext_localconf.php
+    - ../ext_tables.php
+    - ../Configuration
+  excludePaths:
+    - ../.Build
+  inferPrivatePropertyTypeFromConstructor: true
+  ignoreErrors:
+    - message: '#Variable \$_EXTKEY might not be defined.#'
+      path: ../*/ext_emconf.php
+
+  reportUnmatchedIgnoredErrors: false
+  #bootstrapFiles: ~

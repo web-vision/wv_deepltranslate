@@ -1,41 +1,114 @@
 {
-  "name": "web-vision/wv_deepltranslate",
-  "description" : "Fork of deepltranslate from pitsolutions.This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages using Deepl and Googletranslate Api services.",
-  "license": "GPL-2.0-or-later",
-  "autoload": {
-        "psr-4": {
-            "WebVision\\WvDeepltranslate\\": "Classes"
-        }
-    },
-  "keywords": [
-        "TYPO3",
-        "extension",
-        "webvision",
-        "translate",
-        "deepl",
-        "googletranslate"
-    ],
-  "authors": [
-        {
-            "name": "Ricky Mathew",
-            "role": "Developer"
-        },
-        {
-            "name": "Anu Bhuvanendran Nair",
-            "role": "Developer"
-        }
-   ],
-  "type": "typo3-cms-extension",
-  "extra": {
-    "typo3/cms": {
-      "extension-key": "wv_deepltranslate"
-    }
-  },
-  "require": {
-    "php": "~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0",
-    "typo3/cms-core": "^9.5 || ^10.4 || ^11.5",
-    "typo3/cms-backend": "^9.5 || ^10.4 || ^11.5",
-    "typo3/cms-extbase": "^9.5 || ^10.4 || ^11.5",
-    "typo3/cms-fluid": "^9.5 || ^10.4 || ^11.5"
-  }
+	"name": "web-vision/wv_deepltranslate",
+	"type": "typo3-cms-extension",
+	"description": "Fork of deepltranslate from pitsolutions. This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages using Deepl and Googletranslate Api services.",
+	"license": ["GPL-2.0-or-later"],
+	"keywords": [
+		"TYPO3 CMS",
+		"extension",
+		"translate",
+		"deepl",
+		"googletranslate"
+	],
+	"authors": [
+		{
+			"name": "web-vision GmbH",
+			"email": "hello@web-vision.de",
+			"role": "Maintiner"
+		},
+		{
+			"name": "Mark Houben",
+			"email": "markhouben91@gmail.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Ricky Mathew",
+			"role": "Developer"
+		},
+		{
+			"name": "Anu Bhuvanendran Nair",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/web-vision/wv_deepltranslate/issues",
+		"source": "https://github.com/web-vision/wv_deepltranslate"
+	},
+	"config": {
+		"vendor-dir": ".Build/vendor",
+		"bin-dir": ".Build/bin",
+		"optimize-autoloader": true,
+		"sort-packages": true,
+		"allow-plugins": {
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true,
+			"helhum/typo3-console-plugin": true
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"extension-key": "wv_deepltranslate",
+			"ignore-as-root": false,
+			"web-dir": ".Build/Web"
+		}
+	},
+	"require": {
+		"php": "^7.4 || ^8.0",
+		"ext-json": "*",
+		"ext-gd": "*",
+		"ext-curl": "*",
+		"typo3/cms-backend": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-core": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-extbase": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-extensionmanager": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-fluid": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-frontend": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-install": "^9.5 || ^10.4 || ^11.5",
+		"typo3fluid/fluid": "^2.7"
+	},
+	"require-dev": {
+		"armin/editorconfig-cli": "^1.5",
+		"friendsofphp/php-cs-fixer": "^3.0",
+		"helhum/typo3-console": "^5.8",
+		"helmich/typo3-typoscript-lint": "^2.5",
+		"phpstan/phpstan": "^1.3",
+		"saschaegerer/phpstan-typo3": "^1.0",
+		"typo3/cms-belog": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-filelist": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-info": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-lowlevel": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-tstemplate": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-workspaces": "^9.5 || ^10.4 || ^11.5",
+		"typo3/coding-standards": "^0.5",
+		"typo3/testing-framework": "^4.11.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"WebVision\\WvDeepltranslate\\": "Classes"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"WebVision\\WvDeepltranslate\\Tests\\": "Tests"
+		}
+	},
+	"scripts": {
+		"prepare-extension-test-structure": [
+			"mkdir -p .Build/Web/typo3conf/ext/",
+			"[ -L .Build/Web/typo3conf/ext/wv_deepltranslate ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/wv_deepltranslate",
+			"@package-states",
+			"TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+		],
+		"ec:check": "ec -v -n --no-progress -e'var/log' -e'.Build' -e'.ddev' -e'phpstan-baseline.neon'",
+		"ec:fix": "ec -v -n --fix -e'var/log' -e'.Build' -e'.ddev'",
+		"cs:check": "php-cs-fixer fix --config .config/.php-cs-rules.php --ansi --diff --verbose --dry-run",
+		"cs:fix": "php-cs-fixer fix --config .config/.php-cs-rules.php --ansi",
+		"analyze:php": "phpstan analyse --ansi --no-progress --memory-limit=768M --configuration=.config/phpstan.neon",
+		"lint:typoscript": "typoscript-lint --ansi --config=./.config/typoscript-lint.yml",
+		"package-states": "typo3cms install:fixfolderstructure",
+		"post-autoload-dump": [
+			"@prepare-extension-test-structure"
+		]
+	}
 }
