@@ -36,7 +36,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * DeeplSettingsRepository
  */
-
 class DeeplSettingsRepository
 {
 
@@ -141,15 +140,15 @@ class DeeplSettingsRepository
             ->execute()
             ->fetchAll();
     }
-    
+
     /**
      * get record field
-     * @param type $table 
-     * @param type $field 
-     * @param type $recordData 
+     * @param type $table
+     * @param type $field
+     * @param type $recordData
      * @return type array
      */
-    public function getRecordField($table,$field,$recordData)
+    public function getRecordField($table, $field, $recordData)
     {
         return $this->queryBuilder($table)
             ->select($field)

@@ -22,26 +22,26 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-$GLOBALS['TCA']['tx_deepl_settings'] = array(
-    'ctrl' => array(
+$GLOBALS['TCA']['tx_deepl_settings'] = [
+    'ctrl' => [
         'title' => 'Deepl settings',
         'label' => 'uid',
         'iconfile' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
         'hideTable' => 1,
         'rootLevel' => 1,
-    ),
-    'columns' => array(
-        'languages_assigned' => array(
+    ],
+    'columns' => [
+        'languages_assigned' => [
             'label' => 'Deepl language assignments',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'eval' => '',
-            )
-        ),
-    ),
-    'types' => array(
-        0 => array(
+            ],
+        ],
+    ],
+    'types' => [
+        0 => [
             'showitem' => '',
-        ),
-    ),
-);
+        ],
+    ],
+];

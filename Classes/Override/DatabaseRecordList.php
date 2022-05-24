@@ -14,10 +14,7 @@ namespace WebVision\WvDeepltranslate\Override;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class for rendering of Web>List module
@@ -39,8 +36,8 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
         $possibleTranslations = $this->possibleTranslations;
         if ($table === 'pages') {
             // Calculate possible translations for pages
-            $possibleTranslations = array_map(static fn($siteLanguage) => $siteLanguage->getLanguageId(), $this->languagesAllowedForUser);
-            $possibleTranslations = array_filter($possibleTranslations, static fn($languageUid) => $languageUid > 0);
+            $possibleTranslations = array_map(static fn ($siteLanguage) => $siteLanguage->getLanguageId(), $this->languagesAllowedForUser);
+            $possibleTranslations = array_filter($possibleTranslations, static fn ($languageUid) => $languageUid > 0);
         }
 
         // Traverse page translations and add icon for each language that does NOT yet exist and is included in site configuration:
@@ -79,10 +76,9 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
             }
         }
         if ($lNew) {
-
             $uid = "'" . $row['uid'] . "'";
             $table = "'$table'";
-            $lNew = '<a data-state="hidden" href="#" data-params="data[$table][$uid][hidden]=0" ><label class="btn btn-default btn-checkbox deepl-btn-wrap"><input class="deepl-button" id="deepl-translation-enable-' . $row["uid"] . '" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate(' . $table . ',' . $uid . ')" /><span></span></label></a>';
+            $lNew = '<a data-state="hidden" href="#" data-params="data[$table][$uid][hidden]=0" ><label class="btn btn-default btn-checkbox deepl-btn-wrap"><input class="deepl-button" id="deepl-translation-enable-' . $row['uid'] . '" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate(' . $table . ',' . $uid . ')" /><span></span></label></a>';
 
             $out .= $lNew;
         }
