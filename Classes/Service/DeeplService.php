@@ -33,7 +33,8 @@ use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 
 class DeeplService
 {
@@ -76,25 +77,21 @@ class DeeplService
     public $requestFactory;
 
     /**
-     * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository
      */
     protected $deeplSettingsRepository;
 
-    /**
-     * Description
-     * @return type
-     */
     public function __construct()
     {
-        $extConf                       = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->deeplSettingsRepository = $objectManager->get(SettingsRepository::class);
+        $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
 
-        $this->deeplSettingsRepository = GeneralUtility::makeInstance(DeeplSettingsRepository::class);
-        $this->requestFactory          = GeneralUtility::makeInstance(RequestFactory::class);
-
-        $this->apiUrl                  = $extConf['apiUrl'];
-        $this->apiKey                  = $extConf['apiKey'];
-        $this->deeplFormality          = $extConf['deeplFormality'];
-        $this->apiSupportedLanguages   = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages);
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
+        $this->apiUrl = $extensionConfiguration['apiUrl'];
+        $this->apiKey = $extensionConfiguration['apiKey'];
+        $this->deeplFormality = $extensionConfiguration['deeplFormality'];
+        $this->apiSupportedLanguages = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages);
     }
 
     /**

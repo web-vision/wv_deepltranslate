@@ -35,7 +35,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 
@@ -53,7 +53,7 @@ class TranslateHook
     protected $googleService;
 
     /**
-     * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository
      * @inject
      */
     protected $deeplSettingsRepository;
@@ -66,7 +66,7 @@ class TranslateHook
     {
         $this->deeplService = GeneralUtility::makeInstance(DeeplService::class);
         $this->googleService = GeneralUtility::makeInstance(GoogleTranslateService::class);
-        $this->deeplSettingsRepository = GeneralUtility::makeInstance(DeeplSettingsRepository::class);
+        $this->deeplSettingsRepository = GeneralUtility::makeInstance(SettingsRepository::class);
     }
 
     /**
