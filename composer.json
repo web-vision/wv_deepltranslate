@@ -107,7 +107,12 @@
 		"cs:fix": "php-cs-fixer fix --config .config/.php-cs-rules.php --ansi",
 		"analyze:php": "phpstan analyse --ansi --no-progress --memory-limit=768M --configuration=.config/phpstan.neon",
 		"lint:typoscript": "typoscript-lint --ansi --config=./.config/typoscript-lint.yml",
-		"package-states": "typo3cms install:fixfolderstructure",
+		"test:php": [
+			"@test:php:unit",
+			"@test:php:functional"
+		],
+		"test:php:unit": "phpunit --colors=always --configuration .config/phpunit-unit.xml",
+		"test:php:functional": "@test:php:unit --configuration .config/phpunit-functional.xml",
 		"post-autoload-dump": [
 			"@prepare-extension-test-structure"
 		]
