@@ -26,7 +26,7 @@ namespace WebVision\WvDeepltranslate\Controller;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
 /**
@@ -49,16 +49,16 @@ class SettingsController extends ActionController
     }
 
     /**
-     * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
+     * @var \WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository
      */
-    protected $deeplSettingsRepository;
+    protected $settingsRepository;
 
     /**
-     * @param DeeplSettingsRepository $deeplSettingsRepository
+     * @param SettingsRepository $deeplSettingsRepository
      */
-    public function injectDeeplSettingsRepository(DeeplSettingsRepository $deeplSettingsRepository)
+    public function injectDeeplSettingsRepository(SettingsRepository $deeplSettingsRepository)
     {
-        $this->deeplSettingsRepository = $deeplSettingsRepository;
+        $this->settingsRepository = $deeplSettingsRepository;
     }
 
     /**
@@ -85,11 +85,10 @@ class SettingsController extends ActionController
             $this->pageRenderer->addJsInlineCode('success', "top.TYPO3.Notification.success('Saved', '" . $successMessage . "');");
         }
 
-        $sysLanguages = $this->deeplSettingsRepository->getSysLanguages();
-        $data         = [];
-        $preSelect    = [];
+        $sysLanguages = $this->settingsRepository->getSysLanguages();
+        $preSelect = [];
         //get existing assignments if any
-        $languageAssignments = $this->deeplSettingsRepository->getAssignments();
+        $languageAssignments = $this->settingsRepository->getAssignments();
         if (!empty($languageAssignments) && !empty($languageAssignments[0]['languages_assigned'])) {
             $preSelect = array_filter(unserialize($languageAssignments[0]['languages_assigned']));
         }
@@ -109,16 +108,16 @@ class SettingsController extends ActionController
 
         $data = [];
         //get existing assignments if any
-        $languageAssignments = $this->deeplSettingsRepository->getAssignments();
+        $languageAssignments = $this->settingsRepository->getAssignments();
         if (!empty($languages)) {
             $data['languages_assigned'] = serialize($languages);
         }
         if (empty($languageAssignments)) {
             $data['crdate']      = time();
-            $languageAssignments = $this->deeplSettingsRepository->insertDeeplSettings($data);
+            $languageAssignments = $this->settingsRepository->insertDeeplSettings($data);
         } else {
             $data['uid']    = $languageAssignments[0]['uid'];
-            $updateSettings = $this->deeplSettingsRepository->updateDeeplSettings($data);
+            $updateSettings = $this->settingsRepository->updateDeeplSettings($data);
         }
         $args['redirectFrom'] = 'savesetting';
         $this->redirect('index', 'Settings', 'Deepl', $args);
