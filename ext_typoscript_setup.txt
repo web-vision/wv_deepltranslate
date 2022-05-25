@@ -1,0 +1,5 @@
+config.tx_extbase.persistence.classes {
+    WebVision\WvDeepltranslate\Domain\Model\Settings {
+        mapping.tableName = tx_deepl_settings
+    }
+}
