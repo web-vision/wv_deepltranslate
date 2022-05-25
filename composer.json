@@ -50,7 +50,8 @@
 			"cms-package-dir": "{$vendor-dir}/typo3/cms",
 			"extension-key": "wv_deepltranslate",
 			"ignore-as-root": false,
-			"web-dir": ".Build/Web"
+			"web-dir": ".Build/Web",
+			"app-dir": ".Build"
 		}
 	},
 	"require": {
