@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace WebVision\WvDeepltranslate\Controller;
 
 /***************************************************************
@@ -26,6 +27,7 @@ namespace WebVision\WvDeepltranslate\Controller;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
@@ -34,11 +36,11 @@ use WebVision\WvDeepltranslate\Service\DeeplService;
  */
 class SettingsController extends ActionController
 {
-    /**
-     * pageRenderer
-     * @var \TYPO3\CMS\Core\Page\PageRenderer
-     */
-    protected $pageRenderer;
+    protected PageRenderer $pageRenderer;
+
+    protected SettingsRepository $settingsRepository;
+
+    protected DeeplService $deeplService;
 
     /**
      * @param PageRenderer $pageRenderer
@@ -48,58 +50,41 @@ class SettingsController extends ActionController
         $this->pageRenderer = $pageRenderer;
     }
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository
-     */
-    protected $settingsRepository;
-
-    /**
-     * @param SettingsRepository $deeplSettingsRepository
-     */
     public function injectDeeplSettingsRepository(SettingsRepository $deeplSettingsRepository)
     {
         $this->settingsRepository = $deeplSettingsRepository;
     }
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Service\DeeplService
-     */
-    protected $deeplService;
-
-    /**
-     * @param DeeplService $deeplService
-     */
     public function injectDeeplService(DeeplService $deeplService)
     {
         $this->deeplService = $deeplService;
     }
 
-    /**
-     * Default action
-     */
-    public function indexAction()
+    public function indexAction(): void
     {
         $args = $this->request->getArguments();
         if (!empty($args) && $args['redirectFrom'] == 'savesetting') {
-            $successMessage = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('settings_success', 'Deepl');
-            $this->pageRenderer->addJsInlineCode('success', "top.TYPO3.Notification.success('Saved', '" . $successMessage . "');");
+            $successMessage = LocalizationUtility::translate('settings_success', 'Deepl');
+            $this->pageRenderer->addJsInlineCode(
+                'success',
+                "top.TYPO3.Notification.success('Saved', '" . $successMessage . "');"
+            );
         }
 
         $sysLanguages = $this->settingsRepository->getSysLanguages();
         $preSelect = [];
+
         //get existing assignments if any
         $languageAssignments = $this->settingsRepository->getAssignments();
         if (!empty($languageAssignments) && !empty($languageAssignments[0]['languages_assigned'])) {
             $preSelect = array_filter(unserialize($languageAssignments[0]['languages_assigned']));
         }
+
         $selectBox = $this->buildTableAssignments($sysLanguages, $preSelect);
         $this->view->assignMultiple(['sysLanguages' => $sysLanguages, 'selectBox' => $selectBox]);
     }
 
-    /**
-     * save language assignments
-     */
-    public function saveSettingsAction()
+    public function saveSettingsAction(): void
     {
         $args = $this->request->getArguments();
         if (!empty($args['languages'])) {
@@ -107,41 +92,47 @@ class SettingsController extends ActionController
         }
 
         $data = [];
-        //get existing assignments if any
-        $languageAssignments = $this->settingsRepository->getAssignments();
         if (!empty($languages)) {
             $data['languages_assigned'] = serialize($languages);
         }
+
+        //get existing assignments if any
+        $languageAssignments = $this->settingsRepository->getAssignments();
         if (empty($languageAssignments)) {
-            $data['crdate']      = time();
-            $languageAssignments = $this->settingsRepository->insertDeeplSettings($data);
+            $data['crdate'] = time();
+            $this->settingsRepository->insertDeeplSettings($data);
         } else {
-            $data['uid']    = $languageAssignments[0]['uid'];
-            $updateSettings = $this->settingsRepository->updateDeeplSettings($data);
+            $data['uid'] = $languageAssignments[0]['uid'];
+            $this->settingsRepository->updateDeeplSettings($data);
         }
+
         $args['redirectFrom'] = 'savesetting';
         $this->redirect('index', 'Settings', 'Deepl', $args);
     }
 
     /**
      * return an array of options for multiple selectbox
+     *
      * @param array $sysLanguages
      * @param array $preselectedValues
-     * @return array
+     *
+     * @return array[]
      */
-    public function buildTableAssignments($sysLanguages, $preselectedValues)
+    public function buildTableAssignments(array $sysLanguages, array $preselectedValues): array
     {
-        $table        = [];
+        $table = [];
         $selectedKeys = array_keys($preselectedValues);
         foreach ($sysLanguages as $sysLanguage) {
             $syslangIso = $sysLanguage['language_isocode'];
-            $option     = [];
-            $option     = $sysLanguage;
-            if (in_array($sysLanguage['uid'], $selectedKeys) || in_array(strtoupper($sysLanguage['language_isocode']), $this->deeplService->apiSupportedLanguages)) {
+            $option = [];
+            $option = $sysLanguage;
+            if (in_array($sysLanguage['uid'], $selectedKeys) || in_array(strtoupper($sysLanguage['language_isocode']),
+                    $this->deeplService->apiSupportedLanguages)) {
                 $option['value'] = $preselectedValues[$sysLanguage['uid']] ?? strtoupper($syslangIso);
             }
             $table[] = $option;
         }
+
         return $table;
     }
 }
