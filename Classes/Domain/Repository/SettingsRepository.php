@@ -3,43 +3,37 @@
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 class SettingsRepository extends Repository
 {
-    /**
-     * queryBuilder
-     * @param string $table
-     * @return type
-     */
-    public function queryBuilder($table)
+    public function makeQueryBuilder(string $table): QueryBuilder
     {
         return GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
     }
 
     /**
-     * Description
-     * @param type $data
-     * @return type
+     * @param array[] $data
      */
-    public function insertDeeplSettings($data)
+    public function insertDeeplSettings(array $data): void
     {
-        $this->queryBuilder('tx_deepl_settings')
+        $this->makeQueryBuilder('tx_deepl_settings')
             ->insert('tx_deepl_settings')
             ->values($data)
             ->execute();
     }
+
     /**
-     * Description
-     * @param type $data
-     * @return type
+     * @param array{uid:int, languages_assigned:string} $data
      */
-    public function updateDeeplSettings($data)
+    public function updateDeeplSettings(array $data): void
     {
-        $queryBuilder = $this->queryBuilder('tx_deepl_settings');
-        $this->queryBuilder('tx_deepl_settings')
-            ->update('tx_deepl_settings')
+        $queryBuilder = $this->makeQueryBuilder('tx_deepl_settings');
+
+        $queryBuilder->update('tx_deepl_settings')
             ->where(
                 $queryBuilder->expr()->eq('uid', $data['uid'])
             )
@@ -48,80 +42,100 @@ class SettingsRepository extends Repository
     }
 
     /**
-     * get assigned languages if any
-     * @param type $queryBuilder
-     * @return array
+     * Get assigned languages if any
+     *
+     * @return array{uid:int, pid:int, languages_assigned:string}
      */
-    public function getAssignments()
+    public function getAssignments(): array
     {
-        return $this->queryBuilder('tx_deepl_settings')->select('*')
+        return $this->makeQueryBuilder('tx_deepl_settings')
+            ->select('*')
             ->from('tx_deepl_settings')
             ->execute()
-            ->fetchAll();
+            ->fetch();
     }
 
     /**
-     * get language mappings for a syslanguage
+     * Get language mappings for a sys_language
+     *
      * @return string
      */
-    public function getMappings($uid)
+    public function getMappings(int $uid): string
     {
-        $mappings = $this->queryBuilder('tx_deepl_settings')->select('*')
-            ->from('tx_deepl_settings')
-            ->execute()
-            ->fetchAll();
-        if (!empty($mappings) && !empty($mappings[0]['languages_assigned'])) {
-            $assignments = unserialize($mappings[0]['languages_assigned']);
-            if (isset($assignments[$uid]) && !empty($assignments[$uid])) {
-                return $assignments[$uid];
-            }
+        $mappings = $this->getAssignments();
+
+        if (empty($mappings) && empty($mappings['languages_assigned'])) {
+            return '';
         }
+
+        $assignments = unserialize($mappings['languages_assigned']);
+
+        if (!isset($assignments[$uid])) {
+            return '';
+        }
+
+        return $assignments[$uid];
     }
 
     /**
-     * merges default supported languages with language mappings
+     * Merges default supported languages with language mappings
+     *
      * @param array $apiSupportedLanguages
-     * @return array $apiSupportedLanguages
+     * @return array
      */
-    public function getSupportedLanguages($apiSupportedLanguages)
+    public function getSupportedLanguages(array $apiSupportedLanguages): array
     {
         $assignments = $this->getAssignments();
-        if (!empty($assignments) && $assignments[0]['languages_assigned'] != '') {
-            $languages = unserialize($assignments[0]['languages_assigned']);
-            foreach ($languages as $language) {
-                if (!in_array($language, $apiSupportedLanguages)) {
-                    $apiSupportedLanguages[] = $language;
-                }
+
+        if (empty($assignments)) {
+            return $apiSupportedLanguages;
+        }
+
+        $languages = unserialize($assignments['languages_assigned']);
+
+        foreach ($languages as $language) {
+            if (!in_array($language, $apiSupportedLanguages)) {
+                $apiSupportedLanguages[] = $language;
             }
         }
+
         return $apiSupportedLanguages;
     }
 
     /**
-     * return all sys languages
+     * Return all sys languages
+     *
      * @return array
      */
-    public function getSysLanguages()
+    public function getSysLanguages(): array
     {
-        return $this->queryBuilder('sys_language')->select('uid', 'title', 'language_isocode')
+        return $this->makeQueryBuilder('sys_language')
+            ->select('uid', 'title', 'language_isocode')
             ->from('sys_language')
             ->execute()
             ->fetchAll();
     }
 
     /**
-     * get record field
-     * @param type $table
-     * @param type $field
-     * @param type $recordData
-     * @return type array
+     * Get record field
+     *
+     * @param array<string> $fields
+     * @return array[] array
      */
-    public function getRecordField($table, $field, $recordData)
+    public function getRecordField(string $table, array $fields, int $recordUid)
     {
-        return $this->queryBuilder($table)
-            ->select($field)
+        $queryBuilder = $this->makeQueryBuilder($table);
+        $queryBuilder->getRestrictions()->removeByType(DeletedRestriction::class);
+
+        return $queryBuilder->select(...$fields)
             ->from($table)
-            ->where('deleted = 0 AND uid = ' . $recordData['uid'])
-            ->execute()->fetchAll();
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter($recordUid, \PDO::PARAM_INT)
+                )
+            )
+            ->execute()
+            ->fetchAll();
     }
 }
