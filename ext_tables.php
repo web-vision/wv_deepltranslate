@@ -4,20 +4,19 @@ if (!defined('TYPO3_MODE')) {
 }
 
 (function() {
-    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-    $deeplIconIdentifier = 'actions-localize-deepl';
-    $iconRegistry->registerIcon(
-        $deeplIconIdentifier,
-        \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-        ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-deepl.svg']
-    );
+    $iconProviderConfiguration = [
+        \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class => [
+            'actions-localize-deepl' => ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-deepl.svg'],
+            'actions-localize-google' => ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-google.svg']
+        ]
+    ];
 
-    $googleIconIdentifier = 'actions-localize-google';
-    $iconRegistry->registerIcon(
-        $googleIconIdentifier,
-        \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-        ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/' . $googleIconIdentifier . '.svg']
-    );
+    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+    foreach ($iconProviderConfiguration as $provider => $iconConfiguration) {
+        foreach ($iconConfiguration as $identifier => $option) {
+            $iconRegistry->registerIcon($identifier, $provider, $option);
+        }
+    }
 
     //register backend module
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
