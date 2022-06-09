@@ -183,10 +183,17 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             ];
         }
 
-        return (new JsonResponse())->setPayload([
+        $payload = [
             'records' => $records,
             'columns' => $this->getPageColumns($pageId, $records, $params),
-        ]);
+        ];
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {
+            // s. EXT:containers Xclass B13\Container\Xclasses\LocalizationController
+            $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class);
+            $payload = $recordLocalizeSummaryModifier->rebuildPayload($payload);
+        }
+
+        return (new JsonResponse())->setPayload($payload);
     }
 
     /**
@@ -242,14 +249,6 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
                     $cmd['tt_content'][$currentUid] = [
                         'localize' => $destLanguageId,
                     ];
-                    //setting mode and source language for deepl translate.
-                    if ($params['action'] === static::ACTION_LOCALIZEDEEPL || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO) {
-                        $cmd['localization']['custom']['mode']          = 'deepl';
-                        $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
-                    } else if ($params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO) {
-                        $cmd['localization']['custom']['mode']          = 'google';
-                        $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
-                    }
                 } else {
                     $cmd['tt_content'][$currentUid] = [
                         'copyToLanguage' => $destLanguageId,
