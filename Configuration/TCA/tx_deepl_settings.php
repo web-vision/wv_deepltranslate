@@ -25,7 +25,7 @@
 $GLOBALS['TCA']['tx_deepl_settings'] = array(
     'ctrl' => array(
         'title' => 'Deepl settings',
-        'label' => 'Deepl settings',
+        'label' => 'uid',
         'iconfile' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
         'hideTable' => 1,
         'rootLevel' => 1,
