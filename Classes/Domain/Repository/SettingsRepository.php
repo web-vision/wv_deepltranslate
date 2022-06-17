@@ -48,11 +48,16 @@ class SettingsRepository extends Repository
      */
     public function getAssignments(): array
     {
-        return $this->makeQueryBuilder('tx_deepl_settings')
+        $result = $this->makeQueryBuilder('tx_deepl_settings')
             ->select('*')
             ->from('tx_deepl_settings')
-            ->execute()
-            ->fetch();
+            ->execute();
+
+        if ($result->rowCount() === 0) {
+            return [];
+        }
+
+        return $result->fetch();
     }
 
     /**
@@ -105,15 +110,20 @@ class SettingsRepository extends Repository
     /**
      * Return all sys languages
      *
-     * @return array
+     * @return array<array{uid: int, title: string, language_isocode: string}>
      */
     public function getSysLanguages(): array
     {
-        return $this->makeQueryBuilder('sys_language')
+        $result = $this->makeQueryBuilder('sys_language')
             ->select('uid', 'title', 'language_isocode')
             ->from('sys_language')
-            ->execute()
-            ->fetchAll();
+            ->execute();
+
+        if ($result->rowCount() === 0) {
+            return [];
+        }
+
+        return $result->fetchAll();
     }
 
     /**
