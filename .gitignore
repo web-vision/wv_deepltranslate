@@ -5,3 +5,4 @@
 composer.lock
 *.cache
 var
+.php-cs-fixer.cache
