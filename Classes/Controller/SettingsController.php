@@ -69,6 +69,14 @@ class SettingsController extends ActionController
         }
 
         $sysLanguages = $this->settingsRepository->getSysLanguages();
+        if (empty($sysLanguages)) {
+            $this->addFlashMessage(
+                'No system languages found.',
+                'Errors system language',
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+            );
+        }
+
         $preSelect = [];
 
         //get existing assignments if any
@@ -78,7 +86,10 @@ class SettingsController extends ActionController
         }
 
         $selectBox = $this->buildTableAssignments($sysLanguages, $preSelect);
-        $this->view->assignMultiple(['sysLanguages' => $sysLanguages, 'selectBox' => $selectBox]);
+        $this->view->assignMultiple([
+            'sysLanguages' => $sysLanguages,
+            'selectBox' => $selectBox
+        ]);
     }
 
     public function saveSettingsAction(): void
