@@ -3,12 +3,12 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-(function() {
+(function () {
     $iconProviderConfiguration = [
         \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class => [
             'actions-localize-deepl' => ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-deepl.svg'],
-            'actions-localize-google' => ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-google.svg']
-        ]
+            'actions-localize-google' => ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-google.svg'],
+        ],
     ];
 
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);

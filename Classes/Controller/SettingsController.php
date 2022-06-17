@@ -42,9 +42,6 @@ class SettingsController extends ActionController
 
     protected DeeplService $deeplService;
 
-    /**
-     * @param PageRenderer $pageRenderer
-     */
     public function injectPageRenderer(PageRenderer $pageRenderer)
     {
         $this->pageRenderer = $pageRenderer;
@@ -76,8 +73,8 @@ class SettingsController extends ActionController
 
         //get existing assignments if any
         $languageAssignments = $this->settingsRepository->getAssignments();
-        if (!empty($languageAssignments) && !empty($languageAssignments[0]['languages_assigned'])) {
-            $preSelect = array_filter(unserialize($languageAssignments[0]['languages_assigned']));
+        if (!empty($languageAssignments) && !empty($languageAssignments['languages_assigned'])) {
+            $preSelect = array_filter(unserialize($languageAssignments['languages_assigned']));
         }
 
         $selectBox = $this->buildTableAssignments($sysLanguages, $preSelect);
@@ -126,8 +123,10 @@ class SettingsController extends ActionController
             $syslangIso = $sysLanguage['language_isocode'];
             $option = [];
             $option = $sysLanguage;
-            if (in_array($sysLanguage['uid'], $selectedKeys) || in_array(strtoupper($sysLanguage['language_isocode']),
-                    $this->deeplService->apiSupportedLanguages)) {
+            if (in_array($sysLanguage['uid'], $selectedKeys) || in_array(
+                strtoupper($sysLanguage['language_isocode']),
+                $this->deeplService->apiSupportedLanguages
+            )) {
                 $option['value'] = $preselectedValues[$sysLanguage['uid']] ?? strtoupper($syslangIso);
             }
             $table[] = $option;
