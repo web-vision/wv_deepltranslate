@@ -109,16 +109,6 @@ class SettingsRepositoryTest extends FunctionalTestCase
     }
 
     /** @test */
-    public function findSysLanguages(): void
-    {
-        $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
-
-        $languages = $settingsRepository->getSysLanguages();
-
-        static::assertContains('de', $languages[0]);
-    }
-
-    /** @test */
     public function getRecords(): void
     {
         $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
