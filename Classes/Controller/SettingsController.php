@@ -28,6 +28,8 @@ namespace WebVision\WvDeepltranslate\Controller;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use WebVision\WvDeepltranslate\Domain\Model\Language;
+use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
@@ -40,6 +42,8 @@ class SettingsController extends ActionController
 
     protected SettingsRepository $settingsRepository;
 
+    protected LanguageRepository $languageRepository;
+
     protected DeeplService $deeplService;
 
     public function injectPageRenderer(PageRenderer $pageRenderer)
@@ -50,6 +54,11 @@ class SettingsController extends ActionController
     public function injectDeeplSettingsRepository(SettingsRepository $deeplSettingsRepository)
     {
         $this->settingsRepository = $deeplSettingsRepository;
+    }
+
+    public function injectLanguageRepository(LanguageRepository $languageRepository)
+    {
+        $this->languageRepository = $languageRepository;
     }
 
     public function injectDeeplService(DeeplService $deeplService)
@@ -68,8 +77,8 @@ class SettingsController extends ActionController
             );
         }
 
-        $sysLanguages = $this->settingsRepository->getSysLanguages();
-        if (empty($sysLanguages)) {
+        $sysLanguages = $this->languageRepository->findAll();
+        if ($sysLanguages->count() === 0) {
             $this->addFlashMessage(
                 'No system languages found.',
                 'Errors system language',
@@ -85,7 +94,7 @@ class SettingsController extends ActionController
             $preSelect = array_filter(unserialize($languageAssignments['languages_assigned']));
         }
 
-        $selectBox = $this->buildTableAssignments($sysLanguages, $preSelect);
+        $selectBox = $this->buildTableAssignments($sysLanguages->toArray(), $preSelect);
         $this->view->assignMultiple([
             'sysLanguages' => $sysLanguages,
             'selectBox' => $selectBox
@@ -110,7 +119,7 @@ class SettingsController extends ActionController
             $data['crdate'] = time();
             $this->settingsRepository->insertDeeplSettings($data);
         } else {
-            $data['uid'] = $languageAssignments[0]['uid'];
+            $data['uid'] = $languageAssignments['uid'];
             $this->settingsRepository->updateDeeplSettings($data);
         }
 
@@ -121,24 +130,23 @@ class SettingsController extends ActionController
     /**
      * return an array of options for multiple selectbox
      *
-     * @param array $sysLanguages
-     * @param array $preselectedValues
+     * @param Language[] $sysLanguages
+     * @param array<int, array{uid:int, pid:int, languages_assigned:string}> $preselectedValues
      *
      * @return array[]
      */
     public function buildTableAssignments(array $sysLanguages, array $preselectedValues): array
     {
         $table = [];
+
         $selectedKeys = array_keys($preselectedValues);
         foreach ($sysLanguages as $sysLanguage) {
-            $syslangIso = $sysLanguage['language_isocode'];
-            $option = [];
-            $option = $sysLanguage;
-            if (in_array($sysLanguage['uid'], $selectedKeys) || in_array(
-                strtoupper($sysLanguage['language_isocode']),
+            $option = $sysLanguage->toArray();
+            if (in_array($sysLanguage->getUid(), $selectedKeys) || in_array(
+                strtoupper($sysLanguage->getLanguageIsoCode()),
                 $this->deeplService->apiSupportedLanguages
             )) {
-                $option['value'] = $preselectedValues[$sysLanguage['uid']] ?? strtoupper($syslangIso);
+                $option['value'] = $preselectedValues[$sysLanguage->getUid()] ?? strtoupper($sysLanguage->getLanguageIsoCode());
             }
             $table[] = $option;
         }

@@ -35,7 +35,7 @@ class SettingsRepository extends Repository
 
         $queryBuilder->update('tx_deepl_settings')
             ->where(
-                $queryBuilder->expr()->eq('uid', $data['uid'])
+                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$data['uid'], \PDO::PARAM_INT))
             )
             ->set('languages_assigned', $data['languages_assigned'])
             ->execute();
@@ -105,25 +105,6 @@ class SettingsRepository extends Repository
         }
 
         return $apiSupportedLanguages;
-    }
-
-    /**
-     * Return all sys languages
-     *
-     * @return array<array{uid: int, title: string, language_isocode: string}>
-     */
-    public function getSysLanguages(): array
-    {
-        $result = $this->makeQueryBuilder('sys_language')
-            ->select('uid', 'title', 'language_isocode')
-            ->from('sys_language')
-            ->execute();
-
-        if ($result->rowCount() === 0) {
-            return [];
-        }
-
-        return $result->fetchAll();
     }
 
     /**

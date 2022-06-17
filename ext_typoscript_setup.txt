@@ -1,5 +1,18 @@
-config.tx_extbase.persistence.classes {
-    WebVision\WvDeepltranslate\Domain\Model\Settings {
-        mapping.tableName = tx_deepl_settings
-    }
+config.tx_extbase.persistence {
+   classes {
+       WebVision\WvDeepltranslate\Domain\Model\Settings {
+           mapping {
+               tableName = tx_deepl_settings
+           }
+       }
+       WebVision\WvDeepltranslate\Domain\Model\Language {
+           mapping {
+               tableName = sys_language
+               columns {
+                   language_isocode.mapOnProperty = languageIsoCode
+                   static_lang_isocode.mapOnProperty = staticLangIsoCode
+               }
+           }
+       }
+   }
 }
