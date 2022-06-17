@@ -26,7 +26,7 @@ return [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
                 'eval' => 'datetime',
-            ]
+            ],
         ],
         'tstamp' => [
             'label' => 'tstamp',
@@ -34,7 +34,7 @@ return [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
                 'eval' => 'datetime',
-            ]
+            ],
         ],
         'languages_assigned' => [
             'label' => 'Deepl language assignments',

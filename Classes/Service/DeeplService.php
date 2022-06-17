@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace WebVision\WvDeepltranslate\Service;
 
 /***************************************************************
@@ -29,6 +31,7 @@ namespace WebVision\WvDeepltranslate\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
@@ -38,48 +41,29 @@ use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 
 class DeeplService
 {
-    /**
-     * @var type
-     */
-    protected $curlHandle;
+    public string $apiKey;
 
-    /**
-     * @var string
-     */
-    public $apiKey;
+    public string $apiUrl;
 
-    /**
-     * @var string
-     */
-    public $apiUrl;
-
-    /**
-     * @var string
-     */
-    public $deeplFormality;
+    public string $deeplFormality;
 
     /**
      * Default supported languages
+     *
      * @see https://www.deepl.com/de/docs-api/translating-text/#request
-     * @var array
+     * @var string[]
      */
-    public $apiSupportedLanguages = ['BG', 'CS', 'DA', 'DE', 'EL', 'EN', 'ES', 'ET', 'FI', 'FR', 'HU', 'IT', 'JA', 'LT', 'LV', 'NL', 'PL', 'PT', 'RO', 'RU', 'SK', 'SL', 'SV', 'ZH'];
+    public array $apiSupportedLanguages = ['BG', 'CS', 'DA', 'DE', 'EL', 'EN', 'ES', 'ET', 'FI', 'FR', 'HU', 'IT', 'JA', 'LT', 'LV', 'NL', 'PL', 'PT', 'RO', 'RU', 'SK', 'SL', 'SV', 'ZH'];
 
     /**
      * Formality supported languages
-     * @var array
+     * @var string[]
      */
-    public $formalitySupportedLanguages = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
+    public array $formalitySupportedLanguages = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
 
-    /**
-     * @var RequestFactory
-     */
-    public $requestFactory;
+    public RequestFactory $requestFactory;
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository
-     */
-    protected $deeplSettingsRepository;
+    protected SettingsRepository $deeplSettingsRepository;
 
     public function __construct()
     {
@@ -96,9 +80,8 @@ class DeeplService
 
     /**
      * Deepl Api Call for retrieving translation.
-     * @return type
      */
-    public function translateRequest($content, $targetLanguage, $sourceLanguage)
+    public function translateRequest($content, $targetLanguage, $sourceLanguage): string
     {
         $postFields = [
             'auth_key'     => $this->apiKey,
@@ -107,6 +90,7 @@ class DeeplService
             'target_lang'  => urlencode($targetLanguage),
             'tag_handling' => urlencode('xml'),
         ];
+
         if (!empty($this->deeplFormality) && in_array(strtoupper($targetLanguage), $this->formalitySupportedLanguages, true)) {
             $postFields['formality'] = $this->deeplFormality;
         }
@@ -115,7 +99,8 @@ class DeeplService
         foreach ($postFields as $key => $value) {
             $postFieldString .= $key . '=' . $value . '&';
         }
-        rtrim($postFieldString, '&');
+
+        $postFieldString = rtrim($postFieldString, '&');
         $contentLength = mb_strlen($postFieldString, '8bit');
 
         try {
@@ -134,6 +119,7 @@ class DeeplService
             echo $result;
             exit;
         }
+
         return json_decode($response->getBody()->getContents());
     }
 }

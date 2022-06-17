@@ -46,7 +46,7 @@ class TCEmainHook implements DataHandlerCheckModifyAccessListHookInterface
      */
     public function checkModifyAccessList(&$accessAllowed, $table, \TYPO3\CMS\Core\DataHandling\DataHandler $parent)
     {
-        if ($table=='localization') {
+        if ($table == 'localization') {
             $accessAllowed = true;
         }
     }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace WebVision\WvDeepltranslate\Service;
 
 /***************************************************************
@@ -29,6 +31,7 @@ namespace WebVision\WvDeepltranslate\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
@@ -36,40 +39,23 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GoogleTranslateService
 {
-    /**
-     * @var RequestFactory
-     */
-    public $requestFactory;
+    public RequestFactory $requestFactory;
 
-    /**
-     * @var string
-     */
-    public $apiKey;
+    public string $apiKey;
 
-    /**
-     * @var string
-     */
-    public $apiUrl;
+    public string $apiUrl;
 
-    /**
-     * Description
-     * @return type
-     */
     public function __construct()
     {
         $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        $extConf              = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
-        $this->apiUrl         = $extConf['googleapiUrl'];
-        $this->apiKey         = $extConf['googleapiKey'];
+        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
+        $this->apiUrl = $extConf['googleapiUrl'];
+        $this->apiKey = $extConf['googleapiKey'];
     }
     /**
      * Passes translate request and formats response returned on request
-     * @param string $source
-     * @param string $target
-     * @param string $text
-     * @return string
      */
-    public function translate($source, $target, $text)
+    public function translate(string $source, string $target, string $text): string
     {
         // Request translation
         $response = $this->request($source, $target, $text);
@@ -81,12 +67,8 @@ class GoogleTranslateService
 
     /**
      * make translate request to api
-     * @param string $source
-     * @param string $target
-     * @param string $text
-     * @return string
      */
-    protected function request($source, $target, $text)
+    protected function request(string $source, string $target, string $text): string
     {
         //translate request with api key(non free mode - recommended)
         if ($this->apiKey != '' && $this->apiUrl != '') {
@@ -150,10 +132,11 @@ class GoogleTranslateService
 
     /**
      * Formats the response to get the translated text
-     * @param string $response
+     *
+     * @param array{data: array[], sentences: string[]} $response
      * @return string
      */
-    protected function getTranslation($response)
+    protected function getTranslation(array $response): string
     {
         $translation = '';
         if ($this->apiKey != '' && $this->apiUrl != '') {
@@ -169,16 +152,18 @@ class GoogleTranslateService
 
     /**
      * Post processing returned translation
+     *
      * @param string $translate
-     * @return array
+     * @return array{trans: string}
      */
-    public function googleTranslationPostprocess($translate)
+    public function googleTranslationPostprocess($translate): array
     {
         $translate['trans'] = str_replace('</ ', '</', $translate['trans']);
         $translate['trans'] = preg_replace('/(?:&\slt;|&lt;)+/', '<', $translate['trans']);
         $translate['trans'] = preg_replace('/(?:&\sgt;|&gt;)+/', '>', $translate['trans']);
         $translate['trans'] = preg_replace('/(?:&\snbsp;|&nbsp;|&Nbsp;|&\sNbsp;)+/', '', $translate['trans']);
         $translate['trans'] = preg_replace('/(?:href\s="\s|href="\s)+/', 'href="', $translate['trans']);
+
         return $translate;
     }
 }

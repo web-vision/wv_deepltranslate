@@ -25,7 +25,6 @@ class SettingsRepositoryTest extends FunctionalTestCase
         $this->importDataSet(__DIR__ . '/../../Fixtures/Language.xml');
     }
 
-
     /** @test */
     public function insertSettingsRecord(): void
     {
@@ -33,7 +32,7 @@ class SettingsRepositoryTest extends FunctionalTestCase
         $settingsRepository->insertDeeplSettings([
             'uid' => 2,
             'pid' => 0,
-            'languages_assigned' => serialize(['1' => 'de'])
+            'languages_assigned' => serialize(['1' => 'de']),
         ]);
 
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
@@ -41,7 +40,7 @@ class SettingsRepositoryTest extends FunctionalTestCase
 
         static::assertSame(2, $settings['uid']);
         static::assertSame(0, $settings['pid']);
-        static::assertSame( serialize(['1' => 'de']), $settings['languages_assigned']);
+        static::assertSame(serialize(['1' => 'de']), $settings['languages_assigned']);
     }
 
     /** @test */
@@ -50,7 +49,7 @@ class SettingsRepositoryTest extends FunctionalTestCase
         $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
         $settingsRepository->updateDeeplSettings([
             'uid' => 1,
-            'languages_assigned' => serialize(['1' => 'EN'])
+            'languages_assigned' => serialize(['1' => 'EN']),
         ]);
 
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
@@ -70,7 +69,7 @@ class SettingsRepositoryTest extends FunctionalTestCase
         static::assertArrayHasKey('pid', $settings);
         static::assertSame(0, $settings['pid']);
         static::assertArrayHasKey('languages_assigned', $settings);
-        static::assertSame( serialize(['1' => 'de']), $settings['languages_assigned']);
+        static::assertSame(serialize(['1' => 'de']), $settings['languages_assigned']);
     }
 
     /** @test */
@@ -87,7 +86,7 @@ class SettingsRepositoryTest extends FunctionalTestCase
     {
         $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
         $inputArray = [
-            'hallo' => 'welt'
+            'hallo' => 'welt',
         ];
         $apiSupportedLanguages = $settingsRepository->getSupportedLanguages($inputArray);
 
@@ -100,7 +99,7 @@ class SettingsRepositoryTest extends FunctionalTestCase
     {
         $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
         $inputArray = [
-            'hallo' => 'welt'
+            'hallo' => 'welt',
         ];
         $apiSupportedLanguages = $settingsRepository->getSupportedLanguages($inputArray);
 

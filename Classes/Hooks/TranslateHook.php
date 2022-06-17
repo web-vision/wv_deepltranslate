@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
@@ -32,51 +33,37 @@ namespace WebVision\WvDeepltranslate\Hooks;
  ***************************************************************/
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 
 class TranslateHook
 {
+    protected DeeplService $deeplService;
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Service\DeeplService
-     */
-    protected $deeplService;
+    protected GoogleTranslateService $googleService;
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Service\GoogleTranslateService
-     */
-    protected $googleService;
+    protected SettingsRepository $deeplSettingsRepository;
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository
-     * @inject
-     */
-    protected $deeplSettingsRepository;
-
-    /**
-     * Description
-     * @return type
-     */
-    public function __construct()
+    public function __construct(SettingsRepository $settingsRepository = null, DeeplService $deeplService = null, GoogleTranslateService $googleService = null)
     {
-        $this->deeplService = GeneralUtility::makeInstance(DeeplService::class);
-        $this->googleService = GeneralUtility::makeInstance(GoogleTranslateService::class);
-        $this->deeplSettingsRepository = GeneralUtility::makeInstance(SettingsRepository::class);
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->deeplSettingsRepository = $settingsRepository ?? $objectManager->get(SettingsRepository::class);
+        $this->deeplService = $deeplService ?? $objectManager->get(DeeplService::class);
+        $this->googleService = $googleService ?? $objectManager->get(GoogleTranslateService::class);
     }
 
     /**
      * processTranslateTo_copyAction hook
-     * @param type &$content
-     * @param type $languageRecord
-     * @param type $dataHandler
-     * @return string
+     *
+     * @param array{uid: int} $languageRecord
      */
-    public function processTranslateTo_copyAction(&$content, $languageRecord, $dataHandler)
+    public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): string
     {
         $cmdmap = $dataHandler->cmdmap;
         foreach ($cmdmap as $key => $array) {
@@ -175,15 +162,18 @@ class TranslateHook
                     }
                 }
             }
-            //
         }
+
+        return $content;
     }
 
     /**
      * Execute PreRenderHook for possible manipulation:
      * Add deepl.css,overrides localization.js
+     *
+     * @param array[] $hook
      */
-    public function executePreRenderHook(&$hook)
+    public function executePreRenderHook(array &$hook): void
     {
         //assets are only needed in BE context
         if (TYPO3_MODE == 'BE') {
@@ -214,24 +204,25 @@ class TranslateHook
 
     /**
      * check whether the string contains html
-     * @param type $string
-     * @return bool
+     *
+     * @param string $string
      */
-    public function isHtml($string)
+    public function isHtml(string $string): bool
     {
         return preg_match('/<[^<]+>/', $string, $m) != 0;
     }
 
     /**
      * stripoff the tags provided
-     * @param type $tags
-     * @return string
+     *
+     * @param string[] $tags
      */
-    public function stripSpecificTags($tags, $content)
+    public function stripSpecificTags(array $tags, string $content): string
     {
         foreach ($tags as $tag) {
             $content = preg_replace('/<\\/?' . $tag . '(.|\\s)*?>/', '', $content);
         }
+
         return $content;
     }
 }

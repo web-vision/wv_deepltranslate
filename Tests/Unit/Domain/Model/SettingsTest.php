@@ -21,7 +21,7 @@ class SettingsTest extends UnitTestCase
     public function classAttributeDataProvider(): array
     {
         return [
-            ['languagesAssigned', 'The entity "Settings" field has the attribute "languagesAssigned']
+            ['languagesAssigned', 'The entity "Settings" field has the attribute "languagesAssigned'],
         ];
     }
 
@@ -39,7 +39,7 @@ class SettingsTest extends UnitTestCase
     {
         $subject = new Settings();
         $subject->setLanguagesAssigned([
-            'Hello' => 'Welt'
+            'Hello' => 'Welt',
         ]);
 
         $languagesAssigned = $subject->getLanguagesAssigned();

@@ -2,6 +2,6 @@
 
 return [
     \WebVision\WvDeepltranslate\Domain\Model\Settings::class => [
-        'tableName' => 'tx_deepl_settings'
-    ]
+        'tableName' => 'tx_deepl_settings',
+    ],
 ];
