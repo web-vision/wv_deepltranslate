@@ -23,9 +23,19 @@ if (!defined('TYPO3_MODE')) {
         'className' => \WebVision\WvDeepltranslate\Override\LocalizationController::class,
     ];
 
+    $typo3VersionArray = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionStringToArray(
+        \TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version()
+    );
+
+    if (version_compare($typo3VersionArray['version_main'], 10, '<=')) {
+        $databaseRecordClassName = \WebVision\WvDeepltranslate\Override\v10\DatabaseRecordList::class;
+    } else {
+        $databaseRecordClassName = \WebVision\WvDeepltranslate\Override\DatabaseRecordList::class;
+    }
+
     //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class] = [
-        'className' => \WebVision\WvDeepltranslate\Override\DatabaseRecordList::class,
+        'className' => $databaseRecordClassName,
     ];
 
     if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {

@@ -1,5 +1,5 @@
 <?php
-namespace WebVision\WvDeepltranslate\Override;
+namespace WebVision\WvDeepltranslate\Override\v10;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,9 +14,9 @@ namespace WebVision\WvDeepltranslate\Override;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Imaging\Icon;
-
 /**
+ * Compatible with v9 and v10
+ *
  * Class for rendering of Web>List module
  */
 class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList
@@ -24,16 +24,14 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
     /**
      * Creates the localization panel
      *
-     * @param string $table The table
      * @param mixed[] $row The record for which to make the localization panel.
-     * @param array[] $translations
-     * @return string
+     * @return string[]
      */
-    public function makeLocalizationPanel($table, $row, array $translations): string
+    public function makeLocalizationPanel($table, $row): array
     {
-        $out = parent::makeLocalizationPanel($table, $row, $translations);
+        $out = parent::makeLocalizationPanel($table, $row);
 
-        if ($out) {
+        if (!empty($out[1])) {
             $uid = "'" . $row['uid'] . "'";
             $table = "'$table'";
             $lNew = sprintf(<<<HTML
@@ -44,9 +42,9 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
     </label>
 </a>
 HTML
-                , '$table', '$ud', $row['uid'], $table, $uid);
+            , '$table', '$ud', $row['uid'], $table, $uid);
 
-            $out .= $lNew;
+            $out[1] .= $lNew;
         }
 
         return $out;
