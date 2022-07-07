@@ -24,12 +24,6 @@ composer req web-vision/wv_deepltranslate
 
 Once installed ,there appears a Deepl back end module with a settings tab.
 
-## Supported TYPO3 Version
-
-- TYPO3 8.5 to 8.7.99 (Tag v1.0.0 - 1.0.1)
-- TYPO3 9.5.1 to 10.4.99 (Tag v1.0.2 onwards)
-- TYPO3 11.5.1 to 11.5.99 (Tag v2.0.1 onwards)
-
 ## Extension Configuration
 
 Once you installed the extension, you have to set the Deepl API Key under extension configuration section
