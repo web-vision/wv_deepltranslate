@@ -6,3 +6,4 @@ services:
 
   WebVision\WvDeepltranslate\:
     resource: '../Classes/*'
+    exclude: '../Classes/{Domain/Model,Override/DatabaseRecordList.php,Override/v10/DatabaseRecordList.php}'
