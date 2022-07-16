@@ -41,12 +41,13 @@ return [
             'config' => [
                 'type' => 'input',
                 'eval' => 'trim',
+                'readOnly' => true,
             ],
         ],
     ],
     'types' => [
         0 => [
-            'showitem' => '',
+            'showitem' => 'languages_assigned',
         ],
     ],
 ];
