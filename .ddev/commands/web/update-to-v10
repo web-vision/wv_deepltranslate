@@ -27,6 +27,12 @@ composer remove \
     typo3/testing-framework
 
 rm composer.lock
+rm -rf .Build/vendor/*
+rm -rf .Build/var/*
+rm -rf .Build/bin/*
+rm -rf .Build/Web/typo3conf/ext/*
+rm -rf .Build/Web/typo3/*
+rm -rf .Build/Web/typo3temp/*
 
 echo "Add Requires for v10"
 composer req \
