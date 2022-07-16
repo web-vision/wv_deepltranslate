@@ -70,7 +70,7 @@ class Language extends AbstractEntity
     {
         return [
             'uid' => $this->uid,
-            'title' => $this->title
+            'title' => $this->title,
         ];
     }
 }

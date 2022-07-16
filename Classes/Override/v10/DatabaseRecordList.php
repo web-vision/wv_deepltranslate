@@ -35,14 +35,14 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
             $uid = "'" . $row['uid'] . "'";
             $table = "'$table'";
             $lNew = sprintf(<<<HTML
-<a data-state="hidden" href="#" data-params="data[%s][%s][hidden]=0" >
-    <label class="btn btn-default btn-checkbox deepl-btn-wrap">
-        <input class="deepl-button" id="deepl-translation-enable-%s" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate(%s,%s)" />
-        <span></span>
-    </label>
-</a>
-HTML
-            , '$table', '$ud', $row['uid'], $table, $uid);
+                <a data-state="hidden" href="#" data-params="data[%s][%s][hidden]=0" >
+                    <label class="btn btn-default btn-checkbox deepl-btn-wrap">
+                        <input class="deepl-button" id="deepl-translation-enable-%s" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate(%s,%s)" />
+                        <span></span>
+                    </label>
+                </a>
+                HTML
+                , '$table', '$ud', $row['uid'], $table, $uid);
 
             $out[1] .= $lNew;
         }

@@ -27,7 +27,6 @@ if (!defined('TYPO3_MODE')) {
         \TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version()
     );
 
-
     if (version_compare($typo3VersionArray['version_main'], 11, '<')) {
         $databaseRecordClassName = \WebVision\WvDeepltranslate\Override\v10\DatabaseRecordList::class;
     } else {
