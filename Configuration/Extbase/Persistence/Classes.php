@@ -8,11 +8,14 @@ return [
         'tableName' => 'sys_language',
         'properties' => [
             'languageIsoCode' => [
-                'fieldName' => 'language_isocode'
+                'fieldName' => 'language_isocode',
             ],
             'staticLangIsoCode' => [
-                'fieldName' => 'static_lang_isocode'
-            ]
-        ]
-    ]
+                'fieldName' => 'static_lang_isocode',
+            ],
+            'createDate' => [
+                'fieldName' => 'crdate',
+            ],
+        ],
+    ],
 ];

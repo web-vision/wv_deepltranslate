@@ -11,6 +11,7 @@ config.tx_extbase.persistence {
                columns {
                    language_isocode.mapOnProperty = languageIsoCode
                    static_lang_isocode.mapOnProperty = staticLangIsoCode
+                   crdate.mapOnProperty = createDate
                }
            }
        }

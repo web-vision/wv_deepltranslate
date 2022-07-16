@@ -27,8 +27,10 @@ namespace WebVision\WvDeepltranslate\Controller;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Domain\Model\Language;
+use WebVision\WvDeepltranslate\Domain\Model\Settings;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
@@ -77,6 +79,7 @@ class SettingsController extends ActionController
             );
         }
 
+        /** @var QueryResultInterface<Language> $sysLanguages */
         $sysLanguages = $this->languageRepository->findAll();
         if ($sysLanguages->count() === 0) {
             $this->addFlashMessage(
@@ -87,17 +90,19 @@ class SettingsController extends ActionController
         }
 
         $preSelect = [];
-
-        //get existing assignments if any
-        $languageAssignments = $this->settingsRepository->getAssignments();
-        if (!empty($languageAssignments) && !empty($languageAssignments['languages_assigned'])) {
-            $preSelect = array_filter(unserialize($languageAssignments['languages_assigned']));
+        $settings = $this->settingsRepository->getSettings();
+        if ($settings !== null) {
+            $preSelect = array_filter($settings->getLanguagesAssigned());
         }
 
-        $selectBox = $this->buildTableAssignments($sysLanguages->toArray(), $preSelect);
+        $selectBox = $this->buildTableAssignments(
+            $sysLanguages->toArray(),
+            $preSelect
+        );
+
         $this->view->assignMultiple([
             'sysLanguages' => $sysLanguages,
-            'selectBox' => $selectBox
+            'selectBox' => $selectBox,
         ]);
     }
 
@@ -114,13 +119,18 @@ class SettingsController extends ActionController
         }
 
         //get existing assignments if any
-        $languageAssignments = $this->settingsRepository->getAssignments();
-        if (empty($languageAssignments)) {
-            $data['crdate'] = time();
-            $this->settingsRepository->insertDeeplSettings($data);
+        /** @var Settings|null $settings */
+        $settings = $this->settingsRepository->getSettings();
+        if ($settings === null) {
+            $this->settingsRepository->insertDeeplSettings(
+                0,
+                unserialize($data['languages_assigned'])
+            );
         } else {
-            $data['uid'] = $languageAssignments['uid'];
-            $this->settingsRepository->updateDeeplSettings($data);
+            $this->settingsRepository->updateDeeplSettings(
+                $settings->getUid(),
+                $data['languages_assigned']
+            );
         }
 
         $args['redirectFrom'] = 'savesetting';

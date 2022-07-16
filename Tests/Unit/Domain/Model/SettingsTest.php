@@ -38,9 +38,7 @@ class SettingsTest extends UnitTestCase
     public function checkFunctionalityFromLanguagesAssigned(): void
     {
         $subject = new Settings();
-        $subject->setLanguagesAssigned([
-            'Hello' => 'Welt',
-        ]);
+        $subject->setLanguagesAssigned(serialize(['Hello' => 'Welt']));
 
         $languagesAssigned = $subject->getLanguagesAssigned();
         static::assertIsArray($languagesAssigned);

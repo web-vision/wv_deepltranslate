@@ -29,11 +29,10 @@ class SettingsRepositoryTest extends FunctionalTestCase
     public function insertSettingsRecord(): void
     {
         $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
-        $settingsRepository->insertDeeplSettings([
-            'uid' => 2,
-            'pid' => 0,
-            'languages_assigned' => serialize(['1' => 'de']),
-        ]);
+        $settingsRepository->insertDeeplSettings(
+            0,
+            ['1' => 'de']
+        );
 
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
         $settings = $connection->select(['*'], 'tx_deepl_settings', ['uid' => 2])->fetch();
@@ -47,10 +46,7 @@ class SettingsRepositoryTest extends FunctionalTestCase
     public function updateSettingsRecord(): void
     {
         $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
-        $settingsRepository->updateDeeplSettings([
-            'uid' => 1,
-            'languages_assigned' => serialize(['1' => 'EN']),
-        ]);
+        $settingsRepository->updateDeeplSettings(1, serialize(['1' => 'EN']));
 
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
         $settings = $connection->select(['*'], 'tx_deepl_settings', ['uid' => 1])->fetch();
@@ -62,14 +58,11 @@ class SettingsRepositoryTest extends FunctionalTestCase
     public function checkSelectAssignments(): void
     {
         $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
-        $settings = $settingsRepository->getAssignments();
+        $settings = $settingsRepository->getSettings();
 
-        static::assertArrayHasKey('uid', $settings);
-        static::assertSame(1, $settings['uid']);
-        static::assertArrayHasKey('pid', $settings);
-        static::assertSame(0, $settings['pid']);
-        static::assertArrayHasKey('languages_assigned', $settings);
-        static::assertSame(serialize(['1' => 'de']), $settings['languages_assigned']);
+        static::assertSame(1, $settings->getUid());
+        static::assertSame(0, $settings->getPid());
+        static::assertSame(['1' => 'de'], $settings->getLanguagesAssigned());
     }
 
     /** @test */
@@ -106,13 +99,5 @@ class SettingsRepositoryTest extends FunctionalTestCase
         static::assertArrayHasKey('hallo', $apiSupportedLanguages);
         static::assertContains('welt', $apiSupportedLanguages);
         static::assertContains('de', $apiSupportedLanguages);
-    }
-
-    /** @test */
-    public function getRecords(): void
-    {
-        $settingsRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(SettingsRepository::class);
-        $record = $settingsRepository->getRecordField('sys_language', ['*'], 1);
-        static::assertIsArray($record);
     }
 }

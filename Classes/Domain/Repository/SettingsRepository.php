@@ -2,62 +2,60 @@
 
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use WebVision\WvDeepltranslate\Domain\Model\Settings;
+use WebVision\WvDeepltranslate\Exception\SettingQueryException;
 
 class SettingsRepository extends Repository
 {
-    public function makeQueryBuilder(string $table): QueryBuilder
+    public function initializeObject(): void
     {
-        return GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
+
+        $this->setDefaultQuerySettings($querySettings);
     }
 
-    /**
-     * @param array[] $data
-     */
-    public function insertDeeplSettings(array $data): void
+    public function insertDeeplSettings(int $pid, array $languagesAssigned): void
     {
-        $this->makeQueryBuilder('tx_deepl_settings')
-            ->insert('tx_deepl_settings')
-            ->values($data)
-            ->execute();
+        $settings = new Settings();
+        $settings->setCreateDate((new \DateTime())->getTimestamp());
+        $settings->setPid($pid);
+        $settings->setLanguagesAssigned(serialize($languagesAssigned));
+
+        $this->persistenceManager->add($settings);
+        $this->persistenceManager->persistAll();
     }
 
-    /**
-     * @param array{uid:int, languages_assigned:string} $data
-     */
-    public function updateDeeplSettings(array $data): void
+    public function updateDeeplSettings(int $settingId, string $languagesAssigned): void
     {
-        $queryBuilder = $this->makeQueryBuilder('tx_deepl_settings');
-
-        $queryBuilder->update('tx_deepl_settings')
-            ->where(
-                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$data['uid'], \PDO::PARAM_INT))
-            )
-            ->set('languages_assigned', $data['languages_assigned'])
-            ->execute();
-    }
-
-    /**
-     * Get assigned languages if any
-     *
-     * @return array{uid:int, pid:int, languages_assigned:string}
-     */
-    public function getAssignments(): array
-    {
-        $result = $this->makeQueryBuilder('tx_deepl_settings')
-            ->select('*')
-            ->from('tx_deepl_settings')
-            ->execute();
-
-        if ($result->rowCount() === 0) {
-            return [];
+        /** @var Settings|null $settings */
+        $settings = $this->findByUid($settingId);
+        if ($settings === null) {
+            throw new SettingQueryException(sprintf('DeepL settings with id "%d" not available', $settingId), 1657963739);
         }
 
-        return $result->fetch();
+        $settings->setLanguagesAssigned($languagesAssigned);
+        $this->persistenceManager->update($settings);
+        $this->persistenceManager->persistAll();
+    }
+
+    public function getSettings(): ?Settings
+    {
+        /** @var QueryResultInterface<Settings> $result */
+        $result = $this->findAll();
+
+        if ($result->count() > 0) {
+
+            /** @var Settings $settings */
+            $settings = $result->getFirst();
+            return $settings;
+        }
+
+        return null;
     }
 
     /**
@@ -67,13 +65,15 @@ class SettingsRepository extends Repository
      */
     public function getMappings(int $uid): string
     {
-        $mappings = $this->getAssignments();
-
-        if (empty($mappings) && empty($mappings['languages_assigned'])) {
+        $settings = $this->getSettings();
+        if ($settings === null) {
             return '';
         }
 
-        $assignments = unserialize($mappings['languages_assigned']);
+        $assignments = $settings->getLanguagesAssigned();
+        if (empty($assignments)) {
+            return '';
+        }
 
         if (!isset($assignments[$uid])) {
             return '';
@@ -90,13 +90,12 @@ class SettingsRepository extends Repository
      */
     public function getSupportedLanguages(array $apiSupportedLanguages): array
     {
-        $assignments = $this->getAssignments();
-
-        if (empty($assignments)) {
+        $settings = $this->getSettings();
+        if ($settings === null) {
             return $apiSupportedLanguages;
         }
 
-        $languages = unserialize($assignments['languages_assigned']);
+        $languages = $settings->getLanguagesAssigned();
 
         foreach ($languages as $language) {
             if (!in_array($language, $apiSupportedLanguages)) {
@@ -105,28 +104,5 @@ class SettingsRepository extends Repository
         }
 
         return $apiSupportedLanguages;
-    }
-
-    /**
-     * Get record field
-     *
-     * @param array<string> $fields
-     * @return array[] array
-     */
-    public function getRecordField(string $table, array $fields, int $recordUid)
-    {
-        $queryBuilder = $this->makeQueryBuilder($table);
-        $queryBuilder->getRestrictions()->removeByType(DeletedRestriction::class);
-
-        return $queryBuilder->select(...$fields)
-            ->from($table)
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'uid',
-                    $queryBuilder->createNamedParameter($recordUid, \PDO::PARAM_INT)
-                )
-            )
-            ->execute()
-            ->fetchAll();
     }
 }
