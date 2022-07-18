@@ -80,8 +80,9 @@ class DeeplService
 
     /**
      * Deepl Api Call for retrieving translation.
+     * @return object json-object
      */
-    public function translateRequest($content, $targetLanguage, $sourceLanguage): string
+    public function translateRequest($content, $targetLanguage, $sourceLanguage): object
     {
         $postFields = [
             'auth_key'     => $this->apiKey,
