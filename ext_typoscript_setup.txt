@@ -1,5 +1,15 @@
 config.tx_extbase.persistence {
    classes {
+       WebVision\WvDeepltranslate\Domain\Model\Glossaries {
+           mapping {
+               tableName = tx_deepl_glossaries
+           }
+       }
+       WebVision\WvDeepltranslate\Domain\Model\GlossariesSync {
+           mapping {
+               tableName = tx_deepl_glossariess_sync
+           }
+       }
        WebVision\WvDeepltranslate\Domain\Model\Settings {
            mapping {
                tableName = tx_deepl_settings
