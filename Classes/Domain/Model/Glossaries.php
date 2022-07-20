@@ -34,7 +34,8 @@ class Glossaries extends AbstractEntity
     /**
      * Set definition
      *
-     * @param string
+     * @param string $definition
+     * @return void
      */
     public function setDefinition(string $definition)
     {
@@ -54,7 +55,8 @@ class Glossaries extends AbstractEntity
     /**
      * Set term
      *
-     * @param string
+     * @param string $term
+     * @return void
      */
     public function setTerm(string $term)
     {
@@ -74,7 +76,8 @@ class Glossaries extends AbstractEntity
     /**
      * Set description
      *
-     * @param string
+     * @param string $description
+     * @return void
      */
     public function setDescription(string $description)
     {

@@ -7,3 +7,8 @@ services:
   WebVision\WvDeepltranslate\:
     resource: '../Classes/*'
     exclude: '../Classes/{Domain/Model,Override/DatabaseRecordList.php,Override/v10/DatabaseRecordList.php}'
+
+  WebVision\WvDeepltranslate\Command\GlossariesSyncCommand:
+    tags:
+      - name: 'console.command'
+        command: 'wv_deepltranslate:glossariesSync'

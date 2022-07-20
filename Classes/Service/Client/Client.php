@@ -98,7 +98,7 @@ final class Client implements ClientInterface
      * @param string $body
      * @param string $method
      *
-     * @return array
+     * @return array|mixed|null
      *
      * @throws DeepLException
      */
@@ -148,6 +148,7 @@ final class Client implements ClientInterface
      * Set a proxy to use for querying the DeepL API if needed
      *
      * @param string $proxy Proxy URL (e.g 'http://proxy-domain.com:3128')
+     * @return void
      */
     public function setProxy($proxy)
     {
@@ -158,6 +159,7 @@ final class Client implements ClientInterface
      * Set the proxy credentials
      *
      * @param string $proxyCredentials proxy credentials (using 'username:password' format)
+     * @return void
      */
     public function setProxyCredentials($proxyCredentials)
     {
@@ -178,8 +180,6 @@ final class Client implements ClientInterface
      * Creates the Base-Url which all the API-resources have in common.
      *
      * @param string $resource
-     * @param bool   $withAuth
-     *
      * @return string
      */
     public function buildBaseUrl(string $resource = 'translate'): string
@@ -194,11 +194,11 @@ final class Client implements ClientInterface
     }
 
     /**
-     * @param array $paramsArray
      *
+     * @param array $paramsArray
      * @return string
      */
-    public function buildQuery($paramsArray)
+    public function buildQuery($paramsArray): string
     {
         if (isset($paramsArray['text']) && true === is_array($paramsArray['text'])) {
             $text = $paramsArray['text'];
@@ -227,11 +227,9 @@ final class Client implements ClientInterface
     /**
      * Handles the different kind of response returned from API, array, string or null
      *
-     * @param $response
-     * @param $httpCode
-     *
+     * @param string|bool $response
+     * @param int $httpCode
      * @return array|mixed|null
-     *
      * @throws DeepLException
      */
     private function handleResponse($response, $httpCode)

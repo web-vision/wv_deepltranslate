@@ -57,8 +57,8 @@ return [
                 'items' => [
                     ['', 0],
                 ],
-                'foreign_table' => 'tx_deepl_glossaries',
-                'foreign_table_where' => 'AND {#tx_deepl_glossaries}.{#pid}=###CURRENT_PID### AND {#tx_deepl_glossaries}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table' => 'tx_wvdeepltranslate_domain_model_glossaries',
+                'foreign_table_where' => 'AND {#tx_wvdeepltranslate_domain_model_glossaries}.{#pid}=###CURRENT_PID### AND {#tx_wvdeepltranslate_domain_model_glossaries}.{#sys_language_uid} IN (-1,0)',
             ],
         ],
         'l10n_diffsource' => [
