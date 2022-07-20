@@ -4,7 +4,7 @@ namespace WebVision\WvDeepltranslate\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
-class Glossaries extends AbstractEntity
+class Glossariessync extends AbstractEntity
 {
     /**
      * @var string
@@ -39,7 +39,8 @@ class Glossaries extends AbstractEntity
     /**
      * Set glossaryId
      *
-     * @param string
+     * @param string $glossaryId
+     * @return void
      */
     public function setGlossaryId(string $glossaryId)
     {
@@ -59,7 +60,8 @@ class Glossaries extends AbstractEntity
     /**
      * Set sourceLang
      *
-     * @param string
+     * @param string $sourceLang
+     * @return void
      */
     public function setSourceLang(string $sourceLang)
     {
@@ -79,7 +81,8 @@ class Glossaries extends AbstractEntity
     /**
      * Set targetLang
      *
-     * @param string
+     * @param string $targetLang
+     * @return void
      */
     public function setTargetLang(string $targetLang)
     {
@@ -99,7 +102,8 @@ class Glossaries extends AbstractEntity
     /**
      * Set entries
      *
-     * @param string
+     * @param string $entries
+     * @return void
      */
     public function setEntries(string $entries)
     {
