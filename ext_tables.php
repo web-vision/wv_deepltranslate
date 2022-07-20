@@ -60,4 +60,8 @@ if (!defined('TYPO3_MODE')) {
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['locallangXMLOverride']['/typo3/sysext/backend/Resources/Private/Language/locallang_layout.xlf'] = 'EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf';
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_deepl_glossaries', 'EXT:wv_deepltranslate/Resources/Private/Language/locallang_csh_tx_deepl_glossaries.xlf');
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_deepl_glossaries');
+
 })();
