@@ -37,6 +37,7 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 
 class DeeplService
@@ -69,6 +70,7 @@ class DeeplService
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $objectManager->get(SettingsRepository::class);
+        $this->glossariessyncRepository = $objectManager->get(GlossariessyncRepository::class);
         $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
@@ -91,6 +93,12 @@ class DeeplService
             'target_lang'  => urlencode($targetLanguage),
             'tag_handling' => urlencode('xml'),
         ];
+
+        // Implementation of glossary into translation
+        $glossaryId = $this->glossariessyncRepository->getGlossaryIdByLanguages($sourceLanguage, $targetLanguage);
+        if (!empty($glossaryId)) {
+            $postFields['glossary_id'] = $glossaryId;
+        }
 
         if (!empty($this->deeplFormality) && in_array(strtoupper($targetLanguage), $this->formalitySupportedLanguages, true)) {
             $postFields['formality'] = $this->deeplFormality;

@@ -130,9 +130,8 @@ class GlossariesSyncCommand extends Command
      */
     private function doCleanupTasks()
     {
-        $glossaries = $this->deeplGlossaryService->listGlossaries();
-
         // Step - 1: Delete glossaries from DeepL
+        $glossaries = $this->deeplGlossaryService->listGlossaries();
         foreach($glossaries['glossaries'] as $eachGlossary) {
             $glId = $eachGlossary['glossary_id'];
             $this->deeplGlossaryService->deleteGlossary($glId);
