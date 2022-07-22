@@ -18,6 +18,8 @@ if (!defined('TYPO3_MODE')) {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess']['deepl']
         = \WebVision\WvDeepltranslate\Hooks\TranslateHook::class . '->executePreRenderHook';
 
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] =  \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
     //xclass localizationcontroller for localizeRecords() and process() action
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\Page\LocalizationController::class] = [
         'className' => \WebVision\WvDeepltranslate\Override\LocalizationController::class,
@@ -50,5 +52,19 @@ if (!defined('TYPO3_MODE')) {
     if (TYPO3_MODE === 'BE') {
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
+    }
+
+    $icons = [
+        'apps-pagetree-folder-contains-glossar' => 'deepl.svg',
+    ];
+    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+    foreach ($icons as $identifier => $path) {
+        if (!$iconRegistry->isRegistered($identifier)) {
+            $iconRegistry->registerIcon(
+                $identifier,
+                \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+                ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/' . $path]
+            );
+        }
     }
 })();
