@@ -17,6 +17,8 @@ return [
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
+        'useColumnsForDefaultValues' => 'type',
+        'translationSource' => 'l10n_source',
         'delete' => 'deleted',
         'sortby' => 'sorting',
         'enablecolumns' => [
@@ -27,7 +29,11 @@ return [
         'iconfile' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, definition, term, description, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+        '1' => [
+            'showitem' => '
+            sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,l10n_parent, l10n_diffsource, hidden, definition, term, description, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime
+
+            '],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -61,10 +67,16 @@ return [
                 'foreign_table_where' => 'AND {#tx_wvdeepltranslate_domain_model_glossaries}.{#pid}=###CURRENT_PID### AND {#tx_wvdeepltranslate_domain_model_glossaries}.{#sys_language_uid} IN (-1,0)',
             ],
         ],
+        'l10n_source' => [
+            'config' => [
+                'type' => 'passthrough'
+            ]
+        ],
         'l10n_diffsource' => [
             'config' => [
                 'type' => 'passthrough',
-            ],
+                'default' => ''
+            ]
         ],
         'hidden' => [
             'exclude' => true,

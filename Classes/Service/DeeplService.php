@@ -96,6 +96,7 @@ class DeeplService
 
         // Implementation of glossary into translation
         $glossaryId = $this->glossariessyncRepository->getGlossaryIdByLanguages($sourceLanguage, $targetLanguage);
+
         if (!empty($glossaryId)) {
             $postFields['glossary_id'] = $glossaryId;
         }

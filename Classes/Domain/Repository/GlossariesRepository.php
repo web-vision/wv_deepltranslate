@@ -22,23 +22,26 @@ class GlossariesRepository extends Repository
     public function processGlossariesEntries(int $lang = 0): array
     {
         $entries = [];
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('tx_wvdeepltranslate_domain_model_glossaries');
 
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_wvdeepltranslate_domain_model_glossaries');
         $result = $queryBuilder
             ->select('uid', 'term', 'l10n_parent')
             ->from('tx_wvdeepltranslate_domain_model_glossaries')
             ->where(
                 $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($lang, \PDO::PARAM_INT))
             )
-            ->execute()->fetchAll();
+            ->execute()
+            ->fetchAll();
 
-        foreach ($result as $rec) {
-            if ($rec['l10n_parent'] > 0 && $lang > 0) {
-                $parentUid = $rec['l10n_parent'];
+        foreach ($result as $record) {
+            if ($record['l10n_parent'] > 0 && $lang > 0) {
+                $parentUid = $record['l10n_parent'];
                 $parent = $this->findByUid($parentUid);
+
                 if ($parent instanceof Glossaries) {
-                    $sourceTerm = $parent->getTerm();
-                    $targetTerm = $rec['term'];
+                    $sourceTerm =  $parent->getTerm();
+                    $targetTerm = $record['term'];
                     $entries[$sourceTerm] = $targetTerm;
                 }
             }
