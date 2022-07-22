@@ -189,6 +189,7 @@ define('TYPO3/CMS/Backend/Localization', [
                     '</div>' +
                     '</div>',
                 )
+              /*
                 actions.push(
                     '<div class="row" id="deeplTranslateAuto">' +
                     '<div class="btn-group col-sm-3">' +
@@ -201,6 +202,9 @@ define('TYPO3/CMS/Backend/Localization', [
                     '</div>' +
                     '</div>',
                 )
+
+               */
+
                 actions.push(
                     '<div class="row" id="deeplTranslate">' +
                     '<div class="btn-group col-sm-3">' +
@@ -213,6 +217,7 @@ define('TYPO3/CMS/Backend/Localization', [
                     '</div>' +
                     '</div>',
                 )
+              /*
                 actions.push(
                     '<div class="row" id="googleTranslate">' +
                     '<div class="btn-group col-sm-3">' +
@@ -237,6 +242,8 @@ define('TYPO3/CMS/Backend/Localization', [
                     '</div>' +
                     '</div>',
                 )
+
+               */
             }
 
             if ($triggerButton.data('allowCopy')) {
