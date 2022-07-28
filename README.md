@@ -98,3 +98,12 @@ For assigning a language to a sys language you must enter it’s isocode(ISO 639
 ## FAQ
 
 See faq [here](https://docs.typo3.org/typo3cms/extensions/wv_deepltranslate/Faq/Index.html)
+
+## Sponsors
+We appreciate very much the sponsorships of the developments and features for the DeepL Translate Extension for TYPO3. 
+
+### DeepL Glossary feature sponsored by 
+* [Universität Osnabrück](https://www.uni-osnabrueck.de) 
+* [Hochschule für Musik Würzburg](https://www.hfm-wuerzburg.de)
+* [Carl von Ossietzky Universität Oldenburg](https://uol.de/)
+* [Friedrich-Ebert-Stiftung](https://www.fes.de)
