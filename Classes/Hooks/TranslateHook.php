@@ -65,6 +65,7 @@ class TranslateHook
      */
     public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): string
     {
+
         $cmdmap = $dataHandler->cmdmap;
         foreach ($cmdmap as $key => $array) {
             $tablename = $key;
@@ -74,7 +75,6 @@ class TranslateHook
             }
             break;
         }
-
         if (!isset($cmdmap['localization']['custom']['srcLanguageId'])) {
             $cmdmap['localization']['custom']['srcLanguageId'] = '';
         }
@@ -84,6 +84,7 @@ class TranslateHook
         //translation mode set to deepl or google translate
         if ($customMode !== null) {
             $langParam = explode('-', $cmdmap['localization']['custom']['srcLanguageId']);
+
             $sourceLanguageCode = $langParam[0];
             $targetLanguage = BackendUtility::getRecord('sys_language', $languageRecord['uid']);
             $sourceLanguage = BackendUtility::getRecord('sys_language', (int)$sourceLanguageCode);
@@ -92,7 +93,7 @@ class TranslateHook
             if ($targetLanguageMapping != null) {
                 $targetLanguage['language_isocode'] = $targetLanguageMapping;
             }
-
+            // debug($targetLanguage);die();
             if ($sourceLanguage == null) {
                 // Make good defaults
                 $sourceLanguageIso = 'en';
@@ -103,10 +104,14 @@ class TranslateHook
                 if (isset($tablename) && isset($currectRecordId)) {
                     $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
                     $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+
                     try {
                         $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
                         $language = $site->getDefaultLanguage();
                         $sourceLanguageIso = strtolower($language->getTwoLetterIsoCode());
+                        $targetLanguage = $site->getLanguageById($languageRecord['uid']);
+                        $targetLanguageIso = $targetLanguage->getTwoLetterIsoCode();
+
                         if ($sourceLanguageCode !== 'auto') {
                             $deeplSourceIso = strtoupper($sourceLanguageIso);
                         }
@@ -121,20 +126,22 @@ class TranslateHook
                 }
                 $sourceLanguageIso = $sourceLanguage['language_isocode'];
                 $deeplSourceIso = $sourceLanguageIso;
+
             }
             if ($this->isHtml($content)) {
                 $content = $this->stripSpecificTags(['br'], $content);
             }
 
-            //mode deepl
+            // mode deepl
             if ($customMode == 'deepl') {
+                $langSupportedByDeepLApi = in_array(strtoupper($targetLanguageIso), $this->deeplService->apiSupportedLanguages);
                 //if target language and source language among supported languages
-                if (in_array(strtoupper($targetLanguage['language_isocode']), $this->deeplService->apiSupportedLanguages)) {
+                if ($langSupportedByDeepLApi) {
                     if ($tablename == 'tt_content') {
-                        $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $deeplSourceIso);
+                        $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $deeplSourceIso);
                     } else {
                         $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
-                        $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $sourceLanguage['language_isocode']);
+                        $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $sourceLanguage['language_isocode']);
                     }
                     if (!empty($response) && isset($response->translations)) {
                         foreach ($response->translations as $translation) {

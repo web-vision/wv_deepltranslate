@@ -5,10 +5,14 @@ namespace WebVision\WvDeepltranslate\Hooks;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
+use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
@@ -22,19 +26,63 @@ class DataHandlerHook implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var NotificationRepository
-     */
-    private $notificationRepository;
+    private NotificationRepository $notificationRepository;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct()
+    private PersistenceManager $persistenceManager;
+
+    protected DeeplGlossaryService $deeplGlossaryService;
+
+    protected GlossariesRepository $glossariesRepository;
+
+    protected GlossariessyncRepository $glossariessyncRepository;
+
+    protected LanguageRepository $languageRepository;
+
+    public function injectLanguageRepository(LanguageRepository $languageRepository)
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->languageRepository = $languageRepository;
+    }
+
+    public function injectGlossariessyncRepository(GlossariessyncRepository $glossariessyncRepository)
+    {
+        $this->glossariessyncRepository = $glossariessyncRepository;
+    }
+
+    public function injectGlossariesRepository(GlossariesRepository $glossariesRepository)
+    {
+        $this->glossariesRepository = $glossariesRepository;
+    }
+
+    public function injectDeeplGlossaryService(DeeplGlossaryService $deeplGlossaryService)
+    {
+        $this->deeplGlossaryService = $deeplGlossaryService;
+    }
+
+    public function injectPersistenceManager(PersistenceManager $persistenceManager)
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
+
+    public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): void
+    {
+
+        $cmdmap = $dataHandler->cmdmap;
+        foreach ($cmdmap as $key => $array) {
+            $tablename = $key;
+            foreach ($array as $innerkey => $innervalue) {
+                $currectRecordId = $innerkey;
+                break;
+            }
+            break;
+        }
+
+        if ($tablename !== 'tx_wvdeepltranslate_domain_model_glossaries') {
+            return;
+        }
+        $this->prepareLangagues('postTranslate', $tablename, $currectRecordId);
+
     }
 
     public function processDatamap_afterDatabaseOperations(
@@ -44,67 +92,104 @@ class DataHandlerHook implements LoggerAwareInterface
         array $fieldArray,
         DataHandler $dataHandler
     ): void {
-        if ($status !== 'new' && $status !== 'update') {
-            return;
+        $cmdmap = $dataHandler->cmdmap;
+        foreach ($cmdmap as $key => $array) {
+            $tablename = $key;
+            foreach ($array as $innerkey => $innervalue) {
+                $currectRecordId = $innerkey;
+                break;
+            }
+            break;
         }
         if ($table !== 'tx_wvdeepltranslate_domain_model_glossaries') {
             return;
         }
+        if (!MathUtility::canBeInterpretedAsInteger($id)) {
+            $id = $dataHandler->substNEWwithIDs[$id];
+        }
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->persistenceManager = $objectManager->get(PersistenceManager::class);
-        $this->deeplGlossaryService = $objectManager->get(DeeplGlossaryService::class);
-        $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
-        $this->glossariessyncRepository = $objectManager->get(GlossariessyncRepository::class);
-        $this->languageRepository = $objectManager->get(LanguageRepository::class);
+        $this->prepareLangagues('postDatabase', $table, $id);
+    }
 
-        $systemLanguages = $this->languageRepository->findAll();
-        $defaultLanguage = $this->languageRepository->findByUid(0);
-        $defaultLangIso = $defaultLanguage->getLanguageIsoCode();
+    protected function prepareLangagues($action, $tablename, $currectRecordId) {
+        $glossaryNamePrefix = 'DeepL';
 
-        if ($systemLanguages->count() > 0) {
+        if (isset($tablename) && isset($currectRecordId)) {
+            $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
 
-            $glossaryNamePrefix = 'DeepL';
+            try {
+                $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+                $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
+                $language = $site->getDefaultLanguage();
+                $defaultLangIso = $language->getTwoLetterIsoCode();
+                $siteLanguages = $site->getLanguages();
+            } catch (SiteNotFoundException $exception) {
+                // Ignore, use defaults
+            }
+        }
 
-            foreach($systemLanguages as $lang) {
-                $langUid = (int) $lang->getUid();
-                $langIsoCode = $lang->getLanguageIsoCode();
+        if (!empty($siteLanguages)) {
+            foreach($siteLanguages as $language) {
+                $langUid = $language->getLanguageId();
+                $langIsoCode = $language->getTwoLetterIsoCode();
 
                 // Prepare inputs for DeepL API
                 $sourceLang = $defaultLangIso;
                 $targetLang = $langIsoCode;
+
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
-                $glossaryName = $glossaryNamePrefix.'-'.strtoupper($sourceLang).'-'.strtoupper($targetLang);
+                $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
+
 
                 if (!empty($entries)) {
-                    // Create Glossary through API and a DB entry
-                    $glossary = $this->deeplGlossaryService->createGlossary(
-                        $glossaryName,
-                        $entries,
-                        $sourceLang,
-                        $targetLang
-                    );
+                    $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
+                }
+            }
+        }
+        else {
+            $systemLanguages = $this->languageRepository->findAll();
 
-                    $glossaryId = $glossary['glossary_id'];
+            foreach($systemLanguages as $language) {
+                $langUid = (int) $language->getUid();
+                $langIsoCode = $language->getLanguageIsoCode();
 
-                    if (!empty($glossaryId)) {
-                        $newGlossarysync = GeneralUtility::makeInstance(Glossariessync::class);
-                        $newGlossarysync->setGlossaryId($glossaryId);
-                        $newGlossarysync->setSourceLang($sourceLang);
-                        $newGlossarysync->setTargetLang($targetLang);
-                        $newGlossarysync->setEntries(json_encode($entries, JSON_UNESCAPED_UNICODE));
-                        $this->glossariessyncRepository->add($newGlossarysync);
-                        $this->persistenceManager->persistAll();
-                    }
+                // Prepare inputs for DeepL API
+                $sourceLang = $systemLanguages[0]->getLanguageIsoCode();
+                $targetLang = $langIsoCode;
+
+                $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
+                $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
+
+                if (!empty($entries)) {
+                    $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
                 }
             }
         }
     }
 
-    /**
-    * @return ServerRequestInterface
-     */
-    protected function getRequest(): ServerRequestInterface
+    protected function prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang) {
+        // Create Glossary through API and a DB entry
+        $glossary = $this->deeplGlossaryService->createGlossary(
+            $glossaryName,
+            $entries,
+            $sourceLang,
+            $targetLang
+        );
+
+        $glossaryId = $glossary['glossary_id'];
+
+        if (!empty($glossaryId)) {
+            $newGlossarysync = GeneralUtility::makeInstance(Glossariessync::class);
+            $newGlossarysync->setGlossaryId($glossaryId);
+            $newGlossarysync->setSourceLang($sourceLang);
+            $newGlossarysync->setTargetLang($targetLang);
+            $newGlossarysync->setEntries(json_encode($entries, JSON_UNESCAPED_UNICODE));
+            $this->glossariessyncRepository->add($newGlossarysync);
+            $this->persistenceManager->persistAll();
+        }
+    }
+
+    protected function getRequest()
     {
         return $GLOBALS['TYPO3_REQUEST'];
     }
