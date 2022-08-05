@@ -13,5 +13,5 @@ services:
       - name: 'console.command'
         command: 'wv_deepltranslate:glossariesSync'
 
-  WebVision\WvDeepltranslate\Hooks\ButtonBarHook:
+  WebVision\WvDeepltranslate\Hooks\DataHandlerHook:
     public: true
