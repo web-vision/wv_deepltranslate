@@ -62,9 +62,7 @@ class GlossariesSyncCommand extends Command
 
     public function configure(): void
     {
-        $this->setDescription('This task can sync DeepL Glossaries entries.');
-        $this->addArgument('defaultLangIso');
-        $this->addArgument('glossaryNamePrefix', InputArgument::OPTIONAL, '', 'DeepL');
+        $this->setDescription('Cleanup Glossary entries in DeepL Database');
     }
 
     /**
@@ -74,53 +72,11 @@ class GlossariesSyncCommand extends Command
     {
         // Instantiate objects
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->persistenceManager = $objectManager->get(PersistenceManager::class);
         $this->deeplGlossaryService = $objectManager->get(DeeplGlossaryService::class);
         $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
         $this->glossariessyncRepository = $objectManager->get(GlossariessyncRepository::class);
-        $this->languageRepository = $objectManager->get(LanguageRepository::class);
 
-        $systemLanguages = $this->languageRepository->findAll();
-        if ($systemLanguages->count() > 0) {
-
-            // First do some cleanup tasks
-            // @TODO - Need to move this a new task
-            // $this->doCleanupTasks();
-
-            // Process for a new sync
-            $defaultLangIso = strtolower($input->getArgument('defaultLangIso'));
-            $glossaryNamePrefix = $input->getArgument('glossaryNamePrefix');
-            foreach($systemLanguages as $lang) {
-                $langUid = (int) $lang->getUid();
-                $langIsoCode = $lang->getLanguageIsoCode();
-
-                // Prepare inputs for DeepL API
-                $sourceLang = $defaultLangIso;
-                $targetLang = $langIsoCode;
-                $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
-                $glossaryName = $glossaryNamePrefix.'-'.strtoupper($sourceLang).'-'.strtoupper($targetLang);
-
-                if (!empty($entries)) {
-                    // Create Glossary through API and a DB entry
-                    $glossary = $this->deeplGlossaryService->createGlossary(
-                        $glossaryName,
-                        $entries,
-                        $sourceLang,
-                        $targetLang
-                    );
-                    $glossaryId = $glossary['glossary_id'];
-                    if (!empty($glossaryId)) {
-                        $newGlossarysync = GeneralUtility::makeInstance(Glossariessync::class);
-                        $newGlossarysync->setGlossaryId($glossaryId);
-                        $newGlossarysync->setSourceLang($sourceLang);
-                        $newGlossarysync->setTargetLang($targetLang);
-                        $newGlossarysync->setEntries(json_encode($entries));
-                        $this->glossariessyncRepository->add($newGlossarysync);
-                        $this->persistenceManager->persistAll();
-                    }
-                }
-            }
-        }
+        $this->doCleanupTasks($output);
 
         return Command::SUCCESS;
     }
@@ -128,11 +84,19 @@ class GlossariesSyncCommand extends Command
     /**
      * @return void
      */
-    private function doCleanupTasks()
+    private function doCleanupTasks(OutputInterface $output)
     {
         // Step - 1: Delete glossaries from DeepL
         $glossaries = $this->deeplGlossaryService->listGlossaries();
+
+        $output->writeln([
+            'List of Glossary entries',
+            '============',
+            '',
+        ]);
+
         foreach($glossaries['glossaries'] as $eachGlossary) {
+            $output->writeln($eachGlossary);
             $glId = $eachGlossary['glossary_id'];
             $this->deeplGlossaryService->deleteGlossary($glId);
         }
