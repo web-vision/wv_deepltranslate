@@ -4,7 +4,7 @@ if (!defined('TYPO3_MODE')) {
     die();
 }
 
-$ll = 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang_db.xlf:';
+$ll = 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:';
 
 return [
     'ctrl' => [
@@ -31,8 +31,7 @@ return [
     'types' => [
         '1' => [
             'showitem' => '
-            sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,l10n_parent, l10n_diffsource, hidden, definition, term, description, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime
-
+                sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,l10n_parent, l10n_diffsource, hidden, term, description, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime
             '],
     ],
     'columns' => [
@@ -122,23 +121,15 @@ return [
                 ]
             ],
         ],
-
-        'definition' => [
-            'label' => 'Defintion',
-            'config' => [
-                'type' => 'input',
-                'eval' => 'trim',
-            ],
-        ],
         'term' => [
-            'label' => 'Begriff',
+            'label' => $ll . 'glossary.term',
             'config' => [
                 'type' => 'input',
                 'eval' => 'trim',
             ],
         ],
         'description' => [
-            'label' => 'Erklärung',
+            'label' => $ll . 'glossary.description',
             'config' => [
                 'type' => 'text',
                 'cols' => 40,

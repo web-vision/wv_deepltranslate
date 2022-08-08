@@ -51,6 +51,32 @@
 				<source>Deepl</source>
 				<target>Deepl</target>
 			</trans-unit>
+
+			<trans-unit id="glossary.term" xml:space="preserve">
+				<source>Term</source>
+				<target>Begriff</target>
+			</trans-unit>
+			<trans-unit id="glossary.description" xml:space="preserve">
+				<source>Description</source>
+				<target>Beschriebung</target>
+			</trans-unit>
+
+			<trans-unit id="glossary.glossary_id" xml:space="preserve">
+				<source>Glossary Id</source>
+				<target>Glossar Id</target>
+			</trans-unit>
+			<trans-unit id="glossary.source_lang" xml:space="preserve">
+				<source>Source Language</source>
+				<target>Originale Sprache</target>
+			</trans-unit>
+			<trans-unit id="glossary.target_lang" xml:space="preserve">
+				<source>Target Language</source>
+				<target>Zielsprache</target>
+			</trans-unit>
+			<trans-unit id="glossary.entries" xml:space="preserve">
+				<source>Entries</source>
+				<target>Einträge</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
