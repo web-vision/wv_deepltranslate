@@ -95,15 +95,30 @@ The settings module helps to assign the sytem languages to either deepl supporte
 For example, you can assign German under Austrian German sys language if you wish.
 For assigning a language to a sys language you must enter it’s isocode(ISO 639-1).
 
+## Deepl Glossary
+
+After setting up the core languages create a standard page in page tree.
+
+- In the "Behavior" tab select the option DeepL Glossar in Contains Plugin options.
+![Behavior Tab](./Documentation/Images/UserManual/go-to-behavior-tab.png)
+![Glossary Plugin](./Documentation/Images/UserManual/select-container-plugin.png)
+
+- Now you can create DeepL Glossary records on that page. Go to the list module and Create a new record, select the DeepL Glossaries record.
+![Glossary Record](./Documentation/Images/UserManual/select-glossary-record.png)
+
+- Here you can enter the Term and Description for you Glossary entry.
+![Glossary Terms](./Documentation/Images/UserManual/terms.png)
+
+- As soon as you have an entry in the glossary it will be considered by DeepL Translation for the pair language.
 ## FAQ
 
 See faq [here](https://docs.typo3.org/typo3cms/extensions/wv_deepltranslate/Faq/Index.html)
 
 ## Sponsors
-We appreciate very much the sponsorships of the developments and features for the DeepL Translate Extension for TYPO3. 
+We appreciate very much the sponsorships of the developments and features for the DeepL Translate Extension for TYPO3.
 
-### DeepL Glossary feature sponsored by 
-* [Universität Osnabrück](https://www.uni-osnabrueck.de) 
+### DeepL Glossary feature sponsored by
+* [Universität Osnabrück](https://www.uni-osnabrueck.de)
 * [Hochschule für Musik Würzburg](https://www.hfm-wuerzburg.de)
 * [Carl von Ossietzky Universität Oldenburg](https://uol.de/)
 * [Friedrich-Ebert-Stiftung](https://www.fes.de)
