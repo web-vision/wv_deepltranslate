@@ -3,13 +3,12 @@ declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 
 class ButtonBarHook
 {
@@ -21,7 +20,6 @@ class ButtonBarHook
     }
 
     /**
-     *
      * @param array $params
      * @param ButtonBar $buttonBar
      *
@@ -42,14 +40,18 @@ class ButtonBarHook
             // Style button
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
             $button = $buttonBar->makeLinkButton();
-            $button->setIcon($iconFactory->getIcon('apps-pagetree-folder-contains-glossar',
-                Icon::SIZE_SMALL));
+            $button->setIcon($iconFactory->getIcon(
+                'apps-pagetree-folder-contains-glossar',
+                Icon::SIZE_SMALL
+            ));
             $button->setTitle('Sync Glossary');
             $button->setShowLabelText(true);
 
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $uri = $uriBuilder->buildUriFromRoute('glossaryupdate',
-                ['uid' => $queryParams['id']]);
+            $uri = $uriBuilder->buildUriFromRoute(
+                'glossaryupdate',
+                ['uid' => $queryParams['id']]
+            );
             $button->setHref($uri);
 
             // Register Button and position it

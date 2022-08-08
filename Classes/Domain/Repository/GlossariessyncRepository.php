@@ -21,9 +21,6 @@ class GlossariessyncRepository extends Repository
         $this->setDefaultQuerySettings($querySettings);
     }
 
-    /**
-     * @return void
-     */
     public function truncateDbSyncRecords()
     {
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tx_wvdeepltranslate_domain_model_glossariessync');
@@ -31,7 +28,6 @@ class GlossariessyncRepository extends Repository
     }
 
     /**
-     *
      * @param string $sourceLang
      * @param string $targetLang
      * @return string

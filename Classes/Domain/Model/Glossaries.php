@@ -9,38 +9,12 @@ class Glossaries extends AbstractEntity
     /**
      * @var string
      */
-    protected $definition = '';
+    protected string $term = '';
 
     /**
      * @var string
      */
-    protected $term = '';
-
-    /**
-     * @var string
-     */
-    protected $description = '';
-
-    /**
-     * Get definition
-     *
-     * @return string
-     */
-    public function getDefinition(): string
-    {
-        return $this->definition;
-    }
-
-    /**
-     * Set definition
-     *
-     * @param string $definition
-     * @return void
-     */
-    public function setDefinition(string $definition)
-    {
-        $this->definition = $definition;
-    }
+    protected string $description = '';
 
     /**
      * Get term
@@ -56,7 +30,6 @@ class Glossaries extends AbstractEntity
      * Set term
      *
      * @param string $term
-     * @return void
      */
     public function setTerm(string $term)
     {
@@ -77,7 +50,6 @@ class Glossaries extends AbstractEntity
      * Set description
      *
      * @param string $description
-     * @return void
      */
     public function setDescription(string $description)
     {

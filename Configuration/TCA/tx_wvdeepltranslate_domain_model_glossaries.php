@@ -32,7 +32,7 @@ return [
         '1' => [
             'showitem' => '
                 sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,l10n_parent, l10n_diffsource, hidden, term, description, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime
-            '],
+            ', ],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -46,8 +46,8 @@ return [
                     [
                         'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
                         -1,
-                        'flags-multiple'
-                    ]
+                        'flags-multiple',
+                    ],
                 ],
                 'default' => 0,
             ],
@@ -68,14 +68,14 @@ return [
         ],
         'l10n_source' => [
             'config' => [
-                'type' => 'passthrough'
-            ]
+                'type' => 'passthrough',
+            ],
         ],
         'l10n_diffsource' => [
             'config' => [
                 'type' => 'passthrough',
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
         'hidden' => [
             'exclude' => true,
@@ -87,8 +87,8 @@ return [
                     [
                         0 => '',
                         1 => '',
-                        'invertStateDisplay' => true
-                    ]
+                        'invertStateDisplay' => true,
+                    ],
                 ],
             ],
         ],
@@ -101,8 +101,8 @@ return [
                 'eval' => 'datetime,int',
                 'default' => 0,
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
+                    'allowLanguageSynchronization' => true,
+                ],
             ],
         ],
         'endtime' => [
@@ -114,11 +114,11 @@ return [
                 'eval' => 'datetime,int',
                 'default' => 0,
                 'range' => [
-                    'upper' => mktime(0, 0, 0, 1, 1, 2038)
+                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
                 ],
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
+                    'allowLanguageSynchronization' => true,
+                ],
             ],
         ],
         'term' => [
@@ -133,8 +133,8 @@ return [
             'config' => [
                 'type' => 'text',
                 'cols' => 40,
-                'rows' => 15
-            ]
+                'rows' => 15,
+            ],
         ],
     ],
 ];

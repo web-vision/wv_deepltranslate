@@ -1,25 +1,18 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Controller;
 
-use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\Http\NullResponse;
-use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\RedirectResponse;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
+use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
+use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossarySyncController
 {
@@ -53,14 +46,14 @@ class GlossarySyncController
             $sourceLang = $defaultLangIso;
 
             foreach ($systemLanguages as $lang) {
-                $langUid = (int) $lang->getUid();
+                $langUid = (int)$lang->getUid();
                 $langIsoCode = $lang->getLanguageIsoCode();
 
                 // Prepare inputs for DeepL API
                 $targetLang = 'en';
 
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
-                $glossaryName = $glossaryNamePrefix.'-'.strtoupper($sourceLang).'-'.strtoupper($targetLang);
+                $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
                 if (!empty($entries)) {
                     // Create Glossary through API and a DB entry
                     $glossary = $this->deeplGlossaryService->createGlossary(

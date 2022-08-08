@@ -2,23 +2,27 @@
 
 namespace WebVision\WvDeepltranslate\Service\Client;
 
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class Client implements a DeepL http Client based on PHP-CURL
  */
 final class Client implements ClientInterface
 {
-    const API_URL_SCHEMA = 'https';
+    public const API_URL_SCHEMA = 'https';
 
     /**
      * API BASE URL without authentication query parameter
      * https://api.deepl.com/v2/[resource]
      */
-    const API_URL_BASE_NO_AUTH = '%s://%s/v%s/%s';
+    public const API_URL_BASE_NO_AUTH = '%s://%s/v%s/%s';
 
     /**
      * DeepL API Version (v2 is default since 2018)
      *
-     * @var integer
+     * @var int
      */
     protected $apiVersion;
 
@@ -48,27 +52,27 @@ final class Client implements ClientInterface
      *
      * @var int|null
      */
-    protected $timeout = null;
+    protected $timeout;
 
     /**
      * URL of the proxy used to connect to DeepL (if needed)
      *
      * @var string|null
      */
-    protected $proxy = null;
+    protected $proxy;
 
     /**
      * Credentials for the proxy used to connect to DeepL (username:password)
      *
      * @var string|null
      */
-    protected $proxyCredentials = null;
+    protected $proxyCredentials;
 
     /**
      * DeepL constructor
      *
      * @param string  $authKey
-     * @param integer $apiVersion
+     * @param int $apiVersion
      * @param string  $host
      */
     public function __construct($authKey, $apiVersion = 2, $host = 'api-free.deepl.com')
@@ -148,7 +152,6 @@ final class Client implements ClientInterface
      * Set a proxy to use for querying the DeepL API if needed
      *
      * @param string $proxy Proxy URL (e.g 'http://proxy-domain.com:3128')
-     * @return void
      */
     public function setProxy($proxy)
     {
@@ -159,7 +162,6 @@ final class Client implements ClientInterface
      * Set the proxy credentials
      *
      * @param string $proxyCredentials proxy credentials (using 'username:password' format)
-     * @return void
      */
     public function setProxyCredentials($proxyCredentials)
     {
@@ -194,7 +196,6 @@ final class Client implements ClientInterface
     }
 
     /**
-     *
      * @param array $paramsArray
      * @return string
      */
@@ -236,11 +237,37 @@ final class Client implements ClientInterface
     {
         $responseArray = json_decode($response, true);
         if (($httpCode === 200 || $httpCode === 204) && is_null($responseArray)) {
+            // FlashMessage($message, $title, $severity = self::OK, $storeInSession)
+            $message = GeneralUtility::makeInstance(
+                FlashMessage::class,
+                'Glossary was successfully update.',
+                'DeepL Api',
+                FlashMessage::SUCCESS,
+                true
+            );
+            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+            $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
+            $messageQueue->addMessage($message);
             return empty($response) ? null : $response;
         }
 
         if ($httpCode !== 200 && is_array($responseArray) && array_key_exists('message', $responseArray)) {
-            throw new DeepLException($responseArray['message'], $httpCode);
+            if (str_contains($responseArray['message'], 'Unsupported')) {
+
+                // FlashMessage($message, $title, $severity = self::OK, $storeInSession)
+                $message = GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    $responseArray['message'],
+                    'DeepL Api',
+                    FlashMessage::ERROR,
+                    true
+                );
+                $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+                $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
+                $messageQueue->addMessage($message);
+            } else {
+                throw new DeepLException($responseArray['message'], $httpCode);
+            }
         }
 
         if (!is_array($responseArray)) {
