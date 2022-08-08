@@ -31,24 +31,19 @@ namespace WebVision\WvDeepltranslate\Command;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use WebVision\WvDeepltranslate\Domain\Model\Glossaries;
-use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
-/**
- * Class GlossariesSyncCommand
- */
-class GlossariesSyncCommand extends Command
+class GlossariesEntriesCleanupCommand extends Command
 {
     protected DeeplGlossaryService $deeplGlossaryService;
 
@@ -65,9 +60,6 @@ class GlossariesSyncCommand extends Command
         $this->setDescription('Cleanup Glossary entries in DeepL Database');
     }
 
-    /**
-     * Executes the command
-     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         // Instantiate objects
@@ -76,15 +68,12 @@ class GlossariesSyncCommand extends Command
         $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
         $this->glossariessyncRepository = $objectManager->get(GlossariessyncRepository::class);
 
-        $this->doCleanupTasks($output);
+        $this->removeAllGloassaryEntries($output);
 
         return Command::SUCCESS;
     }
 
-    /**
-     * @return void
-     */
-    private function doCleanupTasks(OutputInterface $output)
+    private function removeAllGloassaryEntries(OutputInterface $output): void
     {
         // Step - 1: Delete glossaries from DeepL
         $glossaries = $this->deeplGlossaryService->listGlossaries();
@@ -95,7 +84,7 @@ class GlossariesSyncCommand extends Command
             '',
         ]);
 
-        foreach($glossaries['glossaries'] as $eachGlossary) {
+        foreach ($glossaries['glossaries'] as $eachGlossary) {
             $output->writeln($eachGlossary);
             $glId = $eachGlossary['glossary_id'];
             $this->deeplGlossaryService->deleteGlossary($glId);
