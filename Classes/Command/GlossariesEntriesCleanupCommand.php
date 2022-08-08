@@ -75,7 +75,6 @@ class GlossariesEntriesCleanupCommand extends Command
 
     private function removeAllGloassaryEntries(OutputInterface $output): void
     {
-        // Step - 1: Delete glossaries from DeepL
         $glossaries = $this->deeplGlossaryService->listGlossaries();
 
         $output->writeln([
@@ -83,14 +82,14 @@ class GlossariesEntriesCleanupCommand extends Command
             '============',
             '',
         ]);
+        if(! empty($glossaries)) {
+            foreach ($glossaries['glossaries'] as $eachGlossary) {
+                $output->writeln($eachGlossary);
+                $id = $eachGlossary['glossary_id'];
+                $this->deeplGlossaryService->deleteGlossary($id);
+            }
 
-        foreach ($glossaries['glossaries'] as $eachGlossary) {
-            $output->writeln($eachGlossary);
-            $glId = $eachGlossary['glossary_id'];
-            $this->deeplGlossaryService->deleteGlossary($glId);
+            $this->glossariessyncRepository->truncateDbSyncRecords();
         }
-
-        // Step - 2: Delete DB records related to sync
-        $this->glossariessyncRepository->truncateDbSyncRecords();
     }
 }

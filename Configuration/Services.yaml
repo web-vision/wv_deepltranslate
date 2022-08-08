@@ -13,5 +13,10 @@ services:
       - name: 'console.command'
         command: 'wv_deepltranslate:glossary_cleanup'
 
+  WebVision\WvDeepltranslate\Command\GlossariesEntriesListCommand:
+    tags:
+      - name: 'console.command'
+        command: 'wv_deepltranslate:glossary_list'
+
   WebVision\WvDeepltranslate\Hooks\DataHandlerHook:
     public: true
