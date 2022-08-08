@@ -61,7 +61,7 @@ return [
             ],
         ],
         'entries' => [
-            'label' =>  $ll . 'glossary.entires',
+            'label' =>  $ll . 'glossary.entries',
             'config' => [
                 'type' => 'text',
                 'cols' => 40,
