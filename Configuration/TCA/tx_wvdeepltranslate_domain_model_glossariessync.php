@@ -4,7 +4,7 @@ if (!defined('TYPO3_MODE')) {
     die();
 }
 
-$ll = 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang_db.xlf:';
+$ll = 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:';
 
 return [
     'ctrl' => [
@@ -37,7 +37,7 @@ return [
             ],
         ],
         'glossary_id' => [
-            'label' => 'Glossary Id',
+            'label' => $ll . 'glossary.glossary_id',
             'config' => [
                 'type' => 'input',
                 'eval' => 'trim',
@@ -45,7 +45,7 @@ return [
             ],
         ],
         'source_lang' => [
-            'label' => 'Source Language',
+            'label' => $ll . 'glossary.source_lang',
             'config' => [
                 'type' => 'input',
                 'eval' => 'trim',
@@ -53,7 +53,7 @@ return [
             ],
         ],
         'target_lang' => [
-            'label' => 'Target Language',
+            'label' =>  $ll . 'glossary.target_lang',
             'config' => [
                 'type' => 'input',
                 'eval' => 'trim',
@@ -61,7 +61,7 @@ return [
             ],
         ],
         'entries' => [
-            'label' => 'Glossary Entries',
+            'label' =>  $ll . 'glossary.entries',
             'config' => [
                 'type' => 'text',
                 'cols' => 40,
