@@ -109,7 +109,7 @@ After setting up the core languages create a standard page in page tree.
 
 ![Glossary Record](./Documentation/Images/UserManual/select-glossary-record.png)
 
-- Here you can enter the Term and Description for you Glossary entry and add the Translation term how it should be handled in by DeepL translate.
+- Here you can enter the Term and Description for you Glossary entry and add the Translation term how it should be handled by DeepL translate.
 
 ![Glossary Terms](./Documentation/Images/UserManual/terms.png)
 

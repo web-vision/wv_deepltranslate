@@ -202,17 +202,17 @@ class DeeplGlossaryService
 
         $response = $this->client->request($url, '', 'GET');
 
-        // $entries = [];
-        // if (!empty($response)) {
-        //     $allEntries = preg_split('/\n/', $response);
-        //     foreach ($allEntries as $entry) {
-        //         $sourceAndTarget = preg_split('/\s+/', rtrim($entry));
-        //         if (isset($sourceAndTarget[0], $sourceAndTarget[1])) {
-        //             $entries[$sourceAndTarget[0]] = $sourceAndTarget[1];
-        //         }
-        //     }
-        // }
+        $entries = [];
+        if (!empty($response)) {
+            $allEntries = explode("\n", $response);
+            foreach ($allEntries as $entry) {
+                $sourceAndTarget = preg_split('/\s+/', rtrim($entry));
+                if (isset($sourceAndTarget[0], $sourceAndTarget[1])) {
+                    $entries[$sourceAndTarget[0]] = $sourceAndTarget[1];
+                }
+            }
+        }
 
-        return $response;
+        return $entries;
     }
 }

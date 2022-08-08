@@ -37,7 +37,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use WebVision\WvDeepltranslate\Domain\Model\Glossaries;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
@@ -82,7 +81,8 @@ class GlossariesEntriesCleanupCommand extends Command
             '============',
             '',
         ]);
-        if(! empty($glossaries)) {
+
+        if (! empty($glossaries)) {
             foreach ($glossaries['glossaries'] as $eachGlossary) {
                 $output->writeln($eachGlossary);
                 $id = $eachGlossary['glossary_id'];
