@@ -31,28 +31,28 @@ namespace WebVision\WvDeepltranslate\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Service\Client\Client;
+
 class DeeplGlossaryService
 {
     /**
      * URL Suffix: glossaries
      */
-    const API_URL_SUFFIX_GLOSSARIES = 'glossaries';
+    public const API_URL_SUFFIX_GLOSSARIES = 'glossaries';
 
     /**
      * URL Suffix: glossary-language-pairs
      */
-    const API_URL_SUFFIX_GLOSSARIES_LANG_PAIRS = 'glossary-language-pairs';
+    public const API_URL_SUFFIX_GLOSSARIES_LANG_PAIRS = 'glossary-language-pairs';
 
     /**
      * API Version:
      */
-    const API_VERSION = '2';
+    public const API_VERSION = '2';
 
     /**
      * @var ClientInterface
@@ -133,7 +133,7 @@ class DeeplGlossaryService
         string $targetLang = 'en',
         string $entriesFormat = 'tsv'
     ) {
-        $formattedEntries = "";
+        $formattedEntries = '';
         foreach ($entries as $source => $target) {
             $formattedEntries .= sprintf("%s\t%s\n", $source, $target);
         }
@@ -143,7 +143,7 @@ class DeeplGlossaryService
             'source_lang'    => $sourceLang,
             'target_lang'    => $targetLang,
             'entries'        => $formattedEntries,
-            'entries_format' => $entriesFormat
+            'entries_format' => $entriesFormat,
         ];
 
         $url  = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);

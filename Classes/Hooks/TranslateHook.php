@@ -65,7 +65,6 @@ class TranslateHook
      */
     public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): string
     {
-
         $cmdmap = $dataHandler->cmdmap;
         foreach ($cmdmap as $key => $array) {
             $tablename = $key;
@@ -93,7 +92,7 @@ class TranslateHook
             if ($targetLanguageMapping != null) {
                 $targetLanguage['language_isocode'] = $targetLanguageMapping;
             }
-            // debug($targetLanguage);die();
+
             if ($sourceLanguage == null) {
                 // Make good defaults
                 $sourceLanguageIso = 'en';
@@ -126,7 +125,6 @@ class TranslateHook
                 }
                 $sourceLanguageIso = $sourceLanguage['language_isocode'];
                 $deeplSourceIso = $sourceLanguageIso;
-
             }
             if ($this->isHtml($content)) {
                 $content = $this->stripSpecificTags(['br'], $content);

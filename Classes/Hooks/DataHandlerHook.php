@@ -3,24 +3,20 @@ declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerAwareInterface;
-use TYPO3\CMS\Core\Site\SiteFinder;
-use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
-use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
+use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
+use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class DataHandlerHook implements LoggerAwareInterface
 {
@@ -67,7 +63,6 @@ class DataHandlerHook implements LoggerAwareInterface
 
     public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): void
     {
-
         $cmdmap = $dataHandler->cmdmap;
         foreach ($cmdmap as $key => $array) {
             $tablename = $key;
@@ -82,7 +77,6 @@ class DataHandlerHook implements LoggerAwareInterface
             return;
         }
         $this->prepareLangagues('postTranslate', $tablename, $currectRecordId);
-
     }
 
     public function processDatamap_afterDatabaseOperations(
@@ -111,7 +105,8 @@ class DataHandlerHook implements LoggerAwareInterface
         $this->prepareLangagues('postDatabase', $table, $id);
     }
 
-    protected function prepareLangagues($action, $tablename, $currectRecordId) {
+    protected function prepareLangagues($action, $tablename, $currectRecordId)
+    {
         $glossaryNamePrefix = 'DeepL';
 
         if (isset($tablename) && isset($currectRecordId)) {
@@ -129,7 +124,7 @@ class DataHandlerHook implements LoggerAwareInterface
         }
 
         if (!empty($siteLanguages)) {
-            foreach($siteLanguages as $language) {
+            foreach ($siteLanguages as $language) {
                 $langUid = $language->getLanguageId();
                 $langIsoCode = $language->getTwoLetterIsoCode();
 
@@ -140,17 +135,15 @@ class DataHandlerHook implements LoggerAwareInterface
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
                 $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
 
-
                 if (!empty($entries)) {
                     $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
                 }
             }
-        }
-        else {
+        } else {
             $systemLanguages = $this->languageRepository->findAll();
 
-            foreach($systemLanguages as $language) {
-                $langUid = (int) $language->getUid();
+            foreach ($systemLanguages as $language) {
+                $langUid = (int)$language->getUid();
                 $langIsoCode = $language->getLanguageIsoCode();
 
                 // Prepare inputs for DeepL API
@@ -167,7 +160,8 @@ class DataHandlerHook implements LoggerAwareInterface
         }
     }
 
-    protected function prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang) {
+    protected function prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang)
+    {
         // Create Glossary through API and a DB entry
         $glossary = $this->deeplGlossaryService->createGlossary(
             $glossaryName,

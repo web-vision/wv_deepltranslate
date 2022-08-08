@@ -3,8 +3,7 @@ CREATE TABLE tx_deepl_settings (
 );
 
 CREATE TABLE tx_wvdeepltranslate_domain_model_glossaries (
-		definition varchar(255),
-		term  varchar(255),
+		term varchar(255),
 		description text,
 );
 

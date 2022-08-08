@@ -40,7 +40,6 @@ class Glossariessync extends AbstractEntity
      * Set glossaryId
      *
      * @param string $glossaryId
-     * @return void
      */
     public function setGlossaryId(string $glossaryId)
     {
@@ -61,7 +60,6 @@ class Glossariessync extends AbstractEntity
      * Set sourceLang
      *
      * @param string $sourceLang
-     * @return void
      */
     public function setSourceLang(string $sourceLang)
     {
@@ -82,7 +80,6 @@ class Glossariessync extends AbstractEntity
      * Set targetLang
      *
      * @param string $targetLang
-     * @return void
      */
     public function setTargetLang(string $targetLang)
     {
@@ -103,7 +100,6 @@ class Glossariessync extends AbstractEntity
      * Set entries
      *
      * @param string $entries
-     * @return void
      */
     public function setEntries(string $entries)
     {
