@@ -237,17 +237,6 @@ final class Client implements ClientInterface
     {
         $responseArray = json_decode($response, true);
         if (($httpCode === 200 || $httpCode === 204) && is_null($responseArray)) {
-            // FlashMessage($message, $title, $severity = self::OK, $storeInSession)
-            $message = GeneralUtility::makeInstance(
-                FlashMessage::class,
-                'Glossary was successfully update.',
-                'DeepL Api',
-                FlashMessage::SUCCESS,
-                true
-            );
-            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
-            $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
-            $messageQueue->addMessage($message);
             return empty($response) ? null : $response;
         }
 
