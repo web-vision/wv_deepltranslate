@@ -10,3 +10,7 @@
 
 - TYPO3 v11.5.5 compatibility added
 - Fixed broken translation from list module
+
+## v2.2.0
+
+- Glossary Feature (https://support.deepl.com/hc/en-us/sections/360005269340-Glossary)
