@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Form\Domain\Configuration\FormDefinition\Converters\FlexFormFinisherOverridesConverterDto;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
@@ -57,6 +56,17 @@ class GlossariesEntriesListCommand extends Command
     private function listAllGloassaryEntries(OutputInterface $output): void
     {
         $glossaries = $this->deeplGlossaryService->listGlossaries();
+
+        if (empty($glossaries['glossaries'])) {
+            $output->writeln([
+                '============',
+                'No Glossaries found.',
+                'Read more here: https://www.deepl.com/docs-api/managing-glossaries/listing-glossaries/',
+                '============',
+            ]);
+
+            return;
+        }
 
         $output->writeln([
             '============',
