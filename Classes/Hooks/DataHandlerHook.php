@@ -174,6 +174,7 @@ class DataHandlerHook implements LoggerAwareInterface
 
         if (!empty($glossaryId)) {
             $newGlossarysync = GeneralUtility::makeInstance(Glossariessync::class);
+            $newGlossarysync->setPid($this->currentPageId);
             $newGlossarysync->setGlossaryId($glossaryId);
             $newGlossarysync->setSourceLang($sourceLang);
             $newGlossarysync->setTargetLang($targetLang);
