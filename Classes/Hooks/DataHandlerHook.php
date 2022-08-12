@@ -22,6 +22,8 @@ class DataHandlerHook implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
+    protected int $currentPageId = 1;
+
     private NotificationRepository $notificationRepository;
 
     private EventDispatcherInterface $eventDispatcher;
@@ -86,6 +88,16 @@ class DataHandlerHook implements LoggerAwareInterface
         array $fieldArray,
         DataHandler $dataHandler
     ): void {
+        if ($table !== 'tx_wvdeepltranslate_domain_model_glossaries') {
+            return;
+        }
+        // Only save if its the translated record and not the original term
+        if ($status !== 'update') {
+            return;
+        }
+        if ($fieldArray['l10n_parent'] === 0) {
+            return;
+        }
         $cmdmap = $dataHandler->cmdmap;
         foreach ($cmdmap as $key => $array) {
             $tablename = $key;
@@ -95,9 +107,7 @@ class DataHandlerHook implements LoggerAwareInterface
             }
             break;
         }
-        if ($table !== 'tx_wvdeepltranslate_domain_model_glossaries') {
-            return;
-        }
+
         if (!MathUtility::canBeInterpretedAsInteger($id)) {
             $id = $dataHandler->substNEWwithIDs[$id];
         }
@@ -111,7 +121,7 @@ class DataHandlerHook implements LoggerAwareInterface
 
         if (isset($tablename) && isset($currectRecordId)) {
             $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
-
+            $this->currentPageId = $currentRecord['pid'];
             try {
                 $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
                 $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
@@ -132,12 +142,14 @@ class DataHandlerHook implements LoggerAwareInterface
                 $sourceLang = $defaultLangIso;
                 $targetLang = $langIsoCode;
 
+                if ($sourceLang === $targetLang) { continue; }
+
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
                 $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
+            }
 
-                if (!empty($entries)) {
-                    $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
-                }
+            if (!empty($entries)) {
+                $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
             }
         } else {
             $systemLanguages = $this->languageRepository->findAll();
@@ -150,12 +162,14 @@ class DataHandlerHook implements LoggerAwareInterface
                 $sourceLang = $systemLanguages[0]->getLanguageIsoCode();
                 $targetLang = $langIsoCode;
 
+                if ($sourceLang === $targetLang) { continue; }
+
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
                 $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
 
-                if (!empty($entries)) {
-                    $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
-                }
+            }
+            if (!empty($entries)) {
+                $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
             }
         }
     }
