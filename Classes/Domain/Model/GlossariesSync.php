@@ -4,7 +4,7 @@ namespace WebVision\WvDeepltranslate\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
-class Glossariessync extends AbstractEntity
+class GlossariesSync extends AbstractEntity
 {
     /**
      * @var string

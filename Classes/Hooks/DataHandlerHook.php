@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
+use WebVision\WvDeepltranslate\Domain\Model\GlossariesSync;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;

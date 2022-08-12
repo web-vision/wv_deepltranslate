@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
+use WebVision\WvDeepltranslate\Domain\Model\GlossariesSync;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
@@ -66,7 +66,7 @@ class GlossarySyncController
                     $glossaryId = $glossary['glossary_id'];
 
                     if (!empty($glossaryId)) {
-                        $newGlossarysync = GeneralUtility::makeInstance(Glossariessync::class);
+                        $newGlossarysync = GeneralUtility::makeInstance(GlossariesSync::class);
                         $newGlossarysync->setGlossaryId($glossaryId);
                         $newGlossarysync->setSourceLang($sourceLang);
                         $newGlossarysync->setTargetLang($targetLang);
