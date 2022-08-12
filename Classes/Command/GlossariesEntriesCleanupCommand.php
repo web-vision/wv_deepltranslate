@@ -38,7 +38,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
@@ -48,7 +48,7 @@ class GlossariesEntriesCleanupCommand extends Command
 
     protected GlossariesRepository $glossariesRepository;
 
-    protected GlossariessyncRepository $glossariessyncRepository;
+    protected GlossariesSyncRepository $glossariesSyncRepository;
 
     protected LanguageRepository $languageRepository;
 
@@ -65,7 +65,7 @@ class GlossariesEntriesCleanupCommand extends Command
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplGlossaryService = $objectManager->get(DeeplGlossaryService::class);
         $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
-        $this->glossariessyncRepository = $objectManager->get(GlossariessyncRepository::class);
+        $this->glossariesSyncRepository = $objectManager->get(GlossariesSyncRepository::class);
 
         $this->removeAllGloassaryEntries($output);
 
@@ -89,7 +89,7 @@ class GlossariesEntriesCleanupCommand extends Command
                 $this->deeplGlossaryService->deleteGlossary($id);
             }
 
-            $this->glossariessyncRepository->truncateDbSyncRecords();
+            $this->glossariesSyncRepository->truncateDbSyncRecords();
         }
     }
 }

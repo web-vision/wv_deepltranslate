@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
@@ -22,7 +22,7 @@ class GlossariesEntriesListCommand extends Command
 
     protected GlossariesRepository $glossariesRepository;
 
-    protected GlossariessyncRepository $glossariessyncRepository;
+    protected GlossariesSyncRepository $glossariesSyncRepository;
 
     protected LanguageRepository $languageRepository;
 
@@ -40,7 +40,7 @@ class GlossariesEntriesListCommand extends Command
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplGlossaryService = $objectManager->get(DeeplGlossaryService::class);
         $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
-        $this->glossariessyncRepository = $objectManager->get(GlossariessyncRepository::class);
+        $this->glossariesSyncRepository = $objectManager->get(GlossariesSyncRepository::class);
 
         $glossary_id = $input->getArgument('glossary_id');
 

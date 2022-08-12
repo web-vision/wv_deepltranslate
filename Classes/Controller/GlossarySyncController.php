@@ -10,7 +10,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
@@ -30,7 +30,7 @@ class GlossarySyncController
         $this->persistenceManager = $objectManager->get(PersistenceManager::class);
         $this->deeplGlossaryService = $objectManager->get(DeeplGlossaryService::class);
         $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
-        $this->glossariessyncRepository = $objectManager->get(GlossariessyncRepository::class);
+        $this->glossariesSyncRepository = $objectManager->get(GlossariesSyncRepository::class);
         $this->languageRepository = $objectManager->get(LanguageRepository::class);
 
         $systemLanguages = $this->languageRepository->findAll();
@@ -71,7 +71,7 @@ class GlossarySyncController
                         $newGlossarysync->setSourceLang($sourceLang);
                         $newGlossarysync->setTargetLang($targetLang);
                         $newGlossarysync->setEntries(json_encode($entries));
-                        $this->glossariessyncRepository->add($newGlossarysync);
+                        $this->glossariesSyncRepository->add($newGlossarysync);
                         $this->persistenceManager->persistAll();
                     }
                 }

@@ -14,7 +14,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use WebVision\WvDeepltranslate\Domain\Model\Glossariessync;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossariessyncRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
@@ -34,7 +34,7 @@ class DataHandlerHook implements LoggerAwareInterface
 
     protected GlossariesRepository $glossariesRepository;
 
-    protected GlossariessyncRepository $glossariessyncRepository;
+    protected GlossariesSyncRepository $glossariesSyncRepository;
 
     protected LanguageRepository $languageRepository;
 
@@ -43,9 +43,9 @@ class DataHandlerHook implements LoggerAwareInterface
         $this->languageRepository = $languageRepository;
     }
 
-    public function injectGlossariessyncRepository(GlossariessyncRepository $glossariessyncRepository)
+    public function injectGlossariesSyncRepository(GlossariesSyncRepository $glossariesSyncRepository)
     {
-        $this->glossariessyncRepository = $glossariessyncRepository;
+        $this->glossariesSyncRepository = $glossariesSyncRepository;
     }
 
     public function injectGlossariesRepository(GlossariesRepository $glossariesRepository)
@@ -98,6 +98,7 @@ class DataHandlerHook implements LoggerAwareInterface
         if ($fieldArray['l10n_parent'] === 0) {
             return;
         }
+
         $cmdmap = $dataHandler->cmdmap;
         foreach ($cmdmap as $key => $array) {
             $tablename = $key;
@@ -122,6 +123,7 @@ class DataHandlerHook implements LoggerAwareInterface
         if (isset($tablename) && isset($currectRecordId)) {
             $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
             $this->currentPageId = $currentRecord['pid'];
+
             try {
                 $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
                 $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
@@ -176,7 +178,7 @@ class DataHandlerHook implements LoggerAwareInterface
 
     protected function prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang)
     {
-        // Create Glossary through API and a DB entry
+
         $glossary = $this->deeplGlossaryService->createGlossary(
             $glossaryName,
             $entries,
@@ -187,19 +189,15 @@ class DataHandlerHook implements LoggerAwareInterface
         $glossaryId = $glossary['glossary_id'];
 
         if (!empty($glossaryId)) {
-            $newGlossarysync = GeneralUtility::makeInstance(Glossariessync::class);
+            $newGlossarysync = GeneralUtility::makeInstance(GlossariesSync::class);
             $newGlossarysync->setPid($this->currentPageId);
             $newGlossarysync->setGlossaryId($glossaryId);
             $newGlossarysync->setSourceLang($sourceLang);
             $newGlossarysync->setTargetLang($targetLang);
             $newGlossarysync->setEntries(json_encode($entries, JSON_UNESCAPED_UNICODE));
-            $this->glossariessyncRepository->add($newGlossarysync);
+
+            $this->glossariesSyncRepository->add($newGlossarysync);
             $this->persistenceManager->persistAll();
         }
-    }
-
-    protected function getRequest()
-    {
-        return $GLOBALS['TYPO3_REQUEST'];
     }
 }
