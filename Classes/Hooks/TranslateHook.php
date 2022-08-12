@@ -88,12 +88,14 @@ class TranslateHook
             $targetLanguage = BackendUtility::getRecord('sys_language', $languageRecord['uid']);
             $sourceLanguage = BackendUtility::getRecord('sys_language', (int)$sourceLanguageCode);
             //get target language mapping if any
-            $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
-            if ($targetLanguageMapping != null) {
+            if ($targetLanguage !== null) {
+                $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
+            }
+            if ($targetLanguageMapping !== null) {
                 $targetLanguage['language_isocode'] = $targetLanguageMapping;
             }
 
-            if ($sourceLanguage == null) {
+            if ($sourceLanguage === null) {
                 // Make good defaults
                 $sourceLanguageIso = 'en';
                 //choose between default and autodetect
