@@ -137,12 +137,9 @@ class TranslateHook
                 $langSupportedByDeepLApi = in_array(strtoupper($targetLanguageIso), $this->deeplService->apiSupportedLanguages);
                 //if target language and source language among supported languages
                 if ($langSupportedByDeepLApi) {
-                    if ($tablename == 'tt_content') {
-                        $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $deeplSourceIso);
-                    } else {
-                        $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
-                        $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $sourceLanguage['language_isocode']);
-                    }
+
+                    $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $sourceLanguageIso);
+
                     if (!empty($response) && isset($response->translations)) {
                         foreach ($response->translations as $translation) {
                             if ($translation->text != '') {
@@ -154,12 +151,9 @@ class TranslateHook
                 }
             } //mode google
             elseif ($customMode == 'google') {
-                if ($tablename == 'tt_content') {
-                    $response = $this->googleService->translate($deeplSourceIso, $targetLanguage['language_isocode'], $content);
-                } else {
-                    $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
-                    $response = $this->googleService->translate($content, $targetLanguage['language_isocode'], $content);
-                }
+
+                $response = $this->googleService->translate($deeplSourceIso, $targetLanguageIso, $content);
+
                 if (!empty($response)) {
                     if ($this->isHtml($response)) {
                         $content = preg_replace('/\/\s/', '/', $response);
