@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace WebVision\WvDeepltranslate\Service;
 
 /***************************************************************
@@ -29,47 +31,31 @@ namespace WebVision\WvDeepltranslate\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 use GuzzleHttp\Exception\ClientException;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 
 class GoogleTranslateService
 {
-    /**
-     * @var RequestFactory
-     */
-    public $requestFactory;
+    public RequestFactory $requestFactory;
 
-    /**
-     * @var string
-     */
-    public $apiKey;
+    public string $apiKey;
 
-    /**
-     * @var string
-     */
-    public $apiUrl;
+    public string $apiUrl;
 
-    /**
-     * Description
-     * @return type
-     */
     public function __construct()
     {
         $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        $extConf              = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
-        $this->apiUrl         = $extConf['googleapiUrl'];
-        $this->apiKey         = $extConf['googleapiKey'];
+        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
+        $this->apiUrl = $extConf['googleapiUrl'];
+        $this->apiKey = $extConf['googleapiKey'];
     }
     /**
      * Passes translate request and formats response returned on request
-     * @param string $source
-     * @param string $target
-     * @param string $text
-     * @return string
      */
-    public function translate($source, $target, $text)
+    public function translate(string $source, string $target, string $text): string
     {
         // Request translation
         $response = $this->request($source, $target, $text);
@@ -81,36 +67,32 @@ class GoogleTranslateService
 
     /**
      * make translate request to api
-     * @param string $source
-     * @param string $target
-     * @param string $text
-     * @return string
      */
-    protected function request($source, $target, $text)
+    protected function request(string $source, string $target, string $text): string
     {
         //translate request with api key(non free mode - recommended)
         if ($this->apiKey != '' && $this->apiUrl != '') {
             $url    = $this->apiUrl . '?key=' . $this->apiKey;
-            $fields = array(
+            $fields = [
                 'source' => urlencode($source),
                 'target' => urlencode($target),
                 'q'      => $text,
-            );
+            ];
         }
         //translate request without apikey(free mode)
         else {
-            $url = "https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
+            $url = 'https://translate.google.com/translate_a/single?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=es-ES&ie=UTF-8&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e';
 
-            $fields = array(
+            $fields = [
                 'sl' => urlencode($source),
                 'tl' => urlencode($target),
                 'q'  => $text,
-            );
+            ];
             $result = [];
             //checks for number of characters
             if (strlen($fields['q']) >= 5000) {
                 $result['status']  = 'false';
-                $result['message'] = "Maximum number of characters exceeded: 5000";
+                $result['message'] = 'Maximum number of characters exceeded: 5000';
                 $result            = json_encode($result);
                 echo $result;
                 exit;
@@ -118,7 +100,7 @@ class GoogleTranslateService
         }
 
         // URL-ify the data for the POST
-        $fields_string = "";
+        $fields_string = '';
         foreach ($fields as $key => $value) {
             $fields_string .= $key . '=' . $value . '&';
         }
@@ -130,13 +112,13 @@ class GoogleTranslateService
                 'form_params' => $fields,
                 'headers'     => [
                     'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8',
-                    'Content-Length' => $contentLength
+                    'Content-Length' => $contentLength,
                 ],
             ]);
         } catch (ClientException $e) {
             $result['status']  = 'false';
             if ($e->getCode() == 404) {
-                $result['message'] = "Google Api url not reachable.Check whether the Api url provided in extension configuration is valid(non freemode).";
+                $result['message'] = 'Google Api url not reachable.Check whether the Api url provided in extension configuration is valid(non freemode).';
             } else {
                 $result['message'] = $e->getMessage();
             }
@@ -150,18 +132,19 @@ class GoogleTranslateService
 
     /**
      * Formats the response to get the translated text
-     * @param string $response
+     *
+     * @param array{data: array[], sentences: string[]} $response
      * @return string
      */
-    protected function getTranslation($response)
+    protected function getTranslation(array $response): string
     {
-        $translation = "";
+        $translation = '';
         if ($this->apiKey != '' && $this->apiUrl != '') {
             $translation = $response['data']['translations'][0]['translatedText'];
         } else {
-            foreach ($response["sentences"] as $text) {
+            foreach ($response['sentences'] as $text) {
                 $text = self::googleTranslationPostprocess($text);
-                $translation .= isset($text["trans"]) ? $text["trans"] : '';
+                $translation .= $text['trans'] ?? '';
             }
         }
         return $translation;
@@ -169,16 +152,18 @@ class GoogleTranslateService
 
     /**
      * Post processing returned translation
+     *
      * @param string $translate
-     * @return array
+     * @return array{trans: string}
      */
-    public function googleTranslationPostprocess($translate)
+    public function googleTranslationPostprocess($translate): array
     {
-        $translate["trans"] = str_replace('</ ', '</', $translate["trans"]);
-        $translate["trans"] = preg_replace('/(?:&\slt;|&lt;)+/', '<', $translate["trans"]);
-        $translate["trans"] = preg_replace('/(?:&\sgt;|&gt;)+/', '>', $translate["trans"]);
-        $translate["trans"] = preg_replace('/(?:&\snbsp;|&nbsp;|&Nbsp;|&\sNbsp;)+/', '', $translate["trans"]);
-        $translate["trans"] = preg_replace('/(?:href\s="\s|href="\s)+/', 'href="', $translate["trans"]);
+        $translate['trans'] = str_replace('</ ', '</', $translate['trans']);
+        $translate['trans'] = preg_replace('/(?:&\slt;|&lt;)+/', '<', $translate['trans']);
+        $translate['trans'] = preg_replace('/(?:&\sgt;|&gt;)+/', '>', $translate['trans']);
+        $translate['trans'] = preg_replace('/(?:&\snbsp;|&nbsp;|&Nbsp;|&\sNbsp;)+/', '', $translate['trans']);
+        $translate['trans'] = preg_replace('/(?:href\s="\s|href="\s)+/', 'href="', $translate['trans']);
+
         return $translate;
     }
 }

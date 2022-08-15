@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
+	<file t3:id="1415814785" source-language="en" target-language="de" datatype="plaintext" original="messages" date="2022-07-15T18:18:55Z" product-name="wv_deepltranslate">
+		<header/>
+		<body>
+			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
+				<source>Translating content via Deepl translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
+				<target>Beim Übersetzen von Inhalten über Deepl Translate wird eine Übersetzung aus der Ausgangssprache in die Sprache erstellt, in die Sie übersetzen , Niederländisch und Polnisch. Andere Sprachen werden ignoriert und werden standardmäßig auf die normale Übersetzungsoperation von TYPO3 umgestellt.</target>
+			</trans-unit>
+			<trans-unit id="localize.educate.deepltranslateAuto" xml:space="preserve">
+				<source>Translating content via Deepl translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
+				<target>Durch das Übersetzen von Inhalten über Deepl Translate (automatische Erkennung) wird eine Übersetzung aus der automatisch erkannten Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Der übersetzte Inhalt stammt vom Deepl-Übersetzungsdienst, der zu 99 Prozent genau ist. Sprachen Deutsch, Spanisch, Italienisch, Niederländisch und Polnisch. Andere Sprachen werden ignoriert und verwenden standardmäßig den normalen Übersetzungsvorgang von TYPO3.</target>
+			</trans-unit>
+			<trans-unit id="localize.educate.googleTranslate" xml:space="preserve">
+				<source>Translating content via Google Translate will create a translation  from source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
+				<target>Beim Übersetzen von Inhalten über Google Translate wird eine Übersetzung aus der Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Die übersetzten Inhalte stammen vom Google-Übersetzungsdienst. Der Google-Dienst unterstützt einen fairen Anteil von <![CDATA[<a href="https:// cloud.google.com/translate/docs/languages" target="_blank">Sprachen</a>]]>.</target>
+			</trans-unit>
+			<trans-unit id="localize.educate.googleTranslateAuto" xml:space="preserve">
+				<source>Translating content via Google Translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
+				<target>Beim Übersetzen von Inhalten über Google Übersetzer (automatische Erkennung) wird eine Übersetzung aus der automatisch erkannten Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Die übersetzten Inhalte stammen vom Google-Übersetzungsdienst. Der Google-Dienst unterstützt einen fairen Anteil von <![CDATA[<a href= "https://cloud.google.com/translate/docs/languages" target="_blank">Sprachen</a>]]>.</target>
+			</trans-unit>
+			<trans-unit id="deepl_settings" xml:space="preserve">
+				<source>Deepl Settings</source>
+				<target>Deepl Settings</target>
+			</trans-unit>
+			<trans-unit id="settings_success" xml:space="preserve">
+				<source>Language assignments saved successfully</source>
+				<target>Sprachzuweisungen erfolgreich gespeichert</target>
+			</trans-unit>
+			<trans-unit id="settings_assign" xml:space="preserve">
+				<source>Assign languages</source>
+				<target>Sprachen zuweisen</target>
+			</trans-unit>
+			<trans-unit id="settings_no_language" xml:space="preserve">
+				<source>No system languages found.</source>
+				<target>Keine Systemsprachen gefunden.</target>
+			</trans-unit>
+			 <trans-unit id="languageId" xml:space="preserve">
+				<source>Language Id</source>
+				<target>Language Id</target>
+			</trans-unit>
+			<trans-unit id="syslanguage" xml:space="preserve">
+				<source>System Language</source>
+				<target>System Language</target>
+			</trans-unit>
+			<trans-unit id="deepliso" xml:space="preserve">
+				<source>Assigned Language(ISO Code)</source>
+				<target>Zugewiesene Sprache (ISO-Code)</target>
+			</trans-unit>
+			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
+				<source>Deepl</source>
+				<target>Deepl</target>
+			</trans-unit>
+
+			<trans-unit id="glossary.term" xml:space="preserve">
+				<source>Term</source>
+				<target>Begriff</target>
+			</trans-unit>
+			<trans-unit id="glossary.description" xml:space="preserve">
+				<source>Description</source>
+				<target>Beschriebung</target>
+			</trans-unit>
+
+			<trans-unit id="glossary.glossary_id" xml:space="preserve">
+				<source>Glossary Id</source>
+				<target>Glossar Id</target>
+			</trans-unit>
+			<trans-unit id="glossary.source_lang" xml:space="preserve">
+				<source>Source Language</source>
+				<target>Originale Sprache</target>
+			</trans-unit>
+			<trans-unit id="glossary.target_lang" xml:space="preserve">
+				<source>Target Language</source>
+				<target>Zielsprache</target>
+			</trans-unit>
+			<trans-unit id="glossary.entries" xml:space="preserve">
+				<source>Entries</source>
+				<target>Einträge</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

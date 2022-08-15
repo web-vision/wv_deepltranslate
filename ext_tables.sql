@@ -1,10 +1,15 @@
-#
-# Table structure for table 'tx_deepl_settings'
-#
 CREATE TABLE tx_deepl_settings (
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) DEFAULT '0' NOT NULL,
-    languages_assigned text,
-    crdate int(11) DEFAULT '0' NOT NULL,
-    PRIMARY KEY (uid)
+		languages_assigned text,
+);
+
+CREATE TABLE tx_wvdeepltranslate_domain_model_glossaries (
+		term varchar(255),
+		description text,
+);
+
+CREATE TABLE tx_wvdeepltranslate_domain_model_glossariessync (
+		glossary_id varchar(60),
+		source_lang char(2),
+		target_lang char(2),
+		entries text,
 );

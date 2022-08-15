@@ -13,20 +13,25 @@
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Deepl Translate',
     'description' => 'Fork of deepltranslate from pitsolutions.This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages.',
-    'category' => 'module',
-    'author' => 'Ricky Mathew Kuruvilla, Anu Bhuvanendran Nair',
-    'author_email' => 'ricky@web-vision.de, anu@web-vision.de',
+    'category' => 'module,backend',
+    'author' => 'web-vision GmbH Team',
+    'author_company' => 'web-vision GmbH',
+    'author_email' => 'markhouben91@gmail.com, ricky@web-vision.de, anu@web-vision.de',
     'state' => 'stable',
-    'internal' => '',
     'uploadfolder' => '0',
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '2.0.1',
+    'version' => '2.2.0',
     'constraints' => [
         'depends' => [
             'typo3' => '9.5.1-11.5.99',
         ],
         'conflicts' => [],
         'suggests' => [],
+    ],
+    'autoload' => [
+        'psr-4' => [
+            'WebVision\\WvDeepltranslate\\' => 'Classes',
+        ],
     ],
 ];

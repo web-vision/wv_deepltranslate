@@ -1,0 +1,10 @@
+.idea
+.vscode/
+.Build
+!.Build/Web/.gitkeep
+.ddev/docker-compose.tempfs.yaml
+composer.lock
+*.cache
+var
+.php-cs-fixer.cache
+.DS_Store

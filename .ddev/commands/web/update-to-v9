@@ -1,0 +1,61 @@
+#!/bin/bash
+
+echo "###############################"
+echo "Update TYPO3 dependency to v9"
+echo "###############################"
+echo ""
+
+echo "Reset Requires from vX"
+composer remove \
+    typo3/cms-backend \
+    typo3/cms-core \
+    typo3/cms-extbase \
+    typo3/cms-extensionmanager \
+    typo3/cms-fluid \
+    typo3/cms-frontend \
+    typo3/cms-install \
+    typo3fluid/fluid \
+    b13/container \
+    helhum/typo3-console \
+    saschaegerer/phpstan-typo3 \
+    typo3/cms-belog \
+    typo3/cms-filelist \
+    typo3/cms-info \
+    typo3/cms-lowlevel \
+    typo3/cms-tstemplate \
+    typo3/cms-workspaces \
+    typo3/testing-framework
+
+rm composer.lock
+rm -rf .Build/vendor/*
+rm -rf .Build/var/*
+rm -rf .Build/bin/*
+rm -rf .Build/Web/typo3conf/ext/*
+rm -rf .Build/Web/typo3/*
+rm -rf .Build/Web/typo3temp/*
+
+echo "Add Requires for v9"
+composer req \
+    typo3/cms-core:^9.5 \
+    typo3/cms-backend:^9.5 \
+    typo3/cms-install:^9.5 \
+    typo3/cms-extbase:^9.5 \
+    typo3/cms-fluid:^9.5 \
+    typo3/cms-frontend:^9.5 \
+    typo3/cms-extensionmanager:^9.5 -W
+
+echo "Add Dev-Requires for v9"
+composer req \
+    b13/container:^1.6 \
+    saschaegerer/phpstan-typo3:^1.0 \
+    helhum/typo3-console:^5.8 \
+    typo3/cms-belog:^9.5 \
+    typo3/cms-filelist:^9.5 \
+    typo3/cms-info:^9.5 \
+    typo3/cms-lowlevel:^9.5 \
+    typo3/cms-tstemplate:^9.5 \
+    typo3/cms-workspaces:^9.5 \
+    typo3/testing-framework:^4.15 --dev -W --no-scripts
+
+echo "Update Instance"
+composer install

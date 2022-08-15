@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
@@ -31,52 +32,38 @@ namespace WebVision\WvDeepltranslate\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository;
-use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
+use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 
 class TranslateHook
 {
+    protected DeeplService $deeplService;
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Service\DeeplService
-     */
-    protected $deeplService;
+    protected GoogleTranslateService $googleService;
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Service\GoogleTranslateService
-     */
-    protected $googleService;
+    protected SettingsRepository $deeplSettingsRepository;
 
-    /**
-     * @var \WebVision\WvDeepltranslate\Domain\Repository\DeeplSettingsRepository
-     * @inject
-     */
-    protected $deeplSettingsRepository;
-
-    /**
-     * Description
-     * @return type
-     */
-    public function __construct()
+    public function __construct(SettingsRepository $settingsRepository = null, DeeplService $deeplService = null, GoogleTranslateService $googleService = null)
     {
-        $this->deeplService = GeneralUtility::makeInstance(DeeplService::class);
-        $this->googleService = GeneralUtility::makeInstance(GoogleTranslateService::class);
-        $this->deeplSettingsRepository = GeneralUtility::makeInstance(DeeplSettingsRepository::class);
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->deeplSettingsRepository = $settingsRepository ?? $objectManager->get(SettingsRepository::class);
+        $this->deeplService = $deeplService ?? $objectManager->get(DeeplService::class);
+        $this->googleService = $googleService ?? $objectManager->get(GoogleTranslateService::class);
     }
 
     /**
      * processTranslateTo_copyAction hook
-     * @param type &$content
-     * @param type $languageRecord
-     * @param type $dataHandler
-     * @return string
+     *
+     * @param array{uid: int} $languageRecord
      */
-    public function processTranslateTo_copyAction(&$content, $languageRecord, $dataHandler)
+    public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): string
     {
         $cmdmap = $dataHandler->cmdmap;
         foreach ($cmdmap as $key => $array) {
@@ -87,26 +74,28 @@ class TranslateHook
             }
             break;
         }
-
-        if (!isset($cmdmap['localization']['custom']['srcLanguageId'])){
+        if (!isset($cmdmap['localization']['custom']['srcLanguageId'])) {
             $cmdmap['localization']['custom']['srcLanguageId'] = '';
         }
 
-        $customMode = $cmdmap['localization']['custom']['mode'];
+        $customMode = $cmdmap['localization']['custom']['mode'] ?? null;
 
         //translation mode set to deepl or google translate
-        if (!is_null($customMode)) {
+        if ($customMode !== null) {
             $langParam = explode('-', $cmdmap['localization']['custom']['srcLanguageId']);
+
             $sourceLanguageCode = $langParam[0];
             $targetLanguage = BackendUtility::getRecord('sys_language', $languageRecord['uid']);
             $sourceLanguage = BackendUtility::getRecord('sys_language', (int)$sourceLanguageCode);
             //get target language mapping if any
-            $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
-            if ($targetLanguageMapping != null) {
+            if ($targetLanguage !== null) {
+                $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
+            }
+            if ($targetLanguageMapping !== null) {
                 $targetLanguage['language_isocode'] = $targetLanguageMapping;
             }
 
-            if ($sourceLanguage == null) {
+            if ($sourceLanguage === null) {
                 // Make good defaults
                 $sourceLanguageIso = 'en';
                 //choose between default and autodetect
@@ -116,10 +105,14 @@ class TranslateHook
                 if (isset($tablename) && isset($currectRecordId)) {
                     $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
                     $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+
                     try {
                         $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
                         $language = $site->getDefaultLanguage();
                         $sourceLanguageIso = strtolower($language->getTwoLetterIsoCode());
+                        $targetLanguage = $site->getLanguageById($languageRecord['uid']);
+                        $targetLanguageIso = $targetLanguage->getTwoLetterIsoCode();
+
                         if ($sourceLanguageCode !== 'auto') {
                             $deeplSourceIso = strtoupper($sourceLanguageIso);
                         }
@@ -139,16 +132,14 @@ class TranslateHook
                 $content = $this->stripSpecificTags(['br'], $content);
             }
 
-            //mode deepl
+            // mode deepl
             if ($customMode == 'deepl') {
+                $langSupportedByDeepLApi = in_array(strtoupper($targetLanguageIso), $this->deeplService->apiSupportedLanguages);
                 //if target language and source language among supported languages
-                if (in_array(strtoupper($targetLanguage['language_isocode']), $this->deeplService->apiSupportedLanguages)) {
-                    if ($tablename == 'tt_content') {
-                        $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $deeplSourceIso);
-                    } else {
-                        $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
-                        $response = $this->deeplService->translateRequest($content, $targetLanguage['language_isocode'], $sourceLanguage['language_isocode']);
-                    }
+                if ($langSupportedByDeepLApi) {
+
+                    $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $sourceLanguageIso);
+
                     if (!empty($response) && isset($response->translations)) {
                         foreach ($response->translations as $translation) {
                             if ($translation->text != '') {
@@ -160,12 +151,9 @@ class TranslateHook
                 }
             } //mode google
             elseif ($customMode == 'google') {
-                if ($tablename == 'tt_content') {
-                    $response = $this->googleService->translate($deeplSourceIso, $targetLanguage['language_isocode'], $content);
-                } else {
-                    $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
-                    $response = $this->googleService->translate($content, $targetLanguage['language_isocode'], $content);
-                }
+
+                $response = $this->googleService->translate($deeplSourceIso, $targetLanguageIso, $content);
+
                 if (!empty($response)) {
                     if ($this->isHtml($response)) {
                         $content = preg_replace('/\/\s/', '/', $response);
@@ -175,15 +163,18 @@ class TranslateHook
                     }
                 }
             }
-            //
         }
+
+        return $content;
     }
 
     /**
      * Execute PreRenderHook for possible manipulation:
      * Add deepl.css,overrides localization.js
+     *
+     * @param array[] $hook
      */
-    public function executePreRenderHook(&$hook)
+    public function executePreRenderHook(array &$hook): void
     {
         //assets are only needed in BE context
         if (TYPO3_MODE == 'BE') {
@@ -204,9 +195,9 @@ class TranslateHook
 
             //inline js for adding deepl button on records list.
             $deeplButton = "function deeplTranslate(a,b){ $('#deepl-translation-enable-' + b).parent().parent().siblings().each(function() { var testing = $( this ).attr( 'href' ); if(document.getElementById('deepl-translation-enable-' + b).checked == true){ var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } else { var newUrl = $( this ).attr( 'href' , testing + '&cmd[localization][custom][mode]=deepl'); } }); }";
-            if (isset($hook['jsInline']['RecordListInlineJS']['code'])){
+            if (isset($hook['jsInline']['RecordListInlineJS']['code'])) {
                 $hook['jsInline']['RecordListInlineJS']['code'] .= $deeplButton;
-            }else{
+            } else {
                 $hook['jsInline']['RecordListInlineJS']['code'] = $deeplButton;
             }
         }
@@ -214,24 +205,25 @@ class TranslateHook
 
     /**
      * check whether the string contains html
-     * @param type $string
-     * @return boolean
+     *
+     * @param string $string
      */
-    public function isHtml($string)
+    public function isHtml(string $string): bool
     {
-        return preg_match("/<[^<]+>/", $string, $m) != 0;
+        return preg_match('/<[^<]+>/', $string, $m) != 0;
     }
 
     /**
      * stripoff the tags provided
-     * @param type $tags
-     * @return string
+     *
+     * @param string[] $tags
      */
-    public function stripSpecificTags($tags, $content)
+    public function stripSpecificTags(array $tags, string $content): string
     {
         foreach ($tags as $tag) {
-            $content = preg_replace("/<\\/?" . $tag . "(.|\\s)*?>/", '', $content);
+            $content = preg_replace('/<\\/?' . $tag . '(.|\\s)*?>/', '', $content);
         }
+
         return $content;
     }
 }
