@@ -14,3 +14,6 @@
 ## v2.2.0
 
 - Glossary Feature (https://support.deepl.com/hc/en-us/sections/360005269340-Glossary)
+
+## v2.2.1
+-  Fix third party translations
