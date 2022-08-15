@@ -1,7 +1,6 @@
 [![Latest Stable Version](https://poser.pugx.org/web-vision/wv_deepltranslate/v/stable.svg)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 [![TYPO3 11.5](https://img.shields.io/badge/TYPO3-11.5-orange.svg?style=flat-square)](https://get.typo3.org/version/11)
 [![TYPO3 10.4](https://img.shields.io/badge/TYPO3-10.4-orange.svg?style=flat-square)](https://get.typo3.org/version/10)
-[![TYPO3 9.5](https://img.shields.io/badge/TYPO3-9.5-orange.svg?style=flat-square)](https://get.typo3.org/version/9)
 [![Total Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/downloads.svg)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 [![Monthly Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/d/monthly)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 
