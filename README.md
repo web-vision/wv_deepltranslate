@@ -6,9 +6,9 @@
 
 ## What does it do?
 
-Fork of deepltranslate from pitsolutions. This extension provides option to translate content elements and tca record fields to desired language(supported by [Deepl](https://www.deepl.com/en/api.html)).
-As a fallback, Google Translate option is also provided as they provide support for many languages that deepl isn’t providing.
-For both Deepl translate and Google Translate, there are two modes-normal and autodetect, where the later autodetect source language and translates it to the desired language.
+Fork of deepltranslate from pitsolutions. This extension provides option to translate content elements and tca record fields to desired language(supported by [DeepL](https://www.deepl.com/en/api.html)).
+As a fallback, Google Translate option is also provided as they provide support for many languages that DeepL isn’t providing.
+For both DeepL translate and Google Translate, there are two modes-normal and autodetect, where the later autodetect source language and translates it to the desired language.
 
 ## Installation
 
@@ -21,25 +21,25 @@ You can install the extension using:
 composer req web-vision/wv_deepltranslate
 ```
 
-Once installed ,there appears a Deepl back end module with a settings tab.
+Once installed ,there appears a DeepL back end module with a settings tab.
 
 ## Extension Configuration
 
-Once you installed the extension, you have to set the Deepl API Key under extension configuration section
+Once you installed the extension, you have to set the DeepL API Key under extension configuration section
 
 ## Translating Content Elements
 
 Once the extension is installed and Api key provided we are good to go for translating content elements.
 On translating content element,There appears additional four options apart from normal translate and copy.
 
-- Deepl Translate(auto detect).
-- Deepl Translate.
+- DeepL Translate(auto detect).
+- DeepL Translate.
 - Google Translate(auto detect).
 - Google Translate.
 
 ## Translating TCA Records
 
-Deepltranslate supports translation of specific fields of TCA records.It understands fields which need to be translated,
+wv_deepltranslate supports translation of specific fields of TCA records.It understands fields which need to be translated,
 only if their `l10n_mode` is set to `prefixLangTitle`. For example if you need translation of fields of tx_news (teaser and bodytext),
 You need to override those fields like follows:
 
@@ -62,7 +62,7 @@ $GLOBALS['TCA']['tx_news_domain_model_news']['columns']['teaser']['l10n_mode'] =
 
 ## Translating Content Elements and TCA Records - Editor users
 
-For the perfect working of deepltranslate with editor users , we need to make sure that the editor has some necessary permissions in `Access Lists`.
+For the perfect working of wv_deepltranslate with editor users , we need to make sure that the editor has some necessary permissions in `Access Lists`.
 Make sure editors have the following permissions:
 
 * Tables (modify) - Better provide permission to all core tables and necessary third party extension tables.
@@ -88,13 +88,13 @@ Make sure editors have the following permissions:
 
 ### CE types
 
-## Deepl Module Settings
+## DeepL Module Settings
 
-The settings module helps to assign the sytem languages to either deepl supported languages or to Google supported languages.
+The settings module helps to assign the sytem languages to either DeepL supported languages or to Google supported languages.
 For example, you can assign German under Austrian German sys language if you wish.
 For assigning a language to a sys language you must enter it’s isocode(ISO 639-1).
 
-## Deepl Glossary
+## DeepL Glossary
 
 After setting up the core languages create a standard page in page tree.
 
