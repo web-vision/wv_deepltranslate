@@ -19,6 +19,7 @@ return [
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'useColumnsForDefaultValues' => 'type',
         'translationSource' => 'l10n_source',
+        'searchFields' => 'term',
         'delete' => 'deleted',
         'sortby' => 'sorting',
         'enablecolumns' => [
@@ -126,14 +127,15 @@ return [
             'config' => [
                 'type' => 'input',
                 'eval' => 'trim',
+                'size' => 50,
             ],
         ],
         'description' => [
             'label' => $ll . 'glossary.description',
             'config' => [
                 'type' => 'text',
-                'cols' => 40,
-                'rows' => 15,
+                'cols' => 50,
+                'rows' => 20,
             ],
         ],
     ],
