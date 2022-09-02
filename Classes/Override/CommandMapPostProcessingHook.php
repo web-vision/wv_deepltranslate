@@ -15,18 +15,14 @@ namespace WebVision\WvDeepltranslate\Override;
  */
 
 use B13\Container\Domain\Factory\Exception;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class takes care of content translation for elements within containers
  */
-class CommandMapPostProcessingHook extends \B13\Container\Hooks\Datahandler\CommandMapPostProcessingHook implements LoggerAwareInterface
+class CommandMapPostProcessingHook extends \B13\Container\Hooks\Datahandler\CommandMapPostProcessingHook
 {
-    use LoggerAwareTrait;
-
     protected function localizeOrCopyToLanguage(int $uid, int $language, string $command, DataHandler $dataHandler): void
     {
         try {
@@ -46,12 +42,7 @@ class CommandMapPostProcessingHook extends \B13\Container\Hooks\Datahandler\Comm
                 $localDataHandler->process_cmdmap();
             }
         } catch (Exception $e) {
-            $this->logger->error(sprintf(
-                '%s ("%s") : %d',
-                $e->getFile(),
-                $e->getMessage(),
-                $e->getCode()
-            ));
+            // exception is expected, if CE is not a container
         }
     }
 }
