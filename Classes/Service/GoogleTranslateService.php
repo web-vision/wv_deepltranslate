@@ -68,9 +68,9 @@ class GoogleTranslateService
     /**
      * make translate request to api
      */
-    protected function request(string $source, string $target, string $text): string
+    protected function request(string $source, string $target, string $text): array
     {
-        //translate request with api key(non free mode - recommended)
+        //translate request with api key(non-free mode - recommended)
         if ($this->apiKey != '' && $this->apiUrl != '') {
             $url    = $this->apiUrl . '?key=' . $this->apiKey;
             $fields = [
@@ -93,7 +93,7 @@ class GoogleTranslateService
             if (strlen($fields['q']) >= 5000) {
                 $result['status']  = 'false';
                 $result['message'] = 'Maximum number of characters exceeded: 5000';
-                $result            = json_encode($result);
+                $result = json_encode($result);
                 echo $result;
                 exit;
             }
@@ -105,7 +105,7 @@ class GoogleTranslateService
             $fields_string .= $key . '=' . $value . '&';
         }
 
-        rtrim($fields_string, '&');
+        $fields_string = rtrim($fields_string, '&');
         $contentLength = mb_strlen($fields_string, '8bit');
         try {
             $response = $this->requestFactory->request($url, 'POST', [
@@ -122,12 +122,17 @@ class GoogleTranslateService
             } else {
                 $result['message'] = $e->getMessage();
             }
-            $result            = json_encode($result);
+            $result = json_encode($result);
             echo $result;
             exit;
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        $result = json_decode($response->getBody()->getContents(), true);
+        if (json_last_error() > 0) {
+            return [];
+        }
+
+        return $result;
     }
 
     /**
