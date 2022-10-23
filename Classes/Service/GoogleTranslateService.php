@@ -37,6 +37,9 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * @deprecated In a future version, Google Translate will be removed and only deepL will be supported
+ */
 class GoogleTranslateService
 {
     public RequestFactory $requestFactory;
@@ -54,6 +57,7 @@ class GoogleTranslateService
     }
     /**
      * Passes translate request and formats response returned on request
+     * @deprecated In a future version, Google Translate will be removed and only deepL will be supported
      */
     public function translate(string $source, string $target, string $text): string
     {
