@@ -14,9 +14,9 @@ if (!defined('TYPO3_MODE')) {
     //hook to checkModifyAccessList for editors
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkModifyAccessList']['deepl']
         = \WebVision\WvDeepltranslate\Hooks\TCEmainHook::class;
-    //hook for overriding localization.js,recordlist.js and including deepl.css
+    //hook for overriding recordlist.js and including deepl.css
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess']['deepl']
-        = \WebVision\WvDeepltranslate\Hooks\TranslateHook::class . '->executePreRenderHook';
+        = \WebVision\WvDeepltranslate\Hooks\DeeplResourcePageRenderHook::class . '->executePreRenderHook';
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processTranslateToClass'][] = \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
@@ -51,6 +51,7 @@ if (!defined('TYPO3_MODE')) {
     }
 
     if (TYPO3_MODE === 'BE') {
+        // overriding localization.js
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
     }
