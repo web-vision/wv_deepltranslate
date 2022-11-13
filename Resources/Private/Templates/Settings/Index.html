@@ -2,10 +2,13 @@
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     data-namespace-typo3-fluid="true"
 >
-
 <f:layout name="Default" />
 
 <f:section name="content">
+    <f:be.pageRenderer includeRequireJsModules="{
+       0: 'TYPO3/CMS/WvDeepltranslate/Settings'
+    }" />
+
 <div class="module-deepl">
     <div class="module-header">
         <f:image src="EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-deepl.svg" alt="alt text" width="37" height="37" class="pull-left"/>
@@ -41,20 +44,6 @@
         </f:if>
     </div>
 </div>
-
-<script type="text/javascript">
-!function ($) {
-$(document).ready(function($) {
-    //avoid numeric
-    $('.languageAssigned').keypress(function(key) {
-      var keyCode = (key.keyCode ? key.keyCode : key.which);
-      if ((key.charCode > 90 && key.charCode < 97 )|| (key.charCode < 65 && key.charCode!=45) || key.charCode > 122 ){
-          return false;
-      }
-    });
-});
-}(TYPO3.jQuery);
-</script>
 
 </f:section>
 </html>
