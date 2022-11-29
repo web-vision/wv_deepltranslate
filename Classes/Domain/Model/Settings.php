@@ -6,8 +6,14 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 class Settings extends AbstractEntity
 {
+    /**
+     * @var string
+     */
     protected string $languagesAssigned = '';
 
+    /**
+     * @var int
+     */
     protected int $createDate = 0;
 
     public function getLanguagesAssigned(): array
