@@ -49,7 +49,6 @@ class SettingsRepository extends Repository
         $result = $this->findAll();
 
         if ($result->count() > 0) {
-
             /** @var Settings $settings */
             $settings = $result->getFirst();
             return $settings;

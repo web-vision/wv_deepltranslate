@@ -137,7 +137,6 @@ class TranslateHook
                 $langSupportedByDeepLApi = in_array(strtoupper($targetLanguageIso), $this->deeplService->apiSupportedLanguages);
                 //if target language and source language among supported languages
                 if ($langSupportedByDeepLApi) {
-
                     $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $sourceLanguageIso);
 
                     if (!empty($response) && isset($response->translations)) {
@@ -151,7 +150,6 @@ class TranslateHook
                 }
             } //mode google
             elseif ($customMode == 'google') {
-
                 $response = $this->googleService->translate($deeplSourceIso, $targetLanguageIso, $content);
 
                 if (!empty($response)) {
