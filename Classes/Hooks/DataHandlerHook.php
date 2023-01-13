@@ -148,10 +148,10 @@ class DataHandlerHook implements LoggerAwareInterface
 
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
                 $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
-            }
 
-            if (!empty($entries)) {
-                $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
+                if (!empty($entries)) {
+                    $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
+                }
             }
         } else {
             $systemLanguages = $this->languageRepository->findAll();
