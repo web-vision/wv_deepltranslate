@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
+	<file t3:id="1415814785" source-language="en" datatype="plaintext" original="messages"
+		date="2023-01-19T20:22:32Z" product-name="wv_deepltranslate">
+		<header />
+		<body>
+			<trans-unit id="tx_wvdeepltranslate_has_translated_content" xml:space="preserve">
+				<source>Has Deepl Translated Content</source>
+			</trans-unit>
+			<trans-unit id="tx_wvdeepltranslate_translated_time" xml:space="preserve">
+				<source>Last Translated DateTime</source>
+			</trans-unit>
+			<trans-unit id="traslated_with_deepl" xml:space="preserve">
+				<source>Translated with Deepl</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

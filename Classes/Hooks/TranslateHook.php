@@ -38,6 +38,7 @@ use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use WebVision\WvDeepltranslate\Domain\Repository\PageRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
@@ -50,12 +51,16 @@ class TranslateHook
 
     protected SettingsRepository $deeplSettingsRepository;
 
+    protected PageRepository $pageRepository;
+
     public function __construct(SettingsRepository $settingsRepository = null, DeeplService $deeplService = null, GoogleTranslateService $googleService = null)
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $settingsRepository ?? $objectManager->get(SettingsRepository::class);
         $this->deeplService = $deeplService ?? $objectManager->get(DeeplService::class);
         $this->googleService = $googleService ?? $objectManager->get(GoogleTranslateService::class);
+
+        $this->pageRepository = $objectManager->get(PageRepository::class);
     }
 
     /**
@@ -105,7 +110,6 @@ class TranslateHook
                 if (isset($tablename) && isset($currectRecordId)) {
                     $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
                     $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-
                     try {
                         $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
                         $language = $site->getDefaultLanguage();
@@ -161,6 +165,8 @@ class TranslateHook
                     }
                 }
             }
+
+            $this->pageRepository->setAsTranslatedWithDeepl($currentRecord['pid']);
         }
 
         return $content;

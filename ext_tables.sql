@@ -13,3 +13,8 @@ CREATE TABLE tx_wvdeepltranslate_domain_model_glossariessync (
 		target_lang char(2),
 		entries text,
 );
+
+CREATE TABLE pages (
+		tx_wvdeepltranslate_has_translated_content int(1),
+		tx_wvdeepltranslate_translated_time int(10)
+);
