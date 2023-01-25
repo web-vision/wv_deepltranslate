@@ -8,3 +8,5 @@ deeplFormality = default
 googleapiKey =
 # cat=Settings/O; type=string; label= Google Translate API Url (Non freemode)
 googleapiUrl = https://translation.googleapis.com/language/translate/v2
+# cat=Settings/O; type=string; label= Traget Language (ISO 369-1) (Define translation target language explicitly)
+translationTargetLanguage =

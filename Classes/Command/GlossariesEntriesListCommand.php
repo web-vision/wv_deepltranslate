@@ -101,7 +101,7 @@ class GlossariesEntriesListCommand extends Command
 
         $headers = [
             'source_lang - ' . $information['source_lang'],
-            'target_lang - ' . $information['target_lang']
+            'target_lang - ' . $information['target_lang'],
         ];
 
         $rows = array_map(null, array_keys($entries), $entries);

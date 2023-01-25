@@ -113,6 +113,24 @@ class TranslateHook
                         $targetLanguage = $site->getLanguageById($languageRecord['uid']);
                         $targetLanguageIso = $targetLanguage->getTwoLetterIsoCode();
 
+                        //Use hreflang for RFC 1766 / 3066 standard lang code
+                        if (method_exists($targetLanguage, 'getHreflang')) {
+                            $targetHreflang = $targetLanguage->getHreflang();
+                            if ($targetHreflang != '') {
+                                $targetLanguageIso = $targetHreflang;
+                            }
+                        } else {
+                            $targetLanguageIso = $targetLanguage->getTwoLetterIsoCode();
+                        }
+
+                        //check for translation target language defined explicitly through extension configuration
+                        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['wv_deepltranslate']['translationTargetLanguage'])) {
+                            $translationTargetLanguage = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['wv_deepltranslate']['translationTargetLanguage'];
+                            if ($translationTargetLanguage != '') {
+                                $targetLanguageIso = $translationTargetLanguage;
+                            }
+                        }
+
                         if ($sourceLanguageCode !== 'auto') {
                             $deeplSourceIso = strtoupper($sourceLanguageIso);
                         }
@@ -136,8 +154,8 @@ class TranslateHook
             if ($customMode == 'deepl') {
                 $langSupportedByDeepLApi = in_array(strtoupper($targetLanguageIso), $this->deeplService->apiSupportedLanguages);
                 //if target language and source language among supported languages
-                if ($langSupportedByDeepLApi) {
 
+                if ($langSupportedByDeepLApi) {
                     $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $sourceLanguageIso);
 
                     if (!empty($response) && isset($response->translations)) {
@@ -151,7 +169,6 @@ class TranslateHook
                 }
             } //mode google
             elseif ($customMode == 'google') {
-
                 $response = $this->googleService->translate($deeplSourceIso, $targetLanguageIso, $content);
 
                 if (!empty($response)) {

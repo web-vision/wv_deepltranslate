@@ -144,7 +144,9 @@ class DataHandlerHook implements LoggerAwareInterface
                 $sourceLang = $defaultLangIso;
                 $targetLang = $langIsoCode;
 
-                if ($sourceLang === $targetLang) { continue; }
+                if ($sourceLang === $targetLang) {
+                    continue;
+                }
 
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
                 $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
@@ -164,11 +166,12 @@ class DataHandlerHook implements LoggerAwareInterface
                 $sourceLang = $systemLanguages[0]->getLanguageIsoCode();
                 $targetLang = $langIsoCode;
 
-                if ($sourceLang === $targetLang) { continue; }
+                if ($sourceLang === $targetLang) {
+                    continue;
+                }
 
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
                 $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
-
             }
             if (!empty($entries)) {
                 $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
@@ -178,7 +181,6 @@ class DataHandlerHook implements LoggerAwareInterface
 
     protected function prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang)
     {
-
         $glossary = $this->deeplGlossaryService->createGlossary(
             $glossaryName,
             $entries,
