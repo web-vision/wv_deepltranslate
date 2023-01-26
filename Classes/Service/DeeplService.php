@@ -33,6 +33,7 @@ namespace WebVision\WvDeepltranslate\Service;
  ***************************************************************/
 
 use GuzzleHttp\Exception\ClientException;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -55,21 +56,26 @@ class DeeplService
      * @var string[]
      */
 
-    public array $apiSupportedLanguages =  ['BG', 'CS', 'DA', 'DE', 'EL', 'EN', 'ES', 'ET', 'FI', 'FR', 'HU', 'ID', 'IT', 'JA', 'LT', 'LV', 'NL', 'PL', 'PT', 'RO', 'RU', 'SK', 'SL', 'SV', 'TR', 'ZH'];
+    public array $apiSupportedLanguages =  [];
 
 
     /**
      * Formality supported languages
      * @var string[]
      */
-    public array $formalitySupportedLanguages = ['DE', 'FR', 'IT', 'ES', 'NL', 'PL', 'PT-PT', 'PT-BR', 'RU'];
+    public array $formalitySupportedLanguages = [];
 
     public RequestFactory $requestFactory;
 
     protected SettingsRepository $deeplSettingsRepository;
 
-    public function __construct()
+    protected GlossariesSyncRepository $glossariesSyncRepository;
+
+    private FrontendInterface $cache;
+
+    public function __construct(?FrontendInterface $cache = null)
     {
+        $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $objectManager->get(SettingsRepository::class);
         $this->glossariesSyncRepository = $objectManager->get(GlossariesSyncRepository::class);
@@ -79,6 +85,8 @@ class DeeplService
         $this->apiUrl = $extensionConfiguration['apiUrl'];
         $this->apiKey = $extensionConfiguration['apiKey'];
         $this->deeplFormality = $extensionConfiguration['deeplFormality'];
+
+        $this->loadSupportedLanguages();
         $this->apiSupportedLanguages = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages);
     }
 
@@ -133,5 +141,51 @@ class DeeplService
         }
 
         return json_decode($response->getBody()->getContents());
+    }
+
+    private function loadSupportedLanguages(): void
+    {
+        $cacheIdentifier = 'wv-deepl-supported-languages';
+        if (($supportedLanguages = $this->cache->get($cacheIdentifier)) === false) {
+            $supportedLanguages = $this->loadSupportedLanguagesFromAPI();
+
+            $this->cache->set($cacheIdentifier, $supportedLanguages, [], 86400);
+        }
+
+        foreach ($supportedLanguages as $supportedLanguage) {
+            $this->apiSupportedLanguages[] = $supportedLanguage['language'];
+            if ($supportedLanguage['supports_formality'] === true) {
+                $this->formalitySupportedLanguages[] = $supportedLanguage['language'];
+            }
+        }
+    }
+
+    private function loadSupportedLanguagesFromAPI(): array
+    {
+        $mainApiUrl = parse_url($this->apiUrl);
+        $languageApiUrl = sprintf(
+            '%s://%s/v2/languages?type=target',
+            $mainApiUrl['scheme'],
+            $mainApiUrl['host']
+        );
+
+        $headers = [
+            'Authorization' => sprintf('DeepL-Auth-Key %s', $this->apiKey),
+        ];
+
+        try {
+            $response = $this->requestFactory->request($languageApiUrl, 'GET', [
+                'headers' => $headers,
+            ]);
+        } catch (ClientException $e) {
+            $result            = [];
+            $result['status']  = 'false';
+            $result['message'] = $e->getMessage();
+            $result            = json_encode($result);
+            echo $result;
+            exit;
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
     }
 }

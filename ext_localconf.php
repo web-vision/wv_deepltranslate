@@ -69,4 +69,10 @@ if (!defined('TYPO3_MODE')) {
             );
         }
     }
+
+    //add caching for DeepL API supported Languages
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']
+        ??= [];
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']['backend']
+        ??= \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
 })();
