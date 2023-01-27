@@ -90,9 +90,9 @@ class TranslateHook
             //get target language mapping if any
             if ($targetLanguage !== null) {
                 $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
-            }
-            if ($targetLanguageMapping !== null) {
-                $targetLanguage['language_isocode'] = $targetLanguageMapping;
+                if ($targetLanguageMapping !== null) {
+                    $targetLanguage['language_isocode'] = $targetLanguageMapping;
+                }
             }
 
             if ($sourceLanguage === null) {
