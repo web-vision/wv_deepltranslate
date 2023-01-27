@@ -95,7 +95,8 @@ class DataHandlerHook implements LoggerAwareInterface
         if ($status !== 'update') {
             return;
         }
-        if ($fieldArray['l10n_parent'] === 0) {
+
+        if (!isset($fieldArray['l10n_parent']) || $fieldArray['l10n_parent'] === 0) {
             return;
         }
 
@@ -144,14 +145,16 @@ class DataHandlerHook implements LoggerAwareInterface
                 $sourceLang = $defaultLangIso;
                 $targetLang = $langIsoCode;
 
-                if ($sourceLang === $targetLang) { continue; }
+                if ($sourceLang === $targetLang) {
+                    continue;
+                }
 
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
                 $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
-            }
 
-            if (!empty($entries)) {
-                $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
+                if (!empty($entries)) {
+                    $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
+                }
             }
         } else {
             $systemLanguages = $this->languageRepository->findAll();
@@ -164,11 +167,12 @@ class DataHandlerHook implements LoggerAwareInterface
                 $sourceLang = $systemLanguages[0]->getLanguageIsoCode();
                 $targetLang = $langIsoCode;
 
-                if ($sourceLang === $targetLang) { continue; }
+                if ($sourceLang === $targetLang) {
+                    continue;
+                }
 
                 $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
                 $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
-
             }
             if (!empty($entries)) {
                 $this->prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang);
@@ -178,7 +182,6 @@ class DataHandlerHook implements LoggerAwareInterface
 
     protected function prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang)
     {
-
         $glossary = $this->deeplGlossaryService->createGlossary(
             $glossaryName,
             $entries,

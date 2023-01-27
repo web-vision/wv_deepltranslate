@@ -55,9 +55,7 @@ class DeeplService
      * @see https://www.deepl.com/de/docs-api/translating-text/#request
      * @var string[]
      */
-
     public array $apiSupportedLanguages =  [];
-
 
     /**
      * Formality supported languages

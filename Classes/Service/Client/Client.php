@@ -242,7 +242,6 @@ final class Client implements ClientInterface
 
         if ($httpCode !== 200 && is_array($responseArray) && array_key_exists('message', $responseArray)) {
             if (str_contains($responseArray['message'], 'Unsupported')) {
-
                 // FlashMessage($message, $title, $severity = self::OK, $storeInSession)
                 $message = GeneralUtility::makeInstance(
                     FlashMessage::class,
