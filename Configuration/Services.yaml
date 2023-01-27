@@ -20,3 +20,12 @@ services:
 
   WebVision\WvDeepltranslate\Hooks\DataHandlerHook:
     public: true
+
+  WebVision\WvDeepltranslate\Service\DeeplService:
+    arguments:
+      $cache: '@cache.wvdeepltranslate'
+
+  cache.wvdeepltranslate:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: [ '@TYPO3\CMS\Core\Cache\CacheManager', 'getCache' ]
+    arguments: [ 'wvdeepltranslate' ]
