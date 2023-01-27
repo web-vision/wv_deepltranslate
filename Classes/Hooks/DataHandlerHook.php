@@ -95,7 +95,8 @@ class DataHandlerHook implements LoggerAwareInterface
         if ($status !== 'update') {
             return;
         }
-        if ($fieldArray['l10n_parent'] === 0) {
+
+        if (!isset($fieldArray['l10n_parent']) || $fieldArray['l10n_parent'] === 0) {
             return;
         }
 
