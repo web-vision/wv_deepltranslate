@@ -36,7 +36,6 @@ class ButtonBarHook
         $page = $this->pageRepository->getPage($queryParams['id']);
 
         if ($page['module'] === 'wv_deepltranslate') {
-
             // Style button
             $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
             $button = $buttonBar->makeLinkButton();
