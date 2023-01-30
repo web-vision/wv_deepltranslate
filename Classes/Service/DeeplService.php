@@ -33,6 +33,7 @@ namespace WebVision\WvDeepltranslate\Service;
  ***************************************************************/
 
 use GuzzleHttp\Exception\ClientException;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
