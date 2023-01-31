@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.3.1
+
+* [BUGFIX] Fix exception due to missing use statement by @sypets in #108
+
+## 2.3.0
+
+* [BUGFIX] Add php doc blocks by @spoonerWeb in #94
+* [BUGFIX] Fix glossary sync persistance by @sypets in #100
+* [BUGFIX] Fix undefined array key in DataHandlerHook by @sypets in #101
+* [TASK] Run CGL fix by @sypets in #103
+* [FEATURE] add supported languages automatically from API by @calien666 in #107
+
 ## v2.2.2
 
 * [TASK] Update supported deepl api languages by @ayacoo in #64
