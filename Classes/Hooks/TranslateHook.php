@@ -14,6 +14,7 @@ use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Utility\HtmlUtility;
 
 class TranslateHook
 {
@@ -131,8 +132,8 @@ class TranslateHook
         string $customMode,
         array $sourceLanguageRecord
     ): string {
-        if ($this->isHtml($content)) {
-            $content = $this->stripSpecificTags(['br'], $content);
+        if (HtmlUtility::isHtml($content)) {
+            $content = HtmlUtility::stripSpecificTags(['br'], $content);
         }
 
         // mode deepl
@@ -161,35 +162,11 @@ class TranslateHook
             );
 
             if (!empty($response)) {
-                if ($this->isHtml($response)) {
+                if (HtmlUtility::isHtml($response)) {
                     $content = preg_replace('/\/\s/', '/', $response);
                     $content = preg_replace('/\>\s+/', '>', $content);
                 }
             }
-        }
-
-        return $content;
-    }
-
-    /**
-     * check whether the string contains html
-     *
-     * @param string $string
-     */
-    public function isHtml(string $string): bool
-    {
-        return preg_match('/<[^<]+>/', $string, $m) != 0;
-    }
-
-    /**
-     * stripoff the tags provided
-     *
-     * @param string[] $tags
-     */
-    public function stripSpecificTags(array $tags, string $content): string
-    {
-        foreach ($tags as $tag) {
-            $content = preg_replace('/<\\/?' . $tag . '(.|\\s)*?>/', '', $content);
         }
 
         return $content;
