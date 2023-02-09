@@ -76,17 +76,18 @@
 		"friendsofphp/php-cs-fixer": "^3.0",
 		"helhum/typo3-console": "^5.8 || ^6.7 || ^7.1",
 		"helmich/typo3-typoscript-lint": "^2.5",
+		"nimut/testing-framework": "^6.0",
 		"phpstan/phpstan": "^1.3",
 		"saschaegerer/phpstan-typo3": "^1.0",
 		"symfony/var-dumper": "^5.4",
 		"typo3/cms-belog": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-filelist": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-fluid-styled-content": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-info": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-lowlevel": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-tstemplate": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-workspaces": "^9.5 || ^10.4 || ^11.5",
-		"typo3/coding-standards": "^0.5",
-		"typo3/testing-framework": "^4.11.1 || ^6.16"
+		"typo3/coding-standards": "^0.5"
 	},
 	"autoload": {
 		"psr-4": {
@@ -103,7 +104,7 @@
 			"mkdir -p .Build/Web/typo3conf/ext/",
 			"[ -L .Build/Web/typo3conf/ext/wv_deepltranslate ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/wv_deepltranslate",
 			"@package-states",
-			"TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+			"Nimut\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
 		],
 		"ec:check": "ec -v -n --no-progress -e'var/log' -e'.Build' -e'.ddev' -e'phpstan-baseline.neon'",
 		"ec:fix": "ec -v -n --fix -e'var/log' -e'.Build' -e'.ddev'",
