@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace Unit\Domain\Model;
+namespace WebVision\WvDeepltranslate\Tests\Unit\Domain\Model;
 
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use WebVision\WvDeepltranslate\Domain\Model\Language;
 
 /**
@@ -31,7 +31,7 @@ class LanguageTest extends UnitTestCase
      */
     public function hasClassProperties(string $attribute, string $message): void
     {
-        static::assertClassHasAttribute($attribute, Language::class, $message);
+        static::assertTrue(property_exists(Language::class, $attribute), $message);
     }
 
     public function classMethodDataProvider(): array

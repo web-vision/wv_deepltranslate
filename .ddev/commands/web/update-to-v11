@@ -23,8 +23,7 @@ composer remove \
     typo3/cms-info \
     typo3/cms-lowlevel \
     typo3/cms-tstemplate \
-    typo3/cms-workspaces \
-    typo3/testing-framework
+    typo3/cms-workspaces
 
 rm composer.lock
 rm -rf .Build/vendor/*
@@ -54,8 +53,7 @@ composer req \
     typo3/cms-tstemplate:^11.5 \
     typo3/cms-workspaces:^11.5 \
     typo3/cms-frontend:^11.5 \
-    typo3/cms-extensionmanager:^11.5 \
-    typo3/testing-framework:^6.16 --dev -W --no-scripts
+    typo3/cms-extensionmanager:^11.5 --dev -W --no-scripts
 
 echo "Update Instance"
 composer install

@@ -2,10 +2,10 @@
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Domain\Repository;
 
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 
 class SettingsRepositoryTest extends FunctionalTestCase
