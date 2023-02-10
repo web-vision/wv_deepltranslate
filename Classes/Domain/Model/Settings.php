@@ -4,6 +4,9 @@ namespace WebVision\WvDeepltranslate\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
+/**
+ * @deprecated Module is deprecated v10 and remove with v12
+ */
 class Settings extends AbstractEntity
 {
     /**

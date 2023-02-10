@@ -9,6 +9,9 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 use WebVision\WvDeepltranslate\Domain\Model\Settings;
 use WebVision\WvDeepltranslate\Exception\SettingQueryException;
 
+/**
+ * @deprecated Module is deprecated v10 and remove with v12
+ */
 class SettingsRepository extends Repository
 {
     public function initializeObject(): void

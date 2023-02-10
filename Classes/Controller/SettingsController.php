@@ -36,7 +36,7 @@ use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
 /**
- * Class SettingsController
+ * @deprecated Module is deprecated v10 and remove with v12
  */
 class SettingsController extends ActionController
 {
