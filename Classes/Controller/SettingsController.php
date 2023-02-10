@@ -100,6 +100,22 @@ class SettingsController extends ActionController
             $preSelect
         );
 
+        $typo3VersionArray = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionStringToArray(
+            \TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version()
+        );
+
+        if (version_compare((string)$typo3VersionArray['version_main'], '11', '<')) {
+            $massagesType = \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO;
+        } else {
+            $massagesType = \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING;
+        }
+
+        $this->addFlashMessage(
+            LocalizationUtility::translate('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:deprecated.deepl-be.body'),
+            LocalizationUtility::translate('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:deprecated.deepl-be.title'),
+            $massagesType
+        );
+
         $this->view->assignMultiple([
             'sysLanguages' => $sysLanguages,
             'selectBox' => $selectBox,
