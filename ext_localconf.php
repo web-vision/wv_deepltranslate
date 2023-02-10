@@ -15,6 +15,9 @@ if (!defined('TYPO3_MODE')) {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkModifyAccessList']['deepl']
         = \WebVision\WvDeepltranslate\Hooks\TCEmainHook::class;
 
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all']['deepl-1675946132'] =
+        \WebVision\WvDeepltranslate\Hooks\DeeplPreviewFlagGeneratePageHook::class . '->renderDeeplPreviewFlag';
+
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processTranslateToClass'][] = \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] =  \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;

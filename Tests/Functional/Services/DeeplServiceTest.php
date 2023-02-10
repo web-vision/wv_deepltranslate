@@ -1,11 +1,14 @@
 <?php declare(strict_types = 1);
 
-namespace Functional\Services;
+namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
+/**
+ * @covers \WebVision\WvDeepltranslate\Service\DeeplService
+ */
 class DeeplServiceTest extends FunctionalTestCase
 {
     /**

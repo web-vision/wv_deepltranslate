@@ -15,6 +15,6 @@ CREATE TABLE tx_wvdeepltranslate_domain_model_glossariessync (
 );
 
 CREATE TABLE pages (
-		tx_wvdeepltranslate_has_translated_content int(1),
-		tx_wvdeepltranslate_translated_time int(10)
+		tx_wvdeepltranslate_content_not_checked tinyint,
+		tx_wvdeepltranslate_translated_time int(10) NOT NULL DEFAULT 0
 );
