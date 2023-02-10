@@ -53,120 +53,159 @@ class TranslateHook
 
     protected PageRepository $pageRepository;
 
-    public function __construct(SettingsRepository $settingsRepository = null, DeeplService $deeplService = null, GoogleTranslateService $googleService = null)
-    {
+    public function __construct(
+        ?SettingsRepository $settingsRepository = null,
+        ?PageRepository $pageRepository = null,
+        ?DeeplService $deeplService = null,
+        ?GoogleTranslateService $googleService = null
+    ) {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $settingsRepository ?? $objectManager->get(SettingsRepository::class);
         $this->deeplService = $deeplService ?? $objectManager->get(DeeplService::class);
         $this->googleService = $googleService ?? $objectManager->get(GoogleTranslateService::class);
-
-        $this->pageRepository = $objectManager->get(PageRepository::class);
+        $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class);
     }
 
     /**
-     * processTranslateTo_copyAction hook
-     *
      * @param array{uid: int} $languageRecord
      */
     public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): string
     {
+        $tableName = '';
+        $currentRecordId = '';
+
         $cmdmap = $dataHandler->cmdmap;
         foreach ($cmdmap as $key => $array) {
-            $tablename = $key;
+            $tableName = $key;
             foreach ($array as $innerkey => $innervalue) {
-                $currectRecordId = $innerkey;
+                $currentRecordId = $innerkey;
                 break;
             }
             break;
         }
+
         if (!isset($cmdmap['localization']['custom']['srcLanguageId'])) {
             $cmdmap['localization']['custom']['srcLanguageId'] = '';
         }
 
         $customMode = $cmdmap['localization']['custom']['mode'] ?? null;
+        [$sourceLanguage,] = explode('-', $cmdmap['localization']['custom']['srcLanguageId']);
 
         //translation mode set to deepl or google translate
-        if ($customMode !== null) {
-            $langParam = explode('-', $cmdmap['localization']['custom']['srcLanguageId']);
+        if ($customMode === null) {
+            return $content;
+        }
 
-            $sourceLanguageCode = $langParam[0];
-            $targetLanguage = BackendUtility::getRecord('sys_language', $languageRecord['uid']);
-            $sourceLanguage = BackendUtility::getRecord('sys_language', (int)$sourceLanguageCode);
-            //get target language mapping if any
-            if ($targetLanguage !== null) {
-                $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
-                if ($targetLanguageMapping !== null) {
-                    $targetLanguage['language_isocode'] = $targetLanguageMapping;
+        $translatedContent = $this->translateContent(
+            $content,
+            $languageRecord,
+            $customMode,
+            $sourceLanguage,
+            $tableName,
+            (int)$currentRecordId
+        );
+
+        if ($translatedContent !== '') {
+            // only the parameter reference is in use for content translate
+            $content = $translatedContent;
+        }
+
+        return $content;
+    }
+
+    /**
+     * These logics were outsourced to test them and later to resolve them in a service
+     */
+    public function translateContent(
+        string $content,
+        array $targetLanguageRecord,
+        string $customMode,
+        ?string $sourceLanguage = null,
+        string $tableName = '',
+        ?int $currentRecordId = null
+    ): string {
+        $sourceLanguageCode = $sourceLanguage;
+        $targetLanguage = BackendUtility::getRecord('sys_language', (int)$targetLanguageRecord['uid']);
+        $sourceLanguage = BackendUtility::getRecord('sys_language', (int)$sourceLanguage);
+
+        // get target language mapping if any
+        if ($targetLanguage !== null) {
+            $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
+            if ($targetLanguageMapping !== null) {
+                $targetLanguage['language_isocode'] = $targetLanguageMapping;
+            }
+        }
+
+        // Make good defaults
+        // choose between default and autodetect
+        $sourceLanguageIso = ($sourceLanguageCode == 'auto' ? null : 'EN');
+
+        if ($sourceLanguage === null) {
+            // current fallback to try to find the default language from the site configuration
+            // when sys_language source not exist or not found
+            if (!empty($tableName) && !empty($currentRecordId)) {
+                $currentPageRecord = BackendUtility::getRecord($tableName, (int)$currentRecordId);
+                $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+                try {
+                    $site = $siteFinder->getSiteByPageId($currentPageRecord['pid']);
+                    $sourceLanguageIso = strtoupper($site->getDefaultLanguage()->getTwoLetterIsoCode());
+                    $targetLanguage['language_isocode'] = $site->getLanguageById($targetLanguageRecord['uid'])
+                        ->getTwoLetterIsoCode();
+                } catch (SiteNotFoundException $exception) {
+                    // Ignore, use defaults
                 }
             }
+        } else {
+            if (in_array($sourceLanguage['language_isocode'], $this->deeplService->apiSupportedLanguages)) {
+                $sourceLanguageIso = strtoupper($sourceLanguage['language_isocode']);
+            }
+        }
 
-            if ($sourceLanguage === null) {
-                // Make good defaults
-                $sourceLanguageIso = 'en';
-                //choose between default and autodetect
-                $deeplSourceIso = ($sourceLanguageCode == 'auto' ? null : 'EN');
+        if ($this->isHtml($content)) {
+            $content = $this->stripSpecificTags(['br'], $content);
+        }
 
-                // Try to find the default language from the site configuration
-                if (isset($tablename) && isset($currectRecordId)) {
-                    $currentRecord = BackendUtility::getRecord($tablename, (int)$currectRecordId);
-                    $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-                    try {
-                        $site = $siteFinder->getSiteByPageId($currentRecord['pid']);
-                        $language = $site->getDefaultLanguage();
-                        $sourceLanguageIso = strtolower($language->getTwoLetterIsoCode());
-                        $targetLanguage = $site->getLanguageById($languageRecord['uid']);
-                        $targetLanguageIso = $targetLanguage->getTwoLetterIsoCode();
+        // mode deepl
+        if ($customMode == 'deepl') {
+            $langSupportedByDeepLApi = in_array(
+                strtoupper($targetLanguage['language_isocode'] ?? ''),
+                $this->deeplService->apiSupportedLanguages
+            );
 
-                        if ($sourceLanguageCode !== 'auto') {
-                            $deeplSourceIso = strtoupper($sourceLanguageIso);
+            //if target language and source language among supported languages
+            if ($langSupportedByDeepLApi) {
+                $response = $this->deeplService->translateRequest(
+                    $content,
+                    $targetLanguage['language_isocode'],
+                    $sourceLanguageIso
+                );
+
+                if (!empty($response) && isset($response->translations)) {
+                    foreach ($response->translations as $translation) {
+                        if ($translation->text != '') {
+                            $content = $translation->text;
+                            break;
                         }
-                    } catch (SiteNotFoundException $exception) {
-                        // Ignore, use defaults
-                    }
-                }
-            } else {
-                $sourceLanguageMapping = $this->deeplSettingsRepository->getMappings($sourceLanguage['uid']);
-                if ($sourceLanguageMapping != null) {
-                    $sourceLanguage['language_isocode'] = $sourceLanguageMapping;
-                }
-                $sourceLanguageIso = $sourceLanguage['language_isocode'];
-                $deeplSourceIso = $sourceLanguageIso;
-            }
-            if ($this->isHtml($content)) {
-                $content = $this->stripSpecificTags(['br'], $content);
-            }
-
-            // mode deepl
-            if ($customMode == 'deepl') {
-                $langSupportedByDeepLApi = in_array(strtoupper($targetLanguageIso), $this->deeplService->apiSupportedLanguages);
-                //if target language and source language among supported languages
-                if ($langSupportedByDeepLApi) {
-                    $response = $this->deeplService->translateRequest($content, $targetLanguageIso, $sourceLanguageIso);
-
-                    if (!empty($response) && isset($response->translations)) {
-                        foreach ($response->translations as $translation) {
-                            if ($translation->text != '') {
-                                $content = $translation->text;
-                                break;
-                            }
-                        }
-                    }
-                }
-            } //mode google
-            elseif ($customMode == 'google') {
-                $response = $this->googleService->translate($deeplSourceIso, $targetLanguageIso, $content);
-
-                if (!empty($response)) {
-                    if ($this->isHtml($response)) {
-                        $content = preg_replace('/\/\s/', '/', $response);
-                        $content = preg_replace('/\>\s+/', '>', $content);
-                    } else {
-                        $content = $response;
                     }
                 }
             }
+        } //mode google
+        elseif ($customMode == 'google') {
+            $response = $this->googleService->translate($sourceLanguageIso, $targetLanguage['language_isocode'], $content);
 
-            $this->pageRepository->setAsTranslatedWithDeepl($currentRecord['pid']);
+            if (!empty($response)) {
+                if ($this->isHtml($response)) {
+                    $content = preg_replace('/\/\s/', '/', $response);
+                    $content = preg_replace('/\>\s+/', '>', $content);
+                }
+            }
+        }
+
+        if ($content !== '' && $customMode === 'deepl') {
+            $currentPageRecord = BackendUtility::getRecord($tableName, (int)$currentRecordId);
+            if ($currentPageRecord !== null && isset($currentPageRecord['uid'])) {
+                $this->pageRepository->markPageAsTranslatedWithDeepl($currentPageRecord['uid'], $targetLanguage);
+            }
         }
 
         return $content;
