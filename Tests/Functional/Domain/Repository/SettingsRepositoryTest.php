@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Domain\Repository;
 
@@ -8,6 +10,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 
+/**
+ * @covers \WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository
+ */
 class SettingsRepositoryTest extends FunctionalTestCase
 {
     /**
@@ -21,8 +26,8 @@ class SettingsRepositoryTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->importDataSet(__DIR__ . '/../../Fixtures/Settings.xml');
-        $this->importDataSet(__DIR__ . '/../../Fixtures/Language.xml');
+        $this->importDataSet(__DIR__ . '/Fixtures/Settings.xml');
+        $this->importDataSet(__DIR__ . '/Fixtures/Language.xml');
     }
 
     /** @test */
