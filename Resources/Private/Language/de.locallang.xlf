@@ -102,6 +102,18 @@
 				<source>Translated with Deepl</source>
 				<target>Übersetzt mit Deepl</target>
 			</trans-unit>
+			<trans-unit id="deprecated.deepl-be.title">
+				<source>!!! Module is Deprecated !!!</source>
+				<taget>!!! Module ist Veraltet !!!</taget>
+			</trans-unit>
+			<trans-unit id="deprecated.deepl-be.body">
+				<source><![CDATA[We will remove this backend module from TYPO3 V11 and move the configuration in the site configuration.
+					This must be done because "sys_language" entries are deprecated from TYPO3 11 and are no longer considered in the translation.
+				]]></source>
+				<target><![CDATA[Wir werden ab der TYPO3 V11 dieses Backend Module auflösen und die Konfiguration in der Site Configuration verschieben.
+					Dies muss vorgenommen werden, weil "sys_language" Eintrage ab TYPO3 11 deprecated sind und im Übersetzung nicht mehr berücksichtigt werden.
+				]]></target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
