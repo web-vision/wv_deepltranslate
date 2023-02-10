@@ -69,6 +69,19 @@
 			<trans-unit id="glossary.entries" xml:space="preserve">
 				<source>Entries</source>
 			</trans-unit>
+
+			<trans-unit id="pages.deepl.tab.label">
+				<source>DeepL Translate</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_wvdeepltranslate_content_not_checked">
+				<source>Deepl Translated Content was not checked</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
+				<source>Last Translated Date</source>
+			</trans-unit>
+			<trans-unit id="preview.flag">
+				<source>Translated with Deepl</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

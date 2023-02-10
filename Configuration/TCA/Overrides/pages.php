@@ -3,49 +3,60 @@ if (!defined('TYPO3_MODE')) {
     die();
 }
 
-$GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = [
-    'DeepL Glossar',
-    'wv_deepltranslate',
-    'apps-pagetree-folder-contains-glossar',
-];
-$GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-glossar'] = 'apps-pagetree-folder-contains-glossar';
+(static function (): void {
+    $ll = function (string $languageKey) {
+        return sprintf('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:%s', $languageKey);
+    };
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-    'pages',
-    [
+    $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = [
+        'DeepL Glossar',
+        'wv_deepltranslate',
+        'apps-pagetree-folder-contains-glossar',
+    ];
+    $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-glossar'] = 'apps-pagetree-folder-contains-glossar';
 
-        'tx_wvdeepltranslate_has_translated_content' => [
+    $columns = [
+        'tx_wvdeepltranslate_content_not_checked' => [
             'exclude' => 0,
-            'displayCond' => 'USER:WebVision\\WvDeepltranslate\\Domain\\Repository\\PageRepository->hasDeeplTranslatedContent',
-            'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang_db.xlf:tx_wvdeepltranslate_has_translated_content',
+            'l10n_display' => 'hideDiff',
+            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'label' => $ll('pages.tx_wvdeepltranslate_content_not_checked'),
             'config' => [
-               'type' => 'check',
-               'readOnly' => true,
-               'items' => [
-                  [
-                      'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang_db.xlf:traslated_with_deepl',
-                  ],
-               ],
+                'type' => 'check',
+                'items' => [
+                    [
+                        $ll('traslated_with_deepl'),
+                    ],
+                ],
             ],
-         ],
-
-       'tx_wvdeepltranslate_translated_time' => [
-          'exclude' => 0,
-          'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang_db.xlf:tx_wvdeepltranslate_translated_time',
-          'config' => [
-            'type' => 'input',
-            'renderType' => 'inputDateTime',
-            'eval' => 'datetime',
-            'readOnly' =>true,
-            'default' => 0,
         ],
-       ],
-    ]
-);
+        'tx_wvdeepltranslate_translated_time' => [
+            'exclude' => 0,
+            'l10n_display' => 'hideDiff',
+            'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'label' => $ll('pages.tx_wvdeepltranslate_translated_time'),
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime',
+                'readOnly' => true,
+                'default' => 0,
+            ],
+        ],
+    ];
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
-    'pages',
-    'language',
-    'tx_wvdeepltranslate_has_translated_content,tx_wvdeepltranslate_translated_time',
-    ''
-);
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $columns);
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+        'pages',
+        'deepl_translate',
+        'tx_wvdeepltranslate_content_not_checked, tx_wvdeepltranslate_translated_time'
+    );
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+        'pages',
+        sprintf('--div--;%s,--palette--;;deepl_translate;', $ll('pages.deepl.tab.label')),
+        '',
+        'after:media'
+    );
+})();
