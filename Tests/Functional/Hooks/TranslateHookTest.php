@@ -42,23 +42,17 @@ class TranslateHookTest extends FunctionalTestCase
      */
     public function contentTranslateWithDeepl(): void
     {
-        $this->setUpSites(1, [
-            'site-test' => 'EXT:wv_deepltranslate/Tests/Functional/Hooks/Fixtures/SiteConfig.yaml',
-        ]);
-
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
 
         $content = $translateHook->translateContent(
             'Hello I would like to be translated',
             [
                 'uid' => 2,
-                'language_isocode' => 'DE'
             ],
             'deepl',
-            [
-                'uid' => 0,
-                'language_isocode' => 'EN'
-            ]
+            '1',
+            'pages',
+            1
         );
 
         static::assertSame('Hallo, ich möchte gerne übersetzt werden', $content);
@@ -80,15 +74,12 @@ class TranslateHookTest extends FunctionalTestCase
             'Hello I would like to be translated',
             [
                 'uid' => 3, // This ist the LanguageID its was Configure in SiteConfig
-                'title' => 'not supported language',
-                'language_isocode' => ''
+                'title' => 'not supported language'
             ],
             'deepl',
-            [
-                'uid' => 0,
-                'title' => 'source language',
-                'language_isocode' => 'EN'
-            ]
+            '1',
+            'pages',
+            1
         );
 
         static::assertSame('Hello I would like to be translated', $content);
