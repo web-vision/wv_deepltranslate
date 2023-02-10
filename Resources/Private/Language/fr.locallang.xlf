@@ -51,6 +51,19 @@
 				<source>Deepl</source>
 				<target>Deepl</target>
 			</trans-unit>
+
+			<trans-unit id="pages.tx_wvdeepltranslate_content_not_checked">
+				<source>Deepl Translated Content was not checked</source>
+				<target>Le contenu traduit par Deepl n'a pas été vérifié</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
+				<source>Last Translated Date</source>
+				<target>Date de la dernière traduction</target>
+			</trans-unit>
+			<trans-unit id="preview.flag">
+				<source>Translated with Deepl</source>
+				<target>Traduit avec Deepl</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

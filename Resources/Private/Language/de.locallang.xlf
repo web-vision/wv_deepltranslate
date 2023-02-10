@@ -77,6 +77,23 @@
 				<source>Entries</source>
 				<target>Einträge</target>
 			</trans-unit>
+
+			<trans-unit id="pages.deepl.tab.label">
+				<source>DeepL Translate</source>
+				<target>DeepL Übersetzung</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_wvdeepltranslate_content_not_checked">
+				<source>Deepl Translated Content was not checked</source>
+				<target>Deepl übersetzte Inhalte nicht geprüft</target>
+			</trans-unit>
+			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
+				<source>Last Translated Date</source>
+				<target>Letzter Übersetzung Datum</target>
+			</trans-unit>
+			<trans-unit id="preview.flag">
+				<source>Translated with Deepl</source>
+				<target>Übersetzt mit Deepl</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
