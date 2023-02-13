@@ -1,36 +1,30 @@
 <?php
+
 declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use WebVision\WvDeepltranslate\Domain\Model\GlossariesSync;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use WebVision\WvDeepltranslate\Service\DeeplService;
 
-class DataHandlerHook implements LoggerAwareInterface
+class DataHandlerHook
 {
-    use LoggerAwareTrait;
-
     protected int $currentPageId = 1;
-
-    private NotificationRepository $notificationRepository;
-
-    private EventDispatcherInterface $eventDispatcher;
 
     private PersistenceManager $persistenceManager;
 
-    protected DeeplGlossaryService $deeplGlossaryService;
+    protected DeeplService $deeplService;
 
     protected GlossariesRepository $glossariesRepository;
 
@@ -38,29 +32,19 @@ class DataHandlerHook implements LoggerAwareInterface
 
     protected LanguageRepository $languageRepository;
 
-    public function injectLanguageRepository(LanguageRepository $languageRepository)
-    {
-        $this->languageRepository = $languageRepository;
-    }
+    public function __construct(
+        ?LanguageRepository $languageRepository = null,
+        ?GlossariesSyncRepository $glossariesSyncRepository = null,
+        ?GlossariesRepository $glossariesRepository = null,
+        ?DeeplService $deeplService = null
+    ) {
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
-    public function injectGlossariesSyncRepository(GlossariesSyncRepository $glossariesSyncRepository)
-    {
-        $this->glossariesSyncRepository = $glossariesSyncRepository;
-    }
-
-    public function injectGlossariesRepository(GlossariesRepository $glossariesRepository)
-    {
-        $this->glossariesRepository = $glossariesRepository;
-    }
-
-    public function injectDeeplGlossaryService(DeeplGlossaryService $deeplGlossaryService)
-    {
-        $this->deeplGlossaryService = $deeplGlossaryService;
-    }
-
-    public function injectPersistenceManager(PersistenceManager $persistenceManager)
-    {
-        $this->persistenceManager = $persistenceManager;
+        $this->persistenceManager = $objectManager->get(PersistenceManager::class);
+        $this->languageRepository = $languageRepository ?? $objectManager->get(LanguageRepository::class);
+        $this->glossariesSyncRepository = $glossariesSyncRepository ?? $objectManager->get(GlossariesSyncRepository::class);
+        $this->glossariesRepository = $glossariesRepository ?? $objectManager->get(GlossariesRepository::class);
+        $this->deeplService = $deeplService ?? $objectManager->get(DeeplService::class);
     }
 
     public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): void
@@ -182,7 +166,7 @@ class DataHandlerHook implements LoggerAwareInterface
 
     protected function prepareGlossarEntries($glossaryName, $entries, $sourceLang, $targetLang)
     {
-        $glossary = $this->deeplGlossaryService->createGlossary(
+        $glossary = $this->deeplService->createGlossary(
             $glossaryName,
             $entries,
             $sourceLang,

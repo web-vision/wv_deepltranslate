@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Command;
@@ -13,18 +14,15 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use WebVision\WvDeepltranslate\Service\DeeplService;
 
 class GlossariesEntriesListCommand extends Command
 {
-    protected DeeplGlossaryService $deeplGlossaryService;
+    protected DeeplService $deeplService;
 
     protected GlossariesRepository $glossariesRepository;
 
     protected GlossariesSyncRepository $glossariesSyncRepository;
-
-    protected LanguageRepository $languageRepository;
 
     protected PersistenceManager $persistenceManager;
 
@@ -38,7 +36,7 @@ class GlossariesEntriesListCommand extends Command
     {
         // Instantiate objects
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->deeplGlossaryService = $objectManager->get(DeeplGlossaryService::class);
+        $this->deeplService = $objectManager->get(DeeplService::class);
         $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
         $this->glossariesSyncRepository = $objectManager->get(GlossariesSyncRepository::class);
 
@@ -55,7 +53,7 @@ class GlossariesEntriesListCommand extends Command
 
     private function listAllGloassaryEntries(OutputInterface $output): void
     {
-        $glossaries = $this->deeplGlossaryService->listGlossaries();
+        $glossaries = $this->deeplService->listGlossaries();
 
         if (empty($glossaries['glossaries'])) {
             $output->writeln([
@@ -90,8 +88,8 @@ class GlossariesEntriesListCommand extends Command
 
     private function listAllGloassaryEntriesById(OutputInterface $output, $id): void
     {
-        $entries = $this->deeplGlossaryService->glossaryEntries($id);
-        $information = $this->deeplGlossaryService->glossaryInformation($id);
+        $entries = $this->deeplService->glossaryEntries($id);
+        $information = $this->deeplService->glossaryInformation($id);
 
         $output->writeln([
             '============',
