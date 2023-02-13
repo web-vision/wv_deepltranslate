@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
@@ -29,6 +31,23 @@ class DeeplServiceTest extends FunctionalTestCase
 
         $this->importDataSet(__DIR__ . '/../Fixtures/Settings.xml');
         $this->importDataSet(__DIR__ . '/../Fixtures/Language.xml');
+    }
+
+    /**
+     * @test
+     */
+    public function translateContentFromDeToEn(): void
+    {
+        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+
+        $responseObject = $deeplService->translateRequest(
+            'Ich möchte gern übersetzt werden!',
+            'EN',
+            'DE',
+            ''
+        );
+
+        static::assertSame('I would like to be translated!', $responseObject->translations[0]->text);
     }
 
     /**

@@ -35,21 +35,14 @@ namespace WebVision\WvDeepltranslate\Service;
 use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
+use WebVision\WvDeepltranslate\Client;
 
 class DeeplService
 {
-    public string $apiKey;
-
-    public string $apiUrl;
-
-    public string $deeplFormality;
-
     /**
      * Default supported languages
      *
@@ -64,26 +57,21 @@ class DeeplService
      */
     public array $formalitySupportedLanguages = [];
 
-    public RequestFactory $requestFactory;
-
     protected SettingsRepository $deeplSettingsRepository;
 
     protected GlossariesSyncRepository $glossariesSyncRepository;
 
     private FrontendInterface $cache;
 
-    public function __construct(?FrontendInterface $cache = null)
+    private Client $client;
+
+    public function __construct(?FrontendInterface $cache = null, ?Client $client = null)
     {
         $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $objectManager->get(SettingsRepository::class);
         $this->glossariesSyncRepository = $objectManager->get(GlossariesSyncRepository::class);
-        $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
-        $this->apiUrl = $extensionConfiguration['apiUrl'];
-        $this->apiKey = $extensionConfiguration['apiKey'];
-        $this->deeplFormality = $extensionConfiguration['deeplFormality'];
+        $this->client = $client ?? GeneralUtility::makeInstance(Client::class);;
 
         $this->loadSupportedLanguages();
         $this->apiSupportedLanguages = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages);
@@ -95,41 +83,11 @@ class DeeplService
      */
     public function translateRequest($content, $targetLanguage, $sourceLanguage): object
     {
-        $postFields = [
-            'auth_key'     => $this->apiKey,
-            'text'         => $content,
-            'source_lang'  => urlencode($sourceLanguage),
-            'target_lang'  => urlencode($targetLanguage),
-            'tag_handling' => urlencode('xml'),
-        ];
-
         // Implementation of glossary into translation
         $glossaryId = $this->glossariesSyncRepository->getGlossaryIdByLanguages($sourceLanguage, $targetLanguage);
 
-        if (!empty($glossaryId)) {
-            $postFields['glossary_id'] = $glossaryId;
-        }
-
-        if (!empty($this->deeplFormality) && in_array(strtoupper($targetLanguage), $this->formalitySupportedLanguages, true)) {
-            $postFields['formality'] = $this->deeplFormality;
-        }
-        //url-ify the data to get content length
-        $postFieldString = '';
-        foreach ($postFields as $key => $value) {
-            $postFieldString .= $key . '=' . $value . '&';
-        }
-
-        $postFieldString = rtrim($postFieldString, '&');
-        $contentLength = mb_strlen($postFieldString, '8bit');
-
         try {
-            $response = $this->requestFactory->request($this->apiUrl, 'POST', [
-                'form_params' => $postFields,
-                'headers'     => [
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Content-Length' => $contentLength,
-                ],
-            ]);
+            $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossaryId);
         } catch (ClientException $e) {
             $result            = [];
             $result['status']  = 'false';
@@ -161,21 +119,8 @@ class DeeplService
 
     private function loadSupportedLanguagesFromAPI(): array
     {
-        $mainApiUrl = parse_url($this->apiUrl);
-        $languageApiUrl = sprintf(
-            '%s://%s/v2/languages?type=target',
-            $mainApiUrl['scheme'],
-            $mainApiUrl['host']
-        );
-
-        $headers = [
-            'Authorization' => sprintf('DeepL-Auth-Key %s', $this->apiKey),
-        ];
-
         try {
-            $response = $this->requestFactory->request($languageApiUrl, 'GET', [
-                'headers' => $headers,
-            ]);
+            $response = $this->client->getSupportedTargetLanguage();
         } catch (ClientException $e) {
             $result            = [];
             $result['status']  = 'false';
@@ -186,5 +131,71 @@ class DeeplService
         }
 
         return json_decode($response->getBody()->getContents(), true);
+    }
+
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function listGlossaryLanguagePairs(): array
+    {
+        $response = $this->client->getGlossaryLanguagePairs();
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
+     * @return array
+     */
+    public function listGlossaries(): array
+    {
+        $response = $this->client->getAllGlossaries();
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
+     * @return array|null
+     */
+    public function deleteGlossary(string $glossaryId): bool
+    {
+        // ToDo: Add success full return
+        $response = $this->client->deleteGlossary($glossaryId);
+
+        return true;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function glossaryInformation(string $glossaryId): array
+    {
+        $response = $this->client->getGlossary($glossaryId);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
+     * Fetch glossary entries and format them as associative array [source => target]
+     *
+     * @return array
+     */
+    public function glossaryEntries(string $glossaryId): array
+    {
+        $response = $this->client->getGlossaryEntries($glossaryId);
+
+        $jsons = json_decode($response->getBody()->getContents(), true);
+
+        $entries = [];
+
+        $allEntries = explode("\n", $jsons);
+        foreach ($allEntries as $entry) {
+            $sourceAndTarget = preg_split('/\s+/', rtrim($entry));
+            if (isset($sourceAndTarget[0], $sourceAndTarget[1])) {
+                $entries[$sourceAndTarget[0]] = $sourceAndTarget[1];
+            }
+        }
+
+        return $entries;
     }
 }
