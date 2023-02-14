@@ -82,7 +82,7 @@ class TranslateHook
 
         //translation mode set to deepl or google translate
         if ($customMode !== null) {
-            $langParam = explode('-', $cmdmap['localization']['custom']['srcLanguageId']);
+            $langParam = explode('-', (string)$cmdmap['localization']['custom']['srcLanguageId']);
 
             $sourceLanguageCode = $langParam[0];
             $targetLanguage = BackendUtility::getRecord('sys_language', $languageRecord['uid']);
