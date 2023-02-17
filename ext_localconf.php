@@ -56,7 +56,7 @@ if (!defined('TYPO3_MODE')) {
         }
     }
 
-    if (TYPO3_MODE === 'BE') {
+    if (TYPO3_MODE === 'BE' && \WebVision\WvDeepltranslate\Utility\DeeplBackendUtility::isDeeplApiKeySet()) {
         // overriding localization.js
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
