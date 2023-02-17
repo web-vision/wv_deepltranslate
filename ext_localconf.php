@@ -32,13 +32,22 @@ if (!defined('TYPO3_MODE')) {
 
     if (version_compare($typo3VersionArray['version_main'], 11, '<')) {
         $databaseRecordClassName = \WebVision\WvDeepltranslate\Override\v10\DatabaseRecordList::class;
+        $recordListControllerClassName = \WebVision\WvDeepltranslate\Override\v10\DeeplRecordListController::class;
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\View\PageLayoutView::class] = [
+            'className' => \WebVision\WvDeepltranslate\Override\v10\DeeplPageLayoutView::class,
+        ];
     } else {
         $databaseRecordClassName = \WebVision\WvDeepltranslate\Override\DatabaseRecordList::class;
+        $recordListControllerClassName = \WebVision\WvDeepltranslate\Override\DeeplRecordListController::class;
     }
 
     //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class] = [
         'className' => $databaseRecordClassName,
+    ];
+
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\Controller\RecordListController::class] = [
+        'className' => $recordListControllerClassName,
     ];
 
     if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {
@@ -58,6 +67,7 @@ if (!defined('TYPO3_MODE')) {
 
     $icons = [
         'apps-pagetree-folder-contains-glossar' => 'deepl.svg',
+        'actions-localize-deepl' => 'actions-localize-deepl.svg',
     ];
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
     foreach ($icons as $identifier => $path) {

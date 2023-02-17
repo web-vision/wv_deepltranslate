@@ -1,4 +1,5 @@
 <?php
+
 namespace WebVision\WvDeepltranslate\Override\v10;
 
 /*
@@ -14,10 +15,14 @@ namespace WebVision\WvDeepltranslate\Override\v10;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
+
 /**
  * Compatible with v9 and v10
  *
  * Class for rendering of Web>List module
+ * @deprecated will be removed in version 4
  */
 class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList
 {
@@ -32,21 +37,39 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
         $out = parent::makeLocalizationPanel($table, $row);
 
         if (!empty($out[1])) {
-            $uid = "'" . $row['uid'] . "'";
-            $table = "'$table'";
-            $lNew = sprintf(<<<HTML
-                <a data-state="hidden" href="#" data-params="data[%s][%s][hidden]=0" >
-                    <label class="btn btn-default btn-checkbox deepl-btn-wrap">
-                        <input class="deepl-button" id="deepl-translation-enable-%s" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate(%s,%s)" />
-                        <span></span>
-                    </label>
-                </a>
-                HTML
-                , '$table', '$ud', $row['uid'], $table, $uid);
-
-            $out[1] .= $lNew;
+            $translations = $this->translateTools->translationInfo(
+                $table,
+                $row['uid'],
+                0,
+                $row,
+                $this->selFieldList
+            );
+            if (is_array($translations)) {
+                $this->translations = $translations['translations'];
+                // Traverse page translations and add icon for each language that does NOT yet exist and is included in site configuration:
+                $lNew = '';
+                foreach ($this->pageOverlays as $lUid_OnPage => $lsysRec) {
+                    if (
+                        isset($this->systemLanguagesOnPage[$lUid_OnPage])
+                        && $this->isEditable($table)
+                        && !isset($translations['translations'][$lUid_OnPage])
+                        && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)
+                    ) {
+                        $language = BackendUtility::getRecord('sys_language', $lUid_OnPage, 'title');
+                        $lNew = DeeplBackendUtility::buildTranslateButton(
+                            $table,
+                            $row['uid'],
+                            $lUid_OnPage,
+                            $this->listURL(),
+                            $language['title']
+                        );
+                    }
+                }
+                if ($lNew) {
+                    $out[1] .= $lNew;
+                }
+            }
         }
-
         return $out;
     }
 }

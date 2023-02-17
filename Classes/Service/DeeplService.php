@@ -177,12 +177,15 @@ class DeeplService
                 'headers' => $headers,
             ]);
         } catch (ClientException $e) {
+            /*
             $result            = [];
             $result['status']  = 'false';
             $result['message'] = $e->getMessage();
             $result            = json_encode($result);
             echo $result;
             exit;
+            */
+            return [];
         }
 
         return json_decode($response->getBody()->getContents(), true);

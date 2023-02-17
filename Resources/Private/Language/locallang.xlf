@@ -3,6 +3,9 @@
 	<file t3:id="1415814785" source-language="en" datatype="plaintext" original="messages" date="2011-10-17T20:22:32Z" product-name="wv_deepltranslate">
 		<header/>
 		<body>
+			<trans-unit id="backend.button.translate">
+				<source>Translate to %s with DeepL</source>
+			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
 				<source>Translating content via Deepl translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.
 				</source>
