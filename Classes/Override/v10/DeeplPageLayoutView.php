@@ -21,6 +21,9 @@ class DeeplPageLayoutView extends PageLayoutView
         if ($originalOutput == '') {
             return $originalOutput;
         }
+        if (!DeeplBackendUtility::isDeeplApiKeySet()) {
+            return $originalOutput;
+        }
 
         $options = DeeplBackendUtility::buildTranslateDropdown(
             $this->siteLanguages,

@@ -21,6 +21,9 @@ class DeeplRecordListController extends RecordListController
         if ($originalOutput == '') {
             return $originalOutput;
         }
+        if (!DeeplBackendUtility::isDeeplApiKeySet()) {
+            return $originalOutput;
+        }
         $options = DeeplBackendUtility::buildTranslateDropdown(
             $this->siteLanguages,
             $this->id,

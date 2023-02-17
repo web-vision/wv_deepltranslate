@@ -35,6 +35,9 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
         $out = parent::makeLocalizationPanel($table, $row, $translations);
 
         if ($out) {
+            if (!DeeplBackendUtility::isDeeplApiKeySet()) {
+                return $out;
+            }
             $pageId = (int)($table === 'pages' ? $row['uid'] : $row['pid']);
             $languageInformation = $this->translateTools->getSystemLanguages($pageId);
             foreach ($this->possibleTranslations as $lUid_OnPage) {
