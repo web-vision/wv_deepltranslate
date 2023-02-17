@@ -20,7 +20,7 @@ class DeeplRecordListController extends RecordListController
         $options = DeeplBackendUtility::buildTranslateDropdown(
             $this->siteLanguages,
             $this->id,
-            $originalOutput
+            $requestUri
         );
         if ($options == '') {
             return '';
