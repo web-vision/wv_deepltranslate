@@ -96,7 +96,8 @@ class DataHandlerHook implements LoggerAwareInterface
             return;
         }
 
-        if (!isset($fieldArray['l10n_parent']) || $fieldArray['l10n_parent'] === 0) {
+        $currentRecord = BackendUtility::getRecord($table, $id);
+        if (!($currentRecord['l10n_parent'] ?? false)) {
             return;
         }
 
