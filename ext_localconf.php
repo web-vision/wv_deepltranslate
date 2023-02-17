@@ -59,12 +59,6 @@ if (!defined('TYPO3_MODE')) {
         }
     }
 
-    if (TYPO3_MODE === 'BE') {
-        // overriding localization.js
-        $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
-        $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
-    }
-
     $icons = [
         'apps-pagetree-folder-contains-glossar' => 'deepl.svg',
         'actions-localize-deepl' => 'actions-localize-deepl.svg',
