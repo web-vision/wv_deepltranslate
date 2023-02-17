@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Override\v10;
 
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Recordlist\Controller\RecordListController;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
@@ -27,11 +28,17 @@ class DeeplRecordListController extends RecordListController
         if ($options == '') {
             return '';
         }
-        return str_ireplace('</div>', '', $originalOutput)
+        return str_ireplace('</div></div>', '</div>', $originalOutput)
             . '<div class="form-group">'
-
+            . sprintf(
+                '<label>%s</label>',
+                LocalizationUtility::translate(
+                    'backend.label',
+                    'wv_deepltranslate'
+                )
+            )
             . '<select class="form-control input-sm" name="createNewLanguage" onchange="window.location.href=this.options[this.selectedIndex].value">'
             . $options
-            . '</select></div></div>';
+            . '</select></div></div></div>';
     }
 }

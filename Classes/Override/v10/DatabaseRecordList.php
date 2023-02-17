@@ -61,7 +61,8 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
                             $row['uid'],
                             $lUid_OnPage,
                             $this->listURL(),
-                            $language['title']
+                            $language['title'],
+                            $this->languageIconTitles[$lUid_OnPage]['flagIcon']
                         );
                     }
                 }

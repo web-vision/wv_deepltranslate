@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace WebVision\WvDeepltranslate\Override\v10;
 
 use TYPO3\CMS\Backend\View\PageLayoutView;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 /**
@@ -27,16 +28,20 @@ class DeeplPageLayoutView extends PageLayoutView
         if ($options == '') {
             return '';
         }
-        return str_replace(
-            '<div class="row row-cols-auto align-items-end g-3 mb-3"><div class="col">',
-            '<div class="col-auto row"><div class="col-sm-6">',
-            $originalOutput
-        )
-            . '<div class="col-sm-6 row">'
-            . '<label class="col-sm-4">Translate with DeepL</label>'
-            . '<div class="col-sm-8">'
-            . '<select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">'
+
+        //return $originalOutput;
+        $originalOutput = str_ireplace('</div></div>', '</div>', $originalOutput);
+        return $originalOutput
+            . '<div class="form-group">'
+            . sprintf(
+                '<label>%s</label>',
+                LocalizationUtility::translate(
+                    'backend.label',
+                    'wv_deepltranslate'
+                )
+            )
+            . '<select class="form-control input-sm" onchange="window.location.href=this.options[this.selectedIndex].value">'
             . $options
-            . '</select></div></div></div>';
+            . '</select></div></div>';
     }
 }

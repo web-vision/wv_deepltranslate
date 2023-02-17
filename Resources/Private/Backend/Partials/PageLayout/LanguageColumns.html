@@ -13,7 +13,7 @@ xmlns:f="http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers"
             </select>
         </div>
         <div class="col row">
-            <label class="col-sm-4 col">Translate with DeepL</label>
+            <label class="col-sm-4 col">{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
             <div class="col col-sm-8">
                 <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
                     <deepl:deeplTranslate context="{context}"/>

@@ -12,6 +12,8 @@ use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\WorkspaceRestriction;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -22,7 +24,8 @@ class DeeplBackendUtility
         $id,
         $lUid_OnPage,
         $returnUrl,
-        $languageTitle = ''
+        $languageTitle = '',
+        $flagIcon = ''
     ): string {
         $redirectUrl = self::buildBackendRoute(
             'record_edit',
@@ -45,12 +48,18 @@ class DeeplBackendUtility
                 ]
             );
 
-        $lC = GeneralUtility::makeInstance(
-            IconFactory::class
-        )->getIcon(
-            'actions-localize-deepl',
-            Icon::SIZE_SMALL
-        )->render();
+        if ($flagIcon) {
+            $icon = self::getIcon($flagIcon);
+            $lC = $icon->render();
+        } else {
+            $lC = GeneralUtility::makeInstance(
+                IconFactory::class
+            )
+                ->getIcon(
+                    'actions-localize-deepl',
+                    Icon::SIZE_SMALL
+                )->render();
+        }
 
         return '<a href="' . htmlspecialchars($href) . '"'
             . '" class="btn btn-default t3js-action-localize"'
@@ -65,7 +74,10 @@ class DeeplBackendUtility
     ): string {
         $availableTranslations = [];
         foreach ($siteLanguages as $siteLanguage) {
-            if ($siteLanguage->getLanguageId() === 0) {
+            if (
+                $siteLanguage->getLanguageId() === 0
+                || $siteLanguage->getLanguageId() === -1
+            ) {
                 continue;
             }
             $availableTranslations[$siteLanguage->getLanguageId()] = $siteLanguage->getTitle();
@@ -78,9 +90,9 @@ class DeeplBackendUtility
             ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
             ->add(
                 GeneralUtility::makeInstance(
-                WorkspaceRestriction::class,
-                (int)self::getBackendUserAuthentication()->workspace
-            )
+                    WorkspaceRestriction::class,
+                    (int)self::getBackendUserAuthentication()->workspace
+                )
             );
         $statement = $queryBuilder->select('uid', $languageField)
             ->from('pages')
@@ -90,7 +102,7 @@ class DeeplBackendUtility
                     $queryBuilder->createNamedParameter($id, Connection::PARAM_INT)
                 )
             )
-            ->executeQuery();
+            ->execute();
         while ($pageTranslation = $statement->fetchAssociative()) {
             unset($availableTranslations[(int)$pageTranslation[$languageField]]);
         }
@@ -131,5 +143,45 @@ class DeeplBackendUtility
     private static function getBackendUserAuthentication(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
+    }
+
+    private static function getIcon(string $iconFlag): Icon
+    {
+        $deeplTranslateIcon = sprintf('deepl-translate-%s', $iconFlag);
+        $newIcon = GeneralUtility::makeInstance(IconFactory::class)
+            ->getIcon(
+                $deeplTranslateIcon,
+                Icon::SIZE_SMALL
+            );
+
+        if ($newIcon->getIdentifier() !== 'default-not-found') {
+            return $newIcon;
+        }
+        $flagIcon = GeneralUtility::makeInstance(IconFactory::class)
+            ->getIcon(
+                $iconFlag,
+                Icon::SIZE_SMALL
+            );
+        $deeplIcon = GeneralUtility::makeInstance(
+            IconFactory::class
+        )->getIcon(
+            'actions-localize-deepl',
+            Icon::SIZE_OVERLAY
+        );
+        GeneralUtility::makeInstance(IconRegistry::class)
+            ->registerIcon(
+                $deeplTranslateIcon,
+                BitmapIconProvider::class,
+            );
+
+        $newIcon = GeneralUtility::makeInstance(IconFactory::class)
+            ->getIcon(
+                $deeplTranslateIcon,
+                Icon::SIZE_SMALL
+            );
+        $newIcon->setIdentifier($deeplTranslateIcon);
+        $newIcon->setMarkup($flagIcon->getMarkup());
+        $newIcon->setOverlayIcon($deeplIcon);
+        return $newIcon;
     }
 }
