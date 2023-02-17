@@ -9,34 +9,38 @@
        0: 'TYPO3/CMS/WvDeepltranslate/Settings'
     }" />
 
-<div class="module-deepl">
-    <div class="module-header">
-        <f:image src="EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-deepl.svg" alt="alt text" width="37" height="37" class="pull-left"/>
-        <h3 class="pull-left"><f:translate key="deepl_settings"/></h3>
+<div class="module">
+    <div class="module-docheader t3js-module-docheader">
+        <h3><f:image src="EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-deepl.svg" alt="alt text" width="37" height="37"/><f:translate key="deepl_settings"/></h3>
     </div>
-    <div class="module-body">
+    <div class="module-body t3js-module-body">
         <f:flashMessages />
-       <h3>
-           <f:translate key="settings_assign"/>
-       </h3>
+        <h3>
+            <f:translate key="settings_assign"/>
+        </h3>
         <f:if condition="{sysLanguages}">
             <f:form method="post" action="saveSettings">
                 <table class="table table-striped">
                     <tbody>
+                    <tr>
+                        <th><f:translate key="languageId"/></th>
+                        <th><f:translate key="syslanguage"/></th>
+                        <th><f:translate key="deepliso"/></th>
+                    </tr>
+                    <f:for each="{selectBox}" as="sysLanguage" key="deeplIso">
                         <tr>
-                          <th><f:translate key="languageId"/></th>
-                          <th><f:translate key="syslanguage"/></th>
-                          <th><f:translate key="deepliso"/></th>
+                            <td>{sysLanguage.uid}</td>
+                            <td>{sysLanguage.title}</td>
+                            <td>
+                                <f:form.textfield
+                                    name="languages[{sysLanguage.uid}]"
+                                    maxlength="5"
+                                    class="form-control t3js-charcounter-initialized"
+                                    value="{sysLanguage.value}"
+                                />
+                            </td>
                         </tr>
-                        <f:for each="{selectBox}" as="sysLanguage" key="deeplIso">
-                            <tr>
-                                <td>{sysLanguage.uid}</td>
-                                <td>{sysLanguage.title}</td>
-                                <td>
-                                    <f:form.textfield name="languages[{sysLanguage.uid}]"  maxlength="5" class="languageAssigned"  value="{sysLanguage.value}"/>
-                                </td>
-                            </tr>
-                        </f:for>
+                    </f:for>
                     </tbody>
                 </table>
                 <button type="submit" class="btn btn-default">Save</button>
@@ -44,6 +48,5 @@
         </f:if>
     </div>
 </div>
-
 </f:section>
 </html>
