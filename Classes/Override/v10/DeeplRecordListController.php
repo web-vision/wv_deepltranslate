@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Override\v10;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Recordlist\Controller\RecordListController;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
@@ -23,7 +24,7 @@ class DeeplRecordListController extends RecordListController
         $options = DeeplBackendUtility::buildTranslateDropdown(
             $this->siteLanguages,
             $this->id,
-            $originalOutput
+            GeneralUtility::getIndpEnv('REQUEST_URI')
         );
         if ($options == '') {
             return '';
