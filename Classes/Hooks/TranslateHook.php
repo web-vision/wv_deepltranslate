@@ -1,47 +1,21 @@
 <?php
+
 declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2020 Ricky Mathew <ricky@web-vision.de>, web-vision GmbH
- *      Anu Bhuvanendran Nair <anu@web-vision.de>, web-vision GmbH
- *
- *  You may not remove or change the name of the author above. See:
- *  http://www.gnu.org/licenses/gpl-faq.html#IWantCredit
- *
- *  This script is part of the Typo3 project. The Typo3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *  A copy is found in the textfile GPL.txt and important notices to the license
- *  from the author is found in LICENSE.txt distributed with these scripts.
- *
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Domain\Repository\PageRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
+use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
+use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
+use WebVision\WvDeepltranslate\Service\LanguageService;
 use WebVision\WvDeepltranslate\Utility\HtmlUtility;
 
 class TranslateHook
@@ -54,6 +28,8 @@ class TranslateHook
 
     protected PageRepository $pageRepository;
 
+    private LanguageService $languageService;
+
     public function __construct(
         ?SettingsRepository $settingsRepository = null,
         ?PageRepository $pageRepository = null,
@@ -65,6 +41,7 @@ class TranslateHook
         $this->deeplService = $deeplService ?? $objectManager->get(DeeplService::class);
         $this->googleService = $googleService ?? $objectManager->get(GoogleTranslateService::class);
         $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class);
+        $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
     }
 
     /**
@@ -97,16 +74,47 @@ class TranslateHook
             return $content;
         }
 
-        $translatedContent = $this->translateContent(
-            $content,
-            $languageRecord,
-            $customMode,
-            $sourceLanguage,
-            $tableName,
-            (int)$currentRecordId
-        );
+        $siteInformation = $this->languageService->getCurrentSite($tableName, $currentRecordId);
+
+        $translatedContent = '';
+        $targetLanguageRecord = [];
+
+        try {
+            $sourceLanguageRecord = $this->languageService->getSourceLanguage(
+                $siteInformation['site'],
+                (int)$sourceLanguage
+            );
+
+            $targetLanguageRecord = $this->languageService->getTargetLanguage(
+                $siteInformation['site'],
+                (int)$languageRecord['uid']
+            );
+
+            $translatedContent = $this->translateContent(
+                $content,
+                $languageRecord,
+                $customMode,
+                $sourceLanguageRecord,
+            );
+        } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException $e) {
+            $flashMessage = GeneralUtility::makeInstance(
+                FlashMessage::class,
+                $e->getMessage(),
+                null,
+                FlashMessage::INFO
+            );
+            GeneralUtility::makeInstance(FlashMessageService::class)
+                ->getMessageQueueByIdentifier()
+                ->addMessage($flashMessage);
+        }
 
         if ($translatedContent !== '') {
+            if ($content !== '' && $customMode === 'deepl' && !empty($targetLanguageRecord)) {
+                if (isset($siteInformation['pageUid'])) {
+                    $this->pageRepository->markPageAsTranslatedWithDeepl($siteInformation['pageUid'], $targetLanguageRecord);
+                }
+            }
+
             // only the parameter reference is in use for content translate
             $content = $translatedContent;
         }
@@ -116,112 +124,49 @@ class TranslateHook
 
     /**
      * These logics were outsourced to test them and later to resolve them in a service
+     *
+     * @param array{uid: int, language_isocode: string} $targetLanguageRecord
+     * @param array{uid: int, language_isocode: string} $sourceLanguageRecord
      */
     public function translateContent(
         string $content,
         array $targetLanguageRecord,
         string $customMode,
-        ?string $sourceLanguage = null,
-        string $tableName = '',
-        ?int $currentRecordId = null
+        array $sourceLanguageRecord
     ): string {
-        $sourceLanguageCode = $sourceLanguage;
-        $targetLanguage = BackendUtility::getRecord('sys_language', (int)$targetLanguageRecord['uid']);
-        $sourceLanguage = BackendUtility::getRecord('sys_language', (int)$sourceLanguage);
-
-        // get target language mapping if any
-        if ($targetLanguage !== null) {
-            $targetLanguageMapping = $this->deeplSettingsRepository->getMappings($targetLanguage['uid']);
-            if ($targetLanguageMapping !== null) {
-                $targetLanguage['language_isocode'] = $targetLanguageMapping;
-            }
-        }
-
-        // Make good defaults
-        // choose between default and autodetect
-        $sourceLanguageIso = ($sourceLanguageCode == 'auto' ? null : 'EN');
-
-        if ($sourceLanguage === null) {
-            // current fallback to try to find the default language from the site configuration
-            // when sys_language source not exist or not found
-            if (!empty($tableName) && !empty($currentRecordId)) {
-                $currentPageRecord = BackendUtility::getRecord($tableName, (int)$currentRecordId);
-                $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-                try {
-                    $site = $siteFinder->getSiteByPageId($currentPageRecord['pid']);
-                    $sourceLanguageIso = strtoupper($site->getDefaultLanguage()->getTwoLetterIsoCode());
-                    if ($targetLanguage === null) {
-                        $siteLanguage = $site->getLanguageById($targetLanguageRecord['uid']);
-                        $hrefLang = $siteLanguage->getHreflang();
-                        if (!empty($hrefLang)) {
-                            $targetLanguage['language_isocode'] = in_array(
-                                strtoupper($hrefLang),
-                                $this->deeplService->apiSupportedLanguages['target']
-                            ) ? strtoupper($hrefLang) : null;
-                        }
-
-                        if ($targetLanguage['language_isocode'] === null || empty($hrefLang)) {
-                            $twoLetterIso = $siteLanguage->getTwoLetterIsoCode();
-                            $targetLanguage['language_isocode'] = in_array(
-                                strtoupper($twoLetterIso),
-                                $this->deeplService->apiSupportedLanguages['target']
-                            ) ? strtoupper($twoLetterIso) : null;
-                        }
-                    }
-                } catch (SiteNotFoundException $exception) {
-                    // Ignore, use defaults
-                }
-            }
-        } else {
-            if (in_array($sourceLanguage['language_isocode'], $this->deeplService->apiSupportedLanguages['source'])) {
-                $sourceLanguageIso = strtoupper($sourceLanguage['language_isocode']);
-            }
-        }
-
         if (HtmlUtility::isHtml($content)) {
             $content = HtmlUtility::stripSpecificTags(['br'], $content);
         }
 
         // mode deepl
         if ($customMode == 'deepl') {
-            $langSupportedByDeepLApi = in_array(
-                strtoupper($targetLanguage['language_isocode'] ?? ''),
-                $this->deeplService->apiSupportedLanguages['target']
+            $response = $this->deeplService->translateRequest(
+                $content,
+                $targetLanguageRecord['language_isocode'],
+                $sourceLanguageRecord['language_isocode']
             );
 
-            //if target language and source language among supported languages
-            if ($langSupportedByDeepLApi) {
-                $response = $this->deeplService->translateRequest(
-                    $content,
-                    $targetLanguage['language_isocode'],
-                    $sourceLanguageIso
-                );
-
-                if (!empty($response) && isset($response->translations)) {
-                    foreach ($response->translations as $translation) {
-                        if ($translation->text != '') {
-                            $content = $translation->text;
-                            break;
-                        }
+            if (!empty($response) && isset($response->translations)) {
+                foreach ($response->translations as $translation) {
+                    if ($translation->text != '') {
+                        $content = $translation->text;
+                        break;
                     }
                 }
             }
         } //mode google
         elseif ($customMode == 'google') {
-            $response = $this->googleService->translate($sourceLanguageIso, $targetLanguage['language_isocode'], $content);
+            $response = $this->googleService->translate(
+                $targetLanguageRecord['language_isocode'],
+                $targetLanguageRecord['language_isocode'],
+                $content
+            );
 
             if (!empty($response)) {
                 if (HtmlUtility::isHtml($response)) {
                     $content = preg_replace('/\/\s/', '/', $response);
                     $content = preg_replace('/\>\s+/', '>', $content);
                 }
-            }
-        }
-
-        if ($content !== '' && $customMode === 'deepl') {
-            $currentPageRecord = BackendUtility::getRecord($tableName, (int)$currentRecordId);
-            if ($currentPageRecord !== null && isset($currentPageRecord['uid'])) {
-                $this->pageRepository->markPageAsTranslatedWithDeepl($currentPageRecord['uid'], $targetLanguage);
             }
         }
 
