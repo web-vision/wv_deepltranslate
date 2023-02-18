@@ -170,7 +170,7 @@ class TranslateHook
         if ($customMode == 'deepl') {
             $langSupportedByDeepLApi = in_array(
                 strtoupper($targetLanguage['language_isocode'] ?? ''),
-                $this->deeplService->apiSupportedLanguages['source']
+                $this->deeplService->apiSupportedLanguages['target']
             );
 
             //if target language and source language among supported languages
