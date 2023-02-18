@@ -1,0 +1,19 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:comment>
+    This partial is a usage template to inform frontend users that the texts have been translated by Deepl.
+    and may contain missing information. The partial can be used or you can create one yourself.
+
+    <f:render partial="DeeplTranslateInformationWidget" arguments="{page: '{data}', dateFormat: 'Y-m-d H:i:s'}" />
+</f:comment>
+
+<f:if condition="{page.tx_wvdeepltranslate_content_not_checked}" >
+    <div style="background: #006494; border: #0000cc 1px solid; color: #fff; padding: 10px; text-align: center">
+        <f:translate key="LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:preview.flag" />
+        <f:if condition="{page.tx_wvdeepltranslate_translated_time} > 0" >
+            <f:format.date format="{dateFormat}">{page.tx_wvdeepltranslate_translated_time}</f:format.date>
+        </f:if>
+    </div>
+</f:if>
+
+</html>

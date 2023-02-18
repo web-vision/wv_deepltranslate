@@ -1,11 +1,14 @@
 <?php declare(strict_types = 1);
 
-namespace Functional\Services;
+namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
+/**
+ * @covers \WebVision\WvDeepltranslate\Service\DeeplService
+ */
 class DeeplServiceTest extends FunctionalTestCase
 {
     /**
@@ -15,17 +18,13 @@ class DeeplServiceTest extends FunctionalTestCase
         'typo3conf/ext/wv_deepltranslate',
     ];
 
-    public function __construct()
+    protected function setUp(): void
     {
-        parent::__construct();
         $this->configurationToUseInTestInstance = array_merge(
             $this->configurationToUseInTestInstance,
             require __DIR__ . '/../Fixtures/ExtensionConfig.php'
         );
-    }
 
-    protected function setUp(): void
-    {
         parent::setUp();
 
         $this->importDataSet(__DIR__ . '/../Fixtures/Settings.xml');
