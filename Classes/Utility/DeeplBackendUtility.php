@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Utility;
 
@@ -120,8 +120,7 @@ class DeeplBackendUtility
         $returnUrl,
         $languageTitle = '',
         $flagIcon = ''
-    ): string
-    {
+    ): string {
         $redirectUrl = self::buildBackendRoute(
             'record_edit',
             [
@@ -212,8 +211,7 @@ class DeeplBackendUtility
         $siteLanguages,
         $id,
         $requestUri
-    ): string
-    {
+    ): string {
         $availableTranslations = [];
         foreach ($siteLanguages as $siteLanguage) {
             if (

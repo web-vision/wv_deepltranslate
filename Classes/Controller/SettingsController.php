@@ -25,7 +25,6 @@ namespace WebVision\WvDeepltranslate\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -131,7 +130,6 @@ class SettingsController extends ActionController
                 'wv_deepltranslate'
             )
         );
-
 
         $this->redirect('index');
     }

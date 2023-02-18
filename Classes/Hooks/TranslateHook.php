@@ -150,8 +150,24 @@ class TranslateHook
                 try {
                     $site = $siteFinder->getSiteByPageId($currentPageRecord['pid']);
                     $sourceLanguageIso = strtoupper($site->getDefaultLanguage()->getTwoLetterIsoCode());
-                    $targetLanguage['language_isocode'] = $site->getLanguageById($targetLanguageRecord['uid'])
-                        ->getTwoLetterIsoCode();
+                    if ($targetLanguage === null) {
+                        $siteLanguage = $site->getLanguageById($targetLanguageRecord['uid']);
+                        $hrefLang = $siteLanguage->getHreflang();
+                        if (!empty($hrefLang)) {
+                            $targetLanguage['language_isocode'] = in_array(
+                                strtoupper($hrefLang),
+                                $this->deeplService->apiSupportedLanguages['target']
+                            ) ? strtoupper($hrefLang) : null;
+                        }
+
+                        if ($targetLanguage['language_isocode'] === null || empty($hrefLang)) {
+                            $twoLetterIso = $siteLanguage->getTwoLetterIsoCode();
+                            $targetLanguage['language_isocode'] = in_array(
+                                strtoupper($twoLetterIso),
+                                $this->deeplService->apiSupportedLanguages['target']
+                            ) ? strtoupper($twoLetterIso) : null;
+                        }
+                    }
                 } catch (SiteNotFoundException $exception) {
                     // Ignore, use defaults
                 }
@@ -170,7 +186,7 @@ class TranslateHook
         if ($customMode == 'deepl') {
             $langSupportedByDeepLApi = in_array(
                 strtoupper($targetLanguage['language_isocode'] ?? ''),
-                $this->deeplService->apiSupportedLanguages['source']
+                $this->deeplService->apiSupportedLanguages['target']
             );
 
             //if target language and source language among supported languages
