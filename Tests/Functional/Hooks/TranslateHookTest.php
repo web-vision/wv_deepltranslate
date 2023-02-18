@@ -74,7 +74,7 @@ class TranslateHookTest extends FunctionalTestCase
             'Hello I would like to be translated',
             [
                 'uid' => 3, // This ist the LanguageID its was Configure in SiteConfig
-                'title' => 'not supported language'
+                'title' => 'not supported language',
             ],
             'deepl',
             '1',

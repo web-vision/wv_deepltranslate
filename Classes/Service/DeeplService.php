@@ -56,7 +56,10 @@ class DeeplService
      * @see https://www.deepl.com/de/docs-api/translating-text/#request
      * @var string[]
      */
-    public array $apiSupportedLanguages =  [];
+    public array $apiSupportedLanguages =  [
+        'source' => [],
+        'target' => [],
+    ];
 
     /**
      * Formality supported languages
@@ -86,7 +89,7 @@ class DeeplService
         $this->deeplFormality = $extensionConfiguration['deeplFormality'];
 
         $this->loadSupportedLanguages();
-        $this->apiSupportedLanguages = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages);
+        $this->apiSupportedLanguages['target'] = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages['target']);
     }
 
     /**
@@ -144,22 +147,37 @@ class DeeplService
 
     private function loadSupportedLanguages(): void
     {
-        $cacheIdentifier = 'wv-deepl-supported-languages';
-        if (($supportedLanguages = $this->cache->get($cacheIdentifier)) === false) {
-            $supportedLanguages = $this->loadSupportedLanguagesFromAPI();
+        $cacheIdentifier = 'wv-deepl-supported-languages-target';
+        if (($supportedTargetLanguages = $this->cache->get($cacheIdentifier)) === false) {
+            $supportedTargetLanguages = $this->loadSupportedLanguagesFromAPI();
 
-            $this->cache->set($cacheIdentifier, $supportedLanguages, [], 86400);
+            $this->cache->set($cacheIdentifier, $supportedTargetLanguages, [], 86400);
         }
 
-        foreach ($supportedLanguages as $supportedLanguage) {
-            $this->apiSupportedLanguages[] = $supportedLanguage['language'];
+        foreach ($supportedTargetLanguages as $supportedLanguage) {
+            $this->apiSupportedLanguages['target'][] = $supportedLanguage['language'];
+            if ($supportedLanguage['supports_formality'] === true) {
+                $this->formalitySupportedLanguages[] = $supportedLanguage['language'];
+            }
+        }
+
+        $cacheIdentifier = 'wv-deepl-supported-languages-source';
+
+        if (($supportedSourceLanguages = $this->cache->get($cacheIdentifier)) === false) {
+            $supportedSourceLanguages = $this->loadSupportedLanguagesFromAPI('source');
+
+            $this->cache->set($cacheIdentifier, $supportedSourceLanguages, [], 86400);
+        }
+
+        foreach ($supportedSourceLanguages as $supportedLanguage) {
+            $this->apiSupportedLanguages['source'][] = $supportedLanguage['language'];
             if ($supportedLanguage['supports_formality'] === true) {
                 $this->formalitySupportedLanguages[] = $supportedLanguage['language'];
             }
         }
     }
 
-    private function loadSupportedLanguagesFromAPI(): array
+    private function loadSupportedLanguagesFromAPI(string $type = 'target'): array
     {
         $mainApiUrl = parse_url($this->apiUrl);
         $languageApiUrl = sprintf(
