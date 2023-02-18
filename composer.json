@@ -57,18 +57,14 @@
 	},
 	"require": {
 		"php": "^7.4 || ^8.0",
-		"ext-json": "*",
-		"ext-gd": "*",
 		"ext-curl": "*",
+		"ext-json": "*",
 		"ext-pdo": "*",
 		"typo3/cms-backend": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-core": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-extbase": "^9.5 || ^10.4 || ^11.5",
-		"typo3/cms-extensionmanager": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-fluid": "^9.5 || ^10.4 || ^11.5",
-		"typo3/cms-frontend": "^9.5 || ^10.4 || ^11.5",
-		"typo3/cms-install": "^9.5 || ^10.4 || ^11.5",
-		"typo3fluid/fluid": "^2.7"
+		"typo3/cms-install": "^9.5 || ^10.4 || ^11.5"
 	},
 	"require-dev": {
 		"armin/editorconfig-cli": "^1.5",
@@ -82,6 +78,8 @@
 		"saschaegerer/phpstan-typo3": "^1.0",
 		"symfony/var-dumper": "^5.4",
 		"typo3/cms-belog": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-frontend": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-extensionmanager": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-filelist": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-fluid-styled-content": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-info": "^9.5 || ^10.4 || ^11.5",

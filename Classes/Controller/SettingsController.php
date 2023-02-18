@@ -170,7 +170,7 @@ class SettingsController extends ActionController
             $option = $sysLanguage->toArray();
             if (in_array($sysLanguage->getUid(), $selectedKeys) || in_array(
                 strtoupper($sysLanguage->getLanguageIsoCode()),
-                $this->deeplService->apiSupportedLanguages
+                $this->deeplService->apiSupportedLanguages['target']
             )) {
                 $option['value'] = $preselectedValues[$sysLanguage->getUid()] ?? strtoupper($sysLanguage->getLanguageIsoCode());
             }
