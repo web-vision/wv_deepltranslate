@@ -40,9 +40,7 @@ composer req \
     typo3/cms-backend:^9.5 \
     typo3/cms-install:^9.5 \
     typo3/cms-extbase:^9.5 \
-    typo3/cms-fluid:^9.5 \
-    typo3/cms-frontend:^9.5 \
-    typo3/cms-extensionmanager:^9.5 -W
+    typo3/cms-fluid:^9.5 -W
 
 echo "Add Dev-Requires for v9"
 composer req \
@@ -55,6 +53,8 @@ composer req \
     typo3/cms-lowlevel:^9.5 \
     typo3/cms-tstemplate:^9.5 \
     typo3/cms-workspaces:^9.5 \
+    typo3/cms-frontend:^9.5 \
+    typo3/cms-extensionmanager:^9.5 \
     typo3/testing-framework:^4.15 --dev -W --no-scripts
 
 echo "Update Instance"

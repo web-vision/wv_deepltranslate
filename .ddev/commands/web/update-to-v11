@@ -40,9 +40,7 @@ composer req \
     typo3/cms-backend:^11.5 \
     typo3/cms-install:^11.5 \
     typo3/cms-extbase:^11.5 \
-    typo3/cms-fluid:^11.5 \
-    typo3/cms-frontend:^11.5 \
-    typo3/cms-extensionmanager:^11.5 -W
+    typo3/cms-fluid:^11.5 -W
 
 echo "Add Dev-Requires for v11"
 composer req \
@@ -55,6 +53,8 @@ composer req \
     typo3/cms-lowlevel:^11.5 \
     typo3/cms-tstemplate:^11.5 \
     typo3/cms-workspaces:^11.5 \
+    typo3/cms-frontend:^11.5 \
+    typo3/cms-extensionmanager:^11.5 \
     typo3/testing-framework:^6.16 --dev -W --no-scripts
 
 echo "Update Instance"

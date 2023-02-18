@@ -40,9 +40,7 @@ composer req \
     typo3/cms-backend:^10.4 \
     typo3/cms-install:^10.4 \
     typo3/cms-extbase:^10.4 \
-    typo3/cms-fluid:^10.4 \
-    typo3/cms-frontend:^10.4 \
-    typo3/cms-extensionmanager:^10.4 -W
+    typo3/cms-fluid:^10.4 -W
 
 echo "Add Dev-Requires for v10"
 composer req \
@@ -55,6 +53,8 @@ composer req \
     typo3/cms-lowlevel:^10.4 \
     typo3/cms-tstemplate:^10.4 \
     typo3/cms-workspaces:^10.4 \
+    typo3/cms-frontend:^10.4 \
+    typo3/cms-extensionmanager:^10.4 \
     typo3/testing-framework:^6.16 --dev -W --no-scripts
 
 echo "Update Instance"
