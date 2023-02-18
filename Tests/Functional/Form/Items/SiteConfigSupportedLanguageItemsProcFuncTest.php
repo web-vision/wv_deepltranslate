@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Form\Items;
 
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 
 /**

@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional;
 
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Configuration;
 
 class ConfigurationTest extends FunctionalTestCase
@@ -17,14 +17,16 @@ class ConfigurationTest extends FunctionalTestCase
         'typo3conf/ext/wv_deepltranslate',
     ];
 
-    public function __construct()
+    public function setUp(): void
     {
-        parent::__construct();
         $this->configurationToUseInTestInstance = array_merge(
             $this->configurationToUseInTestInstance,
             require __DIR__ . '/Fixtures/ExtensionConfig.php'
         );
+
+        parent::setUp();
     }
+
 
     /**
      * @test
