@@ -25,6 +25,7 @@ namespace WebVision\WvDeepltranslate\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -70,15 +71,6 @@ class SettingsController extends ActionController
 
     public function indexAction(): void
     {
-        $args = $this->request->getArguments();
-        if (!empty($args) && $args['redirectFrom'] == 'savesetting') {
-            $successMessage = LocalizationUtility::translate('settings_success', 'Deepl');
-            $this->pageRenderer->addJsInlineCode(
-                'success',
-                "top.TYPO3.Notification.success('Saved', '" . $successMessage . "');"
-            );
-        }
-
         /** @var QueryResultInterface<Language> $sysLanguages */
         $sysLanguages = $this->languageRepository->findAll();
         if ($sysLanguages->count() === 0) {
@@ -133,8 +125,15 @@ class SettingsController extends ActionController
             );
         }
 
-        $args['redirectFrom'] = 'savesetting';
-        $this->redirect('index', 'Settings', 'Deepl', $args);
+        $this->addFlashMessage(
+            LocalizationUtility::translate(
+                'settings_success',
+                'wv_deepltranslate'
+            )
+        );
+
+
+        $this->redirect('index');
     }
 
     /**

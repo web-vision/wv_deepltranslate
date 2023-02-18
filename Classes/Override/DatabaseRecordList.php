@@ -1,4 +1,5 @@
 <?php
+
 namespace WebVision\WvDeepltranslate\Override;
 
 /*
@@ -13,6 +14,8 @@ namespace WebVision\WvDeepltranslate\Override;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 /**
  * Class for rendering of Web>List module
@@ -32,19 +35,27 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
         $out = parent::makeLocalizationPanel($table, $row, $translations);
 
         if ($out) {
-            $uid = "'" . $row['uid'] . "'";
-            $table = "'$table'";
-            $lNew = sprintf(<<<HTML
-                <a data-state="hidden" href="#" data-params="data[%s][%s][hidden]=0" >
-                    <label class="btn btn-default btn-checkbox deepl-btn-wrap">
-                        <input class="deepl-button" id="deepl-translation-enable-%s" type="checkbox" name="data[deepl.enable]" onclick="deeplTranslate(%s,%s)" />
-                        <span></span>
-                    </label>
-                </a>
-                HTML
-                , '$table', '$ud', $row['uid'], $table, $uid);
-
-            $out .= $lNew;
+            if (!DeeplBackendUtility::isDeeplApiKeySet()) {
+                return $out;
+            }
+            $pageId = (int)($table === 'pages' ? $row['uid'] : $row['pid']);
+            $languageInformation = $this->translateTools->getSystemLanguages($pageId);
+            foreach ($this->possibleTranslations as $lUid_OnPage) {
+                if ($this->isEditable($table)
+                    && !$this->isRecordDeletePlaceholder($row)
+                    && !isset($translations[$lUid_OnPage])
+                    && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)
+                ) {
+                    $out .= DeeplBackendUtility::buildTranslateButton(
+                        $table,
+                        $row['uid'],
+                        $lUid_OnPage,
+                        $this->listURL(),
+                        $languageInformation[$lUid_OnPage]['title'],
+                        $languageInformation[$lUid_OnPage]['flagIcon']
+                    );
+                }
+            }
         }
 
         return $out;

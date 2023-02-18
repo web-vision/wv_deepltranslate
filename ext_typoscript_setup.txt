@@ -17,3 +17,9 @@ config.tx_extbase.persistence {
        }
    }
 }
+
+module.tx_backend.view {
+    partialRootPaths {
+        10 = EXT:wv_deepltranslate/Resources/Private/Backend/Partials
+    }
+}

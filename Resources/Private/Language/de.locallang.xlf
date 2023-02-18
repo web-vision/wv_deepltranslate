@@ -3,6 +3,14 @@
 	<file t3:id="1415814785" source-language="en" target-language="de" datatype="plaintext" original="messages" date="2022-07-15T18:18:55Z" product-name="wv_deepltranslate">
 		<header/>
 		<body>
+			<trans-unit id="backend.button.translate">
+				<source>Translate to %s with DeepL</source>
+				<target>Übersetzen nach %s mit DeepL</target>
+			</trans-unit>
+			<trans-unit id="backend.label">
+				<source>Translate with DeepL</source>
+				<target>Mit DeepL übersetzen</target>
+			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
 				<source>Translating content via Deepl translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
 				<target>Beim Übersetzen von Inhalten über Deepl Translate wird eine Übersetzung aus der Ausgangssprache in die Sprache erstellt, in die Sie übersetzen , Niederländisch und Polnisch. Andere Sprachen werden ignoriert und werden standardmäßig auf die normale Übersetzungsoperation von TYPO3 umgestellt.</target>
