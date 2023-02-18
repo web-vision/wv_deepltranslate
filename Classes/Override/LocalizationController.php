@@ -27,6 +27,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Versioning\VersionState;
+use WebVision\WvDeepltranslate\Configuration;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
 /**
@@ -49,12 +50,19 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
     protected PageRenderer $pageRenderer;
 
-    public function __construct()
-    {
+    private Configuration $configuration;
+
+    public function __construct(
+        ?PageRenderer $pageRenderer = null,
+        ?DeeplService $deeplService = null,
+        ?Configuration $configuration = null,
+    ) {
         parent::__construct();
 
-        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $this->deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $this->pageRenderer = $pageRenderer ?? GeneralUtility::makeInstance(PageRenderer::class);
+        $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
+        $this->configuration = $configuration ?? GeneralUtility::makeInstance(Configuration::class);
+
         $this->pageRenderer->addInlineLanguageLabelFile('EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf');
     }
 
@@ -250,14 +258,14 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
     }
 
     /**
-     * check deepl Settings (url,apikey).
+     * check deepl Settings (apikey).
      * @param ServerRequestInterface $request
      * @return array
      */
     public function checkdeeplSettings(ServerRequestInterface $request)
     {
         $result = [];
-        if ($this->deeplService->apiKey != null && $this->deeplService->apiUrl != null) {
+        if ($this->configuration->getApiKey() !== '') {
             $result['status'] = 'true';
         } else {
             $result['status']  = 'false';
