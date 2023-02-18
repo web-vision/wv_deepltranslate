@@ -13,6 +13,7 @@ languages:
     direction: ''
     flag: en-us-gb
     languageId: 0
+    deeplTargetLanguage: EN-US
   -
     title: German
     enabled: true
@@ -28,6 +29,7 @@ languages:
     fallbacks: '0'
     flag: de
     languageId: 2
+    deeplTargetLanguage: DE
   -
     title: Britisch
     enabled: true
@@ -43,6 +45,7 @@ languages:
     fallbacks: '0'
     flag: gb-eng
     languageId: 3
+    deeplTargetLanguage: EN-GB
   -
     title: Bosnian
     enabled: true
@@ -58,5 +61,6 @@ languages:
     fallbacks: '0'
     flag: bs
     languageId: 3
+    deeplTargetLanguage: ''
 rootPageId: 1
 websiteTitle: Home
