@@ -7,6 +7,13 @@
         <doktype>1</doktype>
         <is_siteroot>1</is_siteroot>
     </pages>
+    <pages>
+        <uid>3</uid>
+        <pid>0</pid>
+        <title>DeepL-Functional-Tests BS</title>
+        <doktype>1</doktype>
+        <is_siteroot>1</is_siteroot>
+    </pages>
     <tt_content>
         <uid>3</uid>
         <pid>1</pid>

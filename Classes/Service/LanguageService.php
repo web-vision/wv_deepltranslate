@@ -181,4 +181,9 @@ class LanguageService
 
         return $languageRecord;
     }
+
+    public function isSiteLanguageMode(): bool
+    {
+        return $this->siteLanguageMode;
+    }
 }
