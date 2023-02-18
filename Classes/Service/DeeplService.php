@@ -181,9 +181,10 @@ class DeeplService
     {
         $mainApiUrl = parse_url($this->apiUrl);
         $languageApiUrl = sprintf(
-            '%s://%s/v2/languages?type=target',
+            '%s://%s/v2/languages?type=%s',
             $mainApiUrl['scheme'],
-            $mainApiUrl['host']
+            $mainApiUrl['host'],
+            $type
         );
 
         $headers = [
@@ -195,14 +196,6 @@ class DeeplService
                 'headers' => $headers,
             ]);
         } catch (ClientException $e) {
-            /*
-            $result            = [];
-            $result['status']  = 'false';
-            $result['message'] = $e->getMessage();
-            $result            = json_encode($result);
-            echo $result;
-            exit;
-            */
             return [];
         }
 
