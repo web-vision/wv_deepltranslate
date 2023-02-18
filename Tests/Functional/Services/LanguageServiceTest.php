@@ -119,6 +119,6 @@ class LanguageServiceTest extends FunctionalTestCase
         $siteInformation = $languageService->getCurrentSite('pages', 3);
 
         static::expectException(LanguageIsoCodeNotFoundException::class);
-        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site'], 5);
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site'], 0);
     }
 }
