@@ -22,7 +22,6 @@ class DeeplRecordListController extends RecordListController
     protected function languageSelector($id): string
     {
         $originalOutput = parent::languageSelector($id);
-
         if ($originalOutput == '') {
             return $originalOutput;
         }
@@ -34,20 +33,24 @@ class DeeplRecordListController extends RecordListController
             $this->id,
             GeneralUtility::getIndpEnv('REQUEST_URI')
         );
+
         if ($options == '') {
             return '';
         }
+
         return str_ireplace('</div></div>', '</div>', $originalOutput)
             . '<div class="form-group">'
-            . sprintf(
-                '<label>%s</label>',
-                LocalizationUtility::translate(
-                    'backend.label',
-                    'wv_deepltranslate'
+                . sprintf(
+                    '<label>%s</label>',
+                    LocalizationUtility::translate(
+                        'backend.label',
+                        'wv_deepltranslate'
+                    )
                 )
-            )
-            . '<select class="form-control input-sm" name="createNewLanguage" onchange="window.location.href=this.options[this.selectedIndex].value">'
-            . $options
-            . '</select></div></div></div>';
+                . '<select class="form-control input-sm" name="createNewLanguage" onchange="window.location.href=this.options[this.selectedIndex].value">'
+                    . $options
+                . '</select>'
+            . '</div>'
+            . '</div>';
     }
 }
