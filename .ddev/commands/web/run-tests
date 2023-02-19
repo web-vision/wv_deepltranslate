@@ -1,0 +1,108 @@
+#!/bin/bash
+
+## Description: Local TYPO3 Test runner
+## Usage: run-tests [flags]
+## Example: "ddev run-tests"
+## Flags: [{"Name":"version","Shorthand":"v","Type":"string","DefValue":"all","Usage":"Switch of TYPO3 version (9|10|11)"},{"Name":"filter","Shorthand":"f","Type":"string","DefValue":"MySpecialTest","Usage":"filter Test runnings"},{"Name":"test","Shorthand":"t","Type":"string","Usage":"Test mode (all|func|unit)","DefValue":"all"}]
+## ProjectTypes: typo3
+
+versions=(all 9 10 11)
+testcases=(all func unit)
+selectedVersion=all
+testCase=all
+currentVersion=
+filter=
+while :; do
+    case ${1:-} in
+    -v | --version)
+        if [[ "${versions[*]}" =~ "$2" ]]; then
+            selectedVersion="$2"
+            shift 2
+        fi
+        ;;
+    -f | --filter)
+        filter="$2"
+        shift 2
+        ;;
+
+    -t | --test)
+        if [[ "${testcases[*]}" =~ "$2" ]]; then
+            testCase="$2"
+            shift 2
+        fi
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        break
+        ;;
+    esac
+done
+
+prepare_test_instance() {
+    echo "Instantiating TYPO3 v${currentVersion} for Test"
+    bash ./.ddev/scripts/update_version.sh $currentVersion
+}
+
+run_functional() {
+    fileName=".test-results/functional-${currentVersion}.txt"
+    echo "" > $fileName
+    if [ "${filter}" = "" ]; then
+        composer test:php:functional -- >> $fileName
+    else
+        composer test:php:functional -- --filter="$filter" $fileName
+    fi
+}
+
+run_unit() {
+    fileName=".test-results/unit-${currentVersion}.txt"
+    echo "" > $fileName
+    if [ "${filter}" = "" ]; then
+        composer test:php:unit >> $fileName
+    else
+        composer test:php:unit -- --filter="$filter" >> $fileName
+    fi
+}
+
+run_test() {
+    case $testCase in
+    all)
+        run_functional
+        run_unit
+        ;;
+    unit)
+        run_unit
+        ;;
+    func)
+        run_functional
+        ;;
+    esac
+}
+
+# create tests dir if not there (-p flag let us ignore errors)
+mkdir -p .test-results
+
+case $selectedVersion in
+all)
+    for v in ${versions[@]}; do
+        if [[ ${v} != "all" ]]; then
+            currentVersion=$v
+            prepare_test_instance
+            run_test
+        fi
+    done
+    ;;
+*)
+    echo $selectedVersion
+    currentVersion=$selectedVersion
+    prepare_test_instance
+    run_test
+    ;;
+
+esac
+
+echo ""
+echo ""
+echo -e "\033[5m\e[32mDone. Your results are located in ./.test-results\033[m"
