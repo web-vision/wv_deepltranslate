@@ -14,6 +14,9 @@ use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
  */
 class DeeplRecordListController extends RecordListController
 {
+    /**
+     * @param int $id
+     */
     protected function languageSelector($id): string
     {
         $originalOutput = parent::languageSelector($id);

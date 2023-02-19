@@ -9,7 +9,10 @@ use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class DeeplRecordListController extends RecordListController
 {
-    protected function languageSelector(string $requestUri): string
+    /**
+     * @param string $requestUri
+     */
+    protected function languageSelector($requestUri): string
     {
         $originalOutput = parent::languageSelector($requestUri);
 
