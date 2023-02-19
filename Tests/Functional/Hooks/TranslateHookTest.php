@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
+use WebVision\WvDeepltranslate\Service\LanguageService;
 
 /**
  * @covers \WebVision\WvDeepltranslate\Hooks\TranslateHook
@@ -34,7 +35,13 @@ class TranslateHookTest extends FunctionalTestCase
         $this->importDataSet(__DIR__ . '/../Fixtures/Settings.xml');
         $this->importDataSet(__DIR__ . '/../Fixtures/Language.xml');
         $this->importDataSet(__DIR__ . '/../Fixtures/Pages.xml');
-        $this->setUpFrontendRootPage(1);
+        $this->setUpFrontendRootPage(
+            1,
+            [],
+            [
+                1 => 'EXT:wv_deepltranslate/Tests/Functional/Hooks/Fixtures/SiteConfig.yaml',
+            ]
+        );
     }
 
     /**
@@ -43,16 +50,17 @@ class TranslateHookTest extends FunctionalTestCase
     public function contentTranslateWithDeepl(): void
     {
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
-
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $siteConfig = $languageService->getCurrentSite('pages', 1);
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
         $content = $translateHook->translateContent(
             'Hello I would like to be translated',
             [
                 'uid' => 2,
+                'language_isocode' => 'DE',
             ],
             'deepl',
-            '1',
-            'pages',
-            1
+            $sourceLanguageRecord
         );
 
         static::assertSame('Hallo, ich möchte gerne übersetzt werden', $content);
@@ -64,22 +72,21 @@ class TranslateHookTest extends FunctionalTestCase
     public function contentNotTranslateWithDeeplWhenLanguageNotSupported(): void
     {
         $this->importDataSet(__DIR__ . '/Fixtures/NotSupportedLanguage.xml');
-        $this->setUpSites(1, [
-            'site-test' => 'EXT:wv_deepltranslate/Tests/Functional/Hooks/Fixtures/SiteConfig.yaml',
-        ]);
 
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
 
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $siteConfig = $languageService->getCurrentSite('pages', 1);
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
         $content = $translateHook->translateContent(
             'Hello I would like to be translated',
             [
                 'uid' => 3, // This ist the LanguageID its was Configure in SiteConfig
                 'title' => 'not supported language',
+                'language_isocode' => 'BS',
             ],
             'deepl',
-            '1',
-            'pages',
-            1
+            $sourceLanguageRecord
         );
 
         static::assertSame('Hello I would like to be translated', $content);
@@ -92,10 +99,6 @@ class TranslateHookTest extends FunctionalTestCase
     {
         $this->importDataSet(__DIR__ . '/Fixtures/BeUsersTranslateDeeplFlag.xml');
         $this->setUpBackendUserFromFixture(2);
-
-        $this->setUpSites(1, [
-            'site-test' => 'EXT:wv_deepltranslate/Tests/Functional/Hooks/Fixtures/SiteConfig.yaml',
-        ]);
 
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $cmdMap = [

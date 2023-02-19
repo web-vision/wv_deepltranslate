@@ -1,0 +1,8 @@
+#!/bin/bash
+
+## Description: Local TYPO3 version switcher
+## Usage: update-to {9|10|11}
+## Example: "ddev update-to 9"
+## ProjectTypes: typo3
+
+bash ./.ddev/scripts/update_version.sh $*

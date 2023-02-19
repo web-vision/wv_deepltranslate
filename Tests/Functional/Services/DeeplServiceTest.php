@@ -34,14 +34,16 @@ class DeeplServiceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function checkSupportedLanguages(): void
+    public function checkSupportedTargetLanguages(): void
     {
         $deeplService = GeneralUtility::makeInstance(DeeplService::class);
 
-        static::assertContains('EN-GB', $deeplService->apiSupportedLanguages);
-        static::assertContains('EN-US', $deeplService->apiSupportedLanguages);
-        static::assertContains('DE', $deeplService->apiSupportedLanguages);
-        static::assertContains('UK', $deeplService->apiSupportedLanguages);
+        static::assertContains('EN-GB', $deeplService->apiSupportedLanguages['target']);
+        static::assertContains('EN-US', $deeplService->apiSupportedLanguages['target']);
+        static::assertContains('DE', $deeplService->apiSupportedLanguages['target']);
+        static::assertContains('UK', $deeplService->apiSupportedLanguages['target']);
+        static::assertNotContains('EN', $deeplService->apiSupportedLanguages['target']);
+        static::assertNotContains('BS', $deeplService->apiSupportedLanguages['target']);
     }
 
     /**
@@ -54,5 +56,22 @@ class DeeplServiceTest extends FunctionalTestCase
         static::assertContains('ES', $deeplService->formalitySupportedLanguages);
         static::assertContains('DE', $deeplService->formalitySupportedLanguages);
         static::assertContains('NL', $deeplService->formalitySupportedLanguages);
+        static::assertNotContains('EN', $deeplService->formalitySupportedLanguages);
+        static::assertNotContains('BS', $deeplService->formalitySupportedLanguages);
+    }
+
+    /**
+     * @test
+     */
+    public function checkSupportedSourceLanguages(): void
+    {
+        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+
+        static::assertContains('DE', $deeplService->apiSupportedLanguages['source']);
+        static::assertContains('UK', $deeplService->apiSupportedLanguages['source']);
+        static::assertContains('EN', $deeplService->apiSupportedLanguages['source']);
+        static::assertNotContains('EN-GB', $deeplService->apiSupportedLanguages['source']);
+        static::assertNotContains('EN-US', $deeplService->apiSupportedLanguages['source']);
+        static::assertNotContains('BS', $deeplService->apiSupportedLanguages['source']);
     }
 }
