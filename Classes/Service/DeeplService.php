@@ -37,6 +37,8 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
@@ -94,9 +96,9 @@ class DeeplService
 
     /**
      * Deepl Api Call for retrieving translation.
-     * @return object json-object
+     * @return array
      */
-    public function translateRequest($content, $targetLanguage, $sourceLanguage): object
+    public function translateRequest($content, $targetLanguage, $sourceLanguage): array
     {
         $postFields = [
             'auth_key'     => $this->apiKey,
@@ -134,15 +136,19 @@ class DeeplService
                 ],
             ]);
         } catch (ClientException $e) {
-            $result            = [];
-            $result['status']  = 'false';
-            $result['message'] = $e->getMessage();
-            $result            = json_encode($result);
-            echo $result;
-            exit;
+            $flashMessage = GeneralUtility::makeInstance(
+                FlashMessage::class,
+                $e->getMessage(),
+                '',
+                FlashMessage::INFO
+            );
+            GeneralUtility::makeInstance(FlashMessageService::class)
+                ->getMessageQueueByIdentifier()
+                ->addMessage($flashMessage);
+            return [];
         }
 
-        return json_decode($response->getBody()->getContents());
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     private function loadSupportedLanguages(): void

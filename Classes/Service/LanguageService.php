@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
@@ -21,10 +23,25 @@ class LanguageService
     protected bool $siteLanguageMode = true;
 
     protected array $possibleLangMatches = [
-       'deeplTargetLanguage',
-       'hreflang',
-       'iso-639-1',
+        'deeplTargetLanguage',
+        'hreflang',
+        'iso-639-1',
     ];
+
+    public function __construct(
+        ?DeeplService $deeplService = null,
+        ?SettingsRepository $settingsRepository = null
+    ) {
+        $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
+        $this->settingsRepository = $settingsRepository ?? GeneralUtility::makeInstance(SettingsRepository::class);
+        $typo3VersionArray = VersionNumberUtility::convertVersionStringToArray(
+            VersionNumberUtility::getCurrentTypo3Version()
+        );
+
+        if (version_compare((string)$typo3VersionArray['version_main'], '11', '<')) {
+            $this->siteLanguageMode = false;
+        }
+    }
 
     /**
      * @return array{site: Site, pageUid: int}|null
@@ -48,37 +65,17 @@ class LanguageService
         }
     }
 
-    public function __construct(
-        ?DeeplService $deeplService = null,
-        ?SettingsRepository $settingsRepository = null
-    ) {
-        $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
-        $this->settingsRepository = $settingsRepository ?? GeneralUtility::makeInstance(SettingsRepository::class);
-        $typo3VersionArray = VersionNumberUtility::convertVersionStringToArray(
-            VersionNumberUtility::getCurrentTypo3Version()
-        );
-
-        if (version_compare((string)$typo3VersionArray['version_main'], '11', '<')) {
-            $this->siteLanguageMode = false;
-        }
-    }
-
     /**
      * @return array{uid: int, title: string, language_isocode: string}
-     * @throws LanguageRecordNotFoundException
      * @throws LanguageIsoCodeNotFoundException
      */
-    public function getSourceLanguage(Site $currentSite, int $languageId = 0): array
+    public function getSourceLanguage(Site $currentSite): array
     {
-        if ($this->siteLanguageMode) {
-            $sourceLanguageRecord = [
-                'uid' => $currentSite->getDefaultLanguage()->getLanguageId(),
-                'title' => $currentSite->getDefaultLanguage()->getTitle(),
-                'language_isocode' => strtoupper($currentSite->getDefaultLanguage()->getTwoLetterIsoCode()),
-            ];
-        } else {
-            $sourceLanguageRecord = $this->getRecordFromSysLanguage($languageId);
-        }
+        $sourceLanguageRecord = [
+            'uid' => $currentSite->getDefaultLanguage()->getLanguageId(),
+            'title' => $currentSite->getDefaultLanguage()->getTitle(),
+            'language_isocode' => strtoupper($currentSite->getDefaultLanguage()->getTwoLetterIsoCode()),
+        ];
 
         if (!in_array(
             $sourceLanguageRecord['language_isocode'],
@@ -121,10 +118,11 @@ class LanguageService
             $languageIsoCode = null;
 
             foreach ($this->possibleLangMatches as $possibleLangMatch) {
-                if (in_array(
-                    strtoupper($language[$possibleLangMatch]),
-                    $this->deeplService->apiSupportedLanguages['target']
-                )
+                if (array_key_exists($possibleLangMatch, $language)
+                    && in_array(
+                        strtoupper($language[$possibleLangMatch]),
+                        $this->deeplService->apiSupportedLanguages['target']
+                    )
                 ) {
                     $languageIsoCode = strtoupper($language[$possibleLangMatch]);
                     break;
@@ -147,10 +145,13 @@ class LanguageService
                 'language_isocode' => $languageIsoCode,
             ];
         }
+
+        // v9 and v10 sys_language_uid goes from here
+        /** @deprecated will be removed in version 4 */
         $targetLanguageRecord = $this->getRecordFromSysLanguage($languageId);
 
         $targetLanguageMapping = $this->settingsRepository->getMappings($targetLanguageRecord['uid']);
-        if ($targetLanguageMapping === null) {
+        if ($targetLanguageMapping === '') {
             throw new LanguageIsoCodeNotFoundException(
                 sprintf(
                     'No API supported target found for language "%s"',

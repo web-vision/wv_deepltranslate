@@ -81,8 +81,7 @@ class TranslateHook
 
         try {
             $sourceLanguageRecord = $this->languageService->getSourceLanguage(
-                $siteInformation['site'],
-                (int)$sourceLanguage
+                $siteInformation['site']
             );
 
             $targetLanguageRecord = $this->languageService->getTargetLanguage(
@@ -92,15 +91,15 @@ class TranslateHook
 
             $translatedContent = $this->translateContent(
                 $content,
-                $languageRecord,
+                $targetLanguageRecord,
                 $customMode,
-                $sourceLanguageRecord,
+                $sourceLanguageRecord
             );
         } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException $e) {
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
                 $e->getMessage(),
-                null,
+                '',
                 FlashMessage::INFO
             );
             GeneralUtility::makeInstance(FlashMessageService::class)
@@ -146,10 +145,10 @@ class TranslateHook
                 $sourceLanguageRecord['language_isocode']
             );
 
-            if (!empty($response) && isset($response->translations)) {
-                foreach ($response->translations as $translation) {
-                    if ($translation->text != '') {
-                        $content = $translation->text;
+            if (!empty($response) && isset($response['translations'])) {
+                foreach ($response['translations'] as $translation) {
+                    if ($translation['text'] != '') {
+                        $content = $translation['text'];
                         break;
                     }
                 }
