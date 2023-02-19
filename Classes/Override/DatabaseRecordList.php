@@ -39,8 +39,15 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
                 return $out;
             }
             $pageId = (int)($table === 'pages' ? $row['uid'] : $row['pid']);
+            // All records excluding pages
+            $possibleTranslations = $this->possibleTranslations;
+            if ($table === 'pages') {
+                // Calculate possible translations for pages
+                $possibleTranslations = array_map(static fn ($siteLanguage) => $siteLanguage->getLanguageId(), $this->languagesAllowedForUser);
+                $possibleTranslations = array_filter($possibleTranslations, static fn ($languageUid) => $languageUid > 0);
+            }
             $languageInformation = $this->translateTools->getSystemLanguages($pageId);
-            foreach ($this->possibleTranslations as $lUid_OnPage) {
+            foreach ($possibleTranslations as $lUid_OnPage) {
                 if ($this->isEditable($table)
                     && !$this->isRecordDeletePlaceholder($row)
                     && !isset($translations[$lUid_OnPage])
