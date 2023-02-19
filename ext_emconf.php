@@ -11,12 +11,12 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Deepl Translate',
-    'description' => 'Fork of deepltranslate from pitsolutions.This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages.',
+    'title' => 'DeepL Translate',
+    'description' => 'This extension provides option to translate content element, and TCA record texts to DeepL and Google supported languages.',
     'category' => 'module,backend',
     'author' => 'web-vision GmbH Team',
     'author_company' => 'web-vision GmbH',
-    'author_email' => 'markhouben91@gmail.com, ricky@web-vision.de, anu@web-vision.de',
+    'author_email' => 'hello@web-vision.de',
     'state' => 'stable',
     'uploadfolder' => '0',
     'createDirs' => '',
