@@ -11,6 +11,8 @@ use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 /**
  * @deprecated will be removed in version 4
+ *
+ * use in TYPO3 Version 9 and 10 when Feature Toggle disabled
  */
 class DeeplRecordListController extends RecordListController
 {
