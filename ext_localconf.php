@@ -68,6 +68,7 @@ if (!defined('TYPO3_MODE')) {
     $icons = [
         'apps-pagetree-folder-contains-glossar' => 'deepl.svg',
         'actions-localize-deepl' => 'actions-localize-deepl.svg',
+        'deepl-grey-logo' => 'deepl-grey.svg',
     ];
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
     foreach ($icons as $identifier => $path) {
