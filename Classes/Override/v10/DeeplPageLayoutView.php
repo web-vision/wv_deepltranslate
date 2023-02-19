@@ -34,7 +34,6 @@ class DeeplPageLayoutView extends PageLayoutView
             return '';
         }
 
-        //return $originalOutput;
         $originalOutput = str_ireplace('</div></div>', '</div>', $originalOutput);
         return $originalOutput
             . '<div class="form-group">'

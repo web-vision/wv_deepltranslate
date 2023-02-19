@@ -4,28 +4,25 @@
     xmlns:f="http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers"
 >
 <f:comment>
-    Use in TYPO3 v11 default
+    Use in TYPO3 v10 when feature toggle enabled
 </f:comment>
-
 <f:if condition="{context.newLanguageOptions}">
-    <div class="row row-cols-auto align-items-end g-3 mb-3">
-        <div class="col">
-            <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
+    <div class="form-inline form-inline-spaced">
+        <div class="form-group">
+            <select class="form-control input-sm" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
                 <f:for each="{context.newLanguageOptions}" as="languageName" key="url">
                     <option value="{url}">{languageName}</option>
                 </f:for>
             </select>
         </div>
-        <div class="col row">
-            <label class="col-sm-4 col">{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
-            <div class="col col-sm-8">
-                <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
-                    <deepl:deeplTranslate context="{context}"/>
-                    <f:for each="{deepl:deeplTranslate(context: '{context}')}" as="languageName" key="url">
-                        <option value="{url}">{languageName}</option>
-                    </f:for>
-                </select>
-            </div>
+        <div class="form-group">
+            <label >{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
+            <select class="form-control input-sm" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
+                <deepl:deeplTranslate context="{context}"/>
+                <f:for each="{deepl:deeplTranslate(context: '{context}')}" as="languageName" key="url">
+                    <option value="{url}">{languageName}</option>
+                </f:for>
+            </select>
         </div>
     </div>
 </f:if>
@@ -52,7 +49,7 @@
                 <td class="t3-page-column t3-page-lang-label nowrap">
                     <div class="btn-group">
                         <f:if condition="{languageColumn.allowViewPage}">
-                            <a href="#" class="btn btn-default btn-sm" {languageColumn.previewUrlAttributes -> f:format.raw()} title="{languageColumn.viewPageLinkTitle}">
+                            <a href="#" class="btn btn-default btn-sm" onclick="{languageColumn.viewPageOnClick}" title="{languageColumn.viewPageLinkTitle}">
                                 <core:icon identifier="actions-view" />
                             </a>
                         </f:if>
@@ -78,7 +75,7 @@
                         </f:if>
                     </div>
                     {languageColumn.pageIcon -> f:format.raw()}
-                    {languageColumn.context.localizedPageTitle -> f:format.crop(maxCharacters: maxTitleLength)}
+                    {languageColumn.context.localizedPageTitle}
                 </td>
             </f:for>
         </tr>
@@ -129,14 +126,6 @@
                             </f:for>
                         </tr>
                     </f:for>
-                    <tr>
-                        <f:for each="{languageColumns}" as="languageColumn">
-                            <f:variable name="column" value="{be:languageColumn(languageColumn: languageColumn, columnNumber: columnNumber)}" />
-                            <td data-colpos="{column.columnNumber}" valign="top">
-                                <f:format.raw>{column.afterSectionMarkup}</f:format.raw>
-                            </td>
-                        </f:for>
-                    </tr>
                 </f:for>
             </f:then>
             <f:else>
@@ -155,5 +144,6 @@
         </f:if>
     </table>
 </div>
+
 
 </html>
