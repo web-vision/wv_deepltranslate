@@ -3,15 +3,16 @@
 ## Description: Local TYPO3 Test runner
 ## Usage: run-tests [flags]
 ## Example: "ddev run-tests"
-## Flags: [{"Name":"version","Shorthand":"v","Type":"string","DefValue":"all","Usage":"Switch of TYPO3 version (9|10|11)"},{"Name":"filter","Shorthand":"f","Type":"string","DefValue":"MySpecialTest","Usage":"filter Test runnings"},{"Name":"test","Shorthand":"t","Type":"string","Usage":"Test mode (all|func|unit)","DefValue":"all"}]
+## Flags: [{"Name":"version","Shorthand":"v","Type":"string","DefValue":"all","Usage":"Switch of TYPO3 version (9|10|11)"},{"Name":"filter","Shorthand":"f","Type":"string","DefValue":"MySpecialTest","Usage":"filter Test runnings"},{"Name":"test","Shorthand":"t","Type":"string","Usage":"Test mode (all|func|unit)","DefValue":"all","Name":"only-test","Shorthand":"o","Usage":"Flag triggers only tests without version update","NoOptDefVal":"1"}]
 ## ProjectTypes: typo3
 
 versions=(all 9 10 11)
 testcases=(all func unit)
-selectedVersion=all
+selectedVersion=
 testCase=all
 currentVersion=
 filter=
+onlyTest=0
 while :; do
     case ${1:-} in
     -v | --version)
@@ -31,11 +32,16 @@ while :; do
             shift 2
         fi
         ;;
+    -o | --only-test)
+        onlyTest=1
+        shift
+        ;;
     --)
         shift
         break
         ;;
     *)
+        shift
         break
         ;;
     esac
@@ -48,9 +54,9 @@ prepare_test_instance() {
 
 run_functional() {
     fileName=".test-results/functional-${currentVersion}.txt"
-    echo "" > $fileName
+    echo "" >$fileName
     if [ "${filter}" = "" ]; then
-        composer test:php:functional -- >> $fileName
+        composer test:php:functional -- >>$fileName
     else
         composer test:php:functional -- --filter="$filter" $fileName
     fi
@@ -58,11 +64,11 @@ run_functional() {
 
 run_unit() {
     fileName=".test-results/unit-${currentVersion}.txt"
-    echo "" > $fileName
+    echo "" >$fileName
     if [ "${filter}" = "" ]; then
-        composer test:php:unit >> $fileName
+        composer test:php:unit >>$fileName
     else
-        composer test:php:unit -- --filter="$filter" >> $fileName
+        composer test:php:unit -- --filter="$filter" >>$fileName
     fi
 }
 
@@ -81,6 +87,28 @@ run_test() {
     esac
 }
 
+finish() {
+    echo ""
+    echo ""
+    echo -e "\033[5m\e[32mDone. Your results are located in ./.test-results\033[m"
+}
+
+if [[ $selectedVersion != "" ]]; then
+    if [[ ${onlyTest} == 1 ]]; then
+        echo ""
+        echo -e "\033[0;31mUsing '--version' together with '--only-test' leads to unpredictable side effects. ABORTING!\033[0m"
+        exit 1
+    fi
+else
+    selectedVersion=all
+fi
+
+if [[ ${onlyTest} == 1 ]]; then
+    currentVersion="only-test"
+    run_test
+    finish
+    exit 0
+fi
 # create tests dir if not there (-p flag let us ignore errors)
 mkdir -p .test-results
 
@@ -103,6 +131,4 @@ all)
 
 esac
 
-echo ""
-echo ""
-echo -e "\033[5m\e[32mDone. Your results are located in ./.test-results\033[m"
+finish

@@ -5,10 +5,8 @@ declare(strict_types = 1);
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
@@ -100,7 +98,7 @@ class LanguageServiceTest extends FunctionalTestCase
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
-        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site'], 0);
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site']);
 
         static::assertArrayHasKey('uid', $sourceLanguageRecord);
         static::assertArrayHasKey('title', $sourceLanguageRecord);
@@ -119,6 +117,6 @@ class LanguageServiceTest extends FunctionalTestCase
         $siteInformation = $languageService->getCurrentSite('pages', 3);
 
         static::expectException(LanguageIsoCodeNotFoundException::class);
-        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site'], 0);
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site']);
     }
 }

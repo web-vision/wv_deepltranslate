@@ -1,6 +1,23 @@
 #!/usr/bin/env bash
 
 composer_cleanup() {
+    echo "Reset dev requirements"
+    composer remove --dev \
+        typo3/cms-extensionmanager \
+        typo3/cms-frontend \
+        b13/container \
+        helhum/typo3-console \
+        nimut/testing-framework \
+        saschaegerer/phpstan-typo3 \
+        typo3/cms-belog \
+        typo3/cms-fluid-styled-content \
+        typo3/cms-filelist \
+        typo3/cms-info \
+        typo3/cms-lowlevel \
+        typo3/cms-tstemplate \
+        typo3/cms-workspaces \
+        typo3fluid/fluid --no-update
+
     echo "Reset Requires from vX"
     composer remove \
         typo3/cms-backend \
@@ -8,22 +25,7 @@ composer_cleanup() {
         typo3/cms-fluid \
         typo3/cms-install \
         typo3/cms-extbase \
-        typo3/cms-fluid --no-install
-
-    echo "Reset dev requirements"
-    composer remove --dev \
-        typo3/cms-extensionmanager \
-        typo3/cms-frontend \
-        b13/container \
-        helhum/typo3-console \
-        saschaegerer/phpstan-typo3 \
-        typo3/cms-belog \
-        typo3/cms-filelist \
-        typo3/cms-info \
-        typo3/cms-lowlevel \
-        typo3/cms-tstemplate \
-        typo3/cms-workspaces \
-        typo3fluid/fluid
+        typo3/cms-fluid -W
 
     rm composer.lock
     rm -rf .Build/vendor/*
@@ -42,6 +44,18 @@ composer_update() {
     git restore composer.json
 }
 
+composer_require_default_dev() {
+    echo "################################"
+    echo "Require default dev-dependencies"
+    echo "################################"
+    echo ""
+
+    composer req \
+        b13/container:^1.6 \
+        saschaegerer/phpstan-typo3:^1.0 \
+        nimut/testing-framework:^6.0 --no-update
+}
+
 update_v9() {
     echo "###############################"
     echo "Update TYPO3 dependency to v9"
@@ -54,14 +68,15 @@ update_v9() {
         typo3/cms-backend:^9.5 \
         typo3/cms-install:^9.5 \
         typo3/cms-extbase:^9.5 \
-        typo3/cms-fluid:^9.5 --no-install
+        typo3/cms-fluid:^9.5 --no-update
+
+    composer_require_default_dev
 
     echo "Add Dev-Requires for v9"
     composer req \
-        b13/container:^1.6 \
-        saschaegerer/phpstan-typo3:^1.0 \
         helhum/typo3-console:^5.8 \
         typo3/cms-belog:^9.5 \
+        typo3/cms-fluid-styled-content:^9.5 \
         typo3/cms-filelist:^9.5 \
         typo3/cms-info:^9.5 \
         typo3/cms-lowlevel:^9.5 \
@@ -78,14 +93,15 @@ update_v10() {
         typo3/cms-backend:^10.4 \
         typo3/cms-install:^10.4 \
         typo3/cms-extbase:^10.4 \
-        typo3/cms-fluid:^10.4 --no-install
+        typo3/cms-fluid:^10.4 --no-update
+
+    composer_require_default_dev
 
     echo "Add Dev-Requires for v10"
     composer req \
-        b13/container:^1.6 \
-        saschaegerer/phpstan-typo3:^1.0 \
         helhum/typo3-console:^6.7 \
         typo3/cms-belog:^10.4 \
+        typo3/cms-fluid-styled-content:^10.4 \
         typo3/cms-filelist:^10.4 \
         typo3/cms-info:^10.4 \
         typo3/cms-lowlevel:^10.4 \
@@ -102,14 +118,15 @@ update_v11() {
         typo3/cms-backend:^11.5 \
         typo3/cms-install:^11.5 \
         typo3/cms-extbase:^11.5 \
-        typo3/cms-fluid:^11.5 --no-install
+        typo3/cms-fluid:^11.5 --no-update
+
+    composer_require_default_dev
 
     echo "Add Dev-Requires for v11"
     composer req \
-        b13/container:^1.6 \
-        saschaegerer/phpstan-typo3:^1.0 \
         helhum/typo3-console:^7.1 \
         typo3/cms-belog:^11.5 \
+        typo3/cms-fluid-styled-content:^11.5 \
         typo3/cms-filelist:^11.5 \
         typo3/cms-info:^11.5 \
         typo3/cms-lowlevel:^11.5 \
