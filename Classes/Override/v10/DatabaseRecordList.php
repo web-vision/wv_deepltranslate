@@ -60,7 +60,7 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
                         && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)
                     ) {
                         $language = BackendUtility::getRecord('sys_language', $lUid_OnPage, 'title');
-                        $lNew = DeeplBackendUtility::buildTranslateButton(
+                        $lNew .= DeeplBackendUtility::buildTranslateButton(
                             $table,
                             $row['uid'],
                             $lUid_OnPage,
