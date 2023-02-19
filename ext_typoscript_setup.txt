@@ -23,3 +23,7 @@ module.tx_backend.view {
         10 = EXT:wv_deepltranslate/Resources/Private/Backend/Partials
     }
 }
+
+[compatVersion("10.4")]
+    module.tx_backend.view.partialRootPaths.10 = EXT:wv_deepltranslate/Resources/Private/Backend/Partials/v10
+[END]
