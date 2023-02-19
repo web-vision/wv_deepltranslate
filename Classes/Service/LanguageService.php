@@ -115,6 +115,17 @@ class LanguageService
 
             $language = array_shift($languages);
 
+            if (count($language) === 0) {
+                throw new LanguageRecordNotFoundException(
+                    sprintf(
+                        'Language "%d" not found in SiteConfig "%s"',
+                        $languageId,
+                        $currentSite->getConfiguration()['websiteTitle']
+                    ),
+                    1676824459
+                );
+            }
+
             $languageIsoCode = null;
 
             foreach ($this->possibleLangMatches as $possibleLangMatch) {

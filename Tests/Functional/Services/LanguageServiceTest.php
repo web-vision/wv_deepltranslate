@@ -8,6 +8,7 @@ use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
+use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
 class LanguageServiceTest extends FunctionalTestCase
@@ -18,6 +19,7 @@ class LanguageServiceTest extends FunctionalTestCase
     protected $testExtensionsToLoad = [
         'typo3conf/ext/wv_deepltranslate',
     ];
+
     protected function setUp(): void
     {
         $this->configurationToUseInTestInstance = array_merge(
@@ -117,6 +119,67 @@ class LanguageServiceTest extends FunctionalTestCase
         $siteInformation = $languageService->getCurrentSite('pages', 3);
 
         static::expectException(LanguageIsoCodeNotFoundException::class);
+        static::expectExceptionMessage('No API supported target found for language "Bosnian"', );
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site']);
+    }
+
+    /**
+     * @test
+     */
+    public function getTargetLanguageInformationIsValid(): void
+    {
+        $this->typo3VersionSkip();
+
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $siteInformation = $languageService->getCurrentSite('pages', 1);
+
+        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 2);
+
+        static::assertArrayHasKey('uid', $sourceLanguageRecord);
+        static::assertArrayHasKey('title', $sourceLanguageRecord);
+        static::assertArrayHasKey('language_isocode', $sourceLanguageRecord);
+
+        static::assertSame(2, $sourceLanguageRecord['uid']);
+        static::assertSame('DE', $sourceLanguageRecord['language_isocode']);
+    }
+
+    /**
+     * @test
+     */
+    public function getTargetLanguageExceptionWhenLanguageNotExist(): void
+    {
+        $this->typo3VersionSkip();
+
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $siteInformation = $languageService->getCurrentSite('pages', 1);
+
+        static::expectException(LanguageRecordNotFoundException::class);
+        static::expectExceptionMessage('Language "1" not found in SiteConfig "Home"');
+        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 1);
+    }
+
+    /**
+     * @test
+     */
+    public function getTargetLanguageExceptionWhenLanguageIsoNotSupported(): void
+    {
+        $this->typo3VersionSkip();
+
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $siteInformation = $languageService->getCurrentSite('pages', 1);
+
+        static::expectException(LanguageIsoCodeNotFoundException::class);
+        static::expectExceptionMessage('No API supported target found for language "Bosnian" in site "Home"');
+        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 4);
+    }
+
+    private function typo3VersionSkip(): void
+    {
+        $typo3VersionArray = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionStringToArray(
+            \TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version()
+        );
+        if (version_compare((string)$typo3VersionArray['version_main'], '11', '<')) {
+            static::markTestSkipped('Skip test, can only use in version 11');
+        }
     }
 }
