@@ -58,6 +58,10 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
                         && $this->isEditable($table)
                         && !isset($translations['translations'][$lUid_OnPage])
                         && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)
+                        && DeeplBackendUtility::checkCanBeTranslated(
+                            ($table === 'pages') ? $row['uid'] : $row['pid'],
+                            $lUid_OnPage
+                        )
                     ) {
                         $language = BackendUtility::getRecord('sys_language', $lUid_OnPage, 'title');
                         $lNew .= DeeplBackendUtility::buildTranslateButton(

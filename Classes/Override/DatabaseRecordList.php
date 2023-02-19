@@ -52,6 +52,7 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
                     && !$this->isRecordDeletePlaceholder($row)
                     && !isset($translations[$lUid_OnPage])
                     && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)
+                    && DeeplBackendUtility::checkCanBeTranslated($pageId, $lUid_OnPage)
                 ) {
                     $out .= DeeplBackendUtility::buildTranslateButton(
                         $table,

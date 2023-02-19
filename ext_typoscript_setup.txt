@@ -26,6 +26,6 @@ module.tx_backend.view {
     }
 }
 
-[compatVersion("10.4")]
-    module.tx_backend.view.partialRootPaths.10 = EXT:wv_deepltranslate/Resources/Private/Backend/Partials/v10
+[typo3.version < "11.5"]
+    module.tx_backend.view.partialRootPaths.10 = EXT:wv_deepltranslate/Resources/Private/Backend/v10/Partials
 [END]

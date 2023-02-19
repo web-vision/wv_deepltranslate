@@ -45,14 +45,9 @@ class DeeplRecordListController extends RecordListController
             $originalOutput
         )
             . '<div class="col-sm-6">'
-                . '<div class="row">'
-                    . '<label class="col-sm-4" style="font-weight: bold;">' . $deeplSelectLabel . ':</label>'
-                    . '<div class="col-sm-8">'
-                        . '<select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">'
-                            . $options
-                        . '</select>'
-                    . '</div>'
-                . '</div>'
+            . '<select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">'
+            . $options
+            . '</select>'
             . '</div>'
             . '</div>';
     }
