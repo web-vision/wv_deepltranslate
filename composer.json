@@ -111,6 +111,7 @@
 		"cs:fix": "php-cs-fixer fix --config .config/.php-cs-rules.php --ansi",
 		"analyze:php": "phpstan analyse --ansi --no-progress --memory-limit=768M --configuration=.config/phpstan.neon",
 		"lint:typoscript": "typoscript-lint --ansi --config=./.config/typoscript-lint.yml",
+		"lint:php": "find .*.php *.php Classes Configuration Tests -name '*.php' -print0 | xargs -r -0 -n 1 -P 4 php -l",
 		"test:php": [
 			"@test:php:unit",
 			"@test:php:functional"

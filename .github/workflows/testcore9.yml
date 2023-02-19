@@ -1,0 +1,52 @@
+name: tests core 9
+
+# @todo v9 disabled, due multiple out-of-sync dependencies (news to high for core v9) and other issues
+on:
+  push:
+    branches: ['not-available']
+#  pull_request:
+#  schedule:
+#    - cron: '56 4 * * *'
+
+jobs:
+  testsuite:
+    name: all tests with core v9
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ '7.2', '7.3', '7.4']
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+
+      - name: "Install PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php-version }}"
+          coverage: none
+          tools: composer:v2.2
+
+      - name: "Prepare composer dependencies"
+        run: ".ddev/scripts/update_version.sh 9"
+
+      - name: "Verify code against editorconfig"
+        run: "composer ec:check"
+
+      - name: "Verify code cgl"
+        run: "composer cs:check"
+
+      - name: "Run TypoScript lint"
+        run: "composer lint:typoscript"
+
+      - name: "Run PHP lint"
+        run: "composer lint:php"
+
+      - name: "Run PHPStan"
+        run: "composer analyze:php"
+
+      - name: "Unit tests"
+        run: "composer test:php:unit"
+
+      - name: "Functional tests"
+        run: "composer test:php:unit"
