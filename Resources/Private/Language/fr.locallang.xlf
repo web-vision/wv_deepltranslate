@@ -4,12 +4,12 @@
 		<header/>
 		<body>
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
-				<source>Translating content via Deepl translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
-				<target>La traduction de contenu via Deepl translate créera une traduction de la langue source vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction deepl qui est précis à 99 %. Le service Deepl prend en charge la traduction vers et depuis l'anglais, le français, l'allemand, l'espagnol et l'italien. , néerlandais et polonais. Les autres langues seront ignorées et utiliseront par défaut l'opération de traduction normale de TYPO3.</target>
+				<source>Translating content via DeepL translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
+				<target>La traduction de contenu via DeepL translate créera une traduction de la langue source vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction deepl qui est précis à 99 %. Le service DeepL prend en charge la traduction vers et depuis l'anglais, le français, l'allemand, l'espagnol et l'italien. , néerlandais et polonais. Les autres langues seront ignorées et utiliseront par défaut l'opération de traduction normale de TYPO3.</target>
 			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslateAuto" xml:space="preserve">
-				<source>Translating content via Deepl translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
-				<source>La traduction de contenu via Deepl translate (détection automatique) créera une traduction de la langue source détectée automatiquement vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction deepl, qui est précis à 99 %. Langues allemande, espagnole, italienne, néerlandaise et polonaise. Les autres langues seront ignorées et utiliseront par défaut l'opération de traduction normale de TYPO3.</source>
+				<source>Translating content via DeepL translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
+				<source>La traduction de contenu via DeepL translate (détection automatique) créera une traduction de la langue source détectée automatiquement vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction deepl, qui est précis à 99 %. Langues allemande, espagnole, italienne, néerlandaise et polonaise. Les autres langues seront ignorées et utiliseront par défaut l'opération de traduction normale de TYPO3.</source>
 			</trans-unit>
 			<trans-unit id="localize.educate.googleTranslate" xml:space="preserve">
 				<source>Translating content via Google Translate will create a translation  from source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
@@ -20,8 +20,8 @@
 				<target>La traduction de contenu via Google Traduction (détection automatique) créera une traduction de la langue source détectée automatiquement vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction Google. Le service Google prend en charge une part équitable de <![CDATA[<a href= "https://cloud.google.com/translate/docs/languages" target="_blank">langues</a>]]>.</target>
 			</trans-unit>
 			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>Deepl Settings</source>
-				<target>Deepl Settings</target>
+				<source>DeepL Settings</source>
+				<target>DeepL Settings</target>
 			</trans-unit>
 			<trans-unit id="settings_success" xml:space="preserve">
 				<source>Language assignments saved successfully</source>
@@ -48,21 +48,30 @@
 				<target>Langue attribuée (code ISO)</target>
 			</trans-unit>
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
-				<source>Deepl</source>
-				<target>Deepl</target>
+				<source>DeepL</source>
+				<target>DeepL</target>
 			</trans-unit>
 
 			<trans-unit id="pages.tx_wvdeepltranslate_content_not_checked">
-				<source>Deepl Translated Content was not checked</source>
-				<target>Le contenu traduit par Deepl n'a pas été vérifié</target>
+				<source>DeepL Translated Content was not checked</source>
+				<target>Le contenu traduit par DeepL n'a pas été vérifié</target>
 			</trans-unit>
 			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
 				<source>Last Translated Date</source>
 				<target>Date de la dernière traduction</target>
 			</trans-unit>
 			<trans-unit id="preview.flag">
-				<source>Translated with Deepl</source>
-				<target>Traduit avec Deepl</target>
+				<source>Translated with DeepL</source>
+				<target>Traduit avec DeepL</target>
+			</trans-unit>
+
+			<trans-unit id="glossary.sync.button.single">
+				<source>Synchronise Glossary</source>
+				<target>Synchroniser le glossaire</target>
+			</trans-unit>
+			<trans-unit id="glossary.sync.button.all">
+				<source>Synchronise Glossaries</source>
+				<target>Synchroniser les glossaires</target>
 			</trans-unit>
 		</body>
 	</file>

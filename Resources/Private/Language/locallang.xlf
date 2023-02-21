@@ -145,6 +145,13 @@
 			<trans-unit id="entry.target">
 				<source>Target</source>
 			</trans-unit>
+
+			<trans-unit id="glossary.sync.button.single">
+				<source>Synchronise Glossary</source>
+			</trans-unit>
+			<trans-unit id="glossary.sync.button.all">
+				<source>Synchronise Glossaries</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -165,6 +165,15 @@
 				<source>Target</source>
 				<target>Ziel</target>
 			</trans-unit>
+
+			<trans-unit id="glossary.sync.button.single">
+				<source>Synchronise Glossary</source>
+				<target>Glossar synchronisieren</target>
+			</trans-unit>
+			<trans-unit id="glossary.sync.button.all">
+				<source>Synchronise Glossaries</source>
+				<target>Glossare synchronisieren</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

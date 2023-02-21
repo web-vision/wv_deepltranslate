@@ -10,6 +10,7 @@ use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class ButtonBarHook
@@ -36,6 +37,7 @@ class ButtonBarHook
         $renderMode = '';
         $pageId = 0;
         $elementId = 0;
+        $title = '';
 
         // we're inside a page
         if (array_key_exists('id', $queryParams)) {
@@ -68,9 +70,17 @@ class ButtonBarHook
         switch ($renderMode) {
             case DeeplBackendUtility::RENDER_TYPE_ELEMENT:
                 $params = $this->buildParamsForSingleEdit($elementId);
+                $title = LocalizationUtility::translate(
+                    'glossary.sync.button.single',
+                    'wv_deepltranslate'
+                );
                 break;
             case DeeplBackendUtility::RENDER_TYPE_PAGE:
                 $params = $this->buildParamsArrayForListView($pageId);
+                $title = LocalizationUtility::translate(
+                    'glossary.sync.button.all',
+                    'wv_deepltranslate'
+                );
                 break;
         }
 
@@ -81,7 +91,7 @@ class ButtonBarHook
             'apps-pagetree-folder-contains-glossar',
             Icon::SIZE_SMALL
         ));
-        $button->setTitle('Sync Glossary');
+        $button->setTitle($title);
         $button->setShowLabelText(true);
 
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
