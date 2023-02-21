@@ -1,7 +1,7 @@
 ﻿..  include:: /Includes.rst.txt
 
 ===============
-Deepl Translate
+ DeepL Translate
 ===============
 
 :Extension key:
@@ -44,3 +44,4 @@ Deepl Translate
    Editor/Index
    Faq/Index
    Reference/Index
+   KnownIssues/Index

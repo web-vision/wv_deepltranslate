@@ -6,9 +6,13 @@
 
 ## What does it do?
 
-This extension provides option to translate content elements and TCA record fields to desired language(supported by [DeepL](https://www.deepl.com/en/api.html)).
-As a fallback, Google Translate option is also provided as they provide support for many languages that DeepL isn’t providing.
-For both DeepL translate and Google Translate, there are two modes-normal and autodetect, where the later autodetect source language and translates it to the desired language.
+This extension provides option to translate content elements and TCA record
+fields to desired language (supported by
+[DeepL](https://www.deepl.com/en/api.html)).
+As a fallback, Google Translate option is also provided as they provide support
+for many languages that DeepL isn’t providing. For both DeepL translate and
+Google Translate, there are two modes-normal and autodetect, where the later
+autodetect source language and translates it to the desired language.
 
 ## Installation
 
@@ -25,12 +29,14 @@ Once installed ,there appears a DeepL back end module with a settings tab.
 
 ## Extension Configuration
 
-Once you installed the extension, you have to set the DeepL API Key under extension configuration section
+Once you installed the extension, you have to set the DeepL API Key under
+extension configuration section
 
 ## Translating Content Elements
 
-Once the extension is installed and Api key provided we are good to go for translating content elements.
-On translating content element,There appears additional four options apart from normal translate and copy.
+Once the extension is installed and Api key provided we are good to go for
+translating content elements. On translating content element,There appears
+additional four options apart from normal translate and copy.
 
 - DeepL Translate(auto detect).
 - DeepL Translate.

@@ -7,3 +7,4 @@
     :titlesonly:
 
     Usage/Index
+    Glossary/Index
