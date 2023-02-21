@@ -8,6 +8,7 @@ composer.lock
 var
 .php-cs-fixer.cache
 .DS_Store
+/Documentation-GENERATED-temp/
 /*.http
 http-client.env.json
 /.test-results

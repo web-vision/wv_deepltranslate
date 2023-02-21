@@ -1,19 +1,11 @@
-﻿.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
-.. include:: ../Includes.txt
-
-
+﻿.. include:: /Includes.rst.txt
 
 .. _faq:
 
 FAQ
 ===
 
-
-What will be the cost for Deepl Api subscription?
+What will be the cost for DeepL Api subscription?
 ----------------------------------------------------------------
 
 You can find all the details regarding Deepl Api usage here:
@@ -24,4 +16,5 @@ You can find all the details regarding Deepl Api usage here:
 What will be the cost for Google translate Api?
 --------------------------------------------------------------
 
-As of now we are using free google translate Api service.There is a character limit of 5000 words per single translation.
+As of now we are using free google translate Api service. There is a character
+limit of 5000 words per single translation.
