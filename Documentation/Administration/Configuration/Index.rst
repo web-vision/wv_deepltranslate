@@ -12,16 +12,13 @@ Configuration
 
 This extension ships a backend module for configuring translations.
 Inside the backend module all available local languages are listed and you have
-to assign a :ref:`DeepL conform language key <_DeepL>`
+to assign a `DeepL conform language key`_
 
 .. figure:: /Images/Administration/settings.png
     :width: 800px
     :alt: Settings
 
     Module Settings
-
-.. _DeepL: https://www.deepl.com/de/docs-api/general/get-languages/
-
 
 Detecting target language
 -------------------------
@@ -37,3 +34,5 @@ From TYPO3 11.5 LTS on the detection of the target language works as following:
 If none of these match against DeepL API, translation for this language
 is disabled for usage within DeepL. Translation buttons and dropdowns
 respect this setting.
+
+.. _DeepL conform language key: https://www.deepl.com/de/docs-api/general/get-languages/

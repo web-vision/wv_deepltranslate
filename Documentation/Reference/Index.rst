@@ -4,8 +4,8 @@ Reference
 =========
 
 .. toctree::
-   :maxdepth: 3
-   :titlesonly:
+    :maxdepth: 3
+    :titlesonly:
 
-   ExtensionConfiguration/Index
-   TableConfiguration/Index
+    ExtensionConfiguration/Index
+    TableConfiguration/Index

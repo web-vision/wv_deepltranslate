@@ -1,8 +1,8 @@
 ﻿..  include:: /Includes.rst.txt
 
-===============
+================
  DeepL Translate
-===============
+================
 
 :Extension key:
    wv_deepltranslate

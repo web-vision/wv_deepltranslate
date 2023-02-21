@@ -7,8 +7,8 @@ Administration
 ==============
 
 .. toctree::
-   :maxdepth: 5
-   :titlesonly:
+    :maxdepth: 5
+    :titlesonly:
 
-   Installation/Index
-   Configuration/Index
+    Installation/Index
+    Configuration/Index
