@@ -4,127 +4,45 @@
 [![Total Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/downloads.svg)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 [![Monthly Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/d/monthly)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 
-## What does it do?
+# TYPO3 extension `wv_deepltranslate`
 
-This extension provides option to translate content elements and TCA record
-fields to desired language (supported by
-[DeepL](https://www.deepl.com/en/api.html)).
-As a fallback, Google Translate option is also provided as they provide support
-for many languages that DeepL isn’t providing. For both DeepL translate and
-Google Translate, there are two modes-normal and autodetect, where the later
-autodetect source language and translates it to the desired language.
+
+This extension provides automated translation of pages, content and records
+to languages supported by [DeepL](https://www.deepl.com/de/docs-api/).
+
+## Features
+
+* Bulk translation via TYPO3 built-in Translation Wizard
+* Single drop down translation parallel to regular page translation
+  * Translates your page with all fields you want
+* One-Click translation of single records
+* Glossary support
+  * Manage your own glossaries in TYPO3
+  * synchronise glossaries to DeepL API
+  * translate content using your glossaries
 
 ## Installation
 
-You can install the extension using:
+Install with your favour:
 
-- Extension manager
-- or composer
+* [TER](https://extensions.typo3.org/extension/wv_deepltranslate/)
+* Extension Manager
+* composer
 
+We prefer composer installation:
 ```bash
 composer req web-vision/wv_deepltranslate
 ```
 
-Once installed ,there appears a DeepL back end module with a settings tab.
-
-## Extension Configuration
-
-Once you installed the extension, you have to set the DeepL API Key under
-extension configuration section
-
-## Translating Content Elements
-
-Once the extension is installed and Api key provided we are good to go for
-translating content elements. On translating content element,There appears
-additional four options apart from normal translate and copy.
-
-- DeepL Translate(auto detect).
-- DeepL Translate.
-- Google Translate(auto detect).
-- Google Translate.
-
-## Translating TCA Records
-
-wv_deepltranslate supports translation of specific fields of TCA records.It understands fields which need to be translated,
-only if their `l10n_mode` is set to `prefixLangTitle`. For example if you need translation of fields of tx_news (teaser and bodytext),
-You need to override those fields like follows:
-
-Add it to TCA/Overrides:
-
-```bash
-example-extension/Configuration/TCA/Overrides/tx_news_domain_model_news.php
-```
-
-```php
-<?php
-
-if (!defined('TYPO3_MODE')) {
-    die();
-}
-
-$GLOBALS['TCA']['tx_news_domain_model_news']['columns']['bodytext']['l10n_mode'] = 'prefixLangTitle';
-$GLOBALS['TCA']['tx_news_domain_model_news']['columns']['teaser']['l10n_mode'] = 'prefixLangTitle';
-```
-
-## Translating Content Elements and TCA Records - Editor users
-
-For the perfect working of wv_deepltranslate with editor users , we need to make sure that the editor has some necessary permissions in `Access Lists`.
-Make sure editors have the following permissions:
-
-* Tables (modify) - Better provide permission to all core tables and necessary third party extension tables.
-* Allowed excludefields
-
-1. Page Content - Atleast provide permissions to `Columns (colPos)`, `Language (sys_language_uid)` and `Transl.Orig (l18n_parent)`
-
-![GitHub Logo](./Documentation/Images/UserManual/page-content.png)
-
-### Page Content
-
-2. Other Tca record fields
-
-![GitHub Logo](./Documentation/Images/UserManual/tca-fields.png)
-
-### Other TCA Fields
-
-> Explicitly allow/deny field values
-
-1. Page Content: Type - Allow all to use all CE types.
-
-![GitHub Logo](./Documentation/Images/UserManual/ce-types.png)
-
-### CE types
-
-## DeepL Module Settings
-
-The settings module helps to assign the sytem languages to either DeepL supported languages or to Google supported languages.
-For example, you can assign German under Austrian German sys language if you wish.
-For assigning a language to a sys language you must enter it’s isocode(ISO 639-1).
-
-## DeepL Glossary
-
-After setting up the core languages create a standard page in page tree.
-
-- In the "Behavior" tab select the option DeepL Glossar in Contains Plugin options.
-
-![Behavior Tab](./Documentation/Images/UserManual/go-to-behavior-tab.png)
-![Glossary Plugin](./Documentation/Images/UserManual/select-container-plugin.png)
-
-- Now you can create DeepL Glossary records on that page. Go to the list module and Create a new record, select the DeepL Glossaries record.
-
-
-![Glossary Record](./Documentation/Images/UserManual/select-glossary-record.png)
-
-- Here you can enter the Term and Description for you Glossary entry and add the Translation term how it should be handled by DeepL translate.
-
-![Glossary Terms](./Documentation/Images/UserManual/terms.png)
-
-- As soon as you have an entry in the glossary it will be considered by DeepL Translation for the pair language.
-## FAQ
-
-See faq [here](https://docs.typo3.org/typo3cms/extensions/wv_deepltranslate/Faq/Index.html)
+|                  | URL                                                               |
+|------------------|-------------------------------------------------------------------|
+| **Repository:**  | https://github.com/web-vision/wv_deepltranslate                   |
+| **Read online:** | https://docs.typo3.org/p/web-vision/wv_deepltranslate/main/en-us/ |
+| **TER:**         | https://extensions.typo3.org/extension/wv_deepltranslate/         |
 
 ## Sponsors
-We appreciate very much the sponsorships of the developments and features for the DeepL Translate Extension for TYPO3.
+We appreciate very much the sponsorships of the developments and features in
+the DeepL Translate Extension for TYPO3.
 
 ### DeepL Glossary feature sponsored by
 * [Universität Osnabrück](https://www.uni-osnabrueck.de)
