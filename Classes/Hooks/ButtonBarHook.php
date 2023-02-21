@@ -5,18 +5,20 @@ namespace WebVision\WvDeepltranslate\Hooks;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class ButtonBarHook
 {
     protected PageRepository $pageRepository;
 
-    public function __construct(PageRepository $pageRepository)
+    public function __construct(?PageRepository $pageRepository = null)
     {
-        $this->pageRepository = $pageRepository;
+        $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class);
     }
 
     /**
@@ -30,33 +32,86 @@ class ButtonBarHook
         $buttons = $params['buttons'];
         $queryParams = $GLOBALS['TYPO3_REQUEST']->getQueryParams();
 
-        // $editArray = GeneralUtility::_GET('edit');
-        // debug($editArray);
+        // do some initials
+        $renderMode = '';
+        $pageId = 0;
+        $elementId = 0;
 
-        $page = $this->pageRepository->getPage($queryParams['id']);
-
-        if ($page['module'] === 'wv_deepltranslate') {
-            // Style button
-            $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-            $button = $buttonBar->makeLinkButton();
-            $button->setIcon($iconFactory->getIcon(
-                'apps-pagetree-folder-contains-glossar',
-                Icon::SIZE_SMALL
-            ));
-            $button->setTitle('Sync Glossary');
-            $button->setShowLabelText(true);
-
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $uri = $uriBuilder->buildUriFromRoute(
-                'glossaryupdate',
-                ['uid' => $queryParams['id']]
+        // we're inside a page
+        if (array_key_exists('id', $queryParams)) {
+            $page = BackendUtility::getRecord(
+                'pages',
+                $queryParams['id'],
+                'uid,module'
             );
-            $button->setHref($uri);
-
-            // Register Button and position it
-            $buttons[ButtonBar::BUTTON_POSITION_LEFT][5][] = $button;
+            if ($page['module'] === 'wv_deepltranslate') {
+                $pageId = $page['uid'];
+                $renderMode = DeeplBackendUtility::RENDER_TYPE_PAGE;
+            }
         }
 
+        // we are inside a glossary dataset
+        if (
+            array_key_exists('edit', $queryParams)
+            && array_key_exists('tx_wvdeepltranslate_glossary', $queryParams['edit'])
+        ) {
+            $renderMode = DeeplBackendUtility::RENDER_TYPE_ELEMENT;
+            $ids = array_keys($queryParams['edit']['tx_wvdeepltranslate_glossary']);
+            $elementId = array_unshift($ids);
+        }
+
+        // no match on renderMode, exit
+        if ($renderMode === '') {
+            return $buttons;
+        }
+
+        switch ($renderMode) {
+            case DeeplBackendUtility::RENDER_TYPE_ELEMENT:
+                $params = $this->buildParamsForSingleEdit($elementId);
+                break;
+            case DeeplBackendUtility::RENDER_TYPE_PAGE:
+                $params = $this->buildParamsArrayForListView($pageId);
+                break;
+        }
+
+        // Style button
+        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $button = $buttonBar->makeLinkButton();
+        $button->setIcon($iconFactory->getIcon(
+            'apps-pagetree-folder-contains-glossar',
+            Icon::SIZE_SMALL
+        ));
+        $button->setTitle('Sync Glossary');
+        $button->setShowLabelText(true);
+
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $uri = $uriBuilder->buildUriFromRoute(
+            'glossaryupdate',
+            $params
+        );
+        $button->setHref($uri);
+
+        // Register Button and position it
+        $buttons[ButtonBar::BUTTON_POSITION_LEFT][5][] = $button;
+
         return $buttons;
+    }
+
+    private function buildParamsArrayForListView(int $id): array
+    {
+        return [
+            'uid' => $id,
+            'mode' => DeeplBackendUtility::RENDER_TYPE_PAGE,
+            'returnUrl' => $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestUri(),
+        ];
+    }
+
+    private function buildParamsForSingleEdit(int $uid): array
+    {
+        return [
+            'uid' => $uid,
+            'mode' => DeeplBackendUtility::RENDER_TYPE_ELEMENT,
+            'returnUrl' => $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestUri(),
+        ];
     }
 }

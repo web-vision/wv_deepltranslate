@@ -100,6 +100,51 @@
 			<trans-unit id="site_configuration.deepl.field.description">
 				<source>Select which target languages to use for DeepL when translating a record into the language</source>
 			</trans-unit>
+
+			<trans-unit id="glossary.title.count">
+				<source>entries</source>
+			</trans-unit>
+			<trans-unit id="glossary.title.count.single">
+				<source>entry</source>
+			</trans-unit>
+			<trans-unit id="glossary.title.sync.true">
+				<source>Synced with DeepL API</source>
+			</trans-unit>
+			<trans-unit id="glossary.title.sync.false">
+				<source>Not synced with DeepL API</source>
+			</trans-unit>
+			<trans-unit id="glossary">
+				<source>Glossary</source>
+			</trans-unit>
+			<trans-unit id="glossary.glossary_name">
+				<source>Glossary name</source>
+			</trans-unit>
+			<trans-unit id="glossary.glossary_lastsync">
+				<source>Last synchronization with DeepL</source>
+			</trans-unit>
+			<trans-unit id="glossary.glossary_ready">
+				<source>DeepL marked glossary as ready to use</source>
+			</trans-unit>
+			<trans-unit id="glossary.tab.sync">
+				<source>DeepL Sync</source>
+			</trans-unit>
+
+			<trans-unit id="glossary.sync.message">
+				<source>Synchronization with DeepL is done. Your glossaries are ready to use.</source>
+			</trans-unit>
+			<trans-unit id="glossary.sync.title">
+				<source>DeepL Sync ready</source>
+			</trans-unit>
+
+			<trans-unit id="glossaryentry">
+				<source>Glossary entry</source>
+			</trans-unit>
+			<trans-unit id="entry.source">
+				<source>Term</source>
+			</trans-unit>
+			<trans-unit id="entry.target">
+				<source>Target</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

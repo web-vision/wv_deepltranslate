@@ -3,80 +3,113 @@ declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Controller;
 
-use TYPO3\CMS\Backend\Routing\UriBuilder;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use WebVision\WvDeepltranslate\Domain\Model\GlossariesSync;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
+use WebVision\WvDeepltranslate\Exception\InvalidArgumentException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class GlossarySyncController
 {
-    public function update()
+    protected DeeplGlossaryService $deeplGlossaryService;
+
+    protected GlossaryRepository $glossaryRepository;
+
+    public function __construct(
+        ?DeeplGlossaryService $deeplGlossaryService = null,
+        ?GlossaryRepository $glossaryRepository = null
+    ) {
+        $this->deeplGlossaryService = $deeplGlossaryService ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
+        $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function update(ServerRequestInterface $request)
     {
-        // $glossaryPageUid = $request->getQueryParams()['uid'];
+        $processingParameters = $request->getQueryParams();
 
-        //create redirect url to edit view of book dataset
-        // $backendUriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        // $uriParameters = ['edit' => ['tx_wvdeepltranslate_domain_model_glossariessync' => [12 => 'edit']]];
-        // $editLink = $backendUriBuilder->buildUriFromRoute('record_edit',
-        //     $uriParameters);
-
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->persistenceManager = $objectManager->get(PersistenceManager::class);
-        $this->deeplGlossaryService = $objectManager->get(DeeplGlossaryService::class);
-        $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
-        $this->glossariesSyncRepository = $objectManager->get(GlossariesSyncRepository::class);
-        $this->languageRepository = $objectManager->get(LanguageRepository::class);
-
-        $systemLanguages = $this->languageRepository->findAll();
-
-        if ($systemLanguages->count() > 0) {
-            // First do some cleanup tasks
-            // @TODO - Need to move this a new task
-            // $this->doCleanupTasks();
-
-            // Process for a new sync
-            $glossaryNamePrefix = 'DeepL';
-            $defaultLangIso = 'de';
-            $sourceLang = $defaultLangIso;
-
-            foreach ($systemLanguages as $lang) {
-                $langUid = (int)$lang->getUid();
-                $langIsoCode = $lang->getLanguageIsoCode();
-
-                // Prepare inputs for DeepL API
-                $targetLang = 'en';
-
-                $entries = $this->glossariesRepository->processGlossariesEntries($langUid);
-                $glossaryName = $glossaryNamePrefix . '-' . strtoupper($sourceLang) . '-' . strtoupper($targetLang);
-                if (!empty($entries)) {
-                    // Create Glossary through API and a DB entry
-                    $glossary = $this->deeplGlossaryService->createGlossary(
-                        $glossaryName,
-                        $entries,
-                        $sourceLang,
-                        $targetLang
-                    );
-
-                    $glossaryId = $glossary['glossary_id'];
-
-                    if (!empty($glossaryId)) {
-                        $newGlossarysync = GeneralUtility::makeInstance(GlossariesSync::class);
-                        $newGlossarysync->setGlossaryId($glossaryId);
-                        $newGlossarysync->setSourceLang($sourceLang);
-                        $newGlossarysync->setTargetLang($targetLang);
-                        $newGlossarysync->setEntries(json_encode($entries));
-                        $this->glossariesSyncRepository->add($newGlossarysync);
-                        $this->persistenceManager->persistAll();
-                    }
-                }
-            }
+        if (!$processingParameters['mode']) {
+            throw new InvalidArgumentException(
+                'Mode is not defined. Synchronization not completed.',
+                1676935386416
+            );
         }
-        return new RedirectResponse('#');
+
+        if (
+            $processingParameters['mode'] !== DeeplBackendUtility::RENDER_TYPE_ELEMENT
+            && $processingParameters['mode'] !== DeeplBackendUtility::RENDER_TYPE_PAGE
+        ) {
+            throw new InvalidArgumentException(
+                'No mode' . $processingParameters['mode'] . ' defined',
+                1676935573680
+            );
+        }
+
+        if (!$processingParameters['uid']) {
+            throw new InvalidArgumentException(
+                'No ID given for glossary synchronization',
+                1676935668643
+            );
+        }
+
+        switch ($processingParameters['mode']) {
+            case DeeplBackendUtility::RENDER_TYPE_PAGE:
+                $this->syncGlossariesOfPage((int)$processingParameters['uid']);
+                break;
+            case DeeplBackendUtility::RENDER_TYPE_ELEMENT:
+                $this->syncSingleGlossary((int)$processingParameters['uid']);
+                break;
+        }
+
+        $flashMessage = GeneralUtility::makeInstance(
+            FlashMessage::class,
+            LocalizationUtility::translate(
+                'glossary.sync.message',
+                'wv_deepltranslate'
+            ),
+            LocalizationUtility::translate(
+                'glossary.sync.title',
+                'wv_deepltranslate'
+            )
+        );
+        GeneralUtility::makeInstance(FlashMessageService::class)
+            ->getMessageQueueByIdentifier()
+            ->enqueue($flashMessage);
+
+        return new RedirectResponse($processingParameters['returnUrl']);
+    }
+
+    private function syncGlossariesOfPage(int $uid): void
+    {
+        $glossaries = $this->glossaryRepository->findAllGlossaries($uid);
+
+        foreach ($glossaries as $glossary) {
+            $this->syncSingleGlossary($glossary['uid']);
+        }
+    }
+
+    private function syncSingleGlossary(int $uid): void
+    {
+        $glossaryInformation = $this->glossaryRepository
+            ->getGlossaryInformationForSync($uid);
+
+        if ($glossaryInformation['id'] !== '') {
+            $this->deeplGlossaryService->deleteGlossary($glossaryInformation['id']);
+        }
+        $glossary = $this->deeplGlossaryService->createGlossary(
+            $glossaryInformation['name'],
+            $glossaryInformation['entries'],
+            $glossaryInformation['source_lang'],
+            $glossaryInformation['target_lang']
+        );
+
+        $this->glossaryRepository->updateLocalGlossary($glossary, $uid);
     }
 }
