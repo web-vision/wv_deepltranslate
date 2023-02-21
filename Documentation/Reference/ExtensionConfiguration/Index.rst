@@ -26,7 +26,7 @@ DeepL API Key
 
    Add your DeepL API Key here.
 
-.. confval:: apiUrl
+.. confval:: apiUrl (deprecated)
 
    :type: string
    :Default: https://api.deepl.com/v2/translate
@@ -65,13 +65,13 @@ DeepL API Key
    prefer_more
       Use more formal language, if possible, otherwise fallback to default
 
-.. confval:: googleapiKey
+.. confval:: googleapiKey (deprecated)
 
    :type: string
 
    The API key for Google translation.
 
-.. confval:: googleapiUrl
+.. confval:: googleapiUrl (deprecated)
 
    :type: string
 

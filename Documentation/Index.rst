@@ -44,4 +44,3 @@ Deepl Translate
    Editor/Index
    Faq/Index
    Reference/Index
-   ChangeLog/Index

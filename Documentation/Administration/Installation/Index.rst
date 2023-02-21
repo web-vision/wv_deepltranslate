@@ -16,7 +16,8 @@ extension by one of the following methods:
 
    in your TYPO3 installation.
 
-#. **Get it from the Extension Manager:** Switch to the module :guilabel:`Admin Tools > Extensions`.
+#. **Get it from the Extension Manager:** Switch to the module
+   :guilabel:`Admin Tools > Extensions`.
    Switch to :guilabel:`Get Extensions` and search for the extension key
    *wv_deepltranslate* and import the extension from the repository.
 
@@ -26,6 +27,9 @@ extension by one of the following methods:
 
 and :ref:`configure <extensionConfiguration>` it.
 
+Inside your own site configuration follow the instructions for
+:ref:`table configuration <tableConfiguration>`.
+
 .. _TER: https://extensions.typo3.org/extension/wv_deepltranslate
 
 Compatibility
@@ -33,8 +37,6 @@ Compatibility
 
 DeepL Translate supports:
 
-================= ======= =======
- DeepL Translate   TYPO3   PHP
-================= ======= =======
-     2.3           9-11    >=7.4
-
+.. csv-table:: Changes
+   :header: "DeepL Translate version","TYPO3 Version","PHP version"
+   :file: ../../Files/versionSupport.csv

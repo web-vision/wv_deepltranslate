@@ -6,6 +6,12 @@ What does it do?
 ================
 
 This extension provides automatic translation to TCA record fields using
-`DeepL <https://www.deepl.com/>`__ supported languages and provides fallback
-of `Google Translate <https://translate.google.com/>`__ on DeepL unsupported
-languages.
+`DeepL <https://www.deepl.com/>`__ supported languages.
+
+.. attention::
+
+   As Google Translator is currently possible option, this
+   is no longer maintained by this extension and will be dropped in next
+   version release.
+
+

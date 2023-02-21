@@ -8,3 +8,4 @@ Reference
    :titlesonly:
 
    ExtensionConfiguration/Index
+   TableConfiguration/Index
