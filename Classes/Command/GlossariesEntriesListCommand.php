@@ -9,39 +9,32 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossariesRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossariesSyncRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\LanguageRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossariesEntriesListCommand extends Command
 {
     protected DeeplGlossaryService $deeplGlossaryService;
 
-    protected GlossariesRepository $glossariesRepository;
-
-    protected GlossariesSyncRepository $glossariesSyncRepository;
-
-    protected LanguageRepository $languageRepository;
-
-    protected PersistenceManager $persistenceManager;
-
-    public function configure(): void
+    public function __construct(
+        string $name = null,
+        ?DeeplGlossaryService $deeplGlossaryService = null
+    ) {
+        parent::__construct($name);
+        $this->deeplGlossaryService = $deeplGlossaryService
+            ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
+    }
+    protected function configure(): void
     {
         $this->setDescription('List Glossary entries or entries by glossary_id');
-        $this->addArgument('glossary_id', InputArgument::OPTIONAL, 'Which glossary you want to fetch (id)?');
+        $this->addArgument(
+            'glossary_id',
+            InputArgument::OPTIONAL,
+            'Which glossary you want to fetch (id)?'
+        );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // Instantiate objects
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->deeplGlossaryService = $objectManager->get(DeeplGlossaryService::class);
-        $this->glossariesRepository = $objectManager->get(GlossariesRepository::class);
-        $this->glossariesSyncRepository = $objectManager->get(GlossariesSyncRepository::class);
-
         $glossary_id = $input->getArgument('glossary_id');
 
         if ($glossary_id) {

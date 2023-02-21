@@ -136,4 +136,24 @@ class GlossaryRepository
 
         return $result['glossary_id'];
     }
+
+    public function removeGlossarySync(string $glossaryId): bool
+    {
+        $db = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getConnectionForTable('tx_wvdeepltranslate_glossary');
+
+        $count = $db->update(
+            'tx_wvdeepltranslate_glossary',
+            [
+                'glossary_id' => '',
+                'glossary_lastsync' => 0,
+                'glossary_ready' => 0,
+            ],
+            [
+                'glossary_id' => $glossaryId,
+            ]
+        );
+
+        return $count >= 1;
+    }
 }
