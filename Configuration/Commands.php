@@ -10,5 +10,8 @@ if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() < 10) {
         'deepl:glossary:list' => [
             'class' => \WebVision\WvDeepltranslate\Command\GlossariesEntriesListCommand::class,
         ],
+        'deepl:glossary:sync' => [
+            'class' => \WebVision\WvDeepltranslate\Command\GlossarySyncCommand::class,
+        ]
     ];
 }

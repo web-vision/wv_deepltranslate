@@ -12,10 +12,12 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\InvalidArgumentException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use WebVision\WvDeepltranslate\Traits\GlossarySyncTrait;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class GlossarySyncController
 {
+    use GlossarySyncTrait;
     protected DeeplGlossaryService $deeplGlossaryService;
 
     protected GlossaryRepository $glossaryRepository;
@@ -93,23 +95,5 @@ class GlossarySyncController
         foreach ($glossaries as $glossary) {
             $this->syncSingleGlossary($glossary['uid']);
         }
-    }
-
-    private function syncSingleGlossary(int $uid): void
-    {
-        $glossaryInformation = $this->glossaryRepository
-            ->getGlossaryInformationForSync($uid);
-
-        if ($glossaryInformation['id'] !== '') {
-            $this->deeplGlossaryService->deleteGlossary($glossaryInformation['id']);
-        }
-        $glossary = $this->deeplGlossaryService->createGlossary(
-            $glossaryInformation['name'],
-            $glossaryInformation['entries'],
-            $glossaryInformation['source_lang'],
-            $glossaryInformation['target_lang']
-        );
-
-        $this->glossaryRepository->updateLocalGlossary($glossary, $uid);
     }
 }

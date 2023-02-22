@@ -96,17 +96,21 @@ class GlossaryRepository
         );
     }
 
-    public function findAllGlossaries(int $pageId): array
+    public function findAllGlossaries(int $pageId = 0): array
     {
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('tx_wvdeepltranslate_glossary');
 
+        $identifiers = [];
+        if ($pageId > 0) {
+            $identifiers = [
+                'pid' => $pageId,
+            ];
+        }
         return $db->select(
             ['uid'],
             'tx_wvdeepltranslate_glossary',
-            [
-                'pid' => $pageId,
-            ]
+            $identifiers
         )->fetchAll();
     }
 

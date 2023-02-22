@@ -20,6 +20,12 @@ services:
         command: 'deepl:glossary:list'
         schedulable: false
 
+  WebVision\WvDeepltranslate\Command\GlossarySyncCommand:
+    tags:
+      - name: 'console.command'
+        command: 'deepl:glossary:sync'
+        schedulable: true
+
   WebVision\WvDeepltranslate\Hooks\DataHandlerHook:
     public: true
 

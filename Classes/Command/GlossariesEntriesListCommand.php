@@ -39,11 +39,15 @@ class GlossariesEntriesListCommand extends Command
 
         if ($glossary_id) {
             $this->listAllGloassaryEntriesById($output, $glossary_id);
-            return Command::SUCCESS;
+            return 0;
         }
 
+        /**
+         * return 0 HAS to be for TYPO3 v9 support
+         * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
+         */
         $this->listAllGloassaryEntries($output);
-        return Command::SUCCESS;
+        return 0;
     }
 
     private function listAllGloassaryEntries(OutputInterface $output): void

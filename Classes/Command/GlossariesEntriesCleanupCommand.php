@@ -57,13 +57,21 @@ class GlossariesEntriesCleanupCommand extends Command
     {
         if ($input->getOption('yes') === false) {
             $output->writeln('Deletion not confirmed. Cancel.');
-            return Command::INVALID;
+            /**
+             * return 2 HAS to be for TYPO3 v9 support
+             * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
+             */
+            return 2;
         }
 
         $this->removeAllGlossaryEntries($output);
         $output->writeln('Success!');
 
-        return Command::SUCCESS;
+        /**
+         * return 0 HAS to be for TYPO3 v9 support
+         * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
+         */
+        return 0;
     }
 
     private function removeAllGlossaryEntries(OutputInterface $output): void
