@@ -94,6 +94,11 @@ return [
                 'type' => 'inline',
                 'foreign_table' => 'tx_wvdeepltranslate_glossaryentry',
                 'foreign_field' => 'glossary',
+                'appearance' => [
+                    'dragdrop' => false,
+                    'localize' => false,
+                    'sort' => false,
+                ],
             ],
         ],
         'glossary_lastsync' => [

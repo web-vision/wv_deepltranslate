@@ -19,6 +19,10 @@ class LanguageSelectorItemsProc
 
         $possibleSources = $possibleGlossaryConfig[$configuration['row']['source_lang']];
 
+        if (is_null($possibleSources)) {
+            return;
+        }
+
         foreach ($possibleSources as $possibleSource) {
             $label = LocalizationUtility::translate(
                 sprintf('LLL:EXT:core/Resources/Private/Language/db.xlf:sys_language.language_isocode.%s', $possibleSource)
