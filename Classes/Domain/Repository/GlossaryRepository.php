@@ -156,4 +156,23 @@ class GlossaryRepository
 
         return $count >= 1;
     }
+
+    public function getGlossariesDeeplIdSet(): array
+    {
+        $db = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('tx_wvdeepltranslate_glossary');
+        $statement = $db
+            ->select('uid', 'glossary_id')
+            ->from('tx_wvdeepltranslate_glossary')
+            ->where(
+                $db->expr()->neq('glossary_id', $db->createNamedParameter(''))
+            );
+
+        $result = $statement->execute()->fetch();
+        if ($result === false) {
+            return [];
+        }
+
+        return $result;
+    }
 }

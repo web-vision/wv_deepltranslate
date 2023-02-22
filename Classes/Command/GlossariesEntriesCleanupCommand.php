@@ -102,7 +102,20 @@ class GlossariesEntriesCleanupCommand extends Command
         }
 
         $output->writeln('');
-
         $table->render();
+        $output->writeln('');
+
+        $findNotConnected = $this->glossaryRepository->getGlossariesDeeplIdSet();
+
+        if (count($findNotConnected) === 0) {
+            $output->writeln('No glossaries with sync mismatch.');
+        }
+        foreach ($findNotConnected as $notConnected) {
+            $this->glossaryRepository->removeGlossarySync($notConnected['glossary_id']);
+        }
+
+        $output->writeln([
+            sprintf('Found %d glossaries with possible sync mismatch. Cleaned up.', count($findNotConnected))
+        ]);
     }
 }
