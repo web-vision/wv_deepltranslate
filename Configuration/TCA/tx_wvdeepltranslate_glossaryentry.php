@@ -9,7 +9,7 @@ return [
         'label_alt' => 'target',
         'label_alt_force' => true,
         'iconfile' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
-        'default_sortby' => 'uid',
+        'default_sortby' => 'source ASC',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
