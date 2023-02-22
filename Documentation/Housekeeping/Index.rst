@@ -3,7 +3,7 @@
 Housekeeping
 ============
 
-For cleanup and overview, two CLI commands where added.
+For cleanup, sync and overview, three CLI commands are available.
 
 Overview
 --------
@@ -54,5 +54,24 @@ the information, if database was updated to this glossary.
 Your glossaries in TYPO3 are not deleted with this command.
 
 After this, you are able to sync your glossaries again to DeepL.
+
+
+Synchronisation
+---------------
+
+Synchronisation is done by CLI command or as scheduled task (as configured
+CLI Command).
+
+.. code-block:: bash
+
+    vendor/bin/typo3 deepl:glossary:sync
+
+or, with `typo3_console`_ installed:
+
+.. code-block:: bash
+
+    vendor/bin/typo3cms deepl:glossary:sync
+
+Accepts pageId as option. If not given, syncs all available glossaries.
 
 .. _typo3_console: https://extensions.typo3.org/extension/typo3_console
