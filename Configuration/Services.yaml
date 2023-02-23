@@ -26,9 +26,6 @@ services:
         command: 'deepl:glossary:sync'
         schedulable: true
 
-  WebVision\WvDeepltranslate\Hooks\DataHandlerHook:
-    public: true
-
   WebVision\WvDeepltranslate\Service\DeeplService:
     arguments:
       $cache: '@cache.wvdeepltranslate'
