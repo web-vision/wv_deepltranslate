@@ -29,7 +29,7 @@ if (!defined('TYPO3_MODE')) {
         || (
             version_compare((string)$typo3VersionArray['version_main'], '11', '=')
             && isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['wv_deepltranslate']['activateBackendModule'])
-            && $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['wv_deepltranslate']['activateBackendModule'] = true
+            && (bool)$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['wv_deepltranslate']['activateBackendModule'] === true
         )
     ) {
         //register backend module
