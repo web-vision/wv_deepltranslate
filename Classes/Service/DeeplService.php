@@ -177,9 +177,6 @@ class DeeplService
 
         foreach ($supportedSourceLanguages as $supportedLanguage) {
             $this->apiSupportedLanguages['source'][] = $supportedLanguage['language'];
-            if ($supportedLanguage['supports_formality'] === true) {
-                $this->formalitySupportedLanguages[] = $supportedLanguage['language'];
-            }
         }
     }
 
