@@ -61,6 +61,30 @@ class GlossaryRepository
         return $glossaryInformation;
     }
 
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function findByGlossaryId(string $glossaryId): ?array
+    {
+        $db = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getConnectionForTable('tx_wvdeepltranslate_glossary');
+
+        $result = $db->select(
+            ['*'],
+            'tx_wvdeepltranslate_glossary',
+            [
+                'glossary_id' => $glossaryId,
+            ]
+        );
+
+        if ($result->rowCount() === 0) {
+            return null;
+        }
+
+        return $result->fetch();
+    }
+
     /**
      * @param array{
      *     glossary_id?: string,
