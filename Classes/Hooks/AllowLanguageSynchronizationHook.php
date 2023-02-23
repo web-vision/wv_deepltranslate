@@ -19,7 +19,12 @@ class AllowLanguageSynchronizationHook
                 }
                 $l10nState = [];
                 foreach ($element as $column => $value) {
+                    if (!isset($GLOBALS['TCA'][$table]['columns'][$column])) {
+                        continue;
+                    }
+
                     $columnConfig = $GLOBALS['TCA'][$table]['columns'][$column];
+
                     if (
                         isset($columnConfig['config']['behaviour'])
                         && is_array($columnConfig['config']['behaviour'])
