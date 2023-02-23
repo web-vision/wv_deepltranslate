@@ -20,7 +20,6 @@
             <label class="col-sm-4 col">{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
             <div class="col col-sm-8">
                 <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
-                    <deepl:deeplTranslate context="{context}"/>
                     <f:for each="{deepl:deeplTranslate(context: '{context}')}" as="languageName" key="url">
                         <option value="{url}">{languageName}</option>
                     </f:for>
