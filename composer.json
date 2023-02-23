@@ -71,7 +71,6 @@
 		"armin/editorconfig-cli": "^1.5",
 		"b13/container": "^1.6",
 		"friendsofphp/php-cs-fixer": "^3.0",
-		"georgringer/news": "^10.0",
 		"helhum/typo3-console": "^5.8 || ^6.7 || ^7.1",
 		"helmich/typo3-typoscript-lint": "^2.5",
 		"nimut/testing-framework": "^6.0",
