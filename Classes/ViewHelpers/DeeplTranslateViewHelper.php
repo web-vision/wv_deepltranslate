@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace WebVision\WvDeepltranslate\ViewHelpers;
 
 use TYPO3\CMS\Backend\View\PageLayoutContext;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
@@ -33,13 +34,21 @@ class DeeplTranslateViewHelper extends AbstractViewHelper
                 $siteLanguage->getLanguageId() != -1
                 && $siteLanguage->getLanguageId() != 0
             ) {
+                if (!DeeplBackendUtility::checkCanBeTranslated($context->getPageId(), $siteLanguage->getLanguageId())) {
+                    continue;
+                }
                 $languageMatch[$siteLanguage->getTitle()] = $siteLanguage->getLanguageId();
             }
         }
 
+        if (count($languageMatch) === 0) {
+            return $options;
+        }
         foreach ($context->getNewLanguageOptions() as $key => $possibleLanguage) {
             if ($key === 0) {
-                $options[] = $possibleLanguage;
+                continue;
+            }
+            if (!array_key_exists($possibleLanguage, $languageMatch)) {
                 continue;
             }
             $parameters = [

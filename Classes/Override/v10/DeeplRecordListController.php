@@ -35,18 +35,11 @@ class DeeplRecordListController extends RecordListController
         );
 
         if ($options == '') {
-            return '';
+            return $originalOutput;
         }
 
         return str_ireplace('</div></div>', '</div>', $originalOutput)
             . '<div class="form-group">'
-                . sprintf(
-                    '<label>%s</label>',
-                    LocalizationUtility::translate(
-                        'backend.label',
-                        'wv_deepltranslate'
-                    )
-                )
                 . '<select class="form-control input-sm" name="createNewLanguage" onchange="window.location.href=this.options[this.selectedIndex].value">'
                     . $options
                 . '</select>'

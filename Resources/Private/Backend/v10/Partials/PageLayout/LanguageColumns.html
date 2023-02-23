@@ -3,9 +3,9 @@
     xmlns:deepl="http://typo3.org/ns/WebVision/WvDeepltranslate/ViewHelpers"
     xmlns:f="http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers"
 >
-<f:comment>
+<f:comment><!--
     Use in TYPO3 v10 when feature toggle enabled
-</f:comment>
+--></f:comment>
 <f:if condition="{context.newLanguageOptions}">
     <div class="form-inline form-inline-spaced">
         <div class="form-group">
@@ -15,14 +15,19 @@
                 </f:for>
             </select>
         </div>
-        <div class="form-group">
-            <label >{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
-            <select class="form-control input-sm" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
-                <f:for each="{deepl:deeplTranslate(context: '{context}')}" as="languageName" key="url">
-                    <option value="{url}">{languageName}</option>
-                </f:for>
-            </select>
-        </div>
+        <f:alias map="{deeplLanguages: '{deepl:deeplTranslate(context: \'{context}\')}'}">
+            <f:if condition="{deeplLanguages -> f:count()} > 0">
+                <div class="form-group">
+                    <label >{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
+                    <select class="form-control input-sm" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
+                        <option><f:translate key="backend.label" extensionName="wv_deepltranslate" /></option>
+                        <f:for each="{deeplLanguages}" as="languageName" key="url">
+                            <option value="{url}">{languageName}</option>
+                        </f:for>
+                    </select>
+                </div>
+            </f:if>
+        </f:alias>
     </div>
 </f:if>
 <f:comment><!-- Identical to backend/Resources/Partials/PageLayout/LanguageColumns only copied --></f:comment>

@@ -17,6 +17,9 @@ use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
+use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
+use WebVision\WvDeepltranslate\Service\LanguageService;
 
 class DeeplBackendUtility
 {
@@ -187,7 +190,7 @@ class DeeplBackendUtility
         $deeplIcon = GeneralUtility::makeInstance(
             IconFactory::class
         )->getIcon(
-            'actions-localize-deepl',
+            'deepl-grey-logo',
             Icon::SIZE_OVERLAY
         );
         GeneralUtility::makeInstance(IconRegistry::class)
@@ -248,11 +251,13 @@ class DeeplBackendUtility
         }
         // If any languages are left, make selector:
         if (!empty($availableTranslations)) {
-            $output = sprintf(
-                '<option value="">%s</option>',
-                htmlspecialchars(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:new_language'))
-            );
+            $output = '';
             foreach ($availableTranslations as $languageUid => $languageTitle) {
+                // check if language can be translated with DeepL
+                // otherwise continue to next
+                if (!DeeplBackendUtility::checkCanBeTranslated($id, $languageUid)) {
+                    continue;
+                }
                 // Build localize command URL to DataHandler (tce_db)
                 // which redirects to FormEngine (record_edit)
                 // which, when finished editing should return back to the current page (returnUrl)
@@ -268,10 +273,37 @@ class DeeplBackendUtility
                 $targetUrl = self::buildBackendRoute('tce_db', $params);
                 $output .= '<option value="' . htmlspecialchars($targetUrl) . '">' . htmlspecialchars($languageTitle) . '</option>';
             }
+            if ($output !== '') {
+                $output = sprintf(
+                    '<option value="">%s</option>%s',
+                    htmlspecialchars(LocalizationUtility::translate('backend.label', 'wv_deepltranslate')),
+                    $output
+                );
+            }
 
             return $output;
         }
         return '';
+    }
+
+    public static function checkCanBeTranslated(int $pageId, int $languageId): bool
+    {
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $site = $languageService->getCurrentSite('pages', $pageId);
+        if ($site === null) {
+            return false;
+        }
+        try {
+            $languageService->getSourceLanguage($site['site']);
+        } catch (LanguageIsoCodeNotFoundException $e) {
+            return false;
+        }
+        try {
+            $languageService->getTargetLanguage($site['site'], $languageId);
+        } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException $e) {
+            return false;
+        }
+        return true;
     }
 
     private static function getBackendUserAuthentication(): BackendUserAuthentication
