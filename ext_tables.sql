@@ -3,9 +3,9 @@ CREATE TABLE tx_deepl_settings (
 );
 
 CREATE TABLE tx_wvdeepltranslate_glossaryentry (
-		source varchar(255),
-		target varchar(255),
-		glossary int(11)
+		source varchar(255) default '',
+		target varchar(255) default '',
+		glossary int(11) unsigned default 0
 );
 
 CREATE TABLE tx_wvdeepltranslate_glossary (
