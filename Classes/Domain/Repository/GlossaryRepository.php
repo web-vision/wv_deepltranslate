@@ -124,6 +124,12 @@ class GlossaryRepository
         );
     }
 
+    public function hasGlossariesOnPage(int $pageId): bool
+    {
+        $glossaries = $this->findAllGlossaries($pageId);
+        return count($glossaries) > 0;
+    }
+
     public function findAllGlossaries(int $pageId = 0): array
     {
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -139,7 +145,7 @@ class GlossaryRepository
             ['uid'],
             'tx_wvdeepltranslate_glossary',
             $identifiers
-        )->fetchAll();
+        )->fetchAll() ?: [];
     }
 
     public function getGlossaryBySourceAndTarget(string $sourceLanguage, string $targetLanguage): ?string

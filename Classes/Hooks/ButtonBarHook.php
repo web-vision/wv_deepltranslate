@@ -6,20 +6,32 @@ namespace WebVision\WvDeepltranslate\Hooks;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossaryEntryRepository;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class ButtonBarHook
 {
     protected PageRepository $pageRepository;
 
-    public function __construct(?PageRepository $pageRepository = null)
-    {
+    private GlossaryRepository $glossaryRepository;
+
+    private GlossaryEntryRepository $glossaryEntryRepository;
+
+    public function __construct(
+        ?PageRepository $pageRepository = null,
+        ?GlossaryRepository $glossaryRepository = null,
+        ?GlossaryEntryRepository $glossaryEntryRepository = null
+    ) {
         $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class);
+        $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
+        $this->glossaryEntryRepository = $glossaryEntryRepository ??GeneralUtility::makeInstance(GlossaryEntryRepository::class);
     }
 
     /**
@@ -46,7 +58,11 @@ class ButtonBarHook
                 $queryParams['id'],
                 'uid,module'
             );
-            if ($page['module'] === 'wv_deepltranslate') {
+
+            if (
+                $this->getBackendUserAuthentication()->check('tables_modify', 'tx_wvdeepltranslate_glossary')
+                && $this->glossaryRepository->hasGlossariesOnPage((int)$queryParams['id'])
+            ) {
                 $pageId = $page['uid'];
                 $renderMode = DeeplBackendUtility::RENDER_TYPE_PAGE;
             }
@@ -57,9 +73,12 @@ class ButtonBarHook
             isset($queryParams['edit'])
             && isset($queryParams['edit']['tx_wvdeepltranslate_glossary'])
         ) {
-            $renderMode = DeeplBackendUtility::RENDER_TYPE_ELEMENT;
             $ids = array_keys($queryParams['edit']['tx_wvdeepltranslate_glossary']);
             $elementId = array_unshift($ids);
+
+            if ($this->glossaryEntryRepository->hasEntriesForGlossary((int)$elementId)) {
+                $renderMode = DeeplBackendUtility::RENDER_TYPE_ELEMENT;
+            }
         }
 
         // no match on renderMode, exit
@@ -123,5 +142,10 @@ class ButtonBarHook
             'mode' => DeeplBackendUtility::RENDER_TYPE_ELEMENT,
             'returnUrl' => $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestUri(),
         ];
+    }
+
+    private function getBackendUserAuthentication(): BackendUserAuthentication
+    {
+        return $GLOBALS['BE_USER'];
     }
 }
