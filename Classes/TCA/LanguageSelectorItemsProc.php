@@ -17,9 +17,13 @@ class LanguageSelectorItemsProc
 
         $possibleGlossaryConfig = $glossaryService->getPossibleGlossaryLanguageConfig();
 
+        if (!isset($configuration['row']['source_lang'])) {
+            return;
+        }
+
         $possibleSources = $possibleGlossaryConfig[$configuration['row']['source_lang']];
 
-        if (is_null($possibleSources)) {
+        if ($possibleSources === null) {
             return;
         }
 
@@ -54,10 +58,16 @@ class LanguageSelectorItemsProc
             $parameters['row']['uid'],
             'entries,glossary_id,glossary_lastsync,tstamp'
         );
+
+        if ($entries === null) {
+            return;
+        }
+
         $localizationString = 'glossary.title.count';
-        if ($entries['entries'] === 1) {
+        if (isset($entries['entries']) && (int)$entries['entries'] === 1) {
             $localizationString = 'glossary.title.count.single';
         }
+
         $isSync = false;
         if (
             $entries['glossary_id'] != ''
@@ -65,10 +75,11 @@ class LanguageSelectorItemsProc
         ) {
             $isSync = true;
         }
+
         $parameters['title'] = sprintf(
             '%s (%d %s) [%s]',
             $parameters['row']['glossary_name'],
-            $entries['entries'],
+            (int)$entries['entries'] ?? 0,
             LocalizationUtility::translate(
                 $localizationString,
                 'wv_deepltranslate'

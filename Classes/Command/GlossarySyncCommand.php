@@ -16,9 +16,11 @@ use WebVision\WvDeepltranslate\Traits\GlossarySyncTrait;
 class GlossarySyncCommand extends Command
 {
     use GlossarySyncTrait;
+
     protected DeeplGlossaryService $deeplGlossaryService;
 
     protected GlossaryRepository $glossaryRepository;
+
     public function __construct(
         string $name = null,
         ?DeeplGlossaryService $deeplGlossaryService = null,

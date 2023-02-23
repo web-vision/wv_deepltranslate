@@ -40,7 +40,7 @@ class ButtonBarHook
         $title = '';
 
         // we're inside a page
-        if (array_key_exists('id', $queryParams)) {
+        if (isset($queryParams['id'])) {
             $page = BackendUtility::getRecord(
                 'pages',
                 $queryParams['id'],
@@ -54,8 +54,8 @@ class ButtonBarHook
 
         // we are inside a glossary dataset
         if (
-            array_key_exists('edit', $queryParams)
-            && array_key_exists('tx_wvdeepltranslate_glossary', $queryParams['edit'])
+            isset($queryParams['edit'])
+            && isset($queryParams['edit']['tx_wvdeepltranslate_glossary'])
         ) {
             $renderMode = DeeplBackendUtility::RENDER_TYPE_ELEMENT;
             $ids = array_keys($queryParams['edit']['tx_wvdeepltranslate_glossary']);

@@ -37,7 +37,7 @@ class GlossarySyncController
     {
         $processingParameters = $request->getQueryParams();
 
-        if (!$processingParameters['mode']) {
+        if (!isset($processingParameters['mode'])) {
             throw new InvalidArgumentException(
                 'Mode is not defined. Synchronization not completed.',
                 1676935386416
@@ -54,7 +54,7 @@ class GlossarySyncController
             );
         }
 
-        if (!$processingParameters['uid']) {
+        if (!isset($processingParameters['uid'])) {
             throw new InvalidArgumentException(
                 'No ID given for glossary synchronization',
                 1676935668643

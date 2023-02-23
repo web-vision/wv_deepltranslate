@@ -78,8 +78,7 @@ class GlossariesEntriesCleanupCommand extends Command
     {
         $glossaries = $this->deeplGlossaryService->listGlossaries();
 
-        $output->writeln($glossaries['glossaries']);
-        if (empty($glossaries) || empty($glossaries['glossaries'])) {
+        if (empty($glossaries['glossaries'])) {
             $output->writeln('No glossaries found with sync to API');
             return;
         }
@@ -90,6 +89,10 @@ class GlossariesEntriesCleanupCommand extends Command
         $removedGlossary = [];
 
         foreach ($glossaries['glossaries'] as $eachGlossary) {
+            if (!isset($eachGlossary['glossary_id'])) {
+                continue;
+            }
+
             $id = $eachGlossary['glossary_id'];
             $this->deeplGlossaryService->deleteGlossary($id);
             $databaseUpdated = $this->glossaryRepository->removeGlossarySync($id);

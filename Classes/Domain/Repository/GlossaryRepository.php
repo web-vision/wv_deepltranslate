@@ -63,30 +63,34 @@ class GlossaryRepository
 
     /**
      * @param array{
-     *     glossary_id: string,
-     *     name: string,
-     *     ready: bool,
-     *     source_lang: string,
-     *     target_lang: string,
-     *     creation_time: string,
-     *     entry_count: int
+     *     glossary_id?: string,
+     *     name?: string,
+     *     ready?: bool,
+     *     source_lang?: string,
+     *     target_lang?: string,
+     *     creation_time?: string,
+     *     entry_count?: int
      * } $information
      */
     public function updateLocalGlossary(array $information, int $uid): void
     {
-        $dateTimeFormat = 'Y-m-d\TH:i:s.uT';
-        $glossarySyncTimestamp = DateTimeImmutable::createFromFormat(
-            $dateTimeFormat,
-            $information['creation_time']
-        )->getTimestamp();
+        $glossarySyncTimestamp = 0;
+        if (isset($information['creation_time'])) {
+            $glossarySyncTimestamp = DateTimeImmutable::createFromFormat(
+                'Y-m-d\TH:i:s.uT',
+                $information['creation_time']
+            )->getTimestamp();
+        }
+
         $insertParams = [
-            'glossary_id' => $information['glossary_id'],
+            'glossary_id' => $information['glossary_id'] ?? '',
             'glossary_ready' => $information['ready'] ? 1 : 0,
             'glossary_lastsync' => $glossarySyncTimestamp,
         ];
 
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('tx_wvdeepltranslate_glossary');
+
         $db->update(
             'tx_wvdeepltranslate_glossary',
             $insertParams,

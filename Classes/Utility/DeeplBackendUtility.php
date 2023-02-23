@@ -26,6 +26,7 @@ class DeeplBackendUtility
     public const RENDER_TYPE_PAGE = 'page';
 
     public const RENDER_TYPE_ELEMENT = 'element';
+
     private static string $apiKey = '';
     /**
      * @deprecated
