@@ -1,41 +1,17 @@
 <?php
+
 declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2022 Kallol Chakraborty <kallol@web-vision.de>, web-vision GmbH
- *
- *  You may not remove or change the name of the author above. See:
- *  http://www.gnu.org/licenses/gpl-faq.html#IWantCredit
- *
- *  This script is part of the Typo3 project. The Typo3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *  A copy is found in the textfile GPL.txt and important notices to the license
- *  from the author is found in LICENSE.txt distributed with these scripts.
- *
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 use WebVision\WvDeepltranslate\Service\Client\Client;
+use WebVision\WvDeepltranslate\Service\Client\ClientInterface;
+use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 
 class DeeplGlossaryService
 {
@@ -54,6 +30,8 @@ class DeeplGlossaryService
      */
     public const API_VERSION = '2';
 
+    private const GLOSSARY_FORMAT = 'tsv';
+
     /**
      * @var ClientInterface
      */
@@ -69,12 +47,12 @@ class DeeplGlossaryService
      */
     protected string $apiUrl;
 
-    public RequestFactory $requestFactory;
+    private FrontendInterface $cache;
 
-    public function __construct()
-    {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
+    public function __construct(
+        ?FrontendInterface $cache = null
+    ) {
+        $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
 
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
         $this->apiKey = $extensionConfiguration['apiKey'];
@@ -120,9 +98,16 @@ class DeeplGlossaryService
      * @param array $entries
      * @param string $sourceLang
      * @param string $targetLang
-     * @param string $entriesFormat
      *
-     * @return array|null
+     * @return array{
+     *     glossary_id: string,
+     *     name: string,
+     *     ready: bool,
+     *     source_lang: string,
+     *     target_lang: string,
+     *     creation_time: string,
+     *     entry_count: int
+     * }
      *
      * @throws DeepLException
      */
@@ -130,20 +115,26 @@ class DeeplGlossaryService
         string $name,
         array $entries,
         string $sourceLang = 'de',
-        string $targetLang = 'en',
-        string $entriesFormat = 'tsv'
+        string $targetLang = 'en'
     ) {
-        $formattedEntries = '';
-        foreach ($entries as $source => $target) {
-            $formattedEntries .= sprintf("%s\t%s\n", $source, $target);
+        if (empty($entries)) {
+            throw new GlossaryEntriesNotExistException(
+                'Glossary Entries are required',
+                1677169192
+            );
+        }
+
+        $formattedEntries = [];
+        foreach ($entries as $entry) {
+            $formattedEntries[] = sprintf("%s\t%s", $entry['source'], $entry['target']);
         }
 
         $paramsArray = [
             'name' => $name,
             'source_lang'    => $sourceLang,
             'target_lang'    => $targetLang,
-            'entries'        => $formattedEntries,
-            'entries_format' => $entriesFormat,
+            'entries'        => implode("\n", $formattedEntries),
+            'entries_format' => self::GLOSSARY_FORMAT,
         ];
 
         $url  = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
@@ -214,5 +205,24 @@ class DeeplGlossaryService
         }
 
         return $entries;
+    }
+
+    public function getPossibleGlossaryLanguageConfig(): array
+    {
+        $cacheIdentifier = 'wv-deepl-glossary-pairs';
+        if (($pairMappingArray = $this->cache->get($cacheIdentifier)) !== false) {
+            return $pairMappingArray;
+        }
+
+        $possiblePairs = $this->listLanguagePairs();
+
+        $pairMappingArray = [];
+        foreach ($possiblePairs['supported_languages'] as $possiblePair) {
+            $pairMappingArray[$possiblePair['source_lang']][] = $possiblePair['target_lang'];
+        }
+
+        $this->cache->set($cacheIdentifier, $pairMappingArray);
+
+        return $pairMappingArray;
     }
 }

@@ -8,6 +8,8 @@ if (!defined('TYPO3_MODE')) {
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:wv_deepltranslate/Configuration/TsConfig/Page/pagetsconfig.tsconfig">'
     );
 
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['wv_deepltranslate'] =
+        \WebVision\WvDeepltranslate\Hooks\ButtonBarHook::class . '->getButtons';
     //allowLanguageSynchronizationHook manipulates l10n_state
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
         = \WebVision\WvDeepltranslate\Hooks\AllowLanguageSynchronizationHook::class;
@@ -22,9 +24,6 @@ if (!defined('TYPO3_MODE')) {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all']['deepl-1675946132'] =
         \WebVision\WvDeepltranslate\Hooks\DeeplPreviewFlagGeneratePageHook::class . '->renderDeeplPreviewFlag';
 
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processTranslateToClass'][] = \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] = \WebVision\WvDeepltranslate\Hooks\DataHandlerHook::class;
     //xclass localizationcontroller for localizeRecords() and process() action
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\Page\LocalizationController::class] = [
         'className' => \WebVision\WvDeepltranslate\Override\LocalizationController::class,

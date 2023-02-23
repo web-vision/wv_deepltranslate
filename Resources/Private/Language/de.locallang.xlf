@@ -12,12 +12,12 @@
 				<target>Mit DeepL übersetzen</target>
 			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
-				<source>Translating content via Deepl translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
-				<target>Beim Übersetzen von Inhalten über Deepl Translate wird eine Übersetzung aus der Ausgangssprache in die Sprache erstellt, in die Sie übersetzen , Niederländisch und Polnisch. Andere Sprachen werden ignoriert und werden standardmäßig auf die normale Übersetzungsoperation von TYPO3 umgestellt.</target>
+				<source>Translating content via DeepL translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
+				<target>Beim Übersetzen von Inhalten über DeepL Translate wird eine Übersetzung aus der Ausgangssprache in die Sprache erstellt, in die Sie übersetzen , Niederländisch und Polnisch. Andere Sprachen werden ignoriert und werden standardmäßig auf die normale Übersetzungsoperation von TYPO3 umgestellt.</target>
 			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslateAuto" xml:space="preserve">
-				<source>Translating content via Deepl translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
-				<target>Durch das Übersetzen von Inhalten über Deepl Translate (automatische Erkennung) wird eine Übersetzung aus der automatisch erkannten Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Der übersetzte Inhalt stammt vom Deepl-Übersetzungsdienst, der zu 99 Prozent genau ist. Sprachen Deutsch, Spanisch, Italienisch, Niederländisch und Polnisch. Andere Sprachen werden ignoriert und verwenden standardmäßig den normalen Übersetzungsvorgang von TYPO3.</target>
+				<source>Translating content via DeepL translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
+				<target>Durch das Übersetzen von Inhalten über DeepL Translate (automatische Erkennung) wird eine Übersetzung aus der automatisch erkannten Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Der übersetzte Inhalt stammt vom DeepL-Übersetzungsdienst, der zu 99 Prozent genau ist. Sprachen Deutsch, Spanisch, Italienisch, Niederländisch und Polnisch. Andere Sprachen werden ignoriert und verwenden standardmäßig den normalen Übersetzungsvorgang von TYPO3.</target>
 			</trans-unit>
 			<trans-unit id="localize.educate.googleTranslate" xml:space="preserve">
 				<source>Translating content via Google Translate will create a translation  from source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
@@ -28,8 +28,8 @@
 				<target>Beim Übersetzen von Inhalten über Google Übersetzer (automatische Erkennung) wird eine Übersetzung aus der automatisch erkannten Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Die übersetzten Inhalte stammen vom Google-Übersetzungsdienst. Der Google-Dienst unterstützt einen fairen Anteil von <![CDATA[<a href= "https://cloud.google.com/translate/docs/languages" target="_blank">Sprachen</a>]]>.</target>
 			</trans-unit>
 			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>Deepl Settings</source>
-				<target>Deepl Settings</target>
+				<source>DeepL Settings</source>
+				<target>DeepL Settings</target>
 			</trans-unit>
 			<trans-unit id="settings_success" xml:space="preserve">
 				<source>Language assignments saved successfully</source>
@@ -56,17 +56,13 @@
 				<target>Zugewiesene Sprache (ISO-Code)</target>
 			</trans-unit>
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
-				<source>Deepl</source>
-				<target>Deepl</target>
+				<source>DeepL</source>
+				<target>DeepL</target>
 			</trans-unit>
 
 			<trans-unit id="glossary.term" xml:space="preserve">
 				<source>Term</source>
 				<target>Begriff</target>
-			</trans-unit>
-			<trans-unit id="glossary.description" xml:space="preserve">
-				<source>Description</source>
-				<target>Beschreibung</target>
 			</trans-unit>
 
 			<trans-unit id="glossary.glossary_id" xml:space="preserve">
@@ -85,22 +81,26 @@
 				<source>Entries</source>
 				<target>Einträge</target>
 			</trans-unit>
+			<trans-unit id="glossary.entries.description">
+				<source>The glossaries are only passed to the API if entries are available.</source>
+				<target>The glossaries are only passed to the API if entries are available.</target>
+			</trans-unit>
 
 			<trans-unit id="pages.deepl.tab.label">
 				<source>DeepL Translate</source>
 				<target>DeepL Übersetzung</target>
 			</trans-unit>
 			<trans-unit id="pages.tx_wvdeepltranslate_content_not_checked">
-				<source>Deepl Translated Content was not checked</source>
-				<target>Deepl übersetzte Inhalte nicht geprüft</target>
+				<source>DeepL Translated Content was not checked</source>
+				<target>DeepL übersetzte Inhalte nicht geprüft</target>
 			</trans-unit>
 			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
-				<source>Last Translated Date</source>
-				<target>Letzter Übersetzung Datum</target>
+				<source>Last translation date</source>
+				<target>Letzte Übersetzung Datum</target>
 			</trans-unit>
 			<trans-unit id="preview.flag">
-				<source>Translated with Deepl</source>
-				<target>Übersetzt mit Deepl</target>
+				<source>Translated with DeepL</source>
+				<target>Übersetzt mit DeepL</target>
 			</trans-unit>
 			<trans-unit id="deprecated.deepl-be.title">
 				<source>!!! Module is Deprecated !!!</source>
@@ -113,6 +113,70 @@
 				<target><![CDATA[Wir werden ab der TYPO3 V11 dieses Backend Module auflösen und die Konfiguration in der Site Configuration verschieben.
 					Dies muss vorgenommen werden, weil "sys_language" Eintrage ab TYPO3 11 deprecated sind und im Übersetzung nicht mehr berücksichtigt werden.
 				]]></target>
+			</trans-unit>
+
+			<trans-unit id="glossary.title.count">
+				<source>entries</source>
+				<target>Einträge</target>
+			</trans-unit>
+			<trans-unit id="glossary.title.count.single">
+				<source>entry</source>
+				<target>Eintrag</target>
+			</trans-unit>
+			<trans-unit id="glossary.title.sync.true">
+				<source>Synced with DeepL API</source>
+				<target>Synchronisiert mit DeepL API</target>
+			</trans-unit>
+			<trans-unit id="glossary.title.sync.false">
+				<source>Not synced with DeepL API</source>
+				<target>Nicht synchronisiert mit DeepL API</target>
+			</trans-unit>
+			<trans-unit id="glossary">
+				<source>Glossary</source>
+				<target>Glossar</target>
+			</trans-unit>
+			<trans-unit id="glossary.glossary_name">
+				<source>Glossary name</source>
+				<target>Name des Glossars</target>
+			</trans-unit>
+			<trans-unit id="glossary.glossary_lastsync">
+				<source>Last synchronization with DeepL</source>
+				<target>Letzte Synchronisierung mit DeepL</target>
+			</trans-unit>
+			<trans-unit id="glossary.glossary_ready">
+				<source>DeepL marked glossary as ready to use</source>
+				<target>DeepL markierte Glossar als benutzbar</target>
+			</trans-unit>
+
+			<trans-unit id="glossary.sync.message">
+				<source>Synchronization with DeepL is done. Your glossaries are ready to use.</source>
+				<target>Die Synchronisation mit DeepL ist abgeschlossen. Ihre Glossare werden jetzt benutzt.</target>
+			</trans-unit>
+			<trans-unit id="glossary.sync.title">
+				<source>DeepL Sync ready</source>
+				<target>DeepL Sync abgeschlossen</target>
+			</trans-unit>
+
+			<trans-unit id="glossaryentry">
+				<source>Glossary entry</source>
+				<target>Glossareintrag</target>
+			</trans-unit>
+			<trans-unit id="entry.source">
+				<source>Term</source>
+				<target>Begriff</target>
+			</trans-unit>
+			<trans-unit id="entry.target">
+				<source>Target</source>
+				<target>Ziel</target>
+			</trans-unit>
+
+			<trans-unit id="glossary.sync.button.single">
+				<source>Synchronise Glossary</source>
+				<target>Glossar synchronisieren</target>
+			</trans-unit>
+			<trans-unit id="glossary.sync.button.all">
+				<source>Synchronise Glossaries</source>
+				<target>Glossare synchronisieren</target>
 			</trans-unit>
 		</body>
 	</file>

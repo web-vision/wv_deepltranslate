@@ -2,16 +2,23 @@
 
 namespace WebVision\WvDeepltranslate\Service\Client;
 
+use TYPO3\CMS\Core\Http\Request;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 /**
  * Class Client implements a DeepL http Client based on PHP-CURL
+ * actually ONLY used by GlossaryService
  */
 final class Client implements ClientInterface
 {
-    public const API_URL_SCHEMA = 'https';
+    private const HTTP_CODE_READ = [
+        200,
+        201,
+    ];
+    private const API_URL_SCHEMA = 'https';
 
     /**
      * API BASE URL without authentication query parameter
@@ -24,7 +31,7 @@ final class Client implements ClientInterface
      *
      * @var int
      */
-    protected $apiVersion;
+    protected $apiVersion = 2;
 
     /**
      * DeepL API Auth Key (DeepL Pro access required)
@@ -32,13 +39,6 @@ final class Client implements ClientInterface
      * @var string
      */
     protected $authKey;
-
-    /**
-     * cURL resource
-     *
-     * @var resource
-     */
-    protected $curl;
 
     /**
      * Hostname of the API (in most cases api.deepl.com)
@@ -75,24 +75,12 @@ final class Client implements ClientInterface
      * @param int $apiVersion
      * @param string  $host
      */
-    public function __construct($authKey, $apiVersion = 2, $host = 'api-free.deepl.com')
+    public function __construct()
     {
-        $this->authKey    = $authKey;
-        $this->apiVersion = $apiVersion;
-        $this->host       = $host;
-        $this->curl       = curl_init();
-
-        curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
-    }
-
-    /**
-     * DeepL destructor
-     */
-    public function __destruct()
-    {
-        if ($this->curl && is_resource($this->curl)) {
-            curl_close($this->curl);
-        }
+        $this->authKey    = DeeplBackendUtility::getApiKey();
+        // ugly, but only this way all functions will still keep alive, do better
+        // and detect
+        $this->host       = parse_url(DeeplBackendUtility::getApiUrl(), PHP_URL_HOST);
     }
 
     /**
@@ -108,44 +96,50 @@ final class Client implements ClientInterface
      */
     public function request($url, $body = '', $method = 'POST')
     {
-        switch ($method) {
-            case 'DELETE':
-                curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-                break;
-            case 'POST':
-                curl_setopt($this->curl, CURLOPT_POST, true);
-                curl_setopt($this->curl, CURLOPT_POSTFIELDS, $body);
-                break;
-            case 'GET':
-            default:
-                break;
+        $resource = null;
+        if (!empty($body)) {
+            $streamBody = sprintf('data://text/plain,%s', $body);
+            $resource = fopen($streamBody, 'r');
+        }
+        $request = new Request(
+            $url,
+            $method,
+            $resource,
+            [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Authorization' => sprintf('DeepL-Auth-Key %s', $this->authKey),
+                'User-Agent' => 'TYPO3.WvDeepltranslate/1.0',
+            ]
+        );
+
+        $options = [
+          //  '_body_as_string' =>
+        ];
+        // read TYPO3 Proxy settings and adapt
+        if (!empty($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])) {
+            $httpProxy = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
+            if (is_string($httpProxy)) {
+                $options['proxy'] = [
+                    'http' => $httpProxy,
+                    'https' => $httpProxy,
+                ];
+            }
+            if (is_array($httpProxy)) {
+                $options['proxy'] = [
+                    'http' => $httpProxy['http'] ?: '',
+                    'https' => $httpProxy['https']
+                        ?: $httpProxy['http'] ?: '',
+                ];
+            }
         }
 
-        curl_setopt($this->curl, CURLOPT_URL, $url);
+        $response = (new \GuzzleHttp\Client())->send($request, $options);
 
-        curl_setopt($this->curl, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
-        curl_setopt($this->curl, CURLOPT_HTTPHEADER, ['Authorization: DeepL-Auth-Key ' . $this->authKey]);
-
-        if ($this->proxy !== null) {
-            curl_setopt($this->curl, CURLOPT_PROXY, $this->proxy);
+        if (in_array($response->getStatusCode(), self::HTTP_CODE_READ)) {
+            return json_decode($response->getBody()->getContents(), true);
         }
 
-        if ($this->proxyCredentials !== null) {
-            curl_setopt($this->curl, CURLOPT_PROXYAUTH, $this->proxyCredentials);
-        }
-
-        if ($this->timeout !== null) {
-            curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->timeout);
-        }
-
-        $response = curl_exec($this->curl);
-
-        if (curl_errno($this->curl)) {
-            throw new DeepLException('There was a cURL Request Error : ' . curl_error($this->curl));
-        }
-        $httpCode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
-
-        return $this->handleResponse($response, $httpCode);
+        return [];
     }
 
     /**

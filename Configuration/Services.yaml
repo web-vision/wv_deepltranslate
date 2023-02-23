@@ -11,15 +11,20 @@ services:
   WebVision\WvDeepltranslate\Command\GlossariesEntriesCleanupCommand:
     tags:
       - name: 'console.command'
-        command: 'wv_deepltranslate:glossary_cleanup'
+        command: 'deepl:glossary:cleanup'
+        schedulable: true
 
   WebVision\WvDeepltranslate\Command\GlossariesEntriesListCommand:
     tags:
       - name: 'console.command'
-        command: 'wv_deepltranslate:glossary_list'
+        command: 'deepl:glossary:list'
+        schedulable: false
 
-  WebVision\WvDeepltranslate\Hooks\DataHandlerHook:
-    public: true
+  WebVision\WvDeepltranslate\Command\GlossarySyncCommand:
+    tags:
+      - name: 'console.command'
+        command: 'deepl:glossary:sync'
+        schedulable: true
 
   WebVision\WvDeepltranslate\Service\DeeplService:
     arguments:
