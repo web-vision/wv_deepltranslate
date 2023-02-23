@@ -21,9 +21,10 @@ class AllowLanguageSynchronizationHook
                 foreach ($element as $column => $value) {
                     $columnConfig = $GLOBALS['TCA'][$table]['columns'][$column];
                     if (
-                        is_array($columnConfig['config']['behaviour'])
-                        && array_key_exists('allowLanguageSynchronization', $columnConfig['config']['behaviour'])
-                        && $columnConfig['config']['behaviour']['allowLanguageSynchronization']
+                        isset($columnConfig['config']['behaviour'])
+                        && is_array($columnConfig['config']['behaviour'])
+                        && isset($columnConfig['config']['behaviour']['allowLanguageSynchronization'])
+                        && (bool)$columnConfig['config']['behaviour']['allowLanguageSynchronization'] === true
                     ) {
                         if ($columnConfig['l10n_mode'] == 'prefixLangTitle') {
                             $l10nState[$column] = 'custom';
