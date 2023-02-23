@@ -46,7 +46,6 @@ class DeeplTranslateViewHelper extends AbstractViewHelper
         }
         foreach ($context->getNewLanguageOptions() as $key => $possibleLanguage) {
             if ($key === 0) {
-                $options[] = LocalizationUtility::translate('backend.label', 'wv_deepltranslate');
                 continue;
             }
             if (!array_key_exists($possibleLanguage, $languageMatch)) {

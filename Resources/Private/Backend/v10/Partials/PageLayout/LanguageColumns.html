@@ -20,6 +20,7 @@
                 <div class="form-group">
                     <label >{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
                     <select class="form-control input-sm" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
+                        <option><f:translate key="backend.label" extensionName="wv_deepltranslate" /></option>
                         <f:for each="{deeplLanguages}" as="languageName" key="url">
                             <option value="{url}">{languageName}</option>
                         </f:for>
