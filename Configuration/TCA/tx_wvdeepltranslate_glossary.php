@@ -26,6 +26,7 @@ return [
     ],
     'palettes' => [
         'lang' => [
+            'description' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:glossary.lang.palette.description',
             'showitem' => 'source_lang,target_lang',
         ],
         'deepl' => [
@@ -84,6 +85,7 @@ return [
         ],
         'entries' => [
             'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:glossary.entries',
+            'description' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:glossary.entries.description',
             'displayCond' => [
                 'AND' => [
                     'FIELD:source_lang:REQ:true',

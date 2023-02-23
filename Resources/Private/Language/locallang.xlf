@@ -60,6 +60,9 @@
 			<trans-unit id="glossary.glossary_id" xml:space="preserve">
 				<source>Glossary Id</source>
 			</trans-unit>
+			<trans-unit id="glossary.lang.palette.description" xml:space="preserve">
+				<source>The Source Language must be selected before the Target Language can be selected.</source>
+			</trans-unit>
 			<trans-unit id="glossary.source_lang" xml:space="preserve">
 				<source>Source Language</source>
 			</trans-unit>
@@ -68,6 +71,9 @@
 			</trans-unit>
 			<trans-unit id="glossary.entries" xml:space="preserve">
 				<source>Entries</source>
+			</trans-unit>
+			<trans-unit id="glossary.entries.description">
+				<source>The glossaries are only passed to the API if entries are available.</source>
 			</trans-unit>
 
 			<trans-unit id="pages.deepl.tab.label">

@@ -81,6 +81,10 @@
 				<source>Entries</source>
 				<target>Einträge</target>
 			</trans-unit>
+			<trans-unit id="glossary.entries.description">
+				<source>The glossaries are only passed to the API if entries are available.</source>
+				<target>The glossaries are only passed to the API if entries are available.</target>
+			</trans-unit>
 
 			<trans-unit id="pages.deepl.tab.label">
 				<source>DeepL Translate</source>
