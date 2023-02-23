@@ -37,13 +37,6 @@ class DeeplPageLayoutView extends PageLayoutView
         $originalOutput = str_ireplace('</div></div>', '</div>', $originalOutput);
         return $originalOutput
             . '<div class="form-group">'
-            . sprintf(
-                '<label>%s</label>',
-                LocalizationUtility::translate(
-                    'backend.label',
-                    'wv_deepltranslate'
-                )
-            )
             . '<select class="form-control input-sm" onchange="window.location.href=this.options[this.selectedIndex].value">'
             . $options
             . '</select></div></div>';

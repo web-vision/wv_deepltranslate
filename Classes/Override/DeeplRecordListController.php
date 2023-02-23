@@ -34,11 +34,6 @@ class DeeplRecordListController extends RecordListController
             return '';
         }
 
-        $deeplSelectLabel = LocalizationUtility::translate(
-            'backend.label',
-            'wv_deepltranslate'
-        );
-
         return str_replace(
             '<div class="col-auto">',
             '<div class="col-auto row"><div class="col-sm-6">',
