@@ -1,62 +1,48 @@
-﻿.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
+﻿..  include:: /Includes.rst.txt
 
-.. include:: Includes.txt
+================
+ DeepL Translate
+================
 
+:Extension key:
+   wv_deepltranslate
 
-.. _start:
+:Package name:
+   web-vision/wv_deepltranslate
 
-=======================================================
-Deepl Translate
-=======================================================
+:Version:
+   |release|
 
-.. only:: html
+:Language:
+   en
 
-    :Extension key:
-        deepltranslate
+:Copyright:
+   2018
 
-    :Version:
-        |release|
+:Author:
+   web-vision GmbH
 
-    :Language:
-        en
+:Rendered:
+   |today|
 
-    :Description:
-        This extension provides option to translate content element, and tca record fields to Deepl supported languages and provides fallback of google translate on Deepl unsupported languages.
+:License:
+   This document is published under the Open Content License
+   available from http://www.opencontent.org/opl.shtml
 
-    :Keywords:
-        web-vision,deepl,translation,google translate,deepltranslate
+   The content of this document is related to TYPO3,
+   a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_.
 
-    :Copyright:
-        2020
-
-    :Author:
-        Ricky Mathew, Anu Bhuvanendran Nair
-
-    :Email:
-        ricky@web-vision.de,		anu@web-vision.de
-
-    :License:
-        This document is published under the Open Content License
-        available from http://www.opencontent.org/opl.shtml
-
-    :Rendered:
-        |today|
-
-    The content of this document is related to TYPO3,
-    a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_.
-
-
-    **Table of Contents**
+**Table of Contents**
 
 .. toctree::
-    :maxdepth: 5
-    :titlesonly:
-    :glob:
+   :maxdepth: 5
+   :titlesonly:
+   :glob:
 
-    Introduction/Index
-    UsersManual/Index
-    Faq/Index
-    ChangeLog/Index
+   Introduction/Index
+   Administration/Index
+   Editor/Index
+   Faq/Index
+   Housekeeping/Index
+   Reference/Index
+   KnownIssues/Index

@@ -1,7 +1,7 @@
 {
 	"name": "web-vision/wv_deepltranslate",
 	"type": "typo3-cms-extension",
-	"description": "Fork of deepltranslate from pitsolutions. This extension provides option to translate content element, and tca record texts to Deepl and Google supported languages using Deepl and Googletranslate Api services.",
+	"description": "This extension provides option to translate content element, and TCA record texts to Deepl and Google supported languages using Deepl and Googletranslate Api services.",
 	"license": ["GPL-2.0-or-later"],
 	"homepage": "https://www.web-vision.de/en/automated-translations-with-typo3-and-deepl.html",
 	"keywords": [
@@ -23,11 +23,12 @@
 			"role": "Developer"
 		},
 		{
-			"name": "Ricky Mathew",
+			"name": "Markus Hofmann",
+			"email": "typo3@calien.de",
 			"role": "Developer"
 		},
 		{
-			"name": "Anu Bhuvanendran Nair",
+			"name": "Riad Zejnilagic Trumic",
 			"role": "Developer"
 		}
 	],
@@ -78,10 +79,10 @@
 		"saschaegerer/phpstan-typo3": "^1.0",
 		"symfony/var-dumper": "^5.4",
 		"typo3/cms-belog": "^9.5 || ^10.4 || ^11.5",
-		"typo3/cms-frontend": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-extensionmanager": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-filelist": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-fluid-styled-content": "^9.5 || ^10.4 || ^11.5",
+		"typo3/cms-frontend": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-info": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-lowlevel": "^9.5 || ^10.4 || ^11.5",
 		"typo3/cms-tstemplate": "^9.5 || ^10.4 || ^11.5",
