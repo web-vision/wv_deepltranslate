@@ -35,7 +35,7 @@ class DeeplRecordListController extends RecordListController
         );
 
         if ($options == '') {
-            return '';
+            return $originalOutput;
         }
 
         return str_ireplace('</div></div>', '</div>', $originalOutput)

@@ -30,8 +30,9 @@ class DeeplRecordListController extends RecordListController
             $this->id,
             $requestUri
         );
+
         if ($options == '') {
-            return '';
+            return $originalOutput;
         }
 
         return str_replace(

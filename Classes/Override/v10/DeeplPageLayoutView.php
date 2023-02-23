@@ -30,8 +30,9 @@ class DeeplPageLayoutView extends PageLayoutView
             $this->id,
             GeneralUtility::getIndpEnv('REQUEST_URI')
         );
+
         if ($options == '') {
-            return '';
+            return $originalOutput;
         }
 
         $originalOutput = str_ireplace('</div></div>', '</div>', $originalOutput);
