@@ -31,7 +31,8 @@ class GlossarySyncCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->addOption(
+        $this->setDescription('Sync all glossaries to DeepL API')
+            ->addOption(
             'pageId',
             'p',
             InputOption::VALUE_OPTIONAL,

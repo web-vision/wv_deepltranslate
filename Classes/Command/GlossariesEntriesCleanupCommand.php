@@ -44,7 +44,7 @@ class GlossariesEntriesCleanupCommand extends Command
     {
         if (empty($input->getOption('yes'))) {
             $io = new SymfonyStyle($input, $output);
-            $yes = $io->ask('Really delete? [yY] ');
+            $yes = $io->ask('Really all delete? [yY] ');
             if (strtolower($yes) !== 'y') {
                 $output->writeln('Selectiong wrong. Abort.');
                 exit;
