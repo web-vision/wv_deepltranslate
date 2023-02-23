@@ -8,6 +8,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 use WebVision\WvDeepltranslate\Service\Client\Client;
 use WebVision\WvDeepltranslate\Service\Client\ClientInterface;
 use WebVision\WvDeepltranslate\Service\Client\DeepLException;
@@ -116,6 +117,13 @@ class DeeplGlossaryService
         string $sourceLang = 'de',
         string $targetLang = 'en'
     ) {
+        if (empty($entries)) {
+            throw new GlossaryEntriesNotExistException(
+                'Glossary Entries are required',
+                1677169192
+            );
+        }
+
         $formattedEntries = [];
         foreach ($entries as $entry) {
             $formattedEntries[] = sprintf("%s\t%s", $entry['source'], $entry['target']);

@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Traits;
 
+use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
+
 trait GlossarySyncTrait
 {
     private function syncSingleGlossary(int $uid): void
@@ -14,12 +16,18 @@ trait GlossarySyncTrait
         if ($glossaryInformation['id'] !== '') {
             $this->deeplGlossaryService->deleteGlossary($glossaryInformation['id']);
         }
-        $glossary = $this->deeplGlossaryService->createGlossary(
-            $glossaryInformation['name'],
-            $glossaryInformation['entries'],
-            $glossaryInformation['source_lang'],
-            $glossaryInformation['target_lang']
-        );
+
+        try {
+            $glossary = $this->deeplGlossaryService->createGlossary(
+                $glossaryInformation['name'],
+                $glossaryInformation['entries'],
+                $glossaryInformation['source_lang'],
+                $glossaryInformation['target_lang']
+            );
+
+        } catch (GlossaryEntriesNotExistException $exception) {
+            $glossary = [];
+        }
 
         $this->glossaryRepository->updateLocalGlossary($glossary, $uid);
     }
