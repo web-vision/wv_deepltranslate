@@ -35,6 +35,9 @@
 		"issues": "https://github.com/web-vision/wv_deepltranslate/issues",
 		"source": "https://github.com/web-vision/wv_deepltranslate"
 	},
+	"conflict": {
+		"studiomitte/recordlist-thumbnail": "*"
+	},
 	"config": {
 		"vendor-dir": ".Build/vendor",
 		"bin-dir": ".Build/bin",
