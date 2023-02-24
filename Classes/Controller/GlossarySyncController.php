@@ -15,7 +15,7 @@ use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\InvalidArgumentException;
 use WebVision\WvDeepltranslate\Exception\MultipleFailureException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
-use WebVision\WvDeepltranslate\Service\Handler\ExceptionHandlerService;
+use WebVision\WvDeepltranslate\Service\FlashMessageGenerator;
 use WebVision\WvDeepltranslate\Traits\GlossarySyncTrait;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
@@ -76,12 +76,12 @@ class GlossarySyncController
             }
         } catch (MultipleFailureException $exception) {
             // multiple sync. NO return, because sync of other COULD be successful
-            $exceptionHandlerService = GeneralUtility::makeInstance(ExceptionHandlerService::class);
+            $exceptionHandlerService = GeneralUtility::makeInstance(FlashMessageGenerator::class);
             $exceptionHandlerService->generateFlashMessages($exception->getExceptions());
         } catch (Exception $e) {
             $glossary = $this->glossaryRepository->findByUid((int)$processingParameters['uid']);
             // single sync. Return, because sync can either be success of failure
-            $exceptionHandlerService = GeneralUtility::makeInstance(ExceptionHandlerService::class);
+            $exceptionHandlerService = GeneralUtility::makeInstance(FlashMessageGenerator::class);
             $exceptionHandlerService->generateFlashMessages(['exception' >= $e, 'item' => $glossary]);
             return new RedirectResponse($processingParameters['returnUrl']);
         }
