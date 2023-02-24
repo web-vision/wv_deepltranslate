@@ -8,6 +8,7 @@ return [
         'label' => 'source',
         'label_alt' => 'target',
         'label_alt_force' => true,
+        'label_userFunc' => \WebVision\WvDeepltranslate\TCA\EntryItemProcFunc::class . '->entryLabel',
         'iconfile' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
         'default_sortby' => 'source ASC',
         'tstamp' => 'tstamp',
