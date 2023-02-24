@@ -85,6 +85,29 @@ class GlossaryRepository
     }
 
     /**
+     * @return array<string, mixed>|null
+     */
+    public function findByUid(int $uid): ?array
+    {
+        $db = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getConnectionForTable('tx_wvdeepltranslate_glossary');
+
+        $result = $db->select(
+            ['*'],
+            'tx_wvdeepltranslate_glossary',
+            [
+                'uid' => $uid,
+            ]
+        );
+
+        if ($result->rowCount() === 0) {
+            return null;
+        }
+
+        return $result->fetch();
+    }
+
+    /**
      * @param array{
      *     glossary_id?: string,
      *     name?: string,
@@ -141,7 +164,7 @@ class GlossaryRepository
             ];
         }
         return $db->select(
-            ['uid'],
+            ['uid', 'title'],
             'tx_wvdeepltranslate_glossary',
             $identifiers
         )->fetchAll() ?: [];

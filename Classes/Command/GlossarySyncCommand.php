@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Command;
 
@@ -10,6 +10,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
+use WebVision\WvDeepltranslate\Exception\EntrySourceEmptyException;
+use WebVision\WvDeepltranslate\Exception\EntryTargetEmptyException;
+use WebVision\WvDeepltranslate\Exception\NotAllowedDuplicateEntriesException;
+use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Traits\GlossarySyncTrait;
 
@@ -49,7 +53,13 @@ class GlossarySyncCommand extends Command
         $glossaries = $this->glossaryRepository->findAllGlossaries($pageId);
 
         foreach ($glossaries as $glossary) {
-            $this->syncSingleGlossary($glossary['uid']);
+            try {
+                $this->syncSingleGlossary($glossary['uid']);
+            } catch (EntrySourceEmptyException|EntryTargetEmptyException|NotAllowedDuplicateEntriesException|DeepLException $e) {
+                $output->writeln(
+                    sprintf('<error>%s</error>', $e->getMessage())
+                );
+            }
         }
 
         /**

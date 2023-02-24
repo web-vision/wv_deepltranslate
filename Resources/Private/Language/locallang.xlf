@@ -142,6 +142,22 @@
 				<source>DeepL Sync ready</source>
 			</trans-unit>
 
+			<trans-unit id="glossary.sync.exception.EntrySourceEmptyException">
+				<source>Glossary "%s": There are entries with empty source values. Please check your entry set.</source>
+			</trans-unit>
+			<trans-unit id="glossary.sync.exception.EntryTargetEmptyException">
+				<source>Glossary "%s": There are entries with empty target values. Please check your entry set.</source>
+			</trans-unit>
+			<trans-unit id="glossary.sync.exception.NotAllowedDuplicateEntriesException">
+				<source>Glossary "%s": There are duplicate entries. This is not allowed in DeepL. Please check your entry set.</source>
+			</trans-unit>
+			<trans-unit id="glossary.sync.exception.DeeplException">
+				<source>Glossary "%s": There was a general DeepL error.</source>
+			</trans-unit>
+			<trans-unit id="glossary.sync.error.title">
+				<source>Synchronisation with DeepL failed</source>
+			</trans-unit>
+
 			<trans-unit id="glossaryentry">
 				<source>Glossary entry</source>
 			</trans-unit>

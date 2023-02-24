@@ -8,7 +8,10 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WebVision\WvDeepltranslate\Exception\EntrySourceEmptyException;
+use WebVision\WvDeepltranslate\Exception\EntryTargetEmptyException;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
+use WebVision\WvDeepltranslate\Exception\NotAllowedDuplicateEntriesException;
 use WebVision\WvDeepltranslate\Service\Client\Client;
 use WebVision\WvDeepltranslate\Service\Client\ClientInterface;
 use WebVision\WvDeepltranslate\Service\Client\DeepLException;
@@ -107,16 +110,20 @@ class DeeplGlossaryService
      *     target_lang: string,
      *     creation_time: string,
      *     entry_count: int
-     * }
+     * }|array
      *
      * @throws DeepLException
+     * @throws EntrySourceEmptyException
+     * @throws EntryTargetEmptyException
+     * @throws GlossaryEntriesNotExistException
+     * @throws NotAllowedDuplicateEntriesException
      */
     public function createGlossary(
         string $name,
         array $entries,
         string $sourceLang = 'de',
         string $targetLang = 'en'
-    ) {
+    ): array {
         if (empty($entries)) {
             throw new GlossaryEntriesNotExistException(
                 'Glossary Entries are required',
@@ -124,8 +131,28 @@ class DeeplGlossaryService
             );
         }
 
+        if ($this->hasDuplicateSourceValues($entries)) {
+            throw new NotAllowedDuplicateEntriesException(
+                'Duplicate entries are not allowed in DeepL',
+                1677241970114
+            );
+        }
+
         $formattedEntries = [];
         foreach ($entries as $entry) {
+            if (empty($entry['target'])) {
+                throw new EntryTargetEmptyException(
+                    'Target must not be empty',
+                    1677242189281
+                );
+            }
+
+            if (empty($entry['source'])) {
+                throw new EntrySourceEmptyException(
+                    'Source must not be empty',
+                    1677242221506
+                );
+            }
             $formattedEntries[] = sprintf("%s\t%s", trim($entry['source']), trim($entry['target']));
         }
 
@@ -224,5 +251,37 @@ class DeeplGlossaryService
         $this->cache->set($cacheIdentifier, $pairMappingArray);
 
         return $pairMappingArray;
+    }
+
+    /**
+     * @param array<int, array{source: string, target: string}> $entries
+     * @return array<int, array{source: string, target: string}|array>
+     */
+    private function detectDuplicateSourceValues(array $entries): array
+    {
+        $duplicatedEntries = [];
+        foreach ($entries as $key => $entry) {
+            // already detected as duplicate
+            if (isset($duplicatedEntries[$key])) {
+                continue;
+            }
+            foreach ($entries as $searchKey => $searchEntry) {
+                // same record or already detected
+                if ($searchKey === $key || isset($duplicatedEntries[$searchKey])) {
+                    continue;
+                }
+                if ($searchEntry['source'] === $entry['source']) {
+                    $duplicatedEntries[$searchKey] = $searchEntry;
+                    $duplicatedEntries[$key] = $entry;
+                }
+            }
+        }
+
+        return $duplicatedEntries;
+    }
+
+    private function hasDuplicateSourceValues(array $entries): bool
+    {
+        return count($this->detectDuplicateSourceValues($entries)) > 0;
     }
 }
