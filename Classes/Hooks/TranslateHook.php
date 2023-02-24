@@ -133,9 +133,6 @@ class TranslateHook
         string $customMode,
         array $sourceLanguageRecord
     ): string {
-        if (HtmlUtility::isHtml($content)) {
-            $content = HtmlUtility::stripSpecificTags(['br'], $content);
-        }
 
         // mode deepl
         if ($customMode == 'deepl') {
