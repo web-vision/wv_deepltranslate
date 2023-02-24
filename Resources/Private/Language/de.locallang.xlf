@@ -157,6 +157,27 @@
 				<target>DeepL Sync abgeschlossen</target>
 			</trans-unit>
 
+			<trans-unit id="glossary.sync.exception.EntrySourceEmptyException">
+				<source>Glossary "%s": There are entries with empty source values. Please check your entry set.</source>
+				<target>Glossar "%s": Es gibt Einträge mit leeren Quellwerten. Bitte überprüfen Sie Ihre Einträge.</target>
+			</trans-unit>
+			<trans-unit id="glossary.sync.exception.EntryTargetEmptyException">
+				<source>Glossary "%s": There are entries with empty target values. Please check your entry set.</source>
+				<target>Glossary "%s": Es gibt Einträge mit leeren Zielwerten. Bitte überprüfen Sie Ihre Einträge.</target>
+			</trans-unit>
+			<trans-unit id="glossary.sync.exception.NotAllowedDuplicateEntriesException">
+				<source>Glossary "%s": There are duplicate entries. This is not allowed in DeepL. Please check your entry set.</source>
+				<target>Glossar "%s": Es gibt doppelte Einträge. Dies ist auf DeepL nicht erlaubt. Bitte überprüfen Sie Ihre Einträge.</target>
+			</trans-unit>
+			<trans-unit id="glossary.sync.exception.DeeplException">
+				<source>Glossary "%s": There was a general DeepL error.</source>
+				<target>Glossar "%s": Ein allgemeiner DeepL Fehler ist aufgetreten.</target>
+			</trans-unit>
+			<trans-unit id="glossary.sync.error.title">
+				<source>Synchronisation with DeepL failed</source>
+				<target>Synchronisierung mit DeepL fehlgeschlagen</target>
+			</trans-unit>
+
 			<trans-unit id="glossaryentry">
 				<source>Glossary entry</source>
 				<target>Glossareintrag</target>
