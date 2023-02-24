@@ -18,6 +18,11 @@ class EntryItemProcFunc
             $parameters['row']['uid'],
             'source,target,glossary'
         );
+
+        if ($entry === null) {
+            return;
+        }
+
         // build default title
         $parameters['title'] = sprintf(
             '%s => %s',
@@ -30,6 +35,11 @@ class EntryItemProcFunc
             $entry['glossary'],
             'uid'
         );
+
+        if ($glossary === null) {
+            return;
+        }
+
         $glossaryForSync = GeneralUtility::makeInstance(GlossaryRepository::class)
             ->getGlossaryInformationForSync($glossary['uid']);
         $duplicateEntries = DeeplGlossaryService::detectDuplicateSourceValues($glossaryForSync['entries']);
