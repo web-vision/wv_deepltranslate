@@ -53,30 +53,30 @@ class LanguageSelectorItemsProc
 
     public function glossaryLabel(&$parameters): void
     {
-        $entries = BackendUtility::getRecord(
+        $glossary = BackendUtility::getRecord(
             $parameters['table'],
             $parameters['row']['uid'],
-            'entries,glossary_id,glossary_lastsync,tstamp'
+            'entries,glossary_id,glossary_lastsync,tstamp,rowDescription'
         );
 
-        if ($entries === null) {
+        if ($glossary === null) {
             return;
         }
 
         $localizationString = 'glossary.title.count';
-        if (isset($entries['entries']) && (int)$entries['entries'] === 1) {
+        if (isset($glossary['entries']) && (int)$glossary['entries'] === 1) {
             $localizationString = 'glossary.title.count.single';
         }
 
         $duplicates = false;
-        if ($parameters['row']['rowDescription'] !== '') {
+        if ($glossary['rowDescription'] !== '') {
             $duplicates = true;
         }
 
         $isSync = false;
         if (
-            $entries['glossary_id'] != ''
-            && $entries['tstamp'] < $entries['glossary_lastsync']
+            $glossary['glossary_id'] != ''
+            && $glossary['tstamp'] < $glossary['glossary_lastsync']
         ) {
             $isSync = true;
         }
@@ -88,7 +88,7 @@ class LanguageSelectorItemsProc
                 'wv_deepltranslate'
             ) : '',
             $parameters['row']['glossary_name'],
-            (int)$entries['entries'] ?? 0,
+            (int)$glossary['entries'] ?? 0,
             LocalizationUtility::translate(
                 $localizationString,
                 'wv_deepltranslate'
