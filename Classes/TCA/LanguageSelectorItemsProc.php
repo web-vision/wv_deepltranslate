@@ -68,6 +68,11 @@ class LanguageSelectorItemsProc
             $localizationString = 'glossary.title.count.single';
         }
 
+        $duplicates = false;
+        if ($parameters['row']['rowDescription'] !== '') {
+            $duplicates = true;
+        }
+
         $isSync = false;
         if (
             $entries['glossary_id'] != ''
@@ -77,7 +82,11 @@ class LanguageSelectorItemsProc
         }
 
         $parameters['title'] = sprintf(
-            '%s (%d %s) [%s]',
+            '%s%s (%d %s) [%s]',
+            $duplicates ? LocalizationUtility::translate(
+                'glossary.title.duplicates',
+                'wv_deepltranslate'
+            ) : '',
             $parameters['row']['glossary_name'],
             (int)$entries['entries'] ?? 0,
             LocalizationUtility::translate(

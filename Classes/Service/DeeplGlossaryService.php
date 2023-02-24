@@ -131,7 +131,7 @@ class DeeplGlossaryService
             );
         }
 
-        if ($this->hasDuplicateSourceValues($entries)) {
+        if ($this::hasDuplicateSourceValues($entries)) {
             throw new NotAllowedDuplicateEntriesException(
                 'Duplicate entries are not allowed in DeepL',
                 1677241970114
@@ -257,7 +257,7 @@ class DeeplGlossaryService
      * @param array<int, array{source: string, target: string}> $entries
      * @return array<int, array{source: string, target: string}|array>
      */
-    private function detectDuplicateSourceValues(array $entries): array
+    public static function detectDuplicateSourceValues(array $entries): array
     {
         $duplicatedEntries = [];
         foreach ($entries as $key => $entry) {
@@ -280,8 +280,8 @@ class DeeplGlossaryService
         return $duplicatedEntries;
     }
 
-    private function hasDuplicateSourceValues(array $entries): bool
+    public static function hasDuplicateSourceValues(array $entries): bool
     {
-        return count($this->detectDuplicateSourceValues($entries)) > 0;
+        return count(self::detectDuplicateSourceValues($entries)) > 0;
     }
 }

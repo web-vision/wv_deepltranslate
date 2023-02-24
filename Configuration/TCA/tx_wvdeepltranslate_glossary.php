@@ -10,6 +10,7 @@ return [
         'iconfile' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
         'default_sortby' => 'uid',
         'tstamp' => 'tstamp',
+        'descriptionColumn' => 'rowDescription',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
         'delete' => 'deleted',

@@ -119,6 +119,9 @@
 			<trans-unit id="glossary.title.sync.false">
 				<source>Not synced with DeepL API</source>
 			</trans-unit>
+			<trans-unit id="glossary.title.duplicates">
+				<source>[DUPLICATE ENTRIES] </source>
+			</trans-unit>
 			<trans-unit id="glossary">
 				<source>Glossary</source>
 			</trans-unit>

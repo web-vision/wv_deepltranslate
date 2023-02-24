@@ -164,7 +164,7 @@ class GlossaryRepository
             ];
         }
         return $db->select(
-            ['uid', 'title'],
+            ['uid', 'glossary_name'],
             'tx_wvdeepltranslate_glossary',
             $identifiers
         )->fetchAll() ?: [];

@@ -56,7 +56,7 @@ class ExceptionHandlerService
                 'glossary.sync.exception' . (new \ReflectionClass($exception))->getShortName(),
                 'wv_deepltranslate',
                 [
-                    0 => $item['title'] ?? '',
+                    0 => $item['glossary_name'] ?? '',
                 ]
             ),
             LocalizationUtility::translate(
