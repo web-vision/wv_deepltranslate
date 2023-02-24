@@ -98,6 +98,10 @@
 				<source>Last translation date</source>
 				<target>Letzte Übersetzung Datum</target>
 			</trans-unit>
+			<trans-unit id="pages.module.deepl">
+				<source>DeepL Glossary</source>
+				<target>DeepL Glossar</target>
+			</trans-unit>
 			<trans-unit id="preview.flag">
 				<source>Translated with DeepL</source>
 				<target>Übersetzt mit DeepL</target>

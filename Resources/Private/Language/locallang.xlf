@@ -85,6 +85,9 @@
 			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
 				<source>Last Translated Date</source>
 			</trans-unit>
+			<trans-unit id="pages.module.deepl">
+				<source>DeepL Glossary</source>
+			</trans-unit>
 			<trans-unit id="preview.flag">
 				<source>Translated with Deepl</source>
 			</trans-unit>

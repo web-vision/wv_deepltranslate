@@ -9,11 +9,11 @@ if (!defined('TYPO3_MODE')) {
     };
 
     $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = [
-        'DeepL Glossar',
-        'wv_deepltranslate',
-        'apps-pagetree-folder-contains-glossar',
+        0 => $ll('pages.module.deepl'),
+        1 => 'glossary',
+        2 => 'apps-pagetree-folder-contains-glossary',
     ];
-    $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-glossar'] = 'apps-pagetree-folder-contains-glossar';
+    $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-glossary'] = 'apps-pagetree-folder-contains-glossary';
 
     $columns = [
         'tx_wvdeepltranslate_content_not_checked' => [

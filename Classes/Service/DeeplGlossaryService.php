@@ -110,13 +110,14 @@ class DeeplGlossaryService
      * }
      *
      * @throws DeepLException
+     * @throws GlossaryEntriesNotExistException
      */
     public function createGlossary(
         string $name,
         array $entries,
         string $sourceLang = 'de',
         string $targetLang = 'en'
-    ) {
+    ): array {
         if (empty($entries)) {
             throw new GlossaryEntriesNotExistException(
                 'Glossary Entries are required',
@@ -152,12 +153,12 @@ class DeeplGlossaryService
      *
      * @throws DeepLException
      */
-    public function deleteGlossary(string $glossaryId)
+    public function deleteGlossary(string $glossaryId): ?array
     {
         $url = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
         $url .= "/$glossaryId";
 
-        $this->client->request($url, '', 'DELETE');
+        return $this->client->request($url, '', 'DELETE');
     }
 
     /**

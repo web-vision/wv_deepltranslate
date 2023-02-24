@@ -69,7 +69,7 @@ if (!defined('TYPO3_MODE')) {
     }
 
     $icons = [
-        'apps-pagetree-folder-contains-glossar' => 'deepl.svg',
+        'apps-pagetree-folder-contains-glossary' => 'deepl.svg',
         'actions-localize-deepl' => 'actions-localize-deepl.svg',
         'deepl-grey-logo' => 'deepl-grey.svg',
     ];

@@ -107,7 +107,7 @@ class ButtonBarHook
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $button = $buttonBar->makeLinkButton();
         $button->setIcon($iconFactory->getIcon(
-            'apps-pagetree-folder-contains-glossar',
+            'apps-pagetree-folder-contains-glossary',
             Icon::SIZE_SMALL
         ));
         $button->setTitle($title);
