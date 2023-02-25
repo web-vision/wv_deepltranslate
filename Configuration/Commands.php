@@ -1,7 +1,6 @@
 <?php
 
 /** @deprecated, only for v9 support  */
-
 if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() < 10) {
     return [
         'deepl:glossary:cleanup' => [
@@ -12,6 +11,6 @@ if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() < 10) {
         ],
         'deepl:glossary:sync' => [
             'class' => \WebVision\WvDeepltranslate\Command\GlossarySyncCommand::class,
-        ]
+        ],
     ];
 }

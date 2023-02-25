@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Override;
 
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Recordlist\Controller\RecordListController;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 

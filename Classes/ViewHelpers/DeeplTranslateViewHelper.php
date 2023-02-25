@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\ViewHelpers;
 
 use TYPO3\CMS\Backend\View\PageLayoutContext;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 

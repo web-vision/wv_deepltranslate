@@ -35,12 +35,12 @@ class GlossarySyncCommand extends Command
     {
         $this->setDescription('Sync all glossaries to DeepL API')
             ->addOption(
-            'pageId',
-            'p',
-            InputOption::VALUE_OPTIONAL,
-            'Page to sync, not set, sync all glossaries',
-            0
-        );
+                'pageId',
+                'p',
+                InputOption::VALUE_OPTIONAL,
+                'Page to sync, not set, sync all glossaries',
+                0
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

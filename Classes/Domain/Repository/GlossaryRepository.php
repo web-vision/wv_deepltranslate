@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
@@ -60,7 +60,6 @@ class GlossaryRepository
 
         return $glossaryInformation;
     }
-
 
     /**
      * @return array<string, mixed>|null
