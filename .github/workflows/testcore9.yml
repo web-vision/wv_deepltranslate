@@ -8,9 +8,9 @@ on:
     - cron: '56 4 * * *'
 
 jobs:
-  testsuite:
-    name: all tests with core v9
-    runs-on: ubuntu-20.04
+  code-quality:
+    name: "code quality with core v9"
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -19,44 +19,69 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v3
 
-      - name: "Install PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "${{ matrix.php-version }}"
-          coverage: none
-          tools: composer:v2.2
-
-      - name: "Prepare composer dependencies"
-        run: "Build/Scripts/composer-for-core-version.sh 9"
+      - name: "Prepare dependencies for TYPO3 v9"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s composerUpdate"
 
       - name: "Run TypoScript lint"
-        run: "composer lint:typoscript"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s lintTypoScript"
 
       - name: "Run PHP lint"
-        run: "composer lint:php"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s lintPhp"
 
-      - name: "Verify code cgl"
-        run: "composer cs:check"
+      - name: "Validate CGL"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s cgl"
 
-      # @todo Disabled because of PHPStan errors - tricky to handle properly agaist wide range of core versions. Tackle
-      #       after branching and minimizing version range.
-      #      - name: "Run PHPStan"
-      #        run: "composer analyze:php"
+      - name: "Ensure tests methods do not start with \"test\""
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s checkTestMethodsPrefix"
 
-      - name: "Unit tests"
-        run: "composer test:php:unit"
+      - name: "Ensure UTF-8 files do not contain BOM"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s checkBom"
 
-# @todo Functional tests disabled for now - testing against real DeepL API needs an API key. Testing against live API
-#       should be rethinked and tackled otherwise, e.g. using https://github.com/DeepLcom/deepl-mock. The DeepL php
-#       API client also uses this mockserver for testing - maybe it is usable.
-#
-#      - name: "Start MySQL"
-#        run: "sudo /etc/init.d/mysql start"
-#
-#      - name: "Functional tests"
-#        run: |
-#          export typo3DatabaseName="$DB_DATABASE";
-#          export typo3DatabaseHost="$DB_HOST";
-#          export typo3DatabaseUsername="$DB_USER";
-#          export typo3DatabasePassword="$DB_PASSWORD";
-#          composer test:php:functional
+      - name: "Test .rst files for integrity"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s checkRst"
+
+      - name: "Find duplicate exception codes"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s checkExceptionCodes"
+
+  # @todo Disabled because of PHPStan errors - tricky to handle properly against wide range of core versions. Tackle
+#       after branching and minimizing version range.
+#      - name: "Run PHPStan"
+#        run: "composer analyze:php"
+
+  testsuite:
+    name: all tests with core v9
+    runs-on: ubuntu-22.04
+    needs: code-quality
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ '7.4']
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+
+      - name: "Prepare dependencies for TYPO3 v9"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s composerUpdate"
+
+      - name: "Unit"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s unit"
+
+# @todo SQLite disabled. Before PHP8.1 SQLite did not returned integer as integers, test cases needs sanitizing for this.
+#      - name: "Functional SQLite"
+#        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s functional -d sqlite"
+
+      - name: "Functional MariaDB 10.5 mysqli"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s functional -d mariadb -a mysqli"
+
+      - name: "Functional MariaDB 10.5 pdo_mysql"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s functional -d mariadb -a pdo_mysql"
+
+      - name: "Functional MySQL 8.0 mysqli"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s functional -d mariadb -a mysqli"
+
+      - name: "Functional MySQL 8.0 pdo_mysql"
+        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s functional -d mariadb -a pdo_mysql"
+
+# @todo nimut/testing-framework sets sql_mode, which is invalid for postgres. Thus disabling until moved to typo3/testing-framework
+#      - name: "Functional PostgresSQL 10"
+#        run: "Build/Scripts/runTests.sh -t 9 -p ${{ matrix.php-version }} -s functional -d postgres"

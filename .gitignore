@@ -4,6 +4,7 @@
 !.Build/Web/.gitkeep
 .ddev/docker-compose.tempfs.yaml
 composer.lock
+composer.json.testing
 *.cache
 var
 .php-cs-fixer.cache
@@ -12,3 +13,4 @@ var
 /*.http
 http-client.env.json
 /.test-results
+Build/testing-docker/.env

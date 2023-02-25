@@ -11,6 +11,7 @@ if ($deeplApiKey === '') {
         $deeplScheme = 'http';
         defined('DEEPL_MOCKSERVER_USED') || define('DEEPL_MOCKSERVER_USED', true);
     }
+    defined('DEEPL_MOCKSERVER_USED') || define('DEEPL_MOCKSERVER_USED', (bool)getenv('DEEPL_MOCKSERVER_USED'));
     return [
         'EXTENSIONS' => [
             'wv_deepltranslate' => [
@@ -24,7 +25,7 @@ if ($deeplApiKey === '') {
     ];
 }
 
-defined('DEEPL_MOCKSERVER_USED') || define('DEEPL_MOCKSERVER_USED', false);
+defined('DEEPL_MOCKSERVER_USED') || define('DEEPL_MOCKSERVER_USED', (bool)getenv('DEEPL_MOCKSERVER_USED'));
 return [
     'EXTENSIONS' => [
         'wv_deepltranslate' => [
