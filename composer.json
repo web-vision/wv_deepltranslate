@@ -105,18 +105,19 @@
 			"@package-states",
 			"Nimut\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
 		],
-		"ec:check": "ec -v -n --no-progress -e'var/log' -e'.Build' -e'.ddev' -e'phpstan-baseline.neon'",
-		"ec:fix": "ec -v -n --fix -e'var/log' -e'.Build' -e'.ddev'",
-		"cs:check": "php-cs-fixer fix --config .config/.php-cs-rules.php --ansi --diff --verbose --dry-run",
-		"cs:fix": "php-cs-fixer fix --config .config/.php-cs-rules.php --ansi",
-		"analyze:php": "phpstan analyse --ansi --no-progress --memory-limit=768M --configuration=.config/phpstan.neon",
-		"lint:typoscript": "typoscript-lint --ansi --config=./.config/typoscript-lint.yml",
+		"ec:check": ".Build/bin/ec -v -n --no-progress -e'var/log' -e'.Build' -e'.ddev' -e'phpstan-baseline.neon'",
+		"ec:fix": ".Build/bin/ec -v -n --fix -e'var/log' -e'.Build' -e'.ddev'",
+		"cs:check": ".Build/bin/php-cs-fixer fix --config Build/php-cs-fixer/php-cs-rules.php --ansi --diff --verbose --dry-run",
+		"cs:fix": ".Build/bin/php-cs-fixer fix --config Build/php-cs-fixer/php-cs-rules.php --ansi",
+		"analyze:php": ".Build/bin/phpstan analyse --ansi --no-progress --memory-limit=768M --configuration=Build/phpstan/phpstan.neon",
+		"lint:typoscript": ".Build/bin/typoscript-lint --ansi --config=./Build/typoscript-lint/typoscript-lint.yml",
+		"lint:php": "find .*.php *.php Classes Configuration Tests -name '*.php' -print0 | xargs -r -0 -n 1 -P 4 php -l",
 		"test:php": [
 			"@test:php:unit",
 			"@test:php:functional"
 		],
-		"test:php:unit": "phpunit --colors=always --configuration .config/phpunit-unit.xml",
-		"test:php:functional": "@test:php:unit --configuration .config/phpunit-functional.xml",
+		"test:php:unit": ".Build/bin/phpunit --colors=always --configuration Build/phpunit/UnitTests.xml",
+		"test:php:functional": "@test:php:unit --configuration Build/phpunit/FunctionalTests.xml",
 		"post-autoload-dump": [
 			"@prepare-extension-test-structure"
 		]

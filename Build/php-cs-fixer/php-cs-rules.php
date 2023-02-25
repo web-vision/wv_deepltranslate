@@ -13,11 +13,13 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $finder = PhpCsFixer\Finder::create()
+    ->ignoreVCSIgnored(true)
     ->exclude([
-        __DIR__ . '/../.Build',
-        __DIR__ . '/../var'
+        '.Build/',
+        'Build/',
+        'var/',
     ])
-    ->in(__DIR__ . '/../');
+    ->in(realpath(__DIR__ . '/../../'));
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)

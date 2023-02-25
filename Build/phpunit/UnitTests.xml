@@ -3,21 +3,22 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
     backupGlobals="true"
-    bootstrap="../.Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTestsBootstrap.php"
+    bootstrap="../../.Build/vendor/nimut/testing-framework/res/Configuration/UnitTestsBootstrap.php"
     colors="true"
     convertErrorsToExceptions="true"
     convertWarningsToExceptions="true"
     forceCoversAnnotation="false"
+    processIsolation="false"
     stopOnError="false"
     stopOnFailure="false"
     stopOnIncomplete="false"
     stopOnSkipped="false"
     verbose="false"
-    beStrictAboutTestsThatDoNotTestAnything="false"
+    beStrictAboutTestsThatDoNotTestAnything="true"
 >
     <testsuites>
-        <testsuite name="wv-deepltranslate-functional-tests">
-            <directory>../Tests/Functional</directory>
+        <testsuite name="wv-deepltranslate-package-unit-tests">
+            <directory>../../Tests/Unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>
