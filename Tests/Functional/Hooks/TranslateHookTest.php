@@ -49,12 +49,20 @@ class TranslateHookTest extends FunctionalTestCase
      */
     public function contentTranslateWithDeepl(): void
     {
+        $translateContent = 'Hello I would like to be translated';
+        $expectedTranslation = 'Hallo, ich möchte gerne übersetzt werden';
+        // @todo deepL api mockserver can only handle proton beam as translation, therefore use this.
+        if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
+            $translateContent = 'proton beam';
+            $expectedTranslation = 'Protonenstrahl';
+        }
+
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
         $siteConfig = $languageService->getCurrentSite('pages', 1);
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
         $content = $translateHook->translateContent(
-            'Hello I would like to be translated',
+            $translateContent,
             [
                 'uid' => 2,
                 'language_isocode' => 'DE',
@@ -63,7 +71,7 @@ class TranslateHookTest extends FunctionalTestCase
             $sourceLanguageRecord
         );
 
-        static::assertSame('Hallo, ich möchte gerne übersetzt werden', $content);
+        static::assertSame($expectedTranslation, $content);
     }
 
     /**

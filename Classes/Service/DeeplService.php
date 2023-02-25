@@ -161,10 +161,20 @@ class DeeplService
             $mainApiUrl['host'],
             $type
         );
+        if ($mainApiUrl['port'] ?? false) {
+            $languageApiUrl = sprintf(
+                '%s://%s:%s/v2/languages?type=%s',
+                $mainApiUrl['scheme'],
+                $mainApiUrl['host'],
+                $mainApiUrl['port'],
+                $type
+            );
+        }
 
-        $headers = [
-            'Authorization' => sprintf('DeepL-Auth-Key %s', $this->apiKey),
-        ];
+        $headers = [];
+        if (!empty($this->apiKey)) {
+            $headers['Authorization'] = sprintf('DeepL-Auth-Key %s', $this->apiKey);
+        }
 
         try {
             $response = $this->requestFactory->request($languageApiUrl, 'GET', [
