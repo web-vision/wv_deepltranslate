@@ -49,7 +49,7 @@ done
 
 prepare_test_instance() {
     echo "Instantiating TYPO3 v${currentVersion} for Test"
-    bash ./.ddev/scripts/update_version.sh $currentVersion
+    bash ./Build/Scripts/composer-for-core-version.sh $currentVersion
 }
 
 run_functional() {

@@ -5,4 +5,4 @@
 ## Example: "ddev update-to 9"
 ## ProjectTypes: typo3
 
-bash ./.ddev/scripts/update_version.sh $*
+bash ./Build/Scripts/composer-for-core-version.sh $*
