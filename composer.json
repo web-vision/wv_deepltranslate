@@ -68,7 +68,6 @@
 		"typo3/cms-install": "^9.5 || ^10.4 || ^11.5"
 	},
 	"require-dev": {
-		"armin/editorconfig-cli": "^1.5",
 		"b13/container": "^1.6",
 		"friendsofphp/php-cs-fixer": "^3.0",
 		"helhum/typo3-console": "^5.8 || ^6.7 || ^7.1",
@@ -105,8 +104,6 @@
 			"@package-states",
 			"Nimut\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
 		],
-		"ec:check": ".Build/bin/ec -v -n --no-progress -e'var/log' -e'.Build' -e'.ddev' -e'phpstan-baseline.neon'",
-		"ec:fix": ".Build/bin/ec -v -n --fix -e'var/log' -e'.Build' -e'.ddev'",
 		"cs:check": ".Build/bin/php-cs-fixer fix --config Build/php-cs-fixer/php-cs-rules.php --ansi --diff --verbose --dry-run",
 		"cs:fix": ".Build/bin/php-cs-fixer fix --config Build/php-cs-fixer/php-cs-rules.php --ansi",
 		"analyze:php": ".Build/bin/phpstan analyse --ansi --no-progress --memory-limit=768M --configuration=Build/phpstan/phpstan.neon",
