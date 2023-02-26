@@ -45,10 +45,10 @@ final class CmdMapLocalizationHook
         );
         $commandIsProcessed = true;
         $deeLTranslationEnabled = (bool)$GLOBALS['TCA'][$table]['ctrl']['deeplTranslation'] ?? false;
-
         if (!$deeLTranslationEnabled) {
             return;
         }
+
         $tableTCAColumns = $GLOBALS['TCA'][$table]['columns'];
         foreach ($tableTCAColumns as $field => $columnConfig) {
             if ($columnConfig['type'] === 'language') {
@@ -59,7 +59,6 @@ final class CmdMapLocalizationHook
         if (!isset($sysLanguageField)) {
             $sysLanguageField = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
         }
-
         // no config for translation,
         // no language field set.
         // should NEVER appear here
@@ -68,9 +67,7 @@ final class CmdMapLocalizationHook
         }
 
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
-
         $siteInformation = $languageService->getCurrentSite($table, $id);
-
         try {
             $sourceLanguage = $languageService->getLanguage(
                 $siteInformation['site'],
@@ -102,7 +99,6 @@ final class CmdMapLocalizationHook
             ->detectGlossaryForTranslation($table, $id, $translatedElement['sys_language_uid']);
         */
         $deepLService = GeneralUtility::makeInstance(DeeplService::class);
-
         $deepLTranslated = false;
         $detectedSlugField = '';
         foreach ($translatedElement as $field => $value) {
@@ -127,10 +123,10 @@ final class CmdMapLocalizationHook
                 $targetLanguage['language_isocode'],
                 $sourceLanguage['language_isocode']
             );
-            if (!empty($translatedContent) && isset($translatedContent['translations'])) {
+            if (isset($translatedContent['translations'])) {
                 foreach ($translatedContent['translations'] as $translation) {
-                    if ($translation['text'] != '') {
-                        $value = $translation['text'] ?? $value;
+                    if ($translation['text'] !== '') {
+                        $value = $translation['text'];
                         $deepLTranslated = true;
                         break;
                     }
@@ -164,6 +160,7 @@ final class CmdMapLocalizationHook
         $pageId = $table === 'pages' ? $originalElement['uid'] : $originalElement['pid'];
         $TSConfig = BackendUtility::getPagesTSconfig($pageId)['TCEMAIN.'] ?? [];
         $tableEntries = $dataHandler->getTableEntries($table, $TSConfig);
+        $translateToMsg = '';
         if (!empty($TSConfig['translateToMessage']) && !($tableEntries['disablePrependAtCopy'] ?? false)) {
             $translateToMsg = $this->getLanguageService()->sL($TSConfig['translateToMessage']);
             $translateToMsg = @sprintf($translateToMsg, $targetLanguage['title']);
@@ -182,17 +179,14 @@ final class CmdMapLocalizationHook
             if (
                 !isset($tableTCA[$field])
                 || !isset($tableTCA[$field]['config']['type'])
-                || (
-                    $tableTCA[$field]['config']['type'] !== 'text'
-                    && $tableTCA[$field]['config']['type'] !== 'input'
-                )
+                || !in_array($tableTCA[$field]['config']['type'], ['text', 'input'])
             ) {
                 continue;
             }
-            if (!empty($translateToMsg) && !empty($originalElement[$field])) {
-                $translatedElement[$field] = '[' . $translateToMsg . '] ' . $originalElement[$field] ?? '';
-            } else {
-                $translatedElement[$field] = $originalElement[$field] ?? '';
+            $originalElementValue = $originalElement[$field] ?? '';
+            $translatedElement[$field] = $originalElementValue;
+            if ($translateToMsg !== '' && $originalElementValue !== '') {
+                $translatedElement[$field] = '[' . $translateToMsg . '] ' . $originalElementValue;
             }
         }
 

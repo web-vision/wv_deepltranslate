@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class takes care of content translation for elements within containers
- * @deprecated
+ * @deprecated will be removed in v4
  */
 class CommandMapPostProcessingHook extends \B13\Container\Hooks\Datahandler\CommandMapPostProcessingHook
 {
