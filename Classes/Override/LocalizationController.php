@@ -35,6 +35,7 @@ use WebVision\WvDeepltranslate\Service\DeeplService;
  *
  * @internal
  * @override
+ * @deprecated will be removed in v4
  */
 class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\LocalizationController
 {

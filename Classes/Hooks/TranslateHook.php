@@ -18,6 +18,9 @@ use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 use WebVision\WvDeepltranslate\Utility\HtmlUtility;
 
+/**
+ * @deprecated will be removed in v4
+ */
 class TranslateHook
 {
     protected DeeplService $deeplService;

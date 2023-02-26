@@ -4,26 +4,65 @@ if (!defined('TYPO3_MODE')) {
     die();
 }
 
-(function () {
+(static function (): void {
+    if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['deepltranslate.automaticTranslation'])) {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['deepltranslate.automaticTranslation'] = false;
+    }
+
+    //allowLanguageSynchronizationHook manipulates l10n_state
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
+        = \WebVision\WvDeepltranslate\Hooks\AllowLanguageSynchronizationHook::class;
+
+    //hook to checkModifyAccessList for editors
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkModifyAccessList']['deepl']
+        = \WebVision\WvDeepltranslate\Hooks\TCEmainHook::class;
+
+    // preview Hook
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all']['deepl-1675946132'] =
+        \WebVision\WvDeepltranslate\Hooks\DeeplPreviewFlagGeneratePageHook::class . '->renderDeeplPreviewFlag';
+
+    // register Icons
+    $icons = [
+        'apps-pagetree-folder-contains-glossary' => 'deepl.svg',
+        'actions-localize-deepl' => 'actions-localize-deepl.svg',
+        'deepl-grey-logo' => 'deepl-grey.svg',
+    ];
+    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+    foreach ($icons as $identifier => $path) {
+        if (!$iconRegistry->isRegistered($identifier)) {
+            $iconRegistry->registerIcon(
+                $identifier,
+                \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+                ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/' . $path]
+            );
+        }
+    }
+
+    //add caching for DeepL API supported Languages
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']
+        ??= [];
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']['backend']
+        ??= \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
+
+    // Feature Toggle
+    if (TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Configuration\Features::class)
+        ->isFeatureEnabled('deepltranslate.automaticTranslation')) {
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['deepl']
+            = \WebVision\WvDeepltranslate\Hooks\CmdMapLocalizationHook::class;
+        return;
+    }
+
+    /** @deprecated Hooks and Xclasses will be removed in v4 */
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:wv_deepltranslate/Configuration/TsConfig/Page/pagetsconfig.tsconfig">'
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['wv_deepltranslate'] =
         \WebVision\WvDeepltranslate\Hooks\ButtonBarHook::class . '->getButtons';
-    //allowLanguageSynchronizationHook manipulates l10n_state
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
-        = \WebVision\WvDeepltranslate\Hooks\AllowLanguageSynchronizationHook::class;
 
     //hook for translate content
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processTranslateToClass']['deepl']
         = \WebVision\WvDeepltranslate\Hooks\TranslateHook::class;
-    //hook to checkModifyAccessList for editors
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkModifyAccessList']['deepl']
-        = \WebVision\WvDeepltranslate\Hooks\TCEmainHook::class;
-
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all']['deepl-1675946132'] =
-        \WebVision\WvDeepltranslate\Hooks\DeeplPreviewFlagGeneratePageHook::class . '->renderDeeplPreviewFlag';
 
     //xclass localizationcontroller for localizeRecords() and process() action
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\Page\LocalizationController::class] = [
@@ -68,26 +107,4 @@ if (!defined('TYPO3_MODE')) {
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
     }
-
-    $icons = [
-        'apps-pagetree-folder-contains-glossar' => 'deepl.svg',
-        'actions-localize-deepl' => 'actions-localize-deepl.svg',
-        'deepl-grey-logo' => 'deepl-grey.svg',
-    ];
-    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-    foreach ($icons as $identifier => $path) {
-        if (!$iconRegistry->isRegistered($identifier)) {
-            $iconRegistry->registerIcon(
-                $identifier,
-                \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-                ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/' . $path]
-            );
-        }
-    }
-
-    //add caching for DeepL API supported Languages
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']
-        ??= [];
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']['backend']
-        ??= \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
 })();

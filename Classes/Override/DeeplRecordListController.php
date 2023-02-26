@@ -7,6 +7,9 @@ namespace WebVision\WvDeepltranslate\Override;
 use TYPO3\CMS\Recordlist\Controller\RecordListController;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
+/**
+ * @deprecated will be removed in v4
+ */
 class DeeplRecordListController extends RecordListController
 {
     /**

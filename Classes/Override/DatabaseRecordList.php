@@ -19,6 +19,7 @@ use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 /**
  * Class for rendering of Web>List module
+ * @deprecated will be removed in v4
  */
 class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList
 {
