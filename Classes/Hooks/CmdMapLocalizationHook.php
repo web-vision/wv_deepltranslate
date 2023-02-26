@@ -18,6 +18,7 @@ use WebVision\WvDeepltranslate\Service\LanguageService;
 
 class CmdMapLocalizationHook
 {
+    private static bool $flashMessageSet = false;
     public function processCmdmap(
         string $command,
         string $table,
@@ -191,6 +192,20 @@ class CmdMapLocalizationHook
             }
         }
 
+        if ($detectedSlugField !== '') {
+            $translatedElement[$detectedSlugField] = '';
+        }
+        $data[$table][$translatedElement['uid']] = $translatedElement;
+        $innerDataHandler = GeneralUtility::makeInstance(DataHandler::class);
+        $innerDataHandler->start($data, []);
+        $innerDataHandler->process_datamap();
+
+        // check, if flashMessage was set before
+        // needed for bulk translations to avoid
+        // message appearing more than once
+        if (self::$flashMessageSet) {
+            return;
+        }
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
             LocalizationUtility::translate(
@@ -207,14 +222,8 @@ class CmdMapLocalizationHook
         GeneralUtility::makeInstance(FlashMessageService::class)
             ->getMessageQueueByIdentifier()
             ->enqueue($flashMessage);
+        self::$flashMessageSet = true;
 
-        if ($detectedSlugField !== '') {
-            $translatedElement[$detectedSlugField] = '';
-        }
-        $data[$table][$translatedElement['uid']] = $translatedElement;
-        $innerDataHandler = GeneralUtility::makeInstance(DataHandler::class);
-        $innerDataHandler->start($data, []);
-        $innerDataHandler->process_datamap();
     }
 
     /**
