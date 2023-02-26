@@ -158,6 +158,13 @@
 			<trans-unit id="glossary.sync.button.all">
 				<source>Synchronise Glossaries</source>
 			</trans-unit>
+
+			<trans-unit id="automaticTranslation.fallback.message">
+				<source>For this language no DeepL translation is supported. Fallback to default translation behaviour.</source>
+			</trans-unit>
+			<trans-unit id="automaticTranslation.fallback.title">
+				<source>No DeepL support</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

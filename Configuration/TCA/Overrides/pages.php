@@ -60,4 +60,17 @@ if (!defined('TYPO3_MODE')) {
         '',
         'after:media'
     );
+
+    // TODO remove if in v4
+    if (TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(TYPO3\CMS\Core\Configuration\Features::class)
+        ->isFeatureEnabled('deepltranslate.automaticTranslation')) {
+        $GLOBALS['TCA']['pages']['ctrl']['deeplTranslation'] = true;
+        $GLOBALS['TCA']['pages']['columns']['title']['l10n_mode'] = 'deepl';
+        $GLOBALS['TCA']['pages']['columns']['keywords']['l10n_mode'] = 'deepl';
+        $GLOBALS['TCA']['pages']['columns']['description']['l10n_mode'] = 'deepl';
+        $GLOBALS['TCA']['pages']['columns']['nav_title']['l10n_mode'] = 'deepl';
+        $GLOBALS['TCA']['pages']['columns']['subtitle']['l10n_mode'] = 'deepl';
+        $GLOBALS['TCA']['pages']['columns']['abstract']['l10n_mode'] = 'deepl';
+        return;
+    }
 })();

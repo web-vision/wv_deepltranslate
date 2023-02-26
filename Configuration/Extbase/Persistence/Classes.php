@@ -1,7 +1,9 @@
 <?php
 
 declare(strict_types=1);
-
+/**
+ * @deprecated will be removed in v4
+ */
 return [
     \WebVision\WvDeepltranslate\Domain\Model\Settings::class => [
         'tableName' => 'tx_deepl_settings',

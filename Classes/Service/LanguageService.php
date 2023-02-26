@@ -98,8 +98,11 @@ class LanguageService
      * @throws LanguageRecordNotFoundException
      * @throws LanguageIsoCodeNotFoundException
      */
-    public function getTargetLanguage(Site $currentSite, int $languageId): array
-    {
+    public function getTargetLanguage(
+        Site $currentSite,
+        int $languageId,
+        bool $fallbackForDefaultTranslation = false
+    ): array {
         if ($this->siteLanguageMode) {
             $languages = array_filter($currentSite->getConfiguration()['languages'], function ($value) use ($languageId) {
                 if (!is_array($value)) {
@@ -137,7 +140,7 @@ class LanguageService
                     break;
                 }
             }
-            if ($languageIsoCode === null) {
+            if ($languageIsoCode === null && !$fallbackForDefaultTranslation) {
                 throw new LanguageIsoCodeNotFoundException(
                     sprintf(
                         'No API supported target found for language "%s" in site "%s"',
@@ -160,7 +163,7 @@ class LanguageService
         $targetLanguageRecord = $this->getRecordFromSysLanguage($languageId);
 
         $targetLanguageMapping = $this->settingsRepository->getMappings($targetLanguageRecord['uid']);
-        if ($targetLanguageMapping === '') {
+        if ($targetLanguageMapping === '' && !$fallbackForDefaultTranslation) {
             throw new LanguageIsoCodeNotFoundException(
                 sprintf(
                     'No API supported target found for language "%s"',

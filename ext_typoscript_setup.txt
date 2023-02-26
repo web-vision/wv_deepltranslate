@@ -20,12 +20,14 @@ config.tx_extbase.persistence {
    }
 }
 
-module.tx_backend.view {
-    partialRootPaths {
-        10 = EXT:wv_deepltranslate/Resources/Private/Backend/Partials
+[feature("deepltranslate.automaticTranslation") === false]
+    module.tx_backend.view {
+        partialRootPaths {
+            10 = EXT:wv_deepltranslate/Resources/Private/Backend/Partials
+        }
     }
-}
+[END]
 
-[typo3.version < "11.5"]
+[typo3.version < "11.5" && feature("deepltranslate.automaticTranslation") === false]
     module.tx_backend.view.partialRootPaths.10 = EXT:wv_deepltranslate/Resources/Private/Backend/v10/Partials
 [END]
