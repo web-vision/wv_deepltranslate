@@ -67,7 +67,7 @@ class DeeplBackendUtility
     }
 
     /**
-     * @return string
+     * @deprecated will be removed in v4
      */
     public static function getGoogleApiKey(): string
     {
@@ -78,7 +78,7 @@ class DeeplBackendUtility
     }
 
     /**
-     * @return string
+     * @deprecated will be removed in v4
      */
     public static function getGoogleApiUrl(): string
     {
@@ -120,6 +120,9 @@ class DeeplBackendUtility
         self::$configurationLoaded = true;
     }
 
+    /**
+     * @deprecated will be removed in v4
+     */
     public static function buildTranslateButton(
         $table,
         $id,
@@ -168,12 +171,18 @@ class DeeplBackendUtility
             . $lC . '</a> ';
     }
 
+    /**
+     * @deprecated will be removed in v4
+     */
     public static function buildBackendRoute(string $route, array $parameters): string
     {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($route, $parameters);
     }
 
+    /**
+     * @deprecated will be removed in v4
+     */
     private static function getIcon(string $iconFlag): Icon
     {
         $deeplTranslateIcon = sprintf('deepl-translate-%s', $iconFlag);
@@ -214,6 +223,9 @@ class DeeplBackendUtility
         return $newIcon;
     }
 
+    /**
+     * @deprecated will be removed in v4
+     */
     public static function buildTranslateDropdown(
         $siteLanguages,
         $id,
@@ -290,6 +302,9 @@ class DeeplBackendUtility
         return '';
     }
 
+    /**
+     * @deprecated will be removed in v4
+     */
     public static function checkCanBeTranslated(int $pageId, int $languageId): bool
     {
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
@@ -310,6 +325,9 @@ class DeeplBackendUtility
         return true;
     }
 
+    /**
+     * @deprecated will be removed in v4
+     */
     private static function getBackendUserAuthentication(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];

@@ -8,6 +8,9 @@ use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
+/**
+ * @deprecated will be removed in v4
+ */
 class DeeplTranslateViewHelper extends AbstractViewHelper
 {
     public function initializeArguments()
