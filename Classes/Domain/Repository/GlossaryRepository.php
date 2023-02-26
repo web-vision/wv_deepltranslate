@@ -61,6 +61,15 @@ class GlossaryRepository
         return $glossaryInformation;
     }
 
+    public function detectGlossaryForTranslation(
+        string $table,
+        int $elementId,
+        string $sourceLanguageId,
+        string $targetLanguageId
+    ): string {
+        return '';
+    }
+
     /**
      * @return array<string, mixed>|null
      */
