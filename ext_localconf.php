@@ -4,7 +4,7 @@ if (!defined('TYPO3_MODE')) {
     die();
 }
 
-(function () {
+(static function (): void {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:wv_deepltranslate/Configuration/TsConfig/Page/pagetsconfig.tsconfig">'
     );
@@ -70,7 +70,7 @@ if (!defined('TYPO3_MODE')) {
     }
 
     $icons = [
-        'apps-pagetree-folder-contains-glossar' => 'deepl.svg',
+        'apps-pagetree-folder-contains-glossary' => 'deepl.svg',
         'actions-localize-deepl' => 'actions-localize-deepl.svg',
         'deepl-grey-logo' => 'deepl-grey.svg',
     ];

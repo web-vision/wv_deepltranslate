@@ -6,15 +6,19 @@ if (!defined('TYPO3_MODE')) {
 
 (static function (): void {
     $ll = function (string $languageKey) {
-        return sprintf('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:%s', $languageKey);
+        return sprintf(
+            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:%s',
+            $languageKey
+        );
     };
 
     $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = [
-        'DeepL Glossar',
-        'wv_deepltranslate',
-        'apps-pagetree-folder-contains-glossar',
+        'DeepL Glossary',
+        'glossary',
+        'apps-pagetree-folder-contains-glossary',
     ];
-    $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-glossar'] = 'apps-pagetree-folder-contains-glossar';
+    $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-glossary']
+        = 'apps-pagetree-folder-contains-glossary';
 
     $columns = [
         'tx_wvdeepltranslate_content_not_checked' => [
@@ -44,6 +48,21 @@ if (!defined('TYPO3_MODE')) {
                 'default' => 0,
             ],
         ],
+        'glossary_information' => [
+            'label' => 'LLL:EXT:/Resources/Private/Language/locallang.xlf:.glossary_information',
+            'displayCond' => [
+                'AND' => [
+                    'FIELD:doktype:=:254',
+                    'FIELD:module:=:glossary',
+                ],
+            ],
+            'config' => [
+                'type' => 'inline',
+                'readOnly' => true,
+                'foreign_table' => 'tx_wvdeepltranslate_glossary',
+                'foreign_field' => 'pid',
+            ],
+        ],
     ];
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $columns);
@@ -51,13 +70,13 @@ if (!defined('TYPO3_MODE')) {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
         'pages',
         'deepl_translate',
-        'tx_wvdeepltranslate_content_not_checked, tx_wvdeepltranslate_translated_time'
+        'tx_wvdeepltranslate_content_not_checked, tx_wvdeepltranslate_translated_time,glossary_information'
     );
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
         'pages',
         sprintf('--div--;%s,--palette--;;deepl_translate;', $ll('pages.deepl.tab.label')),
         '',
-        'after:media'
+        'after:language'
     );
 })();

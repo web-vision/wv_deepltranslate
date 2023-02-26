@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Controller;
 
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -13,47 +14,26 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\InvalidArgumentException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
-use WebVision\WvDeepltranslate\Traits\GlossarySyncTrait;
-use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class GlossarySyncController
 {
-    use GlossarySyncTrait;
     protected DeeplGlossaryService $deeplGlossaryService;
-
-    protected GlossaryRepository $glossaryRepository;
 
     public function __construct(
         ?DeeplGlossaryService $deeplGlossaryService = null,
         ?GlossaryRepository $glossaryRepository = null
     ) {
-        $this->deeplGlossaryService = $deeplGlossaryService ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
-        $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
+        $this->deeplGlossaryService = $deeplGlossaryService
+            ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
     }
 
     /**
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function update(ServerRequestInterface $request)
     {
         $processingParameters = $request->getQueryParams();
-
-        if (!isset($processingParameters['mode'])) {
-            throw new InvalidArgumentException(
-                'Mode is not defined. Synchronization not completed.',
-                1676935386416
-            );
-        }
-
-        if (
-            $processingParameters['mode'] !== DeeplBackendUtility::RENDER_TYPE_ELEMENT
-            && $processingParameters['mode'] !== DeeplBackendUtility::RENDER_TYPE_PAGE
-        ) {
-            throw new InvalidArgumentException(
-                'No mode' . $processingParameters['mode'] . ' defined',
-                1676935573680
-            );
-        }
 
         if (!isset($processingParameters['uid'])) {
             throw new InvalidArgumentException(
@@ -62,14 +42,7 @@ class GlossarySyncController
             );
         }
 
-        switch ($processingParameters['mode']) {
-            case DeeplBackendUtility::RENDER_TYPE_PAGE:
-                $this->syncGlossariesOfPage((int)$processingParameters['uid']);
-                break;
-            case DeeplBackendUtility::RENDER_TYPE_ELEMENT:
-                $this->syncSingleGlossary((int)$processingParameters['uid']);
-                break;
-        }
+        $this->deeplGlossaryService->syncGlossaries((int)$processingParameters['uid']);
 
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
@@ -87,14 +60,5 @@ class GlossarySyncController
             ->enqueue($flashMessage);
 
         return new RedirectResponse($processingParameters['returnUrl']);
-    }
-
-    private function syncGlossariesOfPage(int $uid): void
-    {
-        $glossaries = $this->glossaryRepository->findAllGlossaries($uid);
-
-        foreach ($glossaries as $glossary) {
-            $this->syncSingleGlossary($glossary['uid']);
-        }
     }
 }

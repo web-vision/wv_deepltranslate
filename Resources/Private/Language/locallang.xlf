@@ -135,6 +135,10 @@
 				<source>DeepL Sync</source>
 			</trans-unit>
 
+			<trans-unit id="pages.glossary.translate">
+				<source>Create new Glossary translation</source>
+			</trans-unit>
+
 			<trans-unit id="glossary.sync.message">
 				<source>Synchronization with DeepL is done. Your glossaries are ready to use.</source>
 			</trans-unit>

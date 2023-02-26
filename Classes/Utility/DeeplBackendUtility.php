@@ -19,29 +19,30 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
+use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
 class DeeplBackendUtility
 {
-    public const RENDER_TYPE_PAGE = 'page';
-
-    public const RENDER_TYPE_ELEMENT = 'element';
-
     private static string $apiKey = '';
+
     /**
      * @deprecated
      */
     private static string $apiUrl = '';
+
     /**
      * @deprecated
      */
     private static string $googleApiKey = '';
+
     /**
      * @deprecated
      */
     private static string $googleApiUrl = '';
 
     private static string $deeplFormality = 'default';
+
     private static bool $configurationLoaded = false;
 
     /**
@@ -308,6 +309,19 @@ class DeeplBackendUtility
             return false;
         }
         return true;
+    }
+
+    public static function checkGlossaryCanCreated(string $sourceLanguage, string $targetLanguage): bool
+    {
+        $possibleGlossaryMatches = GeneralUtility::makeInstance(DeeplGlossaryService::class)
+            ->getPossibleGlossaryLanguageConfig();
+        if (!isset($possibleGlossaryMatches[$sourceLanguage])) {
+            return false;
+        }
+        if (in_array($targetLanguage, $possibleGlossaryMatches[$sourceLanguage])) {
+            return true;
+        }
+        return false;
     }
 
     private static function getBackendUserAuthentication(): BackendUserAuthentication

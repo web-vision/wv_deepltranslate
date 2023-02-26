@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
-class GlossariesEntriesListCommand extends Command
+class GlossaryListCommand extends Command
 {
     protected DeeplGlossaryService $deeplGlossaryService;
 

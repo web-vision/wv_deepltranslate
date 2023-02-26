@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
-class GlossariesEntriesCleanupCommand extends Command
+class GlossaryCleanupCommand extends Command
 {
     protected DeeplGlossaryService $deeplGlossaryService;
 

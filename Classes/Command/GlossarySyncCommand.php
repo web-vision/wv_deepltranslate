@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace WebVision\WvDeepltranslate\Command;
 
@@ -11,12 +11,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
-use WebVision\WvDeepltranslate\Traits\GlossarySyncTrait;
 
 class GlossarySyncCommand extends Command
 {
-    use GlossarySyncTrait;
-
     protected DeeplGlossaryService $deeplGlossaryService;
 
     protected GlossaryRepository $glossaryRepository;
@@ -45,11 +42,14 @@ class GlossarySyncCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $pageId = $input->getOption('pageId');
-        $glossaries = $this->glossaryRepository->findAllGlossaries($pageId);
+        $pageId = (int)$input->getOption('pageId');
+        $glossaries = [$pageId];
+        if ($pageId === 0) {
+            $glossaries = $this->glossaryRepository->findAllGlossaries();
+        }
 
         foreach ($glossaries as $glossary) {
-            $this->syncSingleGlossary($glossary['uid']);
+            $this->deeplGlossaryService->syncGlossaries($glossary);
         }
 
         /**

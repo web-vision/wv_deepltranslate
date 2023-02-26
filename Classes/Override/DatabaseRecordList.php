@@ -38,6 +38,12 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
             if (!DeeplBackendUtility::isDeeplApiKeySet()) {
                 return $out;
             }
+
+            // glossaries should not be auto translated by DeepL
+            if ($table === 'tx_wvdeepltranslate_glossaryentry') {
+                return $out;
+            }
+
             $pageId = (int)($table === 'pages' ? $row['uid'] : $row['pid']);
             // All records excluding pages
             $possibleTranslations = $this->possibleTranslations;

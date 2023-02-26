@@ -80,8 +80,10 @@ class DeeplService
             'tag_handling' => urlencode('xml'),
         ];
 
+        // TODO make glossary findable by current site
         // Implementation of glossary into translation
-        $glossaryId = $this->glossaryRepository->getGlossaryBySourceAndTarget($sourceLanguage, $targetLanguage);
+        $glossaryId = $this->glossaryRepository
+            ->getGlossaryBySourceAndTarget($sourceLanguage, $targetLanguage);
 
         if (!empty($glossaryId)) {
             $postFields['glossary_id'] = $glossaryId;

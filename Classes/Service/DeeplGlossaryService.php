@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\BadResponseException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -12,6 +13,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 use WebVision\WvDeepltranslate\Service\Client\Client;
 use WebVision\WvDeepltranslate\Service\Client\ClientInterface;
@@ -53,8 +55,11 @@ class DeeplGlossaryService
 
     private FrontendInterface $cache;
 
+    protected GlossaryRepository $glossaryRepository;
+
     public function __construct(
-        ?FrontendInterface $cache = null
+        ?FrontendInterface $cache = null,
+        ?GlossaryRepository $glossaryRepository = null
     ) {
         $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
 
@@ -69,6 +74,7 @@ class DeeplGlossaryService
             self::API_VERSION,
             $this->apiUrl
         );
+        $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
     }
 
     /**
@@ -247,5 +253,33 @@ class DeeplGlossaryService
         $this->cache->set($cacheIdentifier, $pairMappingArray);
 
         return $pairMappingArray;
+    }
+
+    public function syncGlossaries(int $uid): void
+    {
+        $glossaries = $this->glossaryRepository
+            ->getGlossaryInformationForSync($uid);
+
+        foreach ($glossaries as $glossaryInformation) {
+            if ($glossaryInformation['glossary_id'] !== '') {
+                try {
+                    $this->deleteGlossary($glossaryInformation['glossary_id']);
+                } catch (ClientException $e) {
+                }
+            }
+
+            try {
+                $glossary = $this->createGlossary(
+                    $glossaryInformation['glossary_name'],
+                    $glossaryInformation['entries'],
+                    $glossaryInformation['source_lang'],
+                    $glossaryInformation['target_lang']
+                );
+            } catch (GlossaryEntriesNotExistException $exception) {
+                $glossary = [];
+            }
+
+            $this->glossaryRepository->updateLocalGlossary($glossary, (int)$glossaryInformation['uid']);
+        }
     }
 }
