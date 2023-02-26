@@ -28,123 +28,124 @@ class CmdMapLocalizationHook
         DataHandler $dataHandler,
         $pasteUpdate
     ): void {
-        if ($command === 'localize') {
-            $originalElement = BackendUtility::getRecord(
-                $table,
-                $id
+        if ($command !== 'localize') {
+            return;
+        }
+        $originalElement = BackendUtility::getRecord(
+            $table,
+            $id
+        );
+        $newId = $dataHandler->localize($table, $id, $value);
+        $translatedElement = BackendUtility::getRecord(
+            $table,
+            $newId
+        );
+        $commandIsProcessed = true;
+        $deeLTranslationEnabled = (bool)$GLOBALS['TCA'][$table]['ctrl']['deeplTranslation'] ?? false;
+
+        if (!$deeLTranslationEnabled) {
+            return;
+        }
+        $tableTCAColumns = $GLOBALS['TCA'][$table]['columns'];
+        foreach ($tableTCAColumns as $field => $columnConfig) {
+            if ($columnConfig['type'] === 'language') {
+                $sysLanguageField = $field;
+            }
+        }
+        // fallback, since 11.2 languageField is deprecated
+        if (!isset($sysLanguageField)) {
+            $sysLanguageField = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
+        }
+
+        // no config for translation,
+        // no language field set.
+        // should NEVER appear here
+        if (!isset($sysLanguageField)) {
+            return;
+        }
+
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+
+        $siteInformation = $languageService->getCurrentSite($table, $id);
+
+        try {
+            $sourceLanguage = $languageService->getLanguage(
+                $siteInformation['site'],
+                (int)$originalElement[$sysLanguageField] ?? 0
             );
-            $newId = $dataHandler->localize($table, $id, $value);
-            $translatedElement = BackendUtility::getRecord(
-                $table,
-                $newId
+            $targetLanguage = $languageService->getLanguage(
+                $siteInformation['site'],
+                (int)$translatedElement[$sysLanguageField]
             );
-            $commandIsProcessed = true;
-            $deeLTranslationEnabled = (bool)$GLOBALS['TCA'][$table]['ctrl']['deeplTranslation'] ?? false;
+        } catch (LanguageIsoCodeNotFoundException $e) {
+            $targetLanguage = $languageService->getLanguage(
+                $siteInformation['site'],
+                (int)$translatedElement[$sysLanguageField],
+                true
+            );
+            $this->cleanUpWithDefault(
+                $table,
+                $originalElement,
+                $translatedElement,
+                $dataHandler,
+                $tableTCAColumns,
+                $targetLanguage
+            );
+            return;
+        }
 
-            if (!$deeLTranslationEnabled) {
-                return;
+        /* TODO Detect glossary here instead in service to avoid multiple calls
+        $glossary = GeneralUtility::makeInstance(GlossaryRepository::class)
+            ->detectGlossaryForTranslation($table, $id, $translatedElement['sys_language_uid']);
+        */
+        $deepLService = GeneralUtility::makeInstance(DeeplService::class);
+
+        $deepLTranslated = false;
+        $detectedSlugField = '';
+        foreach ($translatedElement as $field => $value) {
+            // reset slug to empty to auto create new with correct value
+            if (
+                isset($tableTCAColumns[$field])
+                && isset($tableTCAColumns[$field]['config']['type'])
+                && $tableTCAColumns[$field]['config']['type'] === 'slug'
+            ) {
+                $detectedSlugField = $field;
+                continue;
             }
-            $tableTCAColumns = $GLOBALS['TCA'][$table]['columns'];
-            foreach ($tableTCAColumns as $field => $columnConfig) {
-                if ($columnConfig['type'] === 'language') {
-                    $sysLanguageField = $field;
-                }
+            if (
+                !isset($tableTCAColumns[$field])
+                || !isset($tableTCAColumns[$field]['l10n_mode'])
+                || $tableTCAColumns[$field]['l10n_mode'] !== 'deepl'
+            ) {
+                continue;
             }
-            // fallback, since 11.2 languageField is deprecated
-            if (!isset($sysLanguageField)) {
-                $sysLanguageField = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
-            }
-
-            // no config for translation,
-            // no language field set.
-            // should NEVER appear here
-            if (!isset($sysLanguageField)) {
-                return;
-            }
-
-            $languageService = GeneralUtility::makeInstance(LanguageService::class);
-
-            $siteInformation = $languageService->getCurrentSite($table, $id);
-
-            try {
-                $sourceLanguage = $languageService->getLanguage(
-                    $siteInformation['site'],
-                    (int)$originalElement[$sysLanguageField] ?? 0
-                );
-                $targetLanguage = $languageService->getLanguage(
-                    $siteInformation['site'],
-                    (int)$translatedElement[$sysLanguageField]
-                );
-            } catch (LanguageIsoCodeNotFoundException $e) {
-                $targetLanguage = $languageService->getLanguage(
-                    $siteInformation['site'],
-                    (int)$translatedElement[$sysLanguageField],
-                    true
-                );
-                $this->cleanUpWithDefault(
-                    $table,
-                    $originalElement,
-                    $translatedElement,
-                    $dataHandler,
-                    $tableTCAColumns,
-                    $targetLanguage
-                );
-                return;
-            }
-
-            /* TODO Detect glossary here instead in service to avoid multiple calls
-            $glossary = GeneralUtility::makeInstance(GlossaryRepository::class)
-                ->detectGlossaryForTranslation($table, $id, $translatedElement['sys_language_uid']);
-            */
-            $deepLService = GeneralUtility::makeInstance(DeeplService::class);
-
-            $deepLTranslated = false;
-            $detectedSlugField = '';
-            foreach ($translatedElement as $field => $value) {
-                // reset slug to empty to auto create new with correct value
-                if (
-                    isset($tableTCAColumns[$field])
-                    && isset($tableTCAColumns[$field]['config']['type'])
-                    && $tableTCAColumns[$field]['config']['type'] === 'slug'
-                ) {
-                    $detectedSlugField = $field;
-                    continue;
-                }
-                if (
-                    !isset($tableTCAColumns[$field])
-                    || !isset($tableTCAColumns[$field]['l10n_mode'])
-                    || $tableTCAColumns[$field]['l10n_mode'] !== 'deepl'
-                ) {
-                    continue;
-                }
-                $translatedContent = $deepLService->translateRequest(
-                    $originalElement[$field],
-                    $targetLanguage['language_isocode'],
-                    $sourceLanguage['language_isocode']
-                );
-                if (!empty($translatedContent) && isset($translatedContent['translations'])) {
-                    foreach ($translatedContent['translations'] as $translation) {
-                        if ($translation['text'] != '') {
-                            $value = $translation['text'] ?? $value;
-                            $deepLTranslated = true;
-                            break;
-                        }
+            $translatedContent = $deepLService->translateRequest(
+                $originalElement[$field],
+                $targetLanguage['language_isocode'],
+                $sourceLanguage['language_isocode']
+            );
+            if (!empty($translatedContent) && isset($translatedContent['translations'])) {
+                foreach ($translatedContent['translations'] as $translation) {
+                    if ($translation['text'] != '') {
+                        $value = $translation['text'] ?? $value;
+                        $deepLTranslated = true;
+                        break;
                     }
                 }
-                $translatedElement[$field] = $value ?? $originalElement[$field];
             }
-            if ($deepLTranslated) {
-                // empty slug field to auto create
-                if ($detectedSlugField !== '') {
-                    $translatedElement[$detectedSlugField] = '';
-                }
-                $data[$table][$translatedElement['uid']] = $translatedElement;
-                $innerDataHandler = GeneralUtility::makeInstance(DataHandler::class);
-                $innerDataHandler->start($data, []);
-                $innerDataHandler->process_datamap();
-                GeneralUtility::makeInstance(PageRepository::class)
-                    ->markPageAsTranslatedWithDeepl($siteInformation['pageUid'], $targetLanguage);
+            $translatedElement[$field] = $value ?? $originalElement[$field];
+        }
+        if ($deepLTranslated) {
+            // empty slug field to auto create
+            if ($detectedSlugField !== '') {
+                $translatedElement[$detectedSlugField] = '';
             }
+            $data[$table][$translatedElement['uid']] = $translatedElement;
+            $innerDataHandler = GeneralUtility::makeInstance(DataHandler::class);
+            $innerDataHandler->start($data, []);
+            $innerDataHandler->process_datamap();
+            GeneralUtility::makeInstance(PageRepository::class)
+                ->markPageAsTranslatedWithDeepl($siteInformation['pageUid'], $targetLanguage);
         }
     }
 
