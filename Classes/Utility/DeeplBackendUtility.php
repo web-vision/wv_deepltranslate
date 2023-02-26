@@ -318,7 +318,7 @@ class DeeplBackendUtility
             return false;
         }
         try {
-            $languageService->getTargetLanguage($site['site'], $languageId);
+            $languageService->getLanguage($site['site'], $languageId);
         } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException $e) {
             return false;
         }

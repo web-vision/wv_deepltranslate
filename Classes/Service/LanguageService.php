@@ -69,28 +69,9 @@ class LanguageService
      * @return array{uid: int, title: string, language_isocode: string}
      * @throws LanguageIsoCodeNotFoundException
      */
-    public function getSourceLanguage(Site $currentSite): array
+    public function getSourceLanguage(Site $currentSite, int $languageId = 0): array
     {
-        $sourceLanguageRecord = [
-            'uid' => $currentSite->getDefaultLanguage()->getLanguageId(),
-            'title' => $currentSite->getDefaultLanguage()->getTitle(),
-            'language_isocode' => strtoupper($currentSite->getDefaultLanguage()->getTwoLetterIsoCode()),
-        ];
-
-        if (!in_array(
-            $sourceLanguageRecord['language_isocode'],
-            $this->deeplService->apiSupportedLanguages['source']
-        )) {
-            throw new LanguageIsoCodeNotFoundException(
-                sprintf(
-                    'No API supported target found for language "%s"',
-                    $sourceLanguageRecord['title']
-                ),
-                1676741965
-            );
-        }
-
-        return $sourceLanguageRecord;
+        return $this->getLanguage($currentSite, $languageId);
     }
 
     /**
@@ -98,7 +79,7 @@ class LanguageService
      * @throws LanguageRecordNotFoundException
      * @throws LanguageIsoCodeNotFoundException
      */
-    public function getTargetLanguage(
+    public function getLanguage(
         Site $currentSite,
         int $languageId,
         bool $fallbackForDefaultTranslation = false

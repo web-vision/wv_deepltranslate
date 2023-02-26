@@ -44,20 +44,40 @@ class CmdMapLocalizationHook
                 return;
             }
             $tableTCAColumns = $GLOBALS['TCA'][$table]['columns'];
+            foreach ($tableTCAColumns as $field => $columnConfig) {
+                if ($columnConfig['type'] === 'language') {
+                    $sysLanguageField = $field;
+                }
+            }
+            // fallback, since 11.2 languageField is deprecated
+            if (!isset($sysLanguageField)) {
+                $sysLanguageField = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
+            }
+
+            // no config for translation,
+            // no language field set.
+            // should NEVER appear here
+            if (!isset($sysLanguageField)) {
+                return;
+            }
+
             $languageService = GeneralUtility::makeInstance(LanguageService::class);
 
             $siteInformation = $languageService->getCurrentSite($table, $id);
 
             try {
-                $sourceLanguage = $languageService->getSourceLanguage($siteInformation['site']);
-                $targetLanguage = $languageService->getTargetLanguage(
+                $sourceLanguage = $languageService->getLanguage(
                     $siteInformation['site'],
-                    (int)$translatedElement['sys_language_uid']
+                    (int)$originalElement[$sysLanguageField] ?? 0
+                );
+                $targetLanguage = $languageService->getLanguage(
+                    $siteInformation['site'],
+                    (int)$translatedElement[$sysLanguageField]
                 );
             } catch (LanguageIsoCodeNotFoundException $e) {
-                $targetLanguage = $languageService->getTargetLanguage(
+                $targetLanguage = $languageService->getLanguage(
                     $siteInformation['site'],
-                    (int)$translatedElement['sys_language_uid'],
+                    (int)$translatedElement[$sysLanguageField],
                     true
                 );
                 $this->cleanUpWithDefault(

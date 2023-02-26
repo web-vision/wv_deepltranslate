@@ -49,7 +49,7 @@ class LanguageServiceTest extends FunctionalTestCase
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
-        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 2);
+        $sourceLanguageRecord = $languageService->getLanguage($siteInformation['site'], 2);
 
         static::assertArrayHasKey('uid', $sourceLanguageRecord);
         static::assertArrayHasKey('title', $sourceLanguageRecord);
@@ -71,7 +71,7 @@ class LanguageServiceTest extends FunctionalTestCase
 
         static::expectException(LanguageRecordNotFoundException::class);
         static::expectExceptionMessage('No language for record with uid "5" found.');
-        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 5);
+        $sourceLanguageRecord = $languageService->getLanguage($siteInformation['site'], 5);
     }
 
     /**
@@ -84,7 +84,7 @@ class LanguageServiceTest extends FunctionalTestCase
 
         static::expectException(LanguageIsoCodeNotFoundException::class);
         static::expectExceptionMessage('No API supported target found for language "Bosnian"');
-        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 4);
+        $sourceLanguageRecord = $languageService->getLanguage($siteInformation['site'], 4);
     }
 
     private function typo3VersionSkip(): void

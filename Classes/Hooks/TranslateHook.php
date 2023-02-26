@@ -87,7 +87,7 @@ class TranslateHook
                 $siteInformation['site']
             );
 
-            $targetLanguageRecord = $this->languageService->getTargetLanguage(
+            $targetLanguageRecord = $this->languageService->getLanguage(
                 $siteInformation['site'],
                 (int)$languageRecord['uid']
             );
