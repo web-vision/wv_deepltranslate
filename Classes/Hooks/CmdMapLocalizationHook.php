@@ -16,7 +16,10 @@ use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
-class CmdMapLocalizationHook
+/**
+ * @internal This class is not part of `wv_deepltranslate` public API.
+ */
+final class CmdMapLocalizationHook
 {
     private static bool $flashMessageSet = false;
     public function processCmdmap(
