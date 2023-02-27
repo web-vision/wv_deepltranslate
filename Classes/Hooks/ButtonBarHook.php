@@ -17,9 +17,6 @@ use WebVision\WvDeepltranslate\Domain\Repository\GlossaryEntryRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
-/**
- * @deprecated will be removed in v4
- */
 class ButtonBarHook
 {
     protected PageRepository $pageRepository;
