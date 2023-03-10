@@ -21,7 +21,7 @@ class LanguageSelectorItemsProc
             return;
         }
 
-        $possibleSources = $possibleGlossaryConfig[$configuration['row']['source_lang']];
+        $possibleSources = ($possibleGlossaryConfig[$configuration['row']['source_lang']] ?? null);
 
         if ($possibleSources === null) {
             return;
