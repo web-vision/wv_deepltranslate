@@ -63,7 +63,7 @@ class ButtonBarHook
                 $this->getBackendUserAuthentication()->check('tables_modify', 'tx_wvdeepltranslate_glossary')
                 && $this->glossaryRepository->hasGlossariesOnPage((int)$queryParams['id'])
             ) {
-                $pageId = $page['uid'];
+                $pageId = ($page['uid'] ?? 0);
                 $renderMode = DeeplBackendUtility::RENDER_TYPE_PAGE;
             }
         }
