@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Command;
 
@@ -126,7 +127,7 @@ class GlossariesEntriesCleanupCommand extends Command
         }
 
         $output->writeln([
-            sprintf('Found %d glossaries with possible sync mismatch. Cleaned up.', count($findNotConnected))
+            sprintf('Found %d glossaries with possible sync mismatch. Cleaned up.', count($findNotConnected)),
         ]);
     }
 }

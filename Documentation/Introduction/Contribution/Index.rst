@@ -25,4 +25,6 @@ Contribution workflow
     for a marginal feature. It helps to have a discussion about a new feature before
     opening a pull request.
 
-#.  Please always create a pull request based on the updated release branch.
+#.  Please always create a pull request based on the updated release branch. That
+    ensures that necessary quality checks and tests are executed as a quality
+    raiser.

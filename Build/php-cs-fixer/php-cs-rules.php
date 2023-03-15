@@ -13,11 +13,13 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $finder = PhpCsFixer\Finder::create()
+    ->ignoreVCSIgnored(true)
     ->exclude([
-        __DIR__ . '/../.Build',
-        __DIR__ . '/../var'
+        '.Build/',
+        'Build/',
+        'var/',
     ])
-    ->in(__DIR__ . '/../');
+    ->in(realpath(__DIR__ . '/../../'));
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
@@ -30,6 +32,7 @@ return (new PhpCsFixer\Config())
                 'author'
             ]
         ],
+        'blank_line_after_opening_tag' => true,
         'no_leading_import_slash' => true,
         'no_trailing_comma_in_singleline_array' => true,
         'no_singleline_whitespace_before_semicolons' => true,
@@ -60,7 +63,7 @@ return (new PhpCsFixer\Config())
         'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
         'return_type_declaration' => ['space_before' => 'none'],
         'cast_spaces' => ['space' => 'none'],
-        'declare_equal_normalize' => ['space' => 'single'],
+        'declare_equal_normalize' => ['space' => 'none'],
         'dir_constant' => true,
         'phpdoc_no_access' => true,
         'braces' => ['allow_single_line_closure' => true],

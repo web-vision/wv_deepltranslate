@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Traits;
 
@@ -24,7 +24,6 @@ trait GlossarySyncTrait
                 $glossaryInformation['source_lang'],
                 $glossaryInformation['target_lang']
             );
-
         } catch (GlossaryEntriesNotExistException $exception) {
             $glossary = [];
         }

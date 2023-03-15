@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
@@ -113,9 +113,7 @@ class LanguageService
                 return false;
             });
 
-            $language = array_shift($languages);
-
-            if (count($language) === 0) {
+            if (count($languages) === 0) {
                 throw new LanguageRecordNotFoundException(
                     sprintf(
                         'Language "%d" not found in SiteConfig "%s"',
@@ -125,7 +123,7 @@ class LanguageService
                     1676824459
                 );
             }
-
+            $language = reset($languages);
             $languageIsoCode = null;
 
             foreach ($this->possibleLangMatches as $possibleLangMatch) {
