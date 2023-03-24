@@ -126,7 +126,7 @@ class DeeplGlossaryService
 
         $formattedEntries = [];
         foreach ($entries as $entry) {
-            $formattedEntries[] = sprintf("%s\t%s", $entry['source'], $entry['target']);
+            $formattedEntries[] = sprintf("%s\t%s", trim($entry['source']), trim($entry['target']));
         }
 
         $paramsArray = [
