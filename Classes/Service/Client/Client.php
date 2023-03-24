@@ -96,15 +96,10 @@ final class Client implements ClientInterface
      */
     public function request($url, $body = '', $method = 'POST')
     {
-        $resource = null;
-        if (!empty($body)) {
-            $streamBody = sprintf('data://text/plain,%s', $body);
-            $resource = fopen($streamBody, 'r');
-        }
         $request = new Request(
             $url,
             $method,
-            $resource,
+            null,
             [
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'Authorization' => sprintf('DeepL-Auth-Key %s', $this->authKey),
@@ -113,8 +108,9 @@ final class Client implements ClientInterface
         );
 
         $options = [
-          //  '_body_as_string' =>
+            'body' => $body,
         ];
+
         // read TYPO3 Proxy settings and adapt
         if (!empty($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])) {
             $httpProxy = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
