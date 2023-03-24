@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
+use GuzzleHttp\Exception\BadResponseException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 use WebVision\WvDeepltranslate\Service\Client\Client;
@@ -157,7 +160,21 @@ class DeeplGlossaryService
         $url = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
         $url .= "/$glossaryId";
 
-        $this->client->request($url, '', 'DELETE');
+        try {
+            $this->client->request($url, '', 'DELETE');
+        } catch (BadResponseException $e) {
+            // FlashMessage($message, $title, $severity = self::OK, $storeInSession)
+            $message = GeneralUtility::makeInstance(
+                FlashMessage::class,
+                $e->getMessage(),
+                'DeepL Api',
+                FlashMessage::WARNING,
+                true
+            );
+            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+            $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
+            $messageQueue->addMessage($message);
+        }
     }
 
     /**
