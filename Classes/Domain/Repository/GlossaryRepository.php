@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\DBALException;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\Connection;
@@ -13,6 +14,7 @@ use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossaryRepository
@@ -28,6 +30,7 @@ class GlossaryRepository
      *     entries: array<int, array{source: string, target: string}>
      * }>
      * @throws SiteNotFoundException
+     * @throws DeepLException
      */
     public function getGlossaryInformationForSync(int $pageId): array
     {
@@ -65,6 +68,11 @@ class GlossaryRepository
             foreach ($availableTargets as $targetLang) {
                 // target not configured in current page
                 if (!isset($localizationArray[$targetLang])) {
+                    continue;
+                }
+
+                // target is site default, continue
+                if ($targetLang === $sourceLangIsoCode) {
                     continue;
                 }
 
@@ -268,6 +276,10 @@ class GlossaryRepository
         return $count >= 1;
     }
 
+    /**
+     * @return array<int|string, array{uid: int, glossary_id: string}>
+     * @throws DBALException
+     */
     public function getGlossariesDeeplIdSet(): array
     {
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -351,6 +363,7 @@ class GlossaryRepository
             ->translationInfo('pages', $pageId);
 
         $availableTranslations = [];
+        var_dump($translations);
         foreach ($translations['translations'] as $translation) {
             $availableTranslations[] = $translation['sys_language_uid'];
         }
