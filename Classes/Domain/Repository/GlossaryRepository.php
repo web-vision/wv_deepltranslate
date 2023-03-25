@@ -192,6 +192,7 @@ class GlossaryRepository
     }
 
     /**
+     * @param array{uid: int, title: string}|array<empty> $page
      * @return array{
      *     uid: int,
      *     glossary_name: string,
@@ -205,6 +206,15 @@ class GlossaryRepository
         string $targetLanguage,
         array $page
     ): array {
+        if (empty($page)) {
+            return [
+                'uid' => 0,
+                'glossary_id' => '',
+                'glossary_name' => 'UNDEFINED',
+                'glossary_lastsync' => 0,
+                'glossary_ready' => 0,
+            ];
+        }
         $lowerSourceLang = strtolower($sourceLanguage);
         $lowerTargetLang = strtolower($targetLanguage);
         if (strlen($lowerTargetLang) > 2) {
