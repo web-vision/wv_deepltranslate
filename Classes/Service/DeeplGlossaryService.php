@@ -12,6 +12,7 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
@@ -120,13 +121,14 @@ class DeeplGlossaryService
      * }
      *
      * @throws DeepLException
+     * @throws GlossaryEntriesNotExistException
      */
     public function createGlossary(
         string $name,
         array $entries,
         string $sourceLang = 'de',
         string $targetLang = 'en'
-    ) {
+    ): array {
         if (empty($entries)) {
             throw new GlossaryEntriesNotExistException(
                 'Glossary Entries are required',
@@ -198,7 +200,7 @@ class DeeplGlossaryService
      *
      * @throws DeepLException
      */
-    public function glossaryInformation(string $glossaryId)
+    public function glossaryInformation(string $glossaryId): ?array
     {
         $url  = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
         $url .= "/$glossaryId";
@@ -215,7 +217,7 @@ class DeeplGlossaryService
      *
      * @throws DeepLException
      */
-    public function glossaryEntries(string $glossaryId)
+    public function glossaryEntries(string $glossaryId): array
     {
         $url = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
         $url .= "/$glossaryId/entries";
@@ -236,6 +238,9 @@ class DeeplGlossaryService
         return $entries;
     }
 
+    /**
+     * @throws DeepLException
+     */
     public function getPossibleGlossaryLanguageConfig(): array
     {
         $cacheIdentifier = 'wv-deepl-glossary-pairs';
@@ -255,6 +260,10 @@ class DeeplGlossaryService
         return $pairMappingArray;
     }
 
+    /**
+     * @throws DeepLException
+     * @throws SiteNotFoundException
+     */
     public function syncGlossaries(int $uid): void
     {
         $glossaries = $this->glossaryRepository
@@ -279,7 +288,10 @@ class DeeplGlossaryService
                 $glossary = [];
             }
 
-            $this->glossaryRepository->updateLocalGlossary($glossary, (int)$glossaryInformation['uid']);
+            $this->glossaryRepository->updateLocalGlossary(
+                $glossary,
+                (int)$glossaryInformation['uid']
+            );
         }
     }
 }
