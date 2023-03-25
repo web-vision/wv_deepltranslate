@@ -181,6 +181,7 @@ class GlossaryRepository
         $identifiers = [
             'module' => 'glossary',
             'doktype' => 254,
+            'sys_language_uid' => 0,
         ];
 
         return $db->select(
@@ -363,7 +364,6 @@ class GlossaryRepository
             ->translationInfo('pages', $pageId);
 
         $availableTranslations = [];
-        var_dump($translations);
         foreach ($translations['translations'] as $translation) {
             $availableTranslations[] = $translation['sys_language_uid'];
         }
