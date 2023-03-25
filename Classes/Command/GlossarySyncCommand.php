@@ -61,7 +61,7 @@ class GlossarySyncCommand extends Command
         }
 
         foreach ($glossaries as $glossary) {
-            $this->deeplGlossaryService->syncGlossaries($glossary);
+            $this->deeplGlossaryService->syncGlossaries($glossary['uid']);
         }
 
         /**
