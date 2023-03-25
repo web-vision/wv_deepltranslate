@@ -58,13 +58,7 @@ class DeeplService
 
     public function __construct(?FrontendInterface $cache = null)
     {
-        /** @var Request $request */
-        $request = $GLOBALS['TYPO3_REQUEST'];
-        $page = BackendUtility::getRecord(
-            'pages',
-            (int)($request->getQueryParams()['id'] ?? 0),
-            'uid, title'
-        );
+        $page = self::detectCurrentPage($GLOBALS['TYPO3_REQUEST']);
         self::$currentPage = $page ?? [];
         $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -79,6 +73,55 @@ class DeeplService
 
         $this->loadSupportedLanguages();
         $this->apiSupportedLanguages['target'] = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages['target']);
+    }
+
+    /**
+     * @return array{uid: int, title: string}|array<empty>
+     */
+    private static function detectCurrentPage(Request $request): array
+    {
+        $queryParams = $request->getQueryParams();
+        if (isset($queryParams['id'])) {
+            $currentId = (int)$queryParams['id'];
+            return self::getPageRecord($currentId);
+        }
+        if (isset($queryParams['cmd'])) {
+            foreach ($queryParams['cmd'] as $possibleTable => $values) {
+                if ($possibleTable === 'localization') {
+                    continue;
+                }
+                [$id] = array_keys($values);
+                if ($possibleTable === 'pages') {
+                    return self::getPageRecord($id);
+                }
+                $pageId = self::getPageIdFromRecord($possibleTable, $id);
+                return self::getPageRecord($pageId);
+            }
+        }
+        return [];
+    }
+
+    /**
+     * @return array{uid: int, title: string}|array<empty>
+     */
+    private static function getPageRecord(int $id): array
+    {
+        $page = BackendUtility::getRecord(
+            'pages',
+            $id,
+            'uid, title'
+        );
+        return $page ?? [];
+    }
+
+    private static function getPageIdFromRecord(string $table, int $id): int
+    {
+        $record = BackendUtility::getRecord(
+            $table,
+            $id,
+            'pid'
+        );
+        return $record['pid'];
     }
 
     /**
