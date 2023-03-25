@@ -363,6 +363,10 @@ class GlossaryRepository
         $translations = GeneralUtility::makeInstance(TranslationConfigurationProvider::class)
             ->translationInfo('pages', $pageId);
 
+        // Error string given, if not matching. return empty array then
+        if (!is_array($translations)) {
+            return [];
+        }
         $availableTranslations = [];
         foreach ($translations['translations'] as $translation) {
             $availableTranslations[] = $translation['sys_language_uid'];
