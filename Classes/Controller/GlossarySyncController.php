@@ -116,7 +116,10 @@ class GlossarySyncController
             try {
                 $this->syncSingleGlossary($glossary['uid']);
             } catch (Exception $e) {
-                $exceptions ??= new MultipleFailureException();
+                $exceptions ??= new MultipleFailureException(
+                    'Multiple failures',
+                    1679796265409
+                );
                 $exceptions->addException($e, $glossary);
             }
         }
