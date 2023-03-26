@@ -85,20 +85,33 @@ class GlossaryRepository
                 $glossaryInformation['source_lang'] = $sourceLang;
                 $glossaryInformation['target_lang'] = $targetLang;
 
+                $entries = [];
                 foreach ($localizationArray[$sourceLang] as $entryId => $sourceEntry) {
                     // no source target pair, next
                     if (!isset($localizationArray[$targetLang][$entryId])) {
                         continue;
                     }
-                    $glossaryInformation['entries'][] = [
+                    $entries[] = [
                         'source' => $sourceEntry['term'],
                         'target' => $localizationArray[$targetLang][$entryId]['term'],
                     ];
                 }
                 // no pairs detected
-                if (count($glossaryInformation['entries']) == 0) {
+                if (count($entries) == 0) {
                     continue;
                 }
+                // remove duplicates
+                $sources = [];
+                foreach ($entries as $position => $entry) {
+                    if (in_array($entry['source'], $sources)) {
+                        unset($entries[$position]);
+                        continue;
+                    }
+                    $sources[] = $entry['source'];
+                }
+
+                // reset entries keys
+                $glossaryInformation['entries'] = array_values($entries);
                 $glossaries[] = $glossaryInformation;
             }
         }
