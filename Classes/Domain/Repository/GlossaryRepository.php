@@ -413,7 +413,6 @@ class GlossaryRepository
         string $targetLanguage,
         int $pageUid,
         bool $recursive = false
-
     ): ?array {
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('tx_wvdeepltranslate_glossary');
@@ -435,11 +434,11 @@ class GlossaryRepository
 
         $statement = $db
             ->select(
-                    'uid',
-                    'glossary_id',
-                    'glossary_name',
-                    'glossary_lastsync',
-                    'glossary_ready',
+                'uid',
+                'glossary_id',
+                'glossary_name',
+                'glossary_lastsync',
+                'glossary_ready',
             )
             ->from('tx_wvdeepltranslate_glossary')
             ->where($where);

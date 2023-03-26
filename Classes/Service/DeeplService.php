@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Service;
 
 use GuzzleHttp\Exception\ClientException;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -17,6 +16,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
+use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class DeeplService
 {
@@ -51,15 +51,8 @@ class DeeplService
 
     private FrontendInterface $cache;
 
-    /**
-     * @var array{uid: int, title: string}|array<empty>
-     */
-    protected static array $currentPage;
-
     public function __construct(?FrontendInterface $cache = null)
     {
-        $page = self::detectCurrentPage($GLOBALS['TYPO3_REQUEST']);
-        self::$currentPage = $page ?? [];
         $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $objectManager->get(SettingsRepository::class);
@@ -73,55 +66,6 @@ class DeeplService
 
         $this->loadSupportedLanguages();
         $this->apiSupportedLanguages['target'] = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages['target']);
-    }
-
-    /**
-     * @return array{uid: int, title: string}|array<empty>
-     */
-    private static function detectCurrentPage(Request $request): array
-    {
-        $queryParams = $request->getQueryParams();
-        if (isset($queryParams['id'])) {
-            $currentId = (int)$queryParams['id'];
-            return self::getPageRecord($currentId);
-        }
-        if (isset($queryParams['cmd'])) {
-            foreach ($queryParams['cmd'] as $possibleTable => $values) {
-                if ($possibleTable === 'localization') {
-                    continue;
-                }
-                [$id] = array_keys($values);
-                if ($possibleTable === 'pages') {
-                    return self::getPageRecord($id);
-                }
-                $pageId = self::getPageIdFromRecord($possibleTable, $id);
-                return self::getPageRecord($pageId);
-            }
-        }
-        return [];
-    }
-
-    /**
-     * @return array{uid: int, title: string}|array<empty>
-     */
-    private static function getPageRecord(int $id): array
-    {
-        $page = BackendUtility::getRecord(
-            'pages',
-            $id,
-            'uid, title'
-        );
-        return $page ?? [];
-    }
-
-    private static function getPageIdFromRecord(string $table, int $id): int
-    {
-        $record = BackendUtility::getRecord(
-            $table,
-            $id,
-            'pid'
-        );
-        return $record['pid'];
     }
 
     /**
@@ -144,7 +88,7 @@ class DeeplService
             ->getGlossaryBySourceAndTarget(
                 $sourceLanguage,
                 $targetLanguage,
-                self::$currentPage
+                DeeplBackendUtility::detectCurrentPage()
             );
 
         // use glossary only, if is synced and DeepL marked ready

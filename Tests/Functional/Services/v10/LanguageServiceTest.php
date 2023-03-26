@@ -55,7 +55,7 @@ class LanguageServiceTest extends FunctionalTestCase
         static::assertArrayHasKey('title', $sourceLanguageRecord);
         static::assertArrayHasKey('language_isocode', $sourceLanguageRecord);
 
-        static::assertSame(2, $sourceLanguageRecord['uid']);
+        static::assertSame(2, (int)$sourceLanguageRecord['uid']);
         static::assertSame('DE', $sourceLanguageRecord['language_isocode']);
     }
 
