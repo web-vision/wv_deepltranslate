@@ -311,7 +311,7 @@ class GlossaryRepository
      * @return array<int|string, array{uid: int, glossary_id: string}>
      * @throws DBALException
      */
-    public function getGlossariesDeeplIdSet(): array
+    public function getGlossariesDeeplConnected(): array
     {
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('tx_wvdeepltranslate_glossary');

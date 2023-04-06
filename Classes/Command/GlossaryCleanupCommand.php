@@ -129,7 +129,7 @@ class GlossaryCleanupCommand extends Command
         $table->render();
         $output->writeln('');
 
-        $findNotConnected = $this->glossaryRepository->getGlossariesDeeplIdSet();
+        $findNotConnected = $this->glossaryRepository->getGlossariesDeeplConnected();
 
         if (count($findNotConnected) === 0) {
             $output->writeln('No glossaries with sync mismatch.');
