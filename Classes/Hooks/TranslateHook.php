@@ -133,7 +133,6 @@ class TranslateHook
         string $customMode,
         array $sourceLanguageRecord
     ): string {
-
         // mode deepl
         if ($customMode == 'deepl') {
             $response = $this->deeplService->translateRequest(

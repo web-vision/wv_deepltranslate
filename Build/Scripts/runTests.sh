@@ -29,6 +29,7 @@ setUpDockerComposeDotEnv() {
         echo "SCRIPT_VERBOSE=${SCRIPT_VERBOSE}"
         echo "CGLCHECK_DRY_RUN=${CGLCHECK_DRY_RUN}"
         echo "DATABASE_DRIVER=${DATABASE_DRIVER}"
+        echo "IMAGE_PREFIX=${IMAGE_PREFIX}"
         echo "DEEPL_API_KEY=''"
         echo "DEEPL_HOST='127.0.0.1'"
         echo "DEEPL_PORT='3000'"
@@ -184,6 +185,7 @@ EXTRA_TEST_OPTIONS=""
 SCRIPT_VERBOSE=0
 CGLCHECK_DRY_RUN=""
 DATABASE_DRIVER=""
+IMAGE_PREFIX="ghcr.io/typo3/"
 
 # Option parsing
 # Reset in case getopts has been used previously in the shell
@@ -393,10 +395,10 @@ case ${TEST_SUITE} in
         docker-compose down
         ;;
     update)
-        # pull typo3/core-testing-*:latest versions of those ones that exist locally
-        docker images typo3/core-testing-*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
-        # remove "dangling" typo3/core-testing-* images (those tagged as <none>)
-        docker images typo3/core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
+        # pull ${IMAGE_PREFIX}core-testing-*:latest versions of those ones that exist locally
+        docker images ${IMAGE_PREFIX}core-testing-*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
+        # remove "dangling" ${IMAGE_PREFIX}core-testing-* images (those tagged as <none>)
+        docker images ${IMAGE_PREFIX}core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2
