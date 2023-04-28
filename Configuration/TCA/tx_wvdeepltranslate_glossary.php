@@ -15,7 +15,7 @@ return [
         'hideTable' => true,
         'versioningWS' => false,
         'enablecolumns' => [],
-        'searchFields' => 'glossary_name,glossary_id,entries',
+        'searchFields' => 'glossary_name,glossary_id,glossary_ready,glossary_lastsync',
     ],
     'inferface' => [
         'showRecordFieldList' => '',
