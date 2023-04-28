@@ -121,5 +121,18 @@ class GlossaryUpgradeWizardTest extends FunctionalTestCase
         static::assertContains('tx_wvdeepltranslate_glossaryentry', explode(',', $beGroup['tables_modify']));
         static::assertContains('tx_wvdeepltranslate_glossary', explode(',', $beGroup['tables_select']));
         static::assertContains('tx_wvdeepltranslate_glossary', explode(',', $beGroup['tables_modify']));
+
+        $pageQueryBuilder = $this->getDatabaseConnection()->getDatabaseInstance();
+        /** @var Statement<array> $pageResult */
+        $pageResult = $pageQueryBuilder->select('*')
+            ->from('pages')
+            ->where(
+                $pageQueryBuilder->expr()->eq('doktype', 254),
+                $pageQueryBuilder->expr()->eq('uid', 1)
+            )->execute();
+
+        $pageRow = $pageResult->fetch();
+
+        static::assertSame('glossary', $pageRow['module']);
     }
 }

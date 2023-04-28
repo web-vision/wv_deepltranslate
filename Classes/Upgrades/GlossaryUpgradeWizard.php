@@ -186,6 +186,17 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 
         $this->output->writeln(sprintf('<info>Updated %d backend groups</info>', $countBeGroups));
 
+        $pagesQueryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+        $pagesModuleResult = $pagesQueryBuilder->update('pages')
+            ->set('module', 'glossary')
+            ->where(
+                $pagesQueryBuilder->expr()->eq('doktype', 254),
+                $pagesQueryBuilder->expr()->eq('module', $pagesQueryBuilder->createNamedParameter('wv_deepltranslate'))
+            )
+            ->execute();
+
+        $this->output->writeln(sprintf('<info>Update %d sys-folder module</info>', (int)$pagesModuleResult));
+
         $this->output->writeln('<info>All migrations done.</info>');
         $this->output->writeln('<comment>You should run `typo3 deepl:glossary:sync` for receiving all glossary information.</comment>');
         $this->output->writeln('<comment>You should run database update wizard and remove old tables.</comment>');
