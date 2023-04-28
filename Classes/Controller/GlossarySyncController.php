@@ -53,8 +53,11 @@ class GlossarySyncController
             LocalizationUtility::translate(
                 'glossary.sync.title',
                 'wv_deepltranslate'
-            )
+            ),
+            FlashMessage::OK,
+            true
         );
+
         GeneralUtility::makeInstance(FlashMessageService::class)
             ->getMessageQueueByIdentifier()
             ->enqueue($flashMessage);
