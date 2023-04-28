@@ -49,7 +49,7 @@ if (!defined('TYPO3_MODE')) {
             ],
         ],
         'glossary_information' => [
-            'label' => 'LLL:EXT:/Resources/Private/Language/locallang.xlf:.glossary_information',
+            'label' => $ll('pages.glossary_information'),
             'displayCond' => [
                 'AND' => [
                     'FIELD:doktype:=:254',

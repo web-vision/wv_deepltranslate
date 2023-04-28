@@ -60,6 +60,10 @@
 				<source>Last Translated Date</source>
 				<target>Date de la dernière traduction</target>
 			</trans-unit>
+			<trans-unit id="pages.glossary_information">
+				<source>Glossary Information</source>
+				<target>Informations sur le glossaire</target>
+			</trans-unit>
 			<trans-unit id="preview.flag">
 				<source>Translated with DeepL</source>
 				<target>Traduit avec DeepL</target>
