@@ -49,3 +49,7 @@ the DeepL Translate Extension for TYPO3.
 * [Hochschule für Musik Würzburg](https://www.hfm-wuerzburg.de)
 * [Carl von Ossietzky Universität Oldenburg](https://uol.de/)
 * [Friedrich-Ebert-Stiftung](https://www.fes.de)
+
+### DeepL "Add automatic translation flag and hint" sponsored by
+
+* [FH Aachen](https://www.fh-aachen.de/)

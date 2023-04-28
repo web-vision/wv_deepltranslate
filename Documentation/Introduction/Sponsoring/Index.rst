@@ -13,3 +13,8 @@ DeepL Glossary feature sponsored by
 * `Hochschule für Musik Würzburg <https://www.hfm-wuerzburg.de>`__
 * `Carl von Ossietzky Universität Oldenburg <https://uol.de/>`__
 * `Friedrich-Ebert-Stiftung <https://www.fes.de>`__
+
+DeepL "Add automatic translation flag and hint" sponsored by
+------------------------------------------------------------
+
+* `FH Aachen <https://www.fh-aachen.de/>`__
