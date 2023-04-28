@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\BadResponseException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -155,7 +156,7 @@ class DeeplGlossaryService
      *
      * @throws DeepLException
      */
-    public function deleteGlossary(string $glossaryId)
+    public function deleteGlossary(string $glossaryId): ?array
     {
         $url = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
         $url .= "/$glossaryId";
@@ -164,17 +165,22 @@ class DeeplGlossaryService
             $this->client->request($url, '', 'DELETE');
         } catch (BadResponseException $e) {
             // FlashMessage($message, $title, $severity = self::OK, $storeInSession)
-            $message = GeneralUtility::makeInstance(
-                FlashMessage::class,
-                $e->getMessage(),
-                'DeepL Api',
-                FlashMessage::WARNING,
-                true
-            );
-            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
-            $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
-            $messageQueue->addMessage($message);
+            if (Environment::isCli()) {
+                throw $e;
+            }else {
+                $message = GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    $e->getMessage(),
+                    'DeepL Api',
+                    FlashMessage::WARNING,
+                    true
+                );
+                $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+                $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
+                $messageQueue->addMessage($message);
+            }
         }
+        return null;
     }
 
     /**
