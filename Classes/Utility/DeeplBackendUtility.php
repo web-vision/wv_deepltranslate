@@ -32,16 +32,6 @@ class DeeplBackendUtility
      */
     private static string $apiUrl = '';
 
-    /**
-     * @deprecated
-     */
-    private static string $googleApiKey = '';
-
-    /**
-     * @deprecated
-     */
-    private static string $googleApiUrl = '';
-
     private static string $deeplFormality = 'default';
 
     private static bool $configurationLoaded = false;
@@ -76,28 +66,6 @@ class DeeplBackendUtility
     /**
      * @return string
      */
-    public static function getGoogleApiKey(): string
-    {
-        if (!self::$configurationLoaded) {
-            self::loadConfiguration();
-        }
-        return self::$googleApiKey;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getGoogleApiUrl(): string
-    {
-        if (!self::$configurationLoaded) {
-            self::loadConfiguration();
-        }
-        return self::$googleApiUrl;
-    }
-
-    /**
-     * @return string
-     */
     public static function getDeeplFormality(): string
     {
         if (!self::$configurationLoaded) {
@@ -121,8 +89,6 @@ class DeeplBackendUtility
         self::$apiKey = $extensionConfiguration['apiKey'];
         self::$deeplFormality = $extensionConfiguration['deeplFormality'];
         self::$apiUrl = $extensionConfiguration['apiUrl'];
-        self::$googleApiUrl = $extensionConfiguration['googleapiUrl'];
-        self::$googleApiKey = $extensionConfiguration['googleapiKey'];
 
         self::$configurationLoaded = true;
     }

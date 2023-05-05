@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'DeepL Translate',
-    'description' => 'This extension provides option to translate content element, and TCA record texts to DeepL and Google supported languages.',
+    'description' => 'This extension provides option to translate content element, and TCA record texts to DeepL supported languages.',
     'category' => 'backend',
     'author' => 'web-vision GmbH Team',
     'author_company' => 'web-vision GmbH',

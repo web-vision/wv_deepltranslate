@@ -43,10 +43,6 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
     private const ACTION_LOCALIZEDEEPL_AUTO = 'localizedeeplauto';
 
-    private const ACTION_LOCALIZEGOOGLE = 'localizegoogle';
-
-    private const ACTION_LOCALIZEGOOGLE_AUTO = 'localizegoogleauto';
-
     protected DeeplService $deeplService;
 
     protected PageRenderer $pageRenderer;
@@ -107,9 +103,9 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             })
         );
 
-        //for deepl and google auto modes
+        //for DeepL auto mode
         if (!empty($availableLanguages)) {
-            if ($mode == 'localizedeeplauto' || $mode == 'localizegoogleauto') {
+            if ($mode == 'localizedeeplauto') {
                 foreach ($availableLanguages as &$availableLanguage) {
                     $availableLanguage['uid']     = 'auto-' . $availableLanguage['uid'];
                     $availableLanguage['ISOcode'] = 'AUT';
@@ -201,7 +197,12 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         }
 
         //additional constraint ACTION_LOCALIZEDEEPL
-        if ($params['action'] !== static::ACTION_COPY && $params['action'] !== static::ACTION_LOCALIZE && $params['action'] !== static::ACTION_LOCALIZEDEEPL && $params['action'] !== static::ACTION_LOCALIZEDEEPL_AUTO && $params['action'] !== static::ACTION_LOCALIZEGOOGLE && $params['action'] !== static::ACTION_LOCALIZEGOOGLE_AUTO) {
+        if (
+            $params['action'] !== static::ACTION_COPY
+            && $params['action'] !== static::ACTION_LOCALIZE
+            && $params['action'] !== static::ACTION_LOCALIZEDEEPL
+            && $params['action'] !== static::ACTION_LOCALIZEDEEPL_AUTO
+        ) {
             $response = new Response('php://temp', 400, ['Content-Type' => 'application/json; charset=utf-8']);
             $response->getBody()->write('Invalid action "' . $params['action'] . '" called.');
             return $response;
@@ -236,16 +237,20 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
         if (isset($params['uidList']) && is_array($params['uidList'])) {
             foreach ($params['uidList'] as $currentUid) {
-                if ($params['action'] === static::ACTION_LOCALIZE || $params['action'] === static::ACTION_LOCALIZEDEEPL || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO || $params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO) {
+                if (
+                    $params['action'] === static::ACTION_LOCALIZE
+                    || $params['action'] === static::ACTION_LOCALIZEDEEPL
+                    || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO
+                ) {
                     $cmd['tt_content'][$currentUid] = [
                         'localize' => $destLanguageId,
                     ];
                     //setting mode and source language for deepl translate.
-                    if ($params['action'] === static::ACTION_LOCALIZEDEEPL || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO) {
+                    if (
+                        $params['action'] === static::ACTION_LOCALIZEDEEPL
+                        || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO
+                    ) {
                         $cmd['localization']['custom']['mode']          = 'deepl';
-                        $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
-                    } elseif ($params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO) {
-                        $cmd['localization']['custom']['mode']          = 'google';
                         $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
                     }
                 } else {

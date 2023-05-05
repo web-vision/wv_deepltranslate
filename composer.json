@@ -1,7 +1,7 @@
 {
 	"name": "web-vision/wv_deepltranslate",
 	"type": "typo3-cms-extension",
-	"description": "This extension provides option to translate content element, and TCA record texts to Deepl and Google supported languages using Deepl and Googletranslate Api services.",
+	"description": "This extension provides option to translate content element, and TCA record texts to DeepL supported languages using DeepL API services.",
 	"license": ["GPL-2.0-or-later"],
 	"homepage": "https://www.web-vision.de/en/automated-translations-with-typo3-and-deepl.html",
 	"keywords": [

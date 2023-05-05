@@ -18,8 +18,6 @@ if ($deeplApiKey === '') {
                 'apiKey' => 'wv-deepltranslate-deepl-mockserver-api-key',
                 'apiUrl' => $deeplScheme . '://' . $deeplHost . ':' . $deeplPort . '/v2/translate',
                 'deeplFormality' => 'default',
-                'googleapiKey' => '',
-                'googleapiUrl' => 'https://translation.googleapis.com/language/translate/v2',
             ],
         ],
     ];
@@ -32,8 +30,6 @@ return [
             'apiKey' => $deeplApiKey,
             'apiUrl' => 'https://api-free.deepl.com/v2/translate',
             'deeplFormality' => 'default',
-            'googleapiKey' => '',
-            'googleapiUrl' => 'https://translation.googleapis.com/language/translate/v2',
         ],
     ],
 ];
