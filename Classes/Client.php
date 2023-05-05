@@ -126,7 +126,8 @@ final class Client
     private function buildBaseUrl(string $path): string
     {
         $url = sprintf(
-            'https://%s/%s/%s',
+            '%s://%s/%s/%s',
+            $this->configuration->getApiScheme(),
             $this->configuration->getApiUrl(),
             self::API_VERSION,
             $path

@@ -37,7 +37,15 @@ class ConfigurationTest extends FunctionalTestCase
         if (defined('DEEPL_API_KEY') && getenv('DEEPL_API_KEY') !== '') {
             static::assertSame('api-free.deepl.com', $configuration->getApiUrl());
         } else {
-            static::assertSame('ddev-deepltranslate-deeplmockserver:3000', $configuration->getApiUrl());
+            $parsedUrl = parse_url(
+                $this->configurationToUseInTestInstance['EXTENSIONS']['wv_deepltranslate']['apiUrl']
+                    ?? 'http://ddev-deepltranslate-deeplmockserver:3000'
+            );
+            $checkApiUrl = $parsedUrl['host'] . ($parsedUrl['port'] ? ':' . $parsedUrl['port'] : '');
+            static::assertSame(
+                $checkApiUrl,
+                $configuration->getApiUrl()
+            );
         }
     }
 }

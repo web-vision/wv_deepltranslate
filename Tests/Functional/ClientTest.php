@@ -410,7 +410,8 @@ class ClientTest extends FunctionalTestCase
 
             foreach ($this->glossaryIdStorage as $glossaryId) {
                 $baseUrl = sprintf(
-                    'https://%s/v2/glossaries/%s',
+                    '%s://%s/v2/glossaries/%s',
+                    $configuration->getApiScheme(),
                     $configuration->getApiUrl(),
                     $glossaryId
                 );
