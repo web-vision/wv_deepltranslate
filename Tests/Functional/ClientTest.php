@@ -45,11 +45,15 @@ class ClientTest extends FunctionalTestCase
      */
     public function checkResponseFromTranslateContent(): void
     {
+        $translateContent = 'I would like to be translated!';
+        if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
+            $translateContent = 'proton beam';
+        }
         $client = new Client();
         $response = $client->translate(
-            'Ich möchte gern übersetzt werden!',
-            'DE',
+            $translateContent,
             'EN',
+            'DE',
             ''
         );
 
@@ -63,11 +67,17 @@ class ClientTest extends FunctionalTestCase
      */
     public function checkJsonTranslateContentIsValid(): void
     {
+        $translateContent = 'I would like to be translated!';
+        $expectedTranslation = 'Ich möchte gern übersetzt werden!';
+        if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
+            $translateContent = 'proton beam';
+            $expectedTranslation = 'Protonenstrahl';
+        }
         $client = new Client();
         $response = $client->translate(
-            'Ich möchte gern übersetzt werden!',
-            'DE',
+            $translateContent,
             'EN',
+            'DE',
             ''
         );
 
@@ -82,7 +92,7 @@ class ClientTest extends FunctionalTestCase
         static::assertJsonValueEquals(
             $jsonObject,
             '$.translations[*].text',
-            'I would like to be translated!'
+            $expectedTranslation
         );
     }
 
