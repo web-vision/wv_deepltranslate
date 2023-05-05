@@ -489,4 +489,16 @@ class GlossaryRepository
         }
         return $ids;
     }
+
+    public function setGlossaryNotSyncOnPage(int $pageId): void
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('tx_wvdeepltranslate_glossary');
+
+        $queryBuilder->update('tx_wvdeepltranslate_glossary')
+            ->set('glossary_ready', 0)
+            ->where(
+                $queryBuilder->expr()->eq('pid', $pageId)
+            )->execute();
+    }
 }
