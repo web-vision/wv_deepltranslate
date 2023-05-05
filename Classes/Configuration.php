@@ -50,9 +50,24 @@ class Configuration
 
     public function getApiUrl(): string
     {
-        $parseUrl = parse_url($this->apiUrl);
+        return $this->getApiHost()
+            . ($this->getApiPort() ? ':' . $this->getApiPort() : '');
+    }
 
-        return $parseUrl['host'] . ($parseUrl['port'] ? sprintf(':%s', $parseUrl['port']) : '') ?? '';
+    public function getApiScheme(): string
+    {
+        return parse_url($this->apiUrl)['scheme'] ?? 'https';
+    }
+
+    public function getApiHost(): string
+    {
+        return parse_url($this->apiUrl)['host'] ?? 'localhost';
+    }
+
+    public function getApiPort(): ?int
+    {
+        $port = parse_url($this->apiUrl)['port'] ?? null;
+        return $port ? (int)$port : null;
     }
 
     public function getFormality(): string
