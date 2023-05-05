@@ -1,5 +1,7 @@
 ..  include:: /Includes.rst.txt
 
+.. _housekeeping`:
+
 Housekeeping
 ============
 
@@ -55,6 +57,7 @@ Your glossaries in TYPO3 are not deleted with this command.
 
 After this, you are able to sync your glossaries again to DeepL.
 
+.. _sync-cli:
 
 Synchronisation
 ---------------
