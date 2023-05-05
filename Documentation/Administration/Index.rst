@@ -12,3 +12,4 @@ Administration
 
     Installation/Index
     Configuration/Index
+    AutoTranslatePrefix/Index
