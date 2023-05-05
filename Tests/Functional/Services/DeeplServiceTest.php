@@ -38,6 +38,9 @@ class DeeplServiceTest extends FunctionalTestCase
      */
     public function translateContentFromDeToEn(): void
     {
+        if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
+            self::markTestSkipped(__METHOD__ . ' skipped, because DEEPL MOCKSERVER do not support EN as TARGET language.');
+        }
         $deeplService = GeneralUtility::makeInstance(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
@@ -48,6 +51,29 @@ class DeeplServiceTest extends FunctionalTestCase
         );
 
         static::assertSame('I would like to be translated!', $responseObject['translations'][0]['text']);
+    }
+
+    /**
+     * @test
+     */
+    public function translateContentFromEnToDe(): void
+    {
+        $translateContent = 'I would like to be translated!';
+        $expectedTranslation = 'Ich möchte gern übersetzt werden!';
+        if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
+            $translateContent = 'proton beam';
+            $expectedTranslation = 'Protonenstrahl';
+        }
+        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+
+        $responseObject = $deeplService->translateRequest(
+            $translateContent,
+            'DE',
+            'EN',
+            ''
+        );
+
+        static::assertSame($expectedTranslation, $responseObject['translations'][0]['text']);
     }
 
     /**
