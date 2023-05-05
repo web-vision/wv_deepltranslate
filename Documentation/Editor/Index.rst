@@ -13,3 +13,4 @@ How editors work with *wv_deepltranslate* is described in the following chapters
 
     Usage/Index
     Glossary/Index
+    AutoTranslatePrefix/Index

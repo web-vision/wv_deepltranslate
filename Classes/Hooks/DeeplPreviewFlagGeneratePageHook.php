@@ -31,7 +31,7 @@ class DeeplPreviewFlagGeneratePageHook
 
         $messagePreviewLabel = $controller->config['config']['deepl_message_preview'] ?? '';
         if ($messagePreviewLabel === '') {
-            $messagePreviewLabel = $controller->sL('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:preview.flag');
+            $messagePreviewLabel = 'Translated with DeepL';
         }
 
         $styles = [];
