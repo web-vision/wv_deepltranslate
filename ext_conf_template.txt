@@ -9,5 +9,3 @@ googleapiKey =
 # cat=Settings/O; type=string; label= Google Translate API Url (Non freemode)
 googleapiUrl = https://translation.googleapis.com/language/translate/v2
 
-# cat=Settings/0; type=boolean; label=Activate old backend module
-activateBackendModule = 0

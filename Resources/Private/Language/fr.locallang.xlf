@@ -19,34 +19,6 @@
 				<source>Translating content via Google Translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
 				<target>La traduction de contenu via Google Traduction (détection automatique) créera une traduction de la langue source détectée automatiquement vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction Google. Le service Google prend en charge une part équitable de <![CDATA[<a href= "https://cloud.google.com/translate/docs/languages" target="_blank">langues</a>]]>.</target>
 			</trans-unit>
-			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>DeepL Settings</source>
-				<target>DeepL Settings</target>
-			</trans-unit>
-			<trans-unit id="settings_success" xml:space="preserve">
-				<source>Language assignments saved successfully</source>
-				<target>Devoirs de langue enregistrés avec succès</target>
-			</trans-unit>
-			<trans-unit id="settings_assign" xml:space="preserve">
-				<source>Assign languages</source>
-				<target>Attribuer des langues</target>
-			</trans-unit>
-			<trans-unit id="settings_no_language" xml:space="preserve">
-				<source>No system languages found.</source>
-				<target>Aucune langue système trouvée.</target>
-			</trans-unit>
-			 <trans-unit id="languageId" xml:space="preserve">
-				<source>Language Id</source>
-				<target>Identifiant de la langue</target>
-			</trans-unit>
-			<trans-unit id="syslanguage" xml:space="preserve">
-				<source>System Language</source>
-				<target>System Language</target>
-			</trans-unit>
-			<trans-unit id="deepliso" xml:space="preserve">
-				<source>Assigned Language(ISO Code)</source>
-				<target>Langue attribuée (code ISO)</target>
-			</trans-unit>
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
 				<source>DeepL</source>
 				<target>DeepL</target>

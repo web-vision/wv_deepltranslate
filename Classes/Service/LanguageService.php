@@ -9,18 +9,12 @@ use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 
 class LanguageService
 {
     protected DeeplService $deeplService;
-
-    protected SettingsRepository $settingsRepository;
-
-    protected bool $siteLanguageMode = true;
 
     protected array $possibleLangMatches = [
         'deeplTargetLanguage',
@@ -29,18 +23,9 @@ class LanguageService
     ];
 
     public function __construct(
-        ?DeeplService $deeplService = null,
-        ?SettingsRepository $settingsRepository = null
+        ?DeeplService $deeplService = null
     ) {
         $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
-        $this->settingsRepository = $settingsRepository ?? GeneralUtility::makeInstance(SettingsRepository::class);
-        $typo3VersionArray = VersionNumberUtility::convertVersionStringToArray(
-            VersionNumberUtility::getCurrentTypo3Version()
-        );
-
-        if (version_compare((string)$typo3VersionArray['version_main'], '11', '<')) {
-            $this->siteLanguageMode = false;
-        }
     }
 
     /**
@@ -96,100 +81,57 @@ class LanguageService
      */
     public function getTargetLanguage(Site $currentSite, int $languageId): array
     {
-        if ($this->siteLanguageMode) {
-            $languages = array_filter($currentSite->getConfiguration()['languages'], function ($value) use ($languageId) {
-                if (!is_array($value)) {
-                    return false;
-                }
-
-                if ((int)$value['languageId'] === $languageId) {
-                    return true;
-                }
-
+        $languages = array_filter($currentSite->getConfiguration()['languages'], function ($value) use ($languageId) {
+            if (!is_array($value)) {
                 return false;
-            });
-
-            if (count($languages) === 0) {
-                throw new LanguageRecordNotFoundException(
-                    sprintf(
-                        'Language "%d" not found in SiteConfig "%s"',
-                        $languageId,
-                        $currentSite->getConfiguration()['websiteTitle']
-                    ),
-                    1676824459
-                );
-            }
-            $language = reset($languages);
-            $languageIsoCode = null;
-
-            foreach ($this->possibleLangMatches as $possibleLangMatch) {
-                if (array_key_exists($possibleLangMatch, $language)
-                    && in_array(
-                        strtoupper($language[$possibleLangMatch]),
-                        $this->deeplService->apiSupportedLanguages['target']
-                    )
-                ) {
-                    $languageIsoCode = strtoupper($language[$possibleLangMatch]);
-                    break;
-                }
-            }
-            if ($languageIsoCode === null) {
-                throw new LanguageIsoCodeNotFoundException(
-                    sprintf(
-                        'No API supported target found for language "%s" in site "%s"',
-                        $language['title'],
-                        $currentSite->getConfiguration()['websiteTitle']
-                    ),
-                    1676741837
-                );
             }
 
-            return [
-                'uid' => $language['languageId'] ?? 0,
-                'title' => $language['title'],
-                'language_isocode' => $languageIsoCode,
-            ];
+            if ((int)$value['languageId'] === $languageId) {
+                return true;
+            }
+
+            return false;
+        });
+
+        if (count($languages) === 0) {
+            throw new LanguageRecordNotFoundException(
+                sprintf(
+                    'Language "%d" not found in SiteConfig "%s"',
+                    $languageId,
+                    $currentSite->getConfiguration()['websiteTitle']
+                ),
+                1676824459
+            );
         }
+        $language = reset($languages);
+        $languageIsoCode = null;
 
-        // v9 and v10 sys_language_uid goes from here
-        /** @deprecated will be removed in version 4 */
-        $targetLanguageRecord = $this->getRecordFromSysLanguage($languageId);
-
-        $targetLanguageMapping = $this->settingsRepository->getMappings((int)$targetLanguageRecord['uid']);
-        if ($targetLanguageMapping === '') {
+        foreach ($this->possibleLangMatches as $possibleLangMatch) {
+            if (array_key_exists($possibleLangMatch, $language)
+                && in_array(
+                    strtoupper($language[$possibleLangMatch]),
+                    $this->deeplService->apiSupportedLanguages['target']
+                )
+            ) {
+                $languageIsoCode = strtoupper($language[$possibleLangMatch]);
+                break;
+            }
+        }
+        if ($languageIsoCode === null) {
             throw new LanguageIsoCodeNotFoundException(
                 sprintf(
-                    'No API supported target found for language "%s"',
-                    $targetLanguageRecord['title']
+                    'No API supported target found for language "%s" in site "%s"',
+                    $language['title'],
+                    $currentSite->getConfiguration()['websiteTitle']
                 ),
-                1676741846
+                1676741837
             );
         }
-        $targetLanguageRecord['language_isocode'] = strtoupper($targetLanguageMapping);
 
-        return $targetLanguageRecord;
-    }
-
-    /**
-     * @return array{uid: int, title: string, language_isocode: string}
-     * @throws LanguageRecordNotFoundException
-     */
-    private function getRecordFromSysLanguage(int $uid): array
-    {
-        $languageRecord = BackendUtility::getRecord('sys_language', $uid, 'uid,title,language_isocode');
-        if ($languageRecord === null) {
-            throw new LanguageRecordNotFoundException(
-                sprintf('No language for record with uid "%d" found.', $uid),
-                1676739761064
-            );
-        }
-        $languageRecord['language_isocode'] = strtoupper($languageRecord['language_isocode']);
-
-        return $languageRecord;
-    }
-
-    public function isSiteLanguageMode(): bool
-    {
-        return $this->siteLanguageMode;
+        return [
+            'uid' => $language['languageId'] ?? 0,
+            'title' => $language['title'],
+            'language_isocode' => $languageIsoCode,
+        ];
     }
 }
