@@ -36,6 +36,23 @@ class DeeplServiceTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function translateContentFromDeToEn(): void
+    {
+        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+
+        $responseObject = $deeplService->translateRequest(
+            'Ich möchte gern übersetzt werden!',
+            'EN',
+            'DE',
+            ''
+        );
+
+        static::assertSame('I would like to be translated!', $responseObject['translations'][0]['text']);
+    }
+
+    /**
+     * @test
+     */
     public function checkSupportedTargetLanguages(): void
     {
         $deeplService = GeneralUtility::makeInstance(DeeplService::class);
