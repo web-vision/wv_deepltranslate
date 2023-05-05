@@ -7,7 +7,6 @@ namespace WebVision\WvDeepltranslate\Service;
 use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Http\Request;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -41,6 +40,8 @@ class DeeplService
     protected GlossaryRepository $glossaryRepository;
 
     private FrontendInterface $cache;
+
+    private Client $client;
 
     public function __construct(
         ?FrontendInterface $cache = null,
