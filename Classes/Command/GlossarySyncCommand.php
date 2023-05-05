@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossarySyncCommand extends Command
@@ -47,7 +46,6 @@ class GlossarySyncCommand extends Command
     }
 
     /**
-     * @throws DeepLException
      * @throws SiteNotFoundException
      */
     protected function execute(
@@ -64,10 +62,6 @@ class GlossarySyncCommand extends Command
             $this->deeplGlossaryService->syncGlossaries($glossary['uid']);
         }
 
-        /**
-         * return 0 HAS to be for TYPO3 v9 support
-         * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
-         */
-        return 0;
+        return Command::SUCCESS;
     }
 }
