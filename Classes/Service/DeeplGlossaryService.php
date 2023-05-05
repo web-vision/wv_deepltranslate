@@ -4,55 +4,22 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
-use WebVision\WvDeepltranslate\Service\Client\Client;
-use WebVision\WvDeepltranslate\Service\Client\ClientInterface;
-use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 
 class DeeplGlossaryService
 {
-    /**
-     * URL Suffix: glossaries
-     */
-    public const API_URL_SUFFIX_GLOSSARIES = 'glossaries';
-
-    /**
-     * URL Suffix: glossary-language-pairs
-     */
-    public const API_URL_SUFFIX_GLOSSARIES_LANG_PAIRS = 'glossary-language-pairs';
-
-    /**
-     * API Version:
-     */
-    public const API_VERSION = '2';
-
-    private const GLOSSARY_FORMAT = 'tsv';
-
-    /**
-     * @var ClientInterface
-     */
-    private $client;
-
-    /**
-     * @var string
-     */
-    protected string $apiKey;
-
-    /**
-     * @var string
-     */
-    protected string $apiUrl;
+    private Client $client;
 
     private FrontendInterface $cache;
 
@@ -60,21 +27,11 @@ class DeeplGlossaryService
 
     public function __construct(
         ?FrontendInterface $cache = null,
+        ?Client $client = null,
         ?GlossaryRepository $glossaryRepository = null
     ) {
         $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
-
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
-        $this->apiKey = $extensionConfiguration['apiKey'];
-        $this->apiUrl = $extensionConfiguration['apiUrl'];
-        $this->apiUrl = parse_url($this->apiUrl, PHP_URL_HOST); // @TODO - Remove this line when we get only the host from ext config
-
-        $this->client = $client ?? GeneralUtility::makeInstance(
-            Client::class,
-            $this->apiKey,
-            self::API_VERSION,
-            $this->apiUrl
-        );
+        $this->client = $client ?? GeneralUtility::makeInstance(Client::class);
         $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
     }
 
@@ -82,24 +39,26 @@ class DeeplGlossaryService
      * Calls the glossary-Endpoint and return Json-response as an array
      *
      * @return array
-     *
      * @throws DeepLException
      */
-    public function listLanguagePairs()
+    public function listLanguagePairs(): array
     {
-        return $this->client->request($this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES_LANG_PAIRS), '', 'GET');
+        $response =  $this->client->getGlossaryLanguagePairs();
+
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**
      * Calls the glossary-Endpoint and return Json-response as an array
      *
      * @return array
-     *
      * @throws DeepLException
      */
-    public function listGlossaries()
+    public function listGlossaries(): array
     {
-        return $this->client->request($this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES), '', 'GET');
+        $response = $this->client->getAllGlossaries();
+
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**
@@ -136,23 +95,9 @@ class DeeplGlossaryService
             );
         }
 
-        $formattedEntries = [];
-        foreach ($entries as $entry) {
-            $formattedEntries[] = sprintf("%s\t%s", trim($entry['source']), trim($entry['target']));
-        }
+        $response = $this->client->createGlossary($name, $sourceLang, $targetLang, $entries);
 
-        $paramsArray = [
-            'name' => $name,
-            'source_lang'    => $sourceLang,
-            'target_lang'    => $targetLang,
-            'entries'        => implode("\n", $formattedEntries),
-            'entries_format' => self::GLOSSARY_FORMAT,
-        ];
-
-        $url  = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
-        $body = $this->client->buildQuery($paramsArray);
-
-        return $this->client->request($url, $body);
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**
@@ -166,28 +111,25 @@ class DeeplGlossaryService
      */
     public function deleteGlossary(string $glossaryId): ?array
     {
-        $url = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
-        $url .= "/$glossaryId";
-
         try {
-            $this->client->request($url, '', 'DELETE');
+            $this->client->deleteGlossary($glossaryId);
         } catch (BadResponseException $e) {
             // FlashMessage($message, $title, $severity = self::OK, $storeInSession)
             if (Environment::isCli()) {
                 throw $e;
-            }else {
-                $message = GeneralUtility::makeInstance(
-                    FlashMessage::class,
-                    $e->getMessage(),
-                    'DeepL Api',
-                    FlashMessage::WARNING,
-                    true
-                );
-                $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
-                $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
-                $messageQueue->addMessage($message);
             }
+            $message = GeneralUtility::makeInstance(
+                FlashMessage::class,
+                $e->getMessage(),
+                'DeepL Api',
+                FlashMessage::WARNING,
+                true
+            );
+            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+            $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
+            $messageQueue->addMessage($message);
         }
+
         return null;
     }
 
@@ -195,38 +137,33 @@ class DeeplGlossaryService
      * Gets information about a glossary
      *
      * @param string $glossaryId
-     *
      * @return array|null
      *
      * @throws DeepLException
      */
     public function glossaryInformation(string $glossaryId): ?array
     {
-        $url  = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
-        $url .= "/$glossaryId";
+        $response = $this->client->getGlossary($glossaryId);
 
-        return $this->client->request($url, '', 'GET');
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**
      * Fetch glossary entries and format them as associative array [source => target]
      *
      * @param string $glossaryId
-     *
      * @return array
-     *
      * @throws DeepLException
      */
     public function glossaryEntries(string $glossaryId): array
     {
-        $url = $this->client->buildBaseUrl(self::API_URL_SUFFIX_GLOSSARIES);
-        $url .= "/$glossaryId/entries";
+        $response = $this->client->getGlossaryEntries($glossaryId);
 
-        $response = $this->client->request($url, '', 'GET');
+        $jsons = json_decode($response->getBody()->getContents(), true);
 
         $entries = [];
         if (!empty($response)) {
-            $allEntries = explode("\n", $response);
+            $allEntries = explode("\n", $jsons);
             foreach ($allEntries as $entry) {
                 $sourceAndTarget = preg_split('/\s+/', rtrim($entry));
                 if (isset($sourceAndTarget[0], $sourceAndTarget[1])) {

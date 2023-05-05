@@ -7,25 +7,18 @@ namespace WebVision\WvDeepltranslate\Service;
 use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\Request;
-use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class DeeplService
 {
-    public string $apiKey;
-
-    public string $apiUrl;
-
-    public string $deeplFormality;
-
     /**
      * Default supported languages
      *
@@ -43,26 +36,22 @@ class DeeplService
      */
     public array $formalitySupportedLanguages = [];
 
-    public RequestFactory $requestFactory;
-
     protected SettingsRepository $deeplSettingsRepository;
 
     protected GlossaryRepository $glossaryRepository;
 
     private FrontendInterface $cache;
 
-    public function __construct(?FrontendInterface $cache = null)
-    {
+    public function __construct(
+        ?FrontendInterface $cache = null,
+        ?Client $client = null
+    ) {
         $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
+        $this->client = $client ?? GeneralUtility::makeInstance(Client::class);
+        $this->glossaryRepository = GeneralUtility::makeInstance(GlossaryRepository::class);
+
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $objectManager->get(SettingsRepository::class);
-        $this->glossaryRepository = $objectManager->get(GlossaryRepository::class);
-        $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
-        $this->apiUrl = $extensionConfiguration['apiUrl'];
-        $this->apiKey = $extensionConfiguration['apiKey'];
-        $this->deeplFormality = $extensionConfiguration['deeplFormality'];
 
         $this->loadSupportedLanguages();
         $this->apiSupportedLanguages['target'] = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages['target']);
@@ -74,51 +63,16 @@ class DeeplService
      */
     public function translateRequest($content, $targetLanguage, $sourceLanguage): array
     {
-        $postFields = [
-            'auth_key'     => $this->apiKey,
-            'text'         => $content,
-            'source_lang'  => urlencode($sourceLanguage),
-            'target_lang'  => urlencode($targetLanguage),
-            'tag_handling' => urlencode('xml'),
-        ];
-
         // TODO make glossary findable by current site
         // Implementation of glossary into translation
-        $glossary = $this->glossaryRepository
-            ->getGlossaryBySourceAndTarget(
-                $sourceLanguage,
-                $targetLanguage,
-                DeeplBackendUtility::detectCurrentPage()
-            );
-
-        // use glossary only, if is synced and DeepL marked ready
-        if (
-            $glossary['glossary_id'] !== ''
-            && $glossary['glossary_ready'] === 1
-        ) {
-            $postFields['glossary_id'] = $glossary['glossary_id'];
-        }
-
-        if (!empty($this->deeplFormality) && in_array(strtoupper($targetLanguage), $this->formalitySupportedLanguages, true)) {
-            $postFields['formality'] = $this->deeplFormality;
-        }
-        //url-ify the data to get content length
-        $postFieldString = '';
-        foreach ($postFields as $key => $value) {
-            $postFieldString .= $key . '=' . $value . '&';
-        }
-
-        $postFieldString = rtrim($postFieldString, '&');
-        $contentLength = mb_strlen($postFieldString, '8bit');
+        $glossary = $this->glossaryRepository->getGlossaryBySourceAndTarget(
+            $sourceLanguage,
+            $targetLanguage,
+            DeeplBackendUtility::detectCurrentPage()
+        );
 
         try {
-            $response = $this->requestFactory->request($this->apiUrl, 'POST', [
-                'form_params' => $postFields,
-                'headers'     => [
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Content-Length' => $contentLength,
-                ],
-            ]);
+            $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
         } catch (ClientException $e) {
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
@@ -129,6 +83,7 @@ class DeeplService
             GeneralUtility::makeInstance(FlashMessageService::class)
                 ->getMessageQueueByIdentifier()
                 ->addMessage($flashMessage);
+
             return [];
         }
 
@@ -166,32 +121,8 @@ class DeeplService
 
     private function loadSupportedLanguagesFromAPI(string $type = 'target'): array
     {
-        $mainApiUrl = parse_url($this->apiUrl);
-        $languageApiUrl = sprintf(
-            '%s://%s/v2/languages?type=%s',
-            $mainApiUrl['scheme'],
-            $mainApiUrl['host'],
-            $type
-        );
-        if ($mainApiUrl['port'] ?? false) {
-            $languageApiUrl = sprintf(
-                '%s://%s:%s/v2/languages?type=%s',
-                $mainApiUrl['scheme'],
-                $mainApiUrl['host'],
-                $mainApiUrl['port'],
-                $type
-            );
-        }
-
-        $headers = [];
-        if (!empty($this->apiKey)) {
-            $headers['Authorization'] = sprintf('DeepL-Auth-Key %s', $this->apiKey);
-        }
-
         try {
-            $response = $this->requestFactory->request($languageApiUrl, 'GET', [
-                'headers' => $headers,
-            ]);
+            $response = $this->client->getSupportedTargetLanguage($type);
         } catch (ClientException $e) {
             return [];
         }
