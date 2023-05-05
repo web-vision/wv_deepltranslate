@@ -41,6 +41,11 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
                 return $out;
             }
 
+            // glossaries should not be auto translated by DeepL
+            if ($table === 'tx_wvdeepltranslate_glossaryentry') {
+                return $out;
+            }
+
             $translations = $this->translateTools->translationInfo(
                 $table,
                 $row['uid'],

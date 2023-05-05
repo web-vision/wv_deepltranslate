@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Utility;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\Connection;
@@ -19,30 +20,36 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
+use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
 class DeeplBackendUtility
 {
-    public const RENDER_TYPE_PAGE = 'page';
-
-    public const RENDER_TYPE_ELEMENT = 'element';
-
     private static string $apiKey = '';
+
     /**
      * @deprecated
      */
     private static string $apiUrl = '';
+
     /**
      * @deprecated
      */
     private static string $googleApiKey = '';
+
     /**
      * @deprecated
      */
     private static string $googleApiUrl = '';
 
     private static string $deeplFormality = 'default';
+
     private static bool $configurationLoaded = false;
+
+    /**
+     * @var array{uid: int, title: string}|array<empty>
+     */
+    protected static array $currentPage;
 
     /**
      * @return string
@@ -310,8 +317,72 @@ class DeeplBackendUtility
         return true;
     }
 
+    public static function checkGlossaryCanCreated(string $sourceLanguage, string $targetLanguage): bool
+    {
+        $possibleGlossaryMatches = GeneralUtility::makeInstance(DeeplGlossaryService::class)
+            ->getPossibleGlossaryLanguageConfig();
+        if (!isset($possibleGlossaryMatches[$sourceLanguage])) {
+            return false;
+        }
+        if (in_array($targetLanguage, $possibleGlossaryMatches[$sourceLanguage])) {
+            return true;
+        }
+        return false;
+    }
+
     private static function getBackendUserAuthentication(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * @return array{uid: int, title: string}|array<empty>
+     */
+    public static function detectCurrentPage(): array
+    {
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        $queryParams = $request ? $request->getQueryParams() : [];
+        if (isset($queryParams['id'])) {
+            $currentId = (int)$queryParams['id'];
+            return self::getPageRecord($currentId);
+        }
+        if (isset($queryParams['cmd'])) {
+            foreach ($queryParams['cmd'] as $possibleTable => $values) {
+                if ($possibleTable === 'localization') {
+                    continue;
+                }
+                [$id] = array_keys($values);
+                if ($possibleTable === 'pages') {
+                    self::$currentPage = self::getPageRecord($id);
+                }
+                $pageId = self::getPageIdFromRecord($possibleTable, $id);
+                self::$currentPage = self::getPageRecord($pageId);
+            }
+        }
+        self::$currentPage = [];
+        return self::$currentPage;
+    }
+
+    /**
+     * @return array{uid: int, title: string}|array<empty>
+     */
+    private static function getPageRecord(int $id): array
+    {
+        $page = BackendUtility::getRecord(
+            'pages',
+            $id,
+            'uid, title'
+        );
+        return $page ?? [];
+    }
+
+    private static function getPageIdFromRecord(string $table, int $id): int
+    {
+        $record = BackendUtility::getRecord(
+            $table,
+            $id,
+            'pid'
+        );
+        return $record['pid'];
     }
 }

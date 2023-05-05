@@ -42,8 +42,8 @@ class SettingsRepositoryTest extends FunctionalTestCase
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
         $settings = $connection->select(['*'], 'tx_deepl_settings', ['uid' => 2])->fetch();
 
-        static::assertSame(2, $settings['uid']);
-        static::assertSame(0, $settings['pid']);
+        static::assertSame(2, (int)$settings['uid']);
+        static::assertSame(0, (int)$settings['pid']);
         static::assertSame(serialize(['1' => 'de']), $settings['languages_assigned']);
     }
 

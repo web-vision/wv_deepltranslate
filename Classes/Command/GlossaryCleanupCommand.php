@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Command;
 
+use Doctrine\DBAL\DBALException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
@@ -13,9 +14,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
+use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
-class GlossariesEntriesCleanupCommand extends Command
+class GlossaryCleanupCommand extends Command
 {
     protected DeeplGlossaryService $deeplGlossaryService;
 
@@ -45,17 +47,23 @@ class GlossariesEntriesCleanupCommand extends Command
     {
         if (empty($input->getOption('yes'))) {
             $io = new SymfonyStyle($input, $output);
-            $yes = $io->ask('Really all delete? [yY] ');
+            $yes = $io->ask('Really all delete? [yY]');
             if (strtolower($yes) !== 'y') {
-                $output->writeln('Selectiong wrong. Abort.');
+                $output->writeln('Abort.');
                 exit;
             }
             $input->setOption('yes', true);
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    /**
+     * @throws DeepLException
+     * @throws DBALException
+     */
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output
+    ): int {
         if ($input->getOption('yes') === false) {
             $output->writeln('Deletion not confirmed. Cancel.');
             /**
@@ -75,6 +83,10 @@ class GlossariesEntriesCleanupCommand extends Command
         return 0;
     }
 
+    /**
+     * @throws DeepLException
+     * @throws DBALException
+     */
     private function removeAllGlossaryEntries(OutputInterface $output): void
     {
         $glossaries = $this->deeplGlossaryService->listGlossaries();
@@ -117,7 +129,7 @@ class GlossariesEntriesCleanupCommand extends Command
         $table->render();
         $output->writeln('');
 
-        $findNotConnected = $this->glossaryRepository->getGlossariesDeeplIdSet();
+        $findNotConnected = $this->glossaryRepository->getGlossariesDeeplConnected();
 
         if (count($findNotConnected) === 0) {
             $output->writeln('No glossaries with sync mismatch.');

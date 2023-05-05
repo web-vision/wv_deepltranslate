@@ -140,8 +140,8 @@ class TranslateHookTest extends FunctionalTestCase
         )->fetchAssociative();
 
         static::assertArrayHasKey('tx_wvdeepltranslate_content_not_checked', $pageRow);
-        static::assertSame(1, $pageRow['tx_wvdeepltranslate_content_not_checked']);
+        static::assertSame(1, (int)$pageRow['tx_wvdeepltranslate_content_not_checked']);
         static::assertArrayHasKey('tx_wvdeepltranslate_translated_time', $pageRow);
-        static::assertGreaterThan(0, $pageRow['tx_wvdeepltranslate_translated_time']);
+        static::assertGreaterThan(0, (int)$pageRow['tx_wvdeepltranslate_translated_time']);
     }
 }

@@ -85,6 +85,9 @@
 			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
 				<source>Last Translated Date</source>
 			</trans-unit>
+			<trans-unit id="pages.glossary_information">
+				<source>Glossary Information</source>
+			</trans-unit>
 			<trans-unit id="preview.flag">
 				<source>Translated with Deepl</source>
 			</trans-unit>
@@ -135,11 +138,21 @@
 				<source>DeepL Sync</source>
 			</trans-unit>
 
+			<trans-unit id="pages.glossary.translate">
+				<source>Create new Glossary translation</source>
+			</trans-unit>
+
 			<trans-unit id="glossary.sync.message">
 				<source>Synchronization with DeepL is done. Your glossaries are ready to use.</source>
 			</trans-unit>
 			<trans-unit id="glossary.sync.title">
 				<source>DeepL Sync ready</source>
+			</trans-unit>
+			<trans-unit id="glossary.not-sync.message">
+				<source>Glossary synchronization with DeepL is pending. Your glossaries are not operational.</source>
+			</trans-unit>
+			<trans-unit id="glossary.not-sync.title">
+				<source>DeepL Glossary is out of Sync</source>
 			</trans-unit>
 
 			<trans-unit id="glossaryentry">

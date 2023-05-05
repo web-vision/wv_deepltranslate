@@ -8,13 +8,13 @@ services:
     resource: '../Classes/*'
     exclude: '../Classes/{Domain/Model,Override/DatabaseRecordList.php,Override/v10/DatabaseRecordList.php}'
 
-  WebVision\WvDeepltranslate\Command\GlossariesEntriesCleanupCommand:
+  WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand:
     tags:
       - name: 'console.command'
         command: 'deepl:glossary:cleanup'
         schedulable: true
 
-  WebVision\WvDeepltranslate\Command\GlossariesEntriesListCommand:
+  WebVision\WvDeepltranslate\Command\GlossaryListCommand:
     tags:
       - name: 'console.command'
         command: 'deepl:glossary:list'

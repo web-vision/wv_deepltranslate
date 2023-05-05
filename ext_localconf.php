@@ -4,16 +4,22 @@ if (!defined('TYPO3_MODE')) {
     die();
 }
 
-(function () {
+(static function (): void {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:wv_deepltranslate/Configuration/TsConfig/Page/pagetsconfig.tsconfig">'
     );
+
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['wvDeepltranslate_updateGlossary']
+    = \WebVision\WvDeepltranslate\Upgrades\GlossaryUpgradeWizard::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['wv_deepltranslate'] =
         \WebVision\WvDeepltranslate\Hooks\ButtonBarHook::class . '->getButtons';
     //allowLanguageSynchronizationHook manipulates l10n_state
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
         = \WebVision\WvDeepltranslate\Hooks\AllowLanguageSynchronizationHook::class;
+
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
+        = \WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook::class;
 
     //hook for translate content
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processTranslateToClass']['deepl']
@@ -70,7 +76,7 @@ if (!defined('TYPO3_MODE')) {
     }
 
     $icons = [
-        'apps-pagetree-folder-contains-glossar' => 'deepl.svg',
+        'apps-pagetree-folder-contains-glossary' => 'deepl.svg',
         'actions-localize-deepl' => 'actions-localize-deepl.svg',
         'deepl-grey-logo' => 'deepl-grey.svg',
     ];

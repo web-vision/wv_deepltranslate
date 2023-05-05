@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Http\Request;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -15,6 +16,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
+use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class DeeplService
 {
@@ -68,7 +70,7 @@ class DeeplService
 
     /**
      * Deepl Api Call for retrieving translation.
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function translateRequest($content, $targetLanguage, $sourceLanguage): array
     {
@@ -80,11 +82,21 @@ class DeeplService
             'tag_handling' => urlencode('xml'),
         ];
 
+        // TODO make glossary findable by current site
         // Implementation of glossary into translation
-        $glossaryId = $this->glossaryRepository->getGlossaryBySourceAndTarget($sourceLanguage, $targetLanguage);
+        $glossary = $this->glossaryRepository
+            ->getGlossaryBySourceAndTarget(
+                $sourceLanguage,
+                $targetLanguage,
+                DeeplBackendUtility::detectCurrentPage()
+            );
 
-        if (!empty($glossaryId)) {
-            $postFields['glossary_id'] = $glossaryId;
+        // use glossary only, if is synced and DeepL marked ready
+        if (
+            $glossary['glossary_id'] !== ''
+            && $glossary['glossary_ready'] === 1
+        ) {
+            $postFields['glossary_id'] = $glossary['glossary_id'];
         }
 
         if (!empty($this->deeplFormality) && in_array(strtoupper($targetLanguage), $this->formalitySupportedLanguages, true)) {

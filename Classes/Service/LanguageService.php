@@ -159,7 +159,7 @@ class LanguageService
         /** @deprecated will be removed in version 4 */
         $targetLanguageRecord = $this->getRecordFromSysLanguage($languageId);
 
-        $targetLanguageMapping = $this->settingsRepository->getMappings($targetLanguageRecord['uid']);
+        $targetLanguageMapping = $this->settingsRepository->getMappings((int)$targetLanguageRecord['uid']);
         if ($targetLanguageMapping === '') {
             throw new LanguageIsoCodeNotFoundException(
                 sprintf(
