@@ -144,7 +144,7 @@ class TranslateHook
             if (!empty($response) && isset($response['translations'])) {
                 foreach ($response['translations'] as $translation) {
                     if ($translation['text'] != '') {
-                        $content = $translation['text'];
+                        $content = htmlspecialchars_decode($translation['text'], ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
                         break;
                     }
                 }
