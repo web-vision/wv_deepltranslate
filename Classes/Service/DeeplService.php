@@ -42,6 +42,9 @@ class DeeplService
 
     private FrontendInterface $cache;
 
+    public $apiKey;
+    public $apiUrl;
+
     public function __construct(
         ?FrontendInterface $cache = null,
         ?Client $client = null
@@ -55,6 +58,9 @@ class DeeplService
 
         $this->loadSupportedLanguages();
         $this->apiSupportedLanguages['target'] = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages['target']);
+
+        $this->apiKey = DeeplBackendUtility::getApiKey();
+        $this->apiUrl = DeeplBackendUtility::getApiUrl();
     }
 
     /**
