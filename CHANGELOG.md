@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.2
+
+[BUGFIX] Glossary is not used by @calien666 in #218
+[TASK] Change Ext Icon by @calien666 in #220
+
 ## 3.0.1
 
 * [BUGFIX] Fix runtime deprecation notice by @peterkraume in https://github.com/web-vision/wv_deepltranslate/pull/210
