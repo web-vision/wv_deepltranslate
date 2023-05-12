@@ -42,6 +42,7 @@ class GlossaryRepository
             'pages',
             $pageId
         );
+
         $entries = $this->getOriginalEntries($pageId);
         $localizationLanguageIds = $this->getAvailableLocalizations($pageId);
         $site = GeneralUtility::makeInstance(SiteFinder::class)

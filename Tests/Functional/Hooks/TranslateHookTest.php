@@ -32,8 +32,6 @@ class TranslateHookTest extends FunctionalTestCase
 
         parent::setUp();
 
-        $this->importDataSet(__DIR__ . '/../Fixtures/Settings.xml');
-        $this->importDataSet(__DIR__ . '/../Fixtures/Language.xml');
         $this->importDataSet(__DIR__ . '/../Fixtures/Pages.xml');
         $this->setUpFrontendRootPage(
             1,

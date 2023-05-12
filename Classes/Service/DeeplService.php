@@ -7,14 +7,11 @@ namespace WebVision\WvDeepltranslate\Service;
 use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Http\Request;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 class DeeplService
@@ -36,8 +33,6 @@ class DeeplService
      */
     public array $formalitySupportedLanguages = [];
 
-    protected SettingsRepository $deeplSettingsRepository;
-
     protected GlossaryRepository $glossaryRepository;
 
     private FrontendInterface $cache;
@@ -52,11 +47,7 @@ class DeeplService
         $this->client = $client ?? GeneralUtility::makeInstance(Client::class);
         $this->glossaryRepository = GeneralUtility::makeInstance(GlossaryRepository::class);
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->deeplSettingsRepository = $objectManager->get(SettingsRepository::class);
-
         $this->loadSupportedLanguages();
-        $this->apiSupportedLanguages['target'] = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages['target']);
     }
 
     /**

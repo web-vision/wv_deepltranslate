@@ -27,34 +27,6 @@
 				<source>Translating content via Google Translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
 				<target>Beim Übersetzen von Inhalten über Google Übersetzer (automatische Erkennung) wird eine Übersetzung aus der automatisch erkannten Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Die übersetzten Inhalte stammen vom Google-Übersetzungsdienst. Der Google-Dienst unterstützt einen fairen Anteil von <![CDATA[<a href= "https://cloud.google.com/translate/docs/languages" target="_blank">Sprachen</a>]]>.</target>
 			</trans-unit>
-			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>DeepL Settings</source>
-				<target>DeepL Settings</target>
-			</trans-unit>
-			<trans-unit id="settings_success" xml:space="preserve">
-				<source>Language assignments saved successfully</source>
-				<target>Sprachzuweisungen erfolgreich gespeichert</target>
-			</trans-unit>
-			<trans-unit id="settings_assign" xml:space="preserve">
-				<source>Assign languages</source>
-				<target>Sprachen zuweisen</target>
-			</trans-unit>
-			<trans-unit id="settings_no_language" xml:space="preserve">
-				<source>No system languages found.</source>
-				<target>Keine Systemsprachen gefunden.</target>
-			</trans-unit>
-			 <trans-unit id="languageId" xml:space="preserve">
-				<source>Language Id</source>
-				<target>Language Id</target>
-			</trans-unit>
-			<trans-unit id="syslanguage" xml:space="preserve">
-				<source>System Language</source>
-				<target>System Language</target>
-			</trans-unit>
-			<trans-unit id="deepliso" xml:space="preserve">
-				<source>Assigned Language(ISO Code)</source>
-				<target>Zugewiesene Sprache (ISO-Code)</target>
-			</trans-unit>
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
 				<source>DeepL</source>
 				<target>DeepL</target>
@@ -105,18 +77,6 @@
 			<trans-unit id="preview.flag">
 				<source>Translated with DeepL</source>
 				<target>Übersetzt mit DeepL</target>
-			</trans-unit>
-			<trans-unit id="deprecated.deepl-be.title">
-				<source>!!! Module is Deprecated !!!</source>
-				<taget>!!! Module ist Veraltet !!!</taget>
-			</trans-unit>
-			<trans-unit id="deprecated.deepl-be.body">
-				<source><![CDATA[We will remove this backend module from TYPO3 V11 and move the configuration in the site configuration.
-					This must be done because "sys_language" entries are deprecated from TYPO3 11 and are no longer considered in the translation.
-				]]></source>
-				<target><![CDATA[Wir werden ab der TYPO3 V11 dieses Backend Module auflösen und die Konfiguration in der Site Configuration verschieben.
-					Dies muss vorgenommen werden, weil "sys_language" Eintrage ab TYPO3 11 deprecated sind und im Übersetzung nicht mehr berücksichtigt werden.
-				]]></target>
 			</trans-unit>
 
 			<trans-unit id="glossary.title.count">

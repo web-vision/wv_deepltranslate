@@ -25,27 +25,6 @@
 				<source>Translating content via Google Translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.
 				</source>
 			</trans-unit>
-			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>Deepl Settings</source>
-			</trans-unit>
-			<trans-unit id="settings_success" xml:space="preserve">
-				<source>Language assignments saved successfully</source>
-			</trans-unit>
-			<trans-unit id="settings_assign" xml:space="preserve">
-				<source>Assign languages</source>
-			</trans-unit>
-			<trans-unit id="settings_no_language" xml:space="preserve">
-				<source>No system languages found.</source>
-			</trans-unit>
-			 <trans-unit id="languageId" xml:space="preserve">
-				<source>Language Id</source>
-			</trans-unit>
-			<trans-unit id="syslanguage" xml:space="preserve">
-				<source>System Language</source>
-			</trans-unit>
-			<trans-unit id="deepliso" xml:space="preserve">
-				<source>Assigned Language(ISO Code)</source>
-			</trans-unit>
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
 				<source>Deepl</source>
 			</trans-unit>
@@ -92,14 +71,6 @@
 				<source>Translated with Deepl</source>
 			</trans-unit>
 
-			<trans-unit id="deprecated.deepl-be.title">
-				<source>!!! Module is Deprecated !!!</source>
-			</trans-unit>
-			<trans-unit id="deprecated.deepl-be.body">
-				<source><![CDATA[We will remove this backend module from TYPO3 V11 and move the configuration in the site configuration.
-					This must be done because "sys_language" entries are deprecated from TYPO3 11 and are no longer considered in the translation.
-				]]></source>
-			</trans-unit>
 			<trans-unit id="site_configuration.deepl.title">
 				<source>Deepl Settings</source>
 			</trans-unit>

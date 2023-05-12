@@ -28,9 +28,6 @@ class DeeplServiceTest extends FunctionalTestCase
         );
 
         parent::setUp();
-
-        $this->importDataSet(__DIR__ . '/../Fixtures/Settings.xml');
-        $this->importDataSet(__DIR__ . '/../Fixtures/Language.xml');
     }
 
     /**

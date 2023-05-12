@@ -11,6 +11,7 @@ use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 class DeeplTranslateViewHelper extends AbstractViewHelper
 {
     private const GLOSSARY_MODE = 'glossary';
+
     public function initializeArguments()
     {
         $this->registerArgument(
@@ -70,10 +71,12 @@ class DeeplTranslateViewHelper extends AbstractViewHelper
                 'justLocalized' => 'pages:' . $context->getPageId() . ':' . $languageMatch[$possibleLanguage],
                 'returnUrl' => $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestUri(),
             ];
+
             $redirectUrl = DeeplBackendUtility::buildBackendRoute('record_edit', $parameters);
             $params = [];
             $params['redirect'] = $redirectUrl;
             $params['cmd']['pages'][$context->getPageId()]['localize'] = $languageMatch[$possibleLanguage];
+
             if ($mode !== self::GLOSSARY_MODE) {
                 $params['cmd']['localization']['custom']['mode'] = 'deepl';
             }
