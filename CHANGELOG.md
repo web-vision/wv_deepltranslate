@@ -1,5 +1,43 @@
 # Changelog
 
+## 3.0.0
+
+* [BUGFIX] Prevent TypeError by adding string cast before explode() by @spoonerWeb in https://github.com/web-vision/wv_deepltranslate/pull/126
+* [BUGFIX] v11: Allow pages always getting localized in RecordList by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/142
+* [BUGFIX] Hide DeepL controls for not supported languages by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/143
+* [BUGFIX] Backend module is always loaded, even if setting is false by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/157
+* [BUGFIX] Fix active old backend module condition type handling by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/161
+* [BUGFIX] Require PHP version in ext_emconf.php by @andreasfernandez in https://github.com/web-vision/wv_deepltranslate/pull/171
+* [BUGFIX] language translate button and select by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/140
+* [BUGFIX] DeepL Translation for fields with behaviour->allowLanguageSynchronization by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/141
+* [BUGFIX] Use correct POST body for submitting the glossary by @koehnlein in https://github.com/web-vision/wv_deepltranslate/pull/172
+* [BUGFIX] Fix choose language step skip by @philip-hartmann in https://github.com/web-vision/wv_deepltranslate/pull/178
+* [BUGFIX] decode html special characters by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/187
+* [BUGFIX] Fix ext_emconf version by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/186
+* [BUGFIX] Trim source and target strings by @LimeUwe in https://github.com/web-vision/wv_deepltranslate/pull/175
+* [BUGFIX] errors/warnings with PHP 8.1 by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/155
+* [TASK] Move html utility function by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/122
+* [TASK] Update extension dev dependencies by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/123
+* [TASK] Change behaviour of translation button by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/134
+* [TASK] Translation Check/Flag for Page Properties by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/137
+* [TASK] Code refactoring of Hooks and Language behaviour by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/138
+* [TASK] add news extension as dev-require by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/136
+* [DOC] Restructuring documentation by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/127
+* [DOC] Documentation by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/149
+* [TASK] Introduce GitHub actions powered workflow by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/147
+* [TASK] Improve variable types by @koehnlein in https://github.com/web-vision/wv_deepltranslate/pull/169
+* [TASK] Remove stripTag function in translateHook by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/163
+* [TASK] Add conflicts to recordlist_thumbnail by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/156
+* [TASK] Introduce issue templates by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/145
+* [TASK] Use `core-testing-*` images from `ghcr.io` by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/181
+* [TASK] Add sponsor to Documentation by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/183
+* [TASK] Make glossary sync more tolerant of outdated IDs by @koehnlein in https://github.com/web-vision/wv_deepltranslate/pull/173
+* [TASK] Create docs translate prefix by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/184
+* [TASK] Refactoring glossary handling by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/165
+* [TASK] task template by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/190
+* [TASK] Introduce Upgrade instructions by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/194
+* [FEATURE] Rework and centralize api client operation by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/189
+
 ## 2.3.1
 
 * [BUGFIX] Fix exception due to missing use statement by @sypets in #108
