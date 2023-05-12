@@ -1,7 +1,6 @@
 <?php
 
-(static function () {
-
+(static function (): void {
     $ll = function (string $identifier) {
         return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:' . $identifier;
     };

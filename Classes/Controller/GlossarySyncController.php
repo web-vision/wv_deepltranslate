@@ -20,18 +20,16 @@ class GlossarySyncController
     protected DeeplGlossaryService $deeplGlossaryService;
 
     public function __construct(
-        ?DeeplGlossaryService $deeplGlossaryService = null,
-        ?GlossaryRepository $glossaryRepository = null
+        DeeplGlossaryService $deeplGlossaryService
     ) {
-        $this->deeplGlossaryService = $deeplGlossaryService
-            ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
+        $this->deeplGlossaryService = $deeplGlossaryService;
     }
 
     /**
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function update(ServerRequestInterface $request)
+    public function update(ServerRequestInterface $request): RedirectResponse
     {
         $processingParameters = $request->getQueryParams();
 

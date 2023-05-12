@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Utility;
 
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
@@ -142,6 +145,9 @@ class DeeplBackendUtility
             . $lC . '</a> ';
     }
 
+    /**
+     * @throws RouteNotFoundException
+     */
     public static function buildBackendRoute(string $route, array $parameters): string
     {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
@@ -188,6 +194,11 @@ class DeeplBackendUtility
         return $newIcon;
     }
 
+    /**
+     * @throws DBALException
+     * @throws RouteNotFoundException
+     * @throws Exception
+     */
     public static function buildTranslateDropdown(
         $siteLanguages,
         $id,

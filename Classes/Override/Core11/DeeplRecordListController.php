@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Override\Core11;
 
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\WorkspaceRestriction;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -21,7 +25,7 @@ final class DeeplRecordListController extends RecordListController
      * @param string $requestUri
      * @param mixed $_forwardCore12CombatAndUnused
      */
-    protected function languageSelector($requestUri, $_forwardCore12CombatAndUnused = null): string
+    protected function languageSelector(string $requestUri, $_forwardCore12CombatAndUnused = null): string
     {
         if ($this->pageInfo['module'] === 'glossary') {
             return $this->buildGlossaryTranslationOptionDropdown($requestUri);
@@ -59,6 +63,12 @@ final class DeeplRecordListController extends RecordListController
             . '</div>';
     }
 
+    /**
+     * @throws SiteNotFoundException
+     * @throws DBALException
+     * @throws Exception
+     * @throws RouteNotFoundException
+     */
     private function buildGlossaryTranslationOptionDropdown(string $requestUri): string
     {
         if (!$this->getBackendUserAuthentication()->check('tables_modify', 'pages')) {

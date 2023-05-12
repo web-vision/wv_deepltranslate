@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -27,20 +28,19 @@ class DeeplGlossaryService
     protected GlossaryRepository $glossaryRepository;
 
     public function __construct(
-        ?FrontendInterface $cache = null,
-        ?Client $client = null,
-        ?GlossaryRepository $glossaryRepository = null
+        FrontendInterface $cache,
+        Client $client,
+        GlossaryRepository $glossaryRepository
     ) {
-        $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
-        $this->client = $client ?? GeneralUtility::makeInstance(Client::class);
-        $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
+        $this->cache = $cache;
+        $this->client = $client;
+        $this->glossaryRepository = $glossaryRepository;
     }
 
     /**
      * Calls the glossary-Endpoint and return Json-response as an array
      *
      * @return array
-     * @throws DeepLException
      */
     public function listLanguagePairs(): array
     {
@@ -54,7 +54,6 @@ class DeeplGlossaryService
      * Calls the glossary-Endpoint and return Json-response as an array
      *
      * @return array
-     * @throws DeepLException
      */
     public function listGlossaries(): array
     {
@@ -82,7 +81,6 @@ class DeeplGlossaryService
      *     entry_count: int
      * }
      *
-     * @throws DeepLException
      * @throws GlossaryEntriesNotExistException
      */
     public function createGlossary(
@@ -111,7 +109,6 @@ class DeeplGlossaryService
      *
      * @return array|null
      *
-     * @throws DeepLException
      */
     public function deleteGlossary(string $glossaryId): ?array
     {
@@ -143,7 +140,6 @@ class DeeplGlossaryService
      * @param string $glossaryId
      * @return array|null
      *
-     * @throws DeepLException
      */
     public function glossaryInformation(string $glossaryId): ?array
     {
@@ -158,7 +154,6 @@ class DeeplGlossaryService
      *
      * @param string $glossaryId
      * @return array
-     * @throws DeepLException
      */
     public function glossaryEntries(string $glossaryId): array
     {
@@ -181,9 +176,6 @@ class DeeplGlossaryService
         return $entries;
     }
 
-    /**
-     * @throws DeepLException
-     */
     public function getPossibleGlossaryLanguageConfig(): array
     {
         $cacheIdentifier = 'wv-deepl-glossary-pairs';
@@ -204,8 +196,9 @@ class DeeplGlossaryService
     }
 
     /**
-     * @throws DeepLException
      * @throws SiteNotFoundException
+     * @throws DBALException
+     * @throws Exception
      */
     public function syncGlossaries(int $uid): void
     {
