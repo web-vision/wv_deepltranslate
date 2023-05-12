@@ -14,7 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossaryCleanupCommand extends Command
@@ -57,7 +56,6 @@ class GlossaryCleanupCommand extends Command
     }
 
     /**
-     * @throws DeepLException
      * @throws DBALException
      */
     protected function execute(
@@ -66,25 +64,17 @@ class GlossaryCleanupCommand extends Command
     ): int {
         if ($input->getOption('yes') === false) {
             $output->writeln('Deletion not confirmed. Cancel.');
-            /**
-             * return 2 HAS to be for TYPO3 v9 support
-             * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
-             */
-            return 2;
+
+            return Command::INVALID;
         }
 
         $this->removeAllGlossaryEntries($output);
         $output->writeln('Success!');
 
-        /**
-         * return 0 HAS to be for TYPO3 v9 support
-         * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
-         */
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
-     * @throws DeepLException
      * @throws DBALException
      */
     private function removeAllGlossaryEntries(OutputInterface $output): void

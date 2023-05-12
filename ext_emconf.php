@@ -13,7 +13,7 @@
 $EM_CONF[$_EXTKEY] = [
     'title' => 'DeepL Translate',
     'description' => 'This extension provides option to translate content element, and TCA record texts to DeepL and Google supported languages.',
-    'category' => 'module,backend',
+    'category' => 'backend',
     'author' => 'web-vision GmbH Team',
     'author_company' => 'web-vision GmbH',
     'author_email' => 'hello@web-vision.de',
@@ -25,7 +25,7 @@ $EM_CONF[$_EXTKEY] = [
     'constraints' => [
         'depends' => [
             'php' => '7.4.0-8.2.99',
-            'typo3' => '9.5.1-11.5.99',
+            'typo3' => '11.5.0-12.4.99',
         ],
         'conflicts' => [
             'recordlist_thumbnail' => '*',
