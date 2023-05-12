@@ -36,20 +36,13 @@ if (!defined('TYPO3_MODE')) {
         'className' => \WebVision\WvDeepltranslate\Override\LocalizationController::class,
     ];
 
-    $typo3VersionArray = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionStringToArray(
-        \TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version()
-    );
-
-    $databaseRecordClassName = \WebVision\WvDeepltranslate\Override\DatabaseRecordList::class;
-    $recordListControllerClassName = \WebVision\WvDeepltranslate\Override\DeeplRecordListController::class;
-
     //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class] = [
-        'className' => $databaseRecordClassName,
+        'className' => \WebVision\WvDeepltranslate\Override\DatabaseRecordList::class,
     ];
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\Controller\RecordListController::class] = [
-        'className' => $recordListControllerClassName,
+        'className' => \WebVision\WvDeepltranslate\Override\DeeplRecordListController::class,
     ];
 
     if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {
@@ -61,7 +54,10 @@ if (!defined('TYPO3_MODE')) {
         }
     }
 
-    if (TYPO3_MODE === 'BE' && \WebVision\WvDeepltranslate\Utility\DeeplBackendUtility::isDeeplApiKeySet()) {
+    if (
+        TYPO3_MODE === 'BE'
+        && \WebVision\WvDeepltranslate\Utility\DeeplBackendUtility::isDeeplApiKeySet()
+    ) {
         // overriding localization.js
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
