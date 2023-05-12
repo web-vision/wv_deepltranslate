@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.1
+
+* [BUGFIX] Fix runtime deprecation notice by @peterkraume in https://github.com/web-vision/wv_deepltranslate/pull/210
+* [BUGFIX] Fix missing configuration object for localization wizard by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/211
+* [BUGFIX] Update ButtonBarHook.php by @bigahuna in https://github.com/web-vision/wv_deepltranslate/pull/213
+* [BUGFIX] Exclude fields in upgrade wizards by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/215
+* [TASK] Add auto detect source language by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/214
+* [BUGFIX] Glossary entries by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/212
+
 ## 3.0.0
 
 * [BUGFIX] Prevent TypeError by adding string cast before explode() by @spoonerWeb in https://github.com/web-vision/wv_deepltranslate/pull/126
