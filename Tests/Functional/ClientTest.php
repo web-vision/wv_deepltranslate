@@ -172,7 +172,10 @@ class ClientTest extends FunctionalTestCase
             'de',
             'en',
             [
-                'hallo Welt' => 'hello world',
+                0 => [
+                    'source' => 'hallo Welt',
+                    'target' => 'hello world',
+                ],
             ],
         );
 
@@ -195,7 +198,10 @@ class ClientTest extends FunctionalTestCase
             'de',
             'en',
             [
-                'hallo Welt' => 'hello world',
+                0 => [
+                    'source' => 'hallo Welt',
+                    'target' => 'hello world',
+                ],
             ],
         );
 
@@ -241,7 +247,10 @@ class ClientTest extends FunctionalTestCase
             'de',
             'en',
             [
-                'hallo Welt' => 'hello world',
+                0 => [
+                    'source' => 'hallo Welt',
+                    'target' => 'hello world',
+                ],
             ],
         );
 
@@ -279,7 +288,10 @@ class ClientTest extends FunctionalTestCase
             'de',
             'en',
             [
-                'hallo Welt' => 'hello world',
+                0 => [
+                    'source' => 'hallo Welt',
+                    'target' => 'hello world',
+                ],
             ],
         );
 
@@ -303,7 +315,10 @@ class ClientTest extends FunctionalTestCase
             'de',
             'en',
             [
-                'hallo Welt' => 'hello world',
+                0 => [
+                    'source' => 'hallo Welt',
+                    'target' => 'hello world',
+                ],
             ],
         );
 
@@ -339,7 +354,10 @@ class ClientTest extends FunctionalTestCase
             'de',
             'en',
             [
-                'hallo Welt' => 'hello world',
+                0 => [
+                    'source' => 'hallo Welt',
+                    'target' => 'hello world',
+                ],
             ],
         );
 
@@ -363,7 +381,10 @@ class ClientTest extends FunctionalTestCase
             'de',
             'en',
             [
-                'hallo Welt' => 'hello world',
+                0 => [
+                    'source' => 'hallo Welt',
+                    'target' => 'hello world',
+                ],
             ],
         );
 
@@ -387,7 +408,10 @@ class ClientTest extends FunctionalTestCase
             'de',
             'en',
             [
-                'hallo Welt' => 'hello world',
+                0 => [
+                    'source' => 'hallo Welt',
+                    'target' => 'hello world',
+                    ],
             ],
         );
 
@@ -397,7 +421,7 @@ class ClientTest extends FunctionalTestCase
 
         $content = $response->getBody()->getContents();
 
-        static::assertSame($content, sprintf("%s\t%s", 'hallo Welt', 'hello world'));
+        static::assertSame(sprintf("%s\t%s", 'hallo Welt', 'hello world'), $content);
     }
 
     protected function tearDown(): void
