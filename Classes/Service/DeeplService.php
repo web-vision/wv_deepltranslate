@@ -63,15 +63,20 @@ class DeeplService
      * Deepl Api Call for retrieving translation.
      * @return array<int|string, mixed>
      */
-    public function translateRequest($content, $targetLanguage, $sourceLanguage): array
+    public function translateRequest(string $content, string $targetLanguage, string $sourceLanguage): array
     {
-        // TODO make glossary findable by current site
-        // Implementation of glossary into translation
-        $glossary = $this->glossaryRepository->getGlossaryBySourceAndTarget(
-            $sourceLanguage,
-            $targetLanguage,
-            DeeplBackendUtility::detectCurrentPage()
-        );
+        // If the source language is set to Autodetect, no glossary can be detected.
+        if ($sourceLanguage === 'auto') {
+            $sourceLanguage = '';
+            $glossary['glossary_id'] = '';
+        } else {
+            // TODO make glossary findable by current site
+            $glossary = $this->glossaryRepository->getGlossaryBySourceAndTarget(
+                $sourceLanguage,
+                $targetLanguage,
+                DeeplBackendUtility::detectCurrentPage()
+            );
+        }
 
         try {
             $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);

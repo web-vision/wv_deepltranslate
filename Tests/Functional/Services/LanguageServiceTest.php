@@ -113,14 +113,13 @@ class LanguageServiceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getSourceLanguageExceptionWhenLanguageNotExist(): void
+    public function setAutoDetectOptionForSourceLanguageNotSupported(): void
     {
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 3);
-
-        static::expectException(LanguageIsoCodeNotFoundException::class);
-        static::expectExceptionMessage('No API supported target found for language "Bosnian"', );
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site']);
+
+        static::assertContains('auto', $sourceLanguageRecord);
     }
 
     /**
