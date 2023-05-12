@@ -14,21 +14,12 @@ additional four options apart from normal translate and copy.
 
 * DeepL Translate(auto detect).
 * DeepL Translate.
-* Google Translate(auto detect).
-* Google Translate.
 
 .. figure:: /Images/Editor/deepl.png
     :height: 450px
     :alt: DeepL Options
 
     DeepL translate options
-
-.. figure:: /Images/Editor/google.png
-    :height: 450px
-    :alt: Google Options
-
-    Google translate options
-
 
 Translating a page
 ------------------

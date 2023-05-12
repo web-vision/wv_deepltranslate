@@ -12,15 +12,11 @@ use WebVision\WvDeepltranslate\Domain\Repository\PageRepository;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
-use WebVision\WvDeepltranslate\Utility\HtmlUtility;
 
 class TranslateHook
 {
     protected DeeplService $deeplService;
-
-    protected GoogleTranslateService $googleService;
 
     protected PageRepository $pageRepository;
 
@@ -28,11 +24,9 @@ class TranslateHook
 
     public function __construct(
         ?PageRepository $pageRepository = null,
-        ?DeeplService $deeplService = null,
-        ?GoogleTranslateService $googleService = null
+        ?DeeplService $deeplService = null
     ) {
         $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
-        $this->googleService = $googleService ?? GeneralUtility::makeInstance(GoogleTranslateService::class);
         $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class);
         $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
     }
@@ -62,7 +56,7 @@ class TranslateHook
         $customMode = $cmdmap['localization']['custom']['mode'] ?? null;
         [$sourceLanguage,] = explode('-', (string)$cmdmap['localization']['custom']['srcLanguageId']);
 
-        //translation mode set to deepl or google translate
+        //translation mode not set to DeepL translate
         if ($customMode === null) {
             return $content;
         }
@@ -140,20 +134,6 @@ class TranslateHook
                         $content = htmlspecialchars_decode($translation['text'], ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
                         break;
                     }
-                }
-            }
-        } //mode google
-        elseif ($customMode == 'google') {
-            $response = $this->googleService->translate(
-                $targetLanguageRecord['language_isocode'],
-                $targetLanguageRecord['language_isocode'],
-                $content
-            );
-
-            if (!empty($response)) {
-                if (HtmlUtility::isHtml($response)) {
-                    $content = preg_replace('/\/\s/', '/', $response);
-                    $content = preg_replace('/\>\s+/', '>', $content);
                 }
             }
         }

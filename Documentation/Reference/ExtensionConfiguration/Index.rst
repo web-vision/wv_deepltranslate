@@ -63,18 +63,6 @@ DeepL API Key
     prefer_more
         Use more formal language, if possible, otherwise fallback to default
 
-.. confval:: googleapiKey (deprecated)
-
-    :type: string
-
-    The API key for Google translation.
-
-.. confval:: googleapiUrl (deprecated)
-
-    :type: string
-
-    The URL providing Google translation API. Normally you don't need to change this.
-
 
 .. _DeepL Free API: https://www.deepl.com/pro-checkout/account?productId=1200&yearly=false&trial=false
 .. _DeepL Pro: https://www.deepl.com/de/pro
