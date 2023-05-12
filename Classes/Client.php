@@ -98,7 +98,9 @@ final class Client
         ];
 
         $formatEntries = '';
-        foreach ($entries as $source => $target) {
+        foreach ($entries as $entry) {
+            $source = $entry['source'];
+            $target = $entry['target'];
             $formatEntries .= sprintf(self::GLOSSARY_ENTRY_FORMAT, $source, $target);
         }
 
