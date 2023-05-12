@@ -37,7 +37,7 @@ class ButtonBarHook
             );
 
             if (
-                $page['module'] === 'glossary'
+                isset($page['module']) && $page['module'] === 'glossary'
                 && $this->getBackendUserAuthentication()
                     ->check('tables_modify', 'tx_wvdeepltranslate_glossaryentry')
             ) {
