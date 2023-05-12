@@ -66,6 +66,8 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $updateGlossary = [];
         foreach ($result as $item) {
             unset($item['description']);
+            unset($item['starttime']);
+            unset($item['endtime']);
             $updateGlossary[] = $item;
         }
 

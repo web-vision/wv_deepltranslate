@@ -12,6 +12,8 @@ CREATE TABLE tx_wvdeepltranslate_domain_model_glossaries
 	l10n_source      int unsigned      default 0  not null,
 	l10n_state       text                         null,
 	l10n_diffsource  mediumblob                   null,
+	starttime int unsigned      default 0 not null,
+	endtime int unsigned      default 0 not null,
 
 	term        varchar(255),
 	description text,

@@ -38,6 +38,8 @@
         <description>Englisch - Lorem ipsum dolor sit ame</description>
         <sys_language_uid>0</sys_language_uid>
         <term>Hello</term>
+        <starttime>0</starttime>
+        <endtime>0</endtime>
     </tx_wvdeepltranslate_domain_model_glossaries>
     <tx_wvdeepltranslate_domain_model_glossaries>
         <uid>2</uid>
@@ -45,6 +47,8 @@
         <description>Deutsch - Lorem ipsum dolor sit ame</description>
         <sys_language_uid>1</sys_language_uid>
         <term>Welt</term>
+        <starttime>0</starttime>
+        <endtime>0</endtime>
     </tx_wvdeepltranslate_domain_model_glossaries>
     <tx_wvdeepltranslate_domain_model_glossariessync>
         <uid>1</uid>
