@@ -340,6 +340,7 @@ class DeeplBackendUtility
      */
     public static function detectCurrentPage(): array
     {
+        self::$currentPage = [];
         $request = $GLOBALS['TYPO3_REQUEST'];
         $queryParams = $request ? $request->getQueryParams() : [];
         if (isset($queryParams['id'])) {
@@ -359,7 +360,7 @@ class DeeplBackendUtility
                 self::$currentPage = self::getPageRecord($pageId);
             }
         }
-        self::$currentPage = [];
+
         return self::$currentPage;
     }
 
