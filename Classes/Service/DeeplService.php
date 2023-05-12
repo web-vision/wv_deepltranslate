@@ -42,6 +42,8 @@ class DeeplService
 
     private FrontendInterface $cache;
 
+    private Client $client;
+
     public function __construct(
         ?FrontendInterface $cache = null,
         ?Client $client = null
