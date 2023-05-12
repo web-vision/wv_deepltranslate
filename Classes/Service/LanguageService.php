@@ -81,13 +81,9 @@ class LanguageService
             $sourceLanguageRecord['language_isocode'],
             $this->deeplService->apiSupportedLanguages['source']
         )) {
-            throw new LanguageIsoCodeNotFoundException(
-                sprintf(
-                    'No API supported target found for language "%s"',
-                    $sourceLanguageRecord['title']
-                ),
-                1676741965
-            );
+            // When sources language not supported oder not exist set auto detect for deepL API
+            $sourceLanguageRecord['title'] = 'auto';
+            $sourceLanguageRecord['language_isocode'] = 'auto';
         }
 
         return $sourceLanguageRecord;
