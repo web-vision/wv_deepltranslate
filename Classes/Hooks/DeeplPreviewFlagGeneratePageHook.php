@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class DeeplPreviewFlagGeneratePageHook
 {
     /**
      * @param array{pObj: TypoScriptFrontendController} $params
+     * @throws AspectNotFoundException
      */
     public function renderDeeplPreviewFlag(array $params): void
     {

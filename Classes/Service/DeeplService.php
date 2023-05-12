@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
 use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -40,22 +43,30 @@ class DeeplService
     private Client $client;
 
     public function __construct(
-        ?FrontendInterface $cache = null,
-        ?Client $client = null
+        FrontendInterface $cache,
+        Client $client,
+        GlossaryRepository $glossaryRepository
     ) {
-        $this->cache = $cache ?? GeneralUtility::makeInstance(CacheManager::class)->getCache('wvdeepltranslate');
-        $this->client = $client ?? GeneralUtility::makeInstance(Client::class);
-        $this->glossaryRepository = GeneralUtility::makeInstance(GlossaryRepository::class);
+        $this->cache = $cache;
+        $this->client = $client;
+        $this->glossaryRepository = $glossaryRepository;
 
         $this->loadSupportedLanguages();
     }
 
     /**
      * Deepl Api Call for retrieving translation.
+     *
      * @return array<int|string, mixed>
+     * @throws DBALException
+     * @throws Exception
+     * @throws SiteNotFoundException
      */
-    public function translateRequest(string $content, string $targetLanguage, string $sourceLanguage): array
-    {
+    public function translateRequest(
+        string $content,
+        string $targetLanguage,
+        string $sourceLanguage
+    ): array {
         // If the source language is set to Autodetect, no glossary can be detected.
         if ($sourceLanguage === 'auto') {
             $sourceLanguage = '';

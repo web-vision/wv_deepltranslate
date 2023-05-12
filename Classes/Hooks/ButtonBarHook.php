@@ -17,13 +17,13 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class ButtonBarHook
 {
     /**
-     * @param array $params
+     * @param array<int|string, mixed> $params
      * @param ButtonBar $buttonBar
      *
-     * @return array
+     * @return array<int|string, mixed>
      * @throws RouteNotFoundException
      */
-    public function getButtons(array $params, ButtonBar $buttonBar)
+    public function getButtons(array $params, ButtonBar $buttonBar): array
     {
         $buttons = $params['buttons'];
         $queryParams = $GLOBALS['TYPO3_REQUEST']->getQueryParams();

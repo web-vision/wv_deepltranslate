@@ -23,9 +23,9 @@ class LanguageService
     ];
 
     public function __construct(
-        ?DeeplService $deeplService = null
+        DeeplService $deeplService
     ) {
-        $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
+        $this->deeplService = $deeplService;
     }
 
     /**
@@ -52,7 +52,6 @@ class LanguageService
 
     /**
      * @return array{uid: int, title: string, language_isocode: string}
-     * @throws LanguageIsoCodeNotFoundException
      */
     public function getSourceLanguage(Site $currentSite): array
     {

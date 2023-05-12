@@ -4,19 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Override;
 
-/*
- * This file is part of the TYPO3 CMS project.
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
+use Doctrine\DBAL\Driver\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
@@ -130,6 +118,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      *
      * @param ServerRequestInterface $request
      * @return ResponseInterface
+     * @throws Exception
      */
     public function getRecordLocalizeSummary(ServerRequestInterface $request): ResponseInterface
     {
@@ -141,7 +130,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         $pageId         = (int)$params['pageId'];
         $destLanguageId = (int)$params['destLanguageId'];
         //getting source language id
-        $languageId = $this->getSourceLanguageid($params['languageId']);
+        $languageId = $this->getSourceLanguageId($params['languageId']);
 
         $records = [];
         $result  = $this->localizationRepository->getRecordsToCopyDatabaseResult(
@@ -151,7 +140,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             '*'
         );
 
-        while ($row = $result->fetch()) {
+        while ($row = $result->fetchAssociative()) {
             BackendUtility::workspaceOL('tt_content', $row, -99, true);
             if (!$row || VersionState::cast($row['t3ver_state'])->equals(VersionState::DELETE_PLACEHOLDER)) {
                 continue;
@@ -212,7 +201,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         $params['uidList'] = $this->filterInvalidUids(
             (int)$params['pageId'],
             (int)$params['destLanguageId'],
-            $this->getSourceLanguageid($params['srcLanguageId']),
+            $this->getSourceLanguageId($params['srcLanguageId']),
             $params['uidList']
         );
 
@@ -285,13 +274,10 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         echo $result;
         exit;
     }
-
     /**
-     * Return source language Id from source language string
-     * @param string $srcLanguage
-     * @return int
+     * Return source language ID from source language string
      */
-    public function getSourceLanguageid($srcLanguage)
+    public function getSourceLanguageId(string $srcLanguage): int
     {
         $langParam = explode('-', $srcLanguage);
         if (count($langParam) > 1) {

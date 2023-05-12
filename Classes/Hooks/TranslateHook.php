@@ -34,8 +34,11 @@ class TranslateHook
     /**
      * @param array{uid: int} $languageRecord
      */
-    public function processTranslateTo_copyAction(string &$content, array $languageRecord, DataHandler $dataHandler): string
-    {
+    public function processTranslateTo_copyAction(
+        string &$content,
+        array $languageRecord,
+        DataHandler $dataHandler
+    ): string {
         $tableName = '';
         $currentRecordId = '';
 
