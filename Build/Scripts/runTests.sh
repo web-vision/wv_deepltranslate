@@ -115,11 +115,9 @@ Options:
             - 8.1: use PHP 8.1
             - 8.2: use PHP 8.2
 
-    -t <9|10|11>
+    -t <11>
         Only with -s composerUpdate
         Specifies the TYPO3 core major version to be used
-            - 9: use TYPO3 core v9
-            - 10: use TYPO3 core v10
             - 11 (default): use TYPO3 core v11
 
     -e "<phpunit or codeception options>"
@@ -212,7 +210,7 @@ while getopts ":s:a:d:p:t:e:xnhuv" OPT; do
             ;;
         t)
             TYPO3_VERSION=${OPTARG}
-            if ! [[ ${TYPO3_VERSION} =~ ^(9|10|11)$ ]]; then
+            if ! [[ ${TYPO3_VERSION} =~ ^(11)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;
