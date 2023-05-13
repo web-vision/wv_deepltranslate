@@ -56,61 +56,6 @@ composer_require_default_dev() {
         nimut/testing-framework:^6.0 --no-update
 }
 
-update_v9() {
-    echo "###############################"
-    echo "Update TYPO3 dependency to v9"
-    echo "###############################"
-    echo ""
-
-    echo "Add Requires for v9"
-    composer req \
-        typo3/cms-core:^9.5 \
-        typo3/cms-backend:^9.5 \
-        typo3/cms-install:^9.5 \
-        typo3/cms-extbase:^9.5 \
-        typo3/cms-fluid:^9.5 --no-update
-
-    composer_require_default_dev
-
-    echo "Add Dev-Requires for v9"
-    composer req \
-        helhum/typo3-console:^5.8 \
-        typo3/cms-belog:^9.5 \
-        typo3/cms-fluid-styled-content:^9.5 \
-        typo3/cms-filelist:^9.5 \
-        typo3/cms-info:^9.5 \
-        typo3/cms-lowlevel:^9.5 \
-        typo3/cms-tstemplate:^9.5 \
-        typo3/cms-workspaces:^9.5 \
-        typo3/cms-frontend:^9.5 \
-        typo3/cms-extensionmanager:^9.5 --dev -W --no-scripts
-}
-
-update_v10() {
-    echo "Add Requires for v10"
-    composer req \
-        typo3/cms-core:^10.4 \
-        typo3/cms-backend:^10.4 \
-        typo3/cms-install:^10.4 \
-        typo3/cms-extbase:^10.4 \
-        typo3/cms-fluid:^10.4 --no-update
-
-    composer_require_default_dev
-
-    echo "Add Dev-Requires for v10"
-    composer req \
-        helhum/typo3-console:^6.7 \
-        typo3/cms-belog:^10.4 \
-        typo3/cms-fluid-styled-content:^10.4 \
-        typo3/cms-filelist:^10.4 \
-        typo3/cms-info:^10.4 \
-        typo3/cms-lowlevel:^10.4 \
-        typo3/cms-tstemplate:^10.4 \
-        typo3/cms-workspaces:^10.4 \
-        typo3/cms-frontend:^10.4 \
-        typo3/cms-extensionmanager:^10.4 --dev -W --no-scripts
-}
-
 update_v11() {
     echo "Add Dev-Requires for v11"
     composer req \
@@ -137,23 +82,13 @@ update_v11() {
 }
 
 case "$1" in
-9)
-    composer_cleanup
-    update_v9
-    composer_update
-    ;;
-10)
-    composer_cleanup
-    update_v10
-    composer_update
-    ;;
 11)
     composer_cleanup
     update_v11
     composer_update
     ;;
 *)
-    echo "Usage: ddev update-to {9|10|11}" >&2
+    echo "Usage: ddev update-to {11}" >&2
     exit 0
     ;;
 esac
