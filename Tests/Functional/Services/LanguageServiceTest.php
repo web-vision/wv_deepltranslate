@@ -4,20 +4,66 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
 class LanguageServiceTest extends FunctionalTestCase
 {
+    use SiteBasedTestTrait;
+
+    protected const LANGUAGE_PRESETS = [
+        'EN' => [
+            'id' => 0,
+            'title' => 'English',
+            'locale' => 'en_US.UTF-8',
+            'iso' => 'en',
+            'hrefLang' => 'en-US',
+            'direction' => '',
+        ],
+        'DE' => [
+            'id' => 2,
+            'title' => 'Deutsch',
+            'locale' => 'de_DE',
+            'iso' => 'de',
+            'hrefLang' => 'de-DE',
+            'direction' => '',
+        ],
+        'EB' => [
+            'id' => 3,
+            'title' => 'Britisch',
+            'locale' => 'en_GB',
+            'iso' => 'eb',
+            'hrefLang' => 'en-GB',
+            'direction' => '',
+        ],
+        'BS_default' => [
+            'id' => 0,
+            'title' => 'Bosnian',
+            'locale' => 'bs_BA.utf8',
+            'iso' => 'bs',
+            'hrefLang' => 'bs',
+            'direction' => '',
+        ],
+        'BS' => [
+            'id' => 4,
+            'title' => 'Bosnian',
+            'locale' => 'bs_BA.utf8',
+            'iso' => 'bs',
+            'hrefLang' => 'bs',
+            'direction' => '',
+        ],
+    ];
+
     /**
-     * @var string[]
+     * @var non-empty-string[]
      */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/wv_deepltranslate',
+    protected array $testExtensionsToLoad = [
+        'web-vision/wv_deepltranslate',
     ];
 
     protected function setUp(): void
@@ -29,22 +75,28 @@ class LanguageServiceTest extends FunctionalTestCase
 
         parent::setUp();
 
-        $this->importDataSet(__DIR__ . '/Fixtures/Pages.xml');
-
-        $this->setUpFrontendRootPage(
-            1,
-            [],
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/Pages.csv');
+        $this->writeSiteConfiguration(
+            'site-a',
+            $this->buildSiteConfiguration(1, '/', 'Home'),
             [
-                1 => 'EXT:wv_deepltranslate/Tests/Functional/Services/Fixtures/SiteConfig.yaml',
+                $this->buildDefaultLanguageConfiguration('EN', '/'),
+                $this->buildLanguageConfiguration('DE', '/de/', ['EN'], 'strict'),
+                $this->buildLanguageConfiguration('EB', '/eb/', ['EN'], 'strict'),
+                $this->buildLanguageConfiguration('BS', '/bs/', ['EN'], 'strict'),
             ]
         );
-        $this->setUpFrontendRootPage(
-            3,
-            [],
+        $this->setUpFrontendRootPage(1, [], []);
+        $this->writeSiteConfiguration(
+            'site-b',
+            $this->buildSiteConfiguration(3, '/', 'Home'),
             [
-                3 => 'EXT:wv_deepltranslate/Tests/Functional/Services/Fixtures/SiteConfigEnNotDefault.yaml',
+                $this->buildDefaultLanguageConfiguration('BS_default', '/bs/'),
+                $this->buildLanguageConfiguration('DE', '/de/', ['EN'], 'strict'),
+                $this->buildLanguageConfiguration('EB', '/eb/', ['EN'], 'strict'),
             ]
         );
+        $this->setUpFrontendRootPage(3, [], []);
     }
 
     /**
@@ -127,8 +179,6 @@ class LanguageServiceTest extends FunctionalTestCase
      */
     public function getTargetLanguageInformationIsValid(): void
     {
-        $this->typo3VersionSkip();
-
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
@@ -147,14 +197,12 @@ class LanguageServiceTest extends FunctionalTestCase
      */
     public function getTargetLanguageExceptionWhenLanguageNotExist(): void
     {
-        $this->typo3VersionSkip();
-
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
         static::expectException(LanguageRecordNotFoundException::class);
         static::expectExceptionMessage('Language "1" not found in SiteConfig "Home"');
-        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 1);
+        $languageService->getTargetLanguage($siteInformation['site'], 1);
     }
 
     /**
@@ -162,23 +210,11 @@ class LanguageServiceTest extends FunctionalTestCase
      */
     public function getTargetLanguageExceptionWhenLanguageIsoNotSupported(): void
     {
-        $this->typo3VersionSkip();
-
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
         static::expectException(LanguageIsoCodeNotFoundException::class);
         static::expectExceptionMessage('No API supported target found for language "Bosnian" in site "Home"');
-        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 4);
-    }
-
-    private function typo3VersionSkip(): void
-    {
-        $typo3VersionArray = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionStringToArray(
-            \TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version()
-        );
-        if (version_compare((string)$typo3VersionArray['version_main'], '11', '<')) {
-            static::markTestSkipped('Skip test, can only use in version 11');
-        }
+        $languageService->getTargetLanguage($siteInformation['site'], 4);
     }
 }

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Tests\Functional;
 
 use Helmich\JsonAssert\JsonAssertions;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use PHPUnit\Framework\Constraint\IsType;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Configuration;
 
@@ -20,16 +20,16 @@ class ClientTest extends FunctionalTestCase
     use JsonAssertions;
 
     /**
-     * @var string[]
+     * @var non-empty-string[]
      */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/wv_deepltranslate',
+    protected array $testExtensionsToLoad = [
+        'web-vision/wv_deepltranslate',
     ];
 
     /**
      * @var string[]
      */
-    private array $glossaryIdStorage;
+    private array $glossaryIdStorage = [];
 
     public function __construct(...$arguments)
     {

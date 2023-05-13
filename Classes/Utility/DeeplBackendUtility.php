@@ -307,7 +307,7 @@ class DeeplBackendUtility
     public static function detectCurrentPage(): array
     {
         self::$currentPage = [];
-        $request = $GLOBALS['TYPO3_REQUEST'];
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
         $queryParams = $request ? $request->getQueryParams() : [];
         if (isset($queryParams['id'])) {
             $currentId = (int)$queryParams['id'];
