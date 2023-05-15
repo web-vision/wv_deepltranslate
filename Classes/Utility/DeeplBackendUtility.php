@@ -257,7 +257,7 @@ class DeeplBackendUtility
                 )
             )
             ->execute();
-        while ($pageTranslation = $statement->fetchAssociative()) {
+        while ($pageTranslation = $statement->fetch()) {
             unset($availableTranslations[(int)$pageTranslation[$languageField]]);
         }
         // If any languages are left, make selector:

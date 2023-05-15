@@ -101,8 +101,8 @@ class DeeplRecordListController extends RecordListController
                     $queryBuilder->createNamedParameter($this->id, Connection::PARAM_INT)
                 )
             )
-            ->executeQuery();
-        while ($pageTranslation = $statement->fetchAssociative()) {
+            ->execute();
+        while ($pageTranslation = $statement->fetch()) {
             unset($availableTranslations[(int)$pageTranslation[$languageField]]);
         }
         // If any languages are left, make selector:
