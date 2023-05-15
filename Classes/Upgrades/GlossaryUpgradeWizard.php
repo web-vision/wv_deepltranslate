@@ -226,11 +226,13 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('tx_wvdeepltranslate_domain_model_glossaries');
         $queryBuilder->getRestrictions()->removeAll();
-        $statement = $queryBuilder
-            ->select('*')
-            ->from('tx_wvdeepltranslate_domain_model_glossaries');
+        $count = (int)$queryBuilder
+            ->count('*')
+            ->from('tx_wvdeepltranslate_domain_model_glossaries')
+            ->execute()
+            ->fetchColumn(0);
 
-        return $statement->execute()->rowCount() > 0;
+        return $count > 0;
     }
 
     /**
