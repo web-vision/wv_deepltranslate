@@ -170,7 +170,6 @@
         <f:if condition="{deeplLanguages -> f:count()} > 0">
             <div class="row row-cols-auto align-items-end g-3 mb-3">
                 <div class="col row">
-                    <label class="col-sm-4 col">{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
                     <div class="col col-sm-8">
                         <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
                             <option><f:translate key="pages.glossary.translate" extensionName="wv_deepltranslate" /></option>

@@ -214,6 +214,7 @@ class GlossaryRepository
      *     glossary_lastsync: int,
      *     glossary_ready: int
      * }
+     * @throws DBALException
      */
     public function getGlossaryBySourceAndTarget(
         string $sourceLanguage,
@@ -234,7 +235,7 @@ class GlossaryRepository
         if (strlen($lowerTargetLang) > 2) {
             $lowerTargetLang = substr($lowerTargetLang, 0, 2);
         }
-        return $this->getGlossary($lowerSourceLang, $lowerTargetLang, $page['uid'], true);
+        return $this->getGlossary($lowerSourceLang, $lowerTargetLang, $page['uid'], true) ?? [];
     }
 
     /**
