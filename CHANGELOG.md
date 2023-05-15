@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.3
+
+* [TASK] Set branch alias for 3.0 by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/200
+* [TASK] Avoid `rowCount()` for select query by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/233
+* [BUGFIX] Avoid doctrine/dbal `fetchAssociative()` by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/236
+* [BUGFIX] Fix Problem with translation no glossary given by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/235
+
 ## 3.0.2
 
 [BUGFIX] Glossary is not used by @calien666 in #218
