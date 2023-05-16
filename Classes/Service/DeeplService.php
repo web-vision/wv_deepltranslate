@@ -79,6 +79,9 @@ class DeeplService
         }
 
         try {
+            if(!isset($glossary['glossary_id'])) {
+                $glossary['glossary_id'] = '';
+            }
             $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
         } catch (ClientException $e) {
             $flashMessage = GeneralUtility::makeInstance(

@@ -31,7 +31,7 @@ class AllowLanguageSynchronizationHook
                         && isset($columnConfig['config']['behaviour']['allowLanguageSynchronization'])
                         && (bool)$columnConfig['config']['behaviour']['allowLanguageSynchronization'] === true
                     ) {
-                        if ($columnConfig['l10n_mode'] == 'prefixLangTitle') {
+                        if (isset($columnConfig['l10n_mode']) && $columnConfig['l10n_mode'] == 'prefixLangTitle') {
                             $l10nState[$column] = 'custom';
                         } else {
                             $l10nState[$column] = 'parent';
