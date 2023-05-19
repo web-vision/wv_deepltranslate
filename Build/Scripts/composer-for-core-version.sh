@@ -20,6 +20,16 @@ composer_update() {
     git restore composer.json
 }
 
+update_v12() {
+    echo -e "💪 Enforce TYPO3 v12"
+    composer require --no-update \
+        "typo3/cms-core":"^12.4"
+
+    echo -e "💪 Enforce PHPUnit 9.x"
+    composer req --dev --no-update \
+        "phpunit/phpunit":"^10.1"
+}
+
 update_v11() {
     echo -e "💪 Enforce TYPO3 v11"
     composer require --no-update \
@@ -31,6 +41,11 @@ update_v11() {
 }
 
 case "$1" in
+12)
+    composer_cleanup
+    update_v12
+    composer_update
+    ;;
 11)
     composer_cleanup
     update_v11
