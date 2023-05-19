@@ -1,0 +1,7 @@
+pages,,,,,
+,uid,pid,is_siteroot,doktype,title
+,1,0,1,1,"DeepL-Functional-Tests"
+,3,0,1,1,"DeepL-Functional-Tests BS"
+tt_content,
+,uid,pid,header,CType,bodytext
+,3,1,"DeepL-Functional-Test Element","text",""

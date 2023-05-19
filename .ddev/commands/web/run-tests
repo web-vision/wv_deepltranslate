@@ -3,10 +3,10 @@
 ## Description: Local TYPO3 Test runner
 ## Usage: run-tests [flags]
 ## Example: "ddev run-tests"
-## Flags: [{"Name":"version","Shorthand":"v","Type":"string","DefValue":"all","Usage":"Switch of TYPO3 version (9|10|11)"},{"Name":"filter","Shorthand":"f","Type":"string","DefValue":"MySpecialTest","Usage":"filter Test runnings"},{"Name":"test","Shorthand":"t","Type":"string","Usage":"Test mode (all|func|unit)","DefValue":"all","Name":"only-test","Shorthand":"o","Usage":"Flag triggers only tests without version update","NoOptDefVal":"1"}]
+## Flags: [{"Name":"version","Shorthand":"v","Type":"string","DefValue":"all","Usage":"Switch of TYPO3 version (11)"},{"Name":"filter","Shorthand":"f","Type":"string","DefValue":"MySpecialTest","Usage":"filter Test runnings"},{"Name":"test","Shorthand":"t","Type":"string","Usage":"Test mode (all|func|unit)","DefValue":"all","Name":"only-test","Shorthand":"o","Usage":"Flag triggers only tests without version update","NoOptDefVal":"1"}]
 ## ProjectTypes: typo3
 
-versions=(all 9 10 11)
+versions=(all 11)
 testcases=(all func unit)
 selectedVersion=
 testCase=all

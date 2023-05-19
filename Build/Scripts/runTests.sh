@@ -12,7 +12,7 @@ setUpDockerComposeDotEnv() {
     [ -e .env ] && rm .env
     # Set up a new .env file for docker-compose
     {
-        echo "COMPOSE_PROJECT_NAME=local"
+        echo "COMPOSE_PROJECT_NAME=${PROJECT_NAME}"
         # To prevent access rights of files created by the testing, the docker image later
         # runs with the same user that is currently executing the script. docker-compose can't
         # use $UID directly itself since it is a shell variable and not an env variable, so
@@ -115,11 +115,9 @@ Options:
             - 8.1: use PHP 8.1
             - 8.2: use PHP 8.2
 
-    -t <9|10|11>
+    -t <11>
         Only with -s composerUpdate
         Specifies the TYPO3 core major version to be used
-            - 9: use TYPO3 core v9
-            - 10: use TYPO3 core v10
             - 11 (default): use TYPO3 core v11
 
     -e "<phpunit or codeception options>"
@@ -165,6 +163,21 @@ fi
 # to this dir, no matter from where this script is called.
 THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd "$THIS_SCRIPT_DIR" || exit 1
+
+RUNTESTS_FILE="${BASH_SOURCE[0]}"
+while [ -h "${RUNTESTS_FILE}" ]; do # resolve ${SCRIPT_FILE} until the file is no longer a symlink
+  TMPDIR="$( cd -P "$( dirname "${RUNTESTS_FILE}" )" && pwd )"
+  RUNTESTS_FILE="$(readlink "${RUNTESTS_FILE}")"
+  [[ ${RUNTESTS_FILE} != /* ]] && SOURCE="${TMPDIR}/${RUNTESTS_FILE}"
+done
+PROJECT_DIR="$( cd -P "$( dirname "${SCRIPT_FILE}" )/../.." && pwd )"
+# get project folder name, lowercased and spaces replaced with dashes
+PROJECT_PARENT_NAME="$( basename $( dirname ${PROJECT_DIR} ) | tr 'A-Z' 'a-z' | tr ' ' '-' )"
+PROJECT_NAME="$( echo \"runTests-${PROJECT_PARENT_NAME}-$( basename ${PROJECT_DIR} | tr 'A-Z' 'a-z' | tr ' ' '-' )\" | tr '[:upper:]' '[:lower:]')"
+# using $$ would add the process id to the string. May be breaking, until proper traps have been implemented to
+# ensure docker services are correctly cleaned on errors/exit
+#PROJECT_NAME="${PROJECT_NAME//[[:blank:]]/}-$$"
+PROJECT_NAME="${PROJECT_NAME//[[:blank:]]/}"
 
 # Go to directory that contains the local docker-compose.yml file
 cd ../testing-docker || exit 1
@@ -212,7 +225,7 @@ while getopts ":s:a:d:p:t:e:xnhuv" OPT; do
             ;;
         t)
             TYPO3_VERSION=${OPTARG}
-            if ! [[ ${TYPO3_VERSION} =~ ^(9|10|11)$ ]]; then
+            if ! [[ ${TYPO3_VERSION} =~ ^(11)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;
@@ -261,9 +274,6 @@ DOCKER_PHP_IMAGE=`echo "php${PHP_VERSION}" | sed -e 's/\.//'`
 # Set $1 to first mass argument, this is the optional test file or test directory to execute
 shift $((OPTIND - 1))
 TEST_FILE=${1}
-if [ -n "${1}" ]; then
-    TEST_FILE=".Build/Web/typo3conf/ext/wv_deepltranslate/${1}"
-fi
 
 if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
     set -x

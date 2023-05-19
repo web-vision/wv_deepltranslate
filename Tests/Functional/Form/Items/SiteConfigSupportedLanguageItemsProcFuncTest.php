@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Form\Items;
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 
 /**
@@ -14,10 +14,10 @@ use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFun
 class SiteConfigSupportedLanguageItemsProcFuncTest extends FunctionalTestCase
 {
     /**
-     * @var string[]
+     * @var non-empty-string[]
      */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/wv_deepltranslate',
+    protected array $testExtensionsToLoad = [
+        'web-vision/wv_deepltranslate',
     ];
 
     protected function setUp(): void

@@ -16,6 +16,14 @@ class LanguageService
 {
     protected DeeplService $deeplService;
 
+    /**
+     * @todo TYPO3 v12 do not have hreflang & iso-639-1 directly in the raw language configurations anymore.
+     *       @link LanguageService::getTargetLanguage() for additional commets.
+     *       See: https://review.typo3.org/c/Packages/TYPO3.CMS/+/77807
+     *            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77597
+     *            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77726
+     *            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77814
+     */
     protected array $possibleLangMatches = [
         'deeplTargetLanguage',
         'hreflang',
@@ -41,8 +49,7 @@ class LanguageService
         }
         try {
             return [
-                'site' => GeneralUtility::makeInstance(SiteFinder::class)
-                    ->getSiteByPageId($pageId),
+                'site' => GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId),
                 'pageUid' => $pageId,
             ];
         } catch (SiteNotFoundException $e) {
@@ -81,6 +88,13 @@ class LanguageService
      */
     public function getTargetLanguage(Site $currentSite, int $languageId): array
     {
+        // @todo TYPO3 v12 changed locale API and therefore site configuration. Configured languages do no longer
+        //       directly contains values like hreflang or iso-639-1 directly. Possible workarounds would be to
+        //       operate directly on the siteLanguage objects and no longer use the raw configuration values.
+        //       See: https://review.typo3.org/c/Packages/TYPO3.CMS/+/77807
+        //            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77597
+        //            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77726
+        //            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77814
         $languages = array_filter($currentSite->getConfiguration()['languages'], function ($value) use ($languageId) {
             if (!is_array($value)) {
                 return false;
@@ -98,7 +112,7 @@ class LanguageService
                 sprintf(
                     'Language "%d" not found in SiteConfig "%s"',
                     $languageId,
-                    $currentSite->getConfiguration()['websiteTitle']
+                    (string)($currentSite->getConfiguration()['websiteTitle'] ?? '')
                 ),
                 1676824459
             );
@@ -122,7 +136,7 @@ class LanguageService
                 sprintf(
                     'No API supported target found for language "%s" in site "%s"',
                     $language['title'],
-                    $currentSite->getConfiguration()['websiteTitle']
+                    (string)($currentSite->getConfiguration()['websiteTitle'] ?? '')
                 ),
                 1676741837
             );
