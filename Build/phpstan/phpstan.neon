@@ -15,6 +15,9 @@ parameters:
 	excludePaths:
 		- ../../.Build
 		- ../../Tests/Functional/Updates/Fixtures/Extension/test_extension/ext_emconf.php
+		# @todo Split the excludes into dedicated config files, after splitted PHPStan
+		# 		  configuration and baseline file have been introduced. Eventually keeping
+		- ../../Classes/Override/Core12/DeeplRecordListController.php
 
 	# @todo recheck rules.
 	inferPrivatePropertyTypeFromConstructor: true
