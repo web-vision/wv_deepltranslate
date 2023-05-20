@@ -1,25 +1,3 @@
-config.tx_extbase.persistence {
-   classes {
-       # @deprecated Module is deprecated v10 and remove with v12
-       WebVision\WvDeepltranslate\Domain\Model\Settings {
-           mapping {
-               tableName = tx_deepl_settings
-           }
-       }
-       # @deprecated Module is deprecated v10 and remove with v12
-       WebVision\WvDeepltranslate\Domain\Model\Language {
-           mapping {
-               tableName = sys_language
-               columns {
-                   language_isocode.mapOnProperty = languageIsoCode
-                   static_lang_isocode.mapOnProperty = staticLangIsoCode
-                   crdate.mapOnProperty = createDate
-               }
-           }
-       }
-   }
-}
-
 module.tx_backend.view {
     partialRootPaths {
         10 = EXT:wv_deepltranslate/Resources/Private/Backend/Partials
