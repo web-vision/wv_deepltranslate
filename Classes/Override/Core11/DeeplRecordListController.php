@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Override;
+namespace WebVision\WvDeepltranslate\Override\Core11;
 
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -15,12 +15,13 @@ use TYPO3\CMS\Recordlist\Controller\RecordListController;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
-class DeeplRecordListController extends RecordListController
+final class DeeplRecordListController extends RecordListController
 {
     /**
      * @param string $requestUri
+     * @param mixed $_forwardCore12CombatAndUnused
      */
-    protected function languageSelector($requestUri): string
+    protected function languageSelector($requestUri, $_forwardCore12CombatAndUnused = null): string
     {
         if ($this->pageInfo['module'] === 'glossary') {
             return $this->buildGlossaryTranslationOptionDropdown($requestUri);

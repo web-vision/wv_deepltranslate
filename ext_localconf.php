@@ -3,6 +3,8 @@
 defined('TYPO3') or die();
 
 (static function (): void {
+    $typo3version = new \TYPO3\CMS\Core\Information\Typo3Version();
+
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:wv_deepltranslate/Configuration/TsConfig/Page/pagetsconfig.tsconfig">'
     );
@@ -39,9 +41,15 @@ defined('TYPO3') or die();
         'className' => \WebVision\WvDeepltranslate\Override\DatabaseRecordList::class,
     ];
 
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\Controller\RecordListController::class] = [
-        'className' => \WebVision\WvDeepltranslate\Override\DeeplRecordListController::class,
-    ];
+    if ($typo3version->getMajorVersion() >= 12) {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\RecordListController'] = [
+            'className' => 'WebVision\\WvDeepltranslate\\Override\\Core12\\DeeplRecordListController',
+        ];
+    } else {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Recordlist\\Controller\\RecordListController'] = [
+            'className' => 'WebVision\\WvDeepltranslate\\Override\\Core11\\DeeplRecordListController',
+        ];
+    }
 
     if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {
         //xclass CommandMapPostProcessingHook for translating contents within containers
