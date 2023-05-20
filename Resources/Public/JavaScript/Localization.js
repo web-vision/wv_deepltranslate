@@ -483,7 +483,7 @@ define('TYPO3/CMS/Backend/Localization', [
      */
     Localization.deeplSettings = function (pageId, languageId, uidList) {
       return $.ajax({
-        url: TYPO3.settings.ajaxUrls['records_localizedeepl'],
+        url: TYPO3.settings.ajaxUrls['deepl_check_configuration'],
         data: {
           pageId: pageId,
           srcLanguageId: Localization.settings.language,

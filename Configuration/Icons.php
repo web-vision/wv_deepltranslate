@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 return [
     'apps-pagetree-folder-contains-glossary' => [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
