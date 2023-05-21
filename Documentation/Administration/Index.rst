@@ -1,12 +1,12 @@
-.. include:: /Includes.rst.txt
+..  include:: /Includes.rst.txt
 
-.. _administration:
+..  _administration:
 
 ==============
 Administration
 ==============
 
-.. toctree::
+..  toctree::
     :maxdepth: 5
     :titlesonly:
 

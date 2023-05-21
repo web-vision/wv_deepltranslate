@@ -1,6 +1,6 @@
-.. include:: /Includes.rst.txt
+..  include:: /Includes.rst.txt
 
-.. _tableConfiguration:
+..  _tableConfiguration:
 
 ===================
 Table Configuration
@@ -14,7 +14,7 @@ For detecting translatable fields, *wv_deepltranslate* uses a DataHandler hook.
 
 The following setup is needed, to get *wv_deepltranslate* work on your table:
 
-.. code-block:: php
+..  code-block:: php
     :caption: <extension_key>/Configuration/TCA/Overrides/<table_name>.php
 
     $GLOBALS['TCA']['<table_name>']['columns']['<field_name>']['l10n_mode'] = 'prefixLangTitle';

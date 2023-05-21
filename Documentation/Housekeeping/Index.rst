@@ -1,6 +1,6 @@
 ..  include:: /Includes.rst.txt
 
-.. _housekeeping`:
+..  _housekeeping`:
 
 Housekeeping
 ============
@@ -13,13 +13,13 @@ Overview
 To get an overview, how many glossaries are registered to DeepL,
 you can use:
 
-.. code-block:: bash
+..  code-block:: bash
 
     vendor/bin/typo3 deepl:glossary:list
 
 or, with `typo3_console`_ installed:
 
-.. code-block:: bash
+..  code-block:: bash
 
     vendor/bin/typo3cms deepl:glossary:list
 
@@ -32,13 +32,13 @@ Cleanup
 
 Due to sync failures it is useful, to delete all DeepL glossaries.
 
-.. code-block:: bash
+..  code-block:: bash
 
     vendor/bin/typo3 deepl:glossary:cleanup
 
 or, with `typo3_console`_ installed:
 
-.. code-block:: bash
+..  code-block:: bash
 
     vendor/bin/typo3cms deepl:glossary:cleanup
 
@@ -57,7 +57,7 @@ Your glossaries in TYPO3 are not deleted with this command.
 
 After this, you are able to sync your glossaries again to DeepL.
 
-.. _sync-cli:
+..  _sync-cli:
 
 Synchronisation
 ---------------
@@ -65,16 +65,16 @@ Synchronisation
 Synchronisation is done by CLI command or as scheduled task (as configured
 CLI Command).
 
-.. code-block:: bash
+..  code-block:: bash
 
     vendor/bin/typo3 deepl:glossary:sync
 
 or, with `typo3_console`_ installed:
 
-.. code-block:: bash
+..  code-block:: bash
 
     vendor/bin/typo3cms deepl:glossary:sync
 
 Accepts pageId as option. If not given, syncs all available glossaries.
 
-.. _typo3_console: https://extensions.typo3.org/extension/typo3_console
+..  _typo3_console: https://extensions.typo3.org/extension/typo3_console

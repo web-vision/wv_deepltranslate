@@ -1,6 +1,6 @@
-.. include:: /Includes.rst.txt
+..  include:: /Includes.rst.txt
 
-.. _extensionConfiguration:
+..  _extensionConfiguration:
 
 =======================
 Extension Configuration
@@ -8,24 +8,24 @@ Extension Configuration
 
 Some general settings can be configured in the Extension Configuration.
 
-#. Go to :guilabel:`Admin Tools > Settings > Extension Configuration`
-#. Choose :guilabel:`wv_deepltranslate`
+#.  Go to :guilabel:`Admin Tools > Settings > Extension Configuration`
+#.  Choose :guilabel:`wv_deepltranslate`
 
-.. image:: /Images/Reference/configuration.png
+..  image:: /Images/Reference/configuration.png
     :alt: Screenshot of Extension configuration
 
-.. _deeplApiKey:
+..  _deeplApiKey:
 
 DeepL API Key
 =============
 
-.. confval:: apiKey
+..  confval:: apiKey
 
     :type: string
 
     Add your DeepL API Key here.
 
-.. confval:: apiUrl (deprecated)
+..  confval:: apiUrl (deprecated)
 
     :type: string
     :Default: https://api.deepl.com/v2/translate
@@ -41,7 +41,7 @@ DeepL API Key
         Payed API. If you need more than the 500.000 words per month,
         register and buy a package at `DeepL Pro`_
 
-.. confval:: deeplFormality
+..  confval:: deeplFormality
 
     :type: string
 
@@ -64,5 +64,5 @@ DeepL API Key
         Use more formal language, if possible, otherwise fallback to default
 
 
-.. _DeepL Free API: https://www.deepl.com/pro-checkout/account?productId=1200&yearly=false&trial=false
-.. _DeepL Pro: https://www.deepl.com/de/pro
+..  _DeepL Free API: https://www.deepl.com/pro-checkout/account?productId=1200&yearly=false&trial=false
+..  _DeepL Pro: https://www.deepl.com/de/pro
