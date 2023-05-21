@@ -214,7 +214,8 @@ class DeeplBackendUtility
                     (int)self::getBackendUserAuthentication()->workspace
                 )
             );
-        $statement = $queryBuilder->select('uid', $languageField)
+        $statement = $queryBuilder
+            ->select('uid', $languageField)
             ->from('pages')
             ->where(
                 $queryBuilder->expr()->eq(
@@ -222,7 +223,7 @@ class DeeplBackendUtility
                     $queryBuilder->createNamedParameter($id, Connection::PARAM_INT)
                 )
             )
-            ->execute();
+            ->executeQuery();
         while ($pageTranslation = $statement->fetchAssociative()) {
             unset($availableTranslations[(int)$pageTranslation[$languageField]]);
         }

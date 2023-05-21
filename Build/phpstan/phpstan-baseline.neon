@@ -36,34 +36,14 @@ parameters:
 			path: ../../Classes/Controller/GlossarySyncController.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Result\\:\\:fetch\\(\\)\\.$#"
+			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntriesByGlossary\\(\\) should return array\\<string, mixed\\> but returns array\\<int, array\\<string, mixed\\>\\>\\.$#"
 			count: 1
 			path: ../../Classes/Domain/Repository/GlossaryEntryRepository.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Result\\:\\:fetchAll\\(\\)\\.$#"
+			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntryByUid\\(\\) should return array\\<non\\-empty\\-string, mixed\\> but returns array\\<string, mixed\\>\\.$#"
 			count: 1
 			path: ../../Classes/Domain/Repository/GlossaryEntryRepository.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Result\\:\\:fetch\\(\\)\\.$#"
-			count: 1
-			path: ../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Result\\:\\:fetchAll\\(\\)\\.$#"
-			count: 1
-			path: ../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
-			count: 2
-			path: ../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
-			count: 3
-			path: ../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
 			message: "#^Cannot call method getTimestamp\\(\\) on DateTimeImmutable\\|false\\.$#"
@@ -86,6 +66,11 @@ parameters:
 			path: ../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
+			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getGlossary\\(\\) should return array\\{uid\\: int, glossary_name\\: string, glossary_id\\: string, glossary_lastsync\\: int, glossary_ready\\: int\\}\\|null but returns non\\-empty\\-array\\<string, mixed\\>\\|null\\.$#"
+			count: 1
+			path: ../../Classes/Domain/Repository/GlossaryRepository.php
+
+		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getGlossaryBySourceAndTarget\\(\\) should return array\\{uid\\: int, glossary_name\\: string, glossary_id\\: string, glossary_lastsync\\: int, glossary_ready\\: int\\} but returns array\\{uid\\: int, glossary_name\\: string, glossary_id\\: string, glossary_lastsync\\: int, glossary_ready\\: int\\}\\|null\\.$#"
 			count: 1
 			path: ../../Classes/Domain/Repository/GlossaryRepository.php
@@ -96,7 +81,7 @@ parameters:
 			path: ../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getLocalizedEntries\\(\\) should return array\\<int, array\\{uid\\: int, term\\: string, l10n_parent\\: int\\}\\> but returns array\\<int\\|string, mixed\\>\\.$#"
+			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getLocalizedEntries\\(\\) should return array\\<int, array\\{uid\\: int, term\\: string, l10n_parent\\: int\\}\\> but returns array\\<int\\|string, array\\<string, mixed\\>\\>\\.$#"
 			count: 1
 			path: ../../Classes/Domain/Repository/GlossaryRepository.php
 
@@ -122,11 +107,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#3 \\$pageUid of method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getGlossary\\(\\) expects int, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
-			count: 1
-			path: ../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
-			message: "#^Parameter \\#3 \\.\\.\\.\\$expressions of method TYPO3\\\\CMS\\\\Core\\\\Database\\\\Query\\\\Expression\\\\ExpressionBuilder\\:\\:andX\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: ../../Classes/Domain/Repository/GlossaryRepository.php
 
@@ -176,11 +156,6 @@ parameters:
 			path: ../../Classes/Hooks/DeeplPreviewFlagGeneratePageHook.php
 
 		-
-			message: "#^Offset 'pid' does not exist on array\\{uid\\: int\\}\\.$#"
-			count: 1
-			path: ../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
-
-		-
 			message: "#^Parameter \\#1 \\$message of class TYPO3\\\\CMS\\\\Core\\\\Messaging\\\\FlashMessage constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: ../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
@@ -192,11 +167,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$title of class TYPO3\\\\CMS\\\\Core\\\\Messaging\\\\FlashMessage constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: ../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
-
-		-
-			message: "#^Variable \\$glossary in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: ../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
 
@@ -224,16 +194,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, string\\|null given\\.$#"
 			count: 1
 			path: ../../Classes/Override/DeeplRecordListController.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Result\\:\\:fetch\\(\\)\\.$#"
-			count: 1
-			path: ../../Classes/Override/LocalizationController.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\LocalizationController\\:\\:checkdeeplSettings\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../Classes/Override/LocalizationController.php
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\LocalizationController\\:\\:process\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
@@ -334,11 +294,6 @@ parameters:
 			message: "#^Property WebVision\\\\WvDeepltranslate\\\\Service\\\\LanguageService\\:\\:\\$possibleLangMatches type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../Classes/Service/LanguageService.php
-
-		-
-			message: "#^Cannot call method fetchAssociative\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
-			count: 1
-			path: ../../Classes/Utility/DeeplBackendUtility.php
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Utility\\\\DeeplBackendUtility\\:\\:buildBackendRoute\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
