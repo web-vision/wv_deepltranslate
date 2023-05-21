@@ -1,7 +1,5 @@
 <?php
 
-if (!defined('TYPO3_MODE')) {
-    die();
-}
+defined('TYPO3') or die();
 
 $GLOBALS['TCA']['tt_content']['columns']['subheader']['l10n_mode'] = 'prefixLangTitle';
