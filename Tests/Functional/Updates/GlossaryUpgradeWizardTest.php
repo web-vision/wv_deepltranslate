@@ -14,7 +14,7 @@ use WebVision\WvDeepltranslate\Upgrades\GlossaryUpgradeWizard;
 /**
  * @covers \WebVision\WvDeepltranslate\Upgrades\GlossaryUpgradeWizard
  */
-class GlossaryUpgradeWizardTest extends FunctionalTestCase
+final class GlossaryUpgradeWizardTest extends FunctionalTestCase
 {
     /**
      * @var non-empty-string[]

@@ -12,7 +12,7 @@ use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
-class LanguageServiceTest extends FunctionalTestCase
+final class LanguageServiceTest extends FunctionalTestCase
 {
     use SiteBasedTestTrait;
 

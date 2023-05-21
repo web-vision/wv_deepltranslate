@@ -11,7 +11,7 @@ use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFun
 /**
  * @covers \WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc
  */
-class SiteConfigSupportedLanguageItemsProcFuncTest extends FunctionalTestCase
+final class SiteConfigSupportedLanguageItemsProcFuncTest extends FunctionalTestCase
 {
     /**
      * @var non-empty-string[]
