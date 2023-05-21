@@ -46,11 +46,11 @@ class GlossarySyncController
 
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
-            LocalizationUtility::translate(
+            (string)LocalizationUtility::translate(
                 'glossary.sync.message',
                 'wv_deepltranslate'
             ),
-            LocalizationUtility::translate(
+            (string)LocalizationUtility::translate(
                 'glossary.sync.title',
                 'wv_deepltranslate'
             ),
