@@ -1,4 +1,4 @@
-version: '2.3'
+version: '3'
 services:
   # This is the service name used when running ddev commands accepting the
   # --service flag.
@@ -545,6 +545,15 @@ services:
         php -v | grep '^PHP';
         .Build/bin/typoscript-lint --ansi --config=./Build/typoscript-lint/typoscript-lint.yml
       "
+
+  render_documentation:
+    platform: linux/amd64
+    image: ghcr.io/t3docs/render-documentation:develop
+    user: "${HOST_UID}"
+    volumes:
+      - ${ROOT_DIR}:/PROJECT:ro
+      - ${ROOT_DIR}/Documentation-GENERATED-temp:/RESULT
+    command: makehtml
 
   phpstan:
     image: ${IMAGE_PREFIX}core-testing-${DOCKER_PHP_IMAGE}:latest

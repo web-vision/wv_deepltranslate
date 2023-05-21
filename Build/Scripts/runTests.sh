@@ -86,6 +86,7 @@ Options:
             - functional: functional tests
             - lintPhp: PHP linting
             - lintTypoScript: TypoScript linting
+            - renderDocumentation: This uses the official rendering container to render the extension documentation.
             - phpstan: phpstan analyze
             - phpstanGenerateBaseline: regenerate phpstan baseline, handy after phpstan updates
             - unit: PHP unit tests
@@ -326,7 +327,8 @@ case ${TEST_SUITE} in
             ../../.Build/ \
             ../../Tests/Acceptance/Support/_generated/ \
             ../../composer.json.testing \
-            ../../.cache
+            ../../.cache \
+            ../../Documentation-GENERATED-temp
         ;;
     composerUpdate)
         setUpDockerComposeDotEnv
@@ -408,6 +410,13 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
+    renderDocumentation)
+        setUpDockerComposeDotEnv
+        mkdir -p ../../Documentation-GENERATED-temp
+        docker-compose run render_documentation
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
     phpstan)
         setUpDockerComposeDotEnv
         docker-compose run phpstan
@@ -436,6 +445,14 @@ case ${TEST_SUITE} in
         docker images ${IMAGE_PREFIX}core-testing-*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
         # remove "dangling" ${IMAGE_PREFIX}core-testing-* images (those tagged as <none>)
         docker images ${IMAGE_PREFIX}core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
+        # pull ghcr.io/t3docs/render-documentation:latest versions of those ones that exist locally
+        docker images ghcr.io/t3docs/render-documentation:develop --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
+        # remove "dangling" ghcr.io/t3docs/render-documentation images (those tagged as <none>)
+        docker images ghcr.io/t3docs/render-documentation --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
+        # pull sbuerk/sbuerk-testing-deeplapimockserver:latest of those ones that exist locally
+        docker images sbuerk/sbuerk-testing-deeplapimockserver:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
+        # remove "dangling" sbuerk/sbuerk-testing-deeplapimockserver images (those tagged as <none>)
+        docker images sbuerk/sbuerk-testing-deeplapimockserver --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2
