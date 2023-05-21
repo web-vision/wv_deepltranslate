@@ -22,6 +22,7 @@ setUpDockerComposeDotEnv() {
         echo "ROOT_DIR=${ROOT_DIR}"
         echo "HOST_USER=${USER}"
         echo "TEST_FILE=${TEST_FILE}"
+        echo "ORIGINAL_ROOT=${ORIGINAL_ROOT}"
         echo "TYPO3_VERSION=${TYPO3_VERSION}"
         echo "PHP_XDEBUG_ON=${PHP_XDEBUG_ON}"
         echo "DOCKER_PHP_IMAGE=${DOCKER_PHP_IMAGE}"
@@ -165,20 +166,22 @@ fi
 THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd "$THIS_SCRIPT_DIR" || exit 1
 
-RUNTESTS_FILE="${BASH_SOURCE[0]}"
+RUNTESTS_FILE="${PWD}"
 while [ -h "${RUNTESTS_FILE}" ]; do # resolve ${SCRIPT_FILE} until the file is no longer a symlink
-  TMPDIR="$( cd -P "$( dirname "${RUNTESTS_FILE}" )" && pwd )"
-  RUNTESTS_FILE="$(readlink "${RUNTESTS_FILE}")"
+  TMPDIR="$( cd -P "$( dirname "${RUNTESTS_FILE}" 2>/dev/null )" && pwd )"
+  RUNTESTS_FILE="$(readlink "${RUNTESTS_FILE}" 2>/dev/null )"
   [[ ${RUNTESTS_FILE} != /* ]] && SOURCE="${TMPDIR}/${RUNTESTS_FILE}"
 done
-PROJECT_DIR="$( cd -P "$( dirname "${SCRIPT_FILE}" )/../.." && pwd )"
+PROJECT_DIR="$( cd -P "$( dirname "${RUNTESTS_FILE}" 2>/dev/null )/.." && pwd )"
 # get project folder name, lowercased and spaces replaced with dashes
-PROJECT_PARENT_NAME="$( basename $( dirname ${PROJECT_DIR} ) | tr 'A-Z' 'a-z' | tr ' ' '-' )"
-PROJECT_NAME="$( echo \"runTests-${PROJECT_PARENT_NAME}-$( basename ${PROJECT_DIR} | tr 'A-Z' 'a-z' | tr ' ' '-' )\" | tr '[:upper:]' '[:lower:]')"
+PROJECT_PARENT_NAME="$( basename $( dirname ${PROJECT_DIR} 2>/dev/null ) 2>/dev/null | tr 'A-Z' 'a-z' | tr ' ' '-' )"
+[[ -z "${PROJECT_PARENT_NAME}" ]] && PROJECT_PARENT_NAME="no-parent-folder"
+PROJECT_NAME="$( echo \"runTests-${PROJECT_PARENT_NAME}-$( basename ${PROJECT_DIR} 2>/dev/null | tr 'A-Z' 'a-z' | tr ' ' '-' )\" | tr '[:upper:]' '[:lower:]')"
 # using $$ would add the process id to the string. May be breaking, until proper traps have been implemented to
 # ensure docker services are correctly cleaned on errors/exit
 #PROJECT_NAME="${PROJECT_NAME//[[:blank:]]/}-$$"
 PROJECT_NAME="${PROJECT_NAME//[[:blank:]]/}"
+ORIGINAL_ROOT="${PROJECT_DIR}/.Build"
 
 # Go to directory that contains the local docker-compose.yml file
 cd ../testing-docker || exit 1
