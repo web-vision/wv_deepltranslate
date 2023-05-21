@@ -42,7 +42,7 @@ class ButtonBarHook
                     ->check('tables_modify', 'tx_wvdeepltranslate_glossaryentry')
             ) {
                 $parameters = $this->buildParamsArrayForListView($page['uid']);
-                $title = LocalizationUtility::translate(
+                $title = (string)LocalizationUtility::translate(
                     'glossary.sync.button.all',
                     'wv_deepltranslate'
                 );

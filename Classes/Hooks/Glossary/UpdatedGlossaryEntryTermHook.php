@@ -54,11 +54,11 @@ class UpdatedGlossaryEntryTermHook
         $this->glossaryRepository->setGlossaryNotSyncOnPage($glossary['pid']);
 
         $flashMessage = new FlashMessage(
-            LocalizationUtility::translate(
+            (string)LocalizationUtility::translate(
                 'glossary.not-sync.message',
                 'wv_deepltranslate'
             ),
-            LocalizationUtility::translate(
+            (string)LocalizationUtility::translate(
                 'glossary.not-sync.title',
                 'wv_deepltranslate'
             ),
