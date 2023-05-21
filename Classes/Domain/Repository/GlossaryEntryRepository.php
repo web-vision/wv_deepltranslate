@@ -7,6 +7,8 @@ namespace WebVision\WvDeepltranslate\Domain\Repository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+// @todo Mark this class final.
+// @todo Consider to rename/move this as service class.
 class GlossaryEntryRepository
 {
     /**

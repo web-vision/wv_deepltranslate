@@ -8,6 +8,7 @@ use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
+// @todo Make this class final.
 class DeeplTranslateViewHelper extends AbstractViewHelper
 {
     private const GLOSSARY_MODE = 'glossary';

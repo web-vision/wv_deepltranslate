@@ -23,6 +23,7 @@ use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
+// @todo Make class final. Overriding a static utility class does not make much sense, but better to enforce it.
 class DeeplBackendUtility
 {
     private static string $apiKey = '';
