@@ -52,14 +52,11 @@ defined('TYPO3') or die();
         }
     }
 
-    if (
-        TYPO3_MODE === 'BE'
-        && \WebVision\WvDeepltranslate\Utility\DeeplBackendUtility::isDeeplApiKeySet()
-    ) {
-        // overriding localization.js
-        $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
-        $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
-    }
+    // We need to provide the global backend javascript module instead of calling page-renderer here directly - which
+    // cannot be done and checking the context (FE/BE) directly. Instantiating PageRenderer here directly would be
+    // emitted an exception as the cache configuration manager cannot be retrieved in this early stage.
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][1684661135]
+        = \WebVision\WvDeepltranslate\Hooks\PageRendererHook::class . '->renderPreProcess';
 
     //add caching for DeepL API-supported Languages
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']
