@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Configuration;
 
-class ConfigurationTest extends FunctionalTestCase
+final class ConfigurationTest extends FunctionalTestCase
 {
     /**
      * @var non-empty-string[]

@@ -19,7 +19,7 @@ use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTra
 /**
  * @covers \WebVision\WvDeepltranslate\Hooks\TranslateHook
  */
-class TranslateHookTest extends FunctionalTestCase
+final class TranslateHookTest extends FunctionalTestCase
 {
     use SiteBasedTestTrait;
     protected const LANGUAGE_PRESETS = [

@@ -15,7 +15,7 @@ use WebVision\WvDeepltranslate\Configuration;
 /**
  * @covers \WebVision\WvDeepltranslate\Client
  */
-class ClientTest extends FunctionalTestCase
+final class ClientTest extends FunctionalTestCase
 {
     use JsonAssertions;
 

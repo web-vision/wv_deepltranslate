@@ -14,7 +14,7 @@ use WebVision\WvDeepltranslate\Service\DeeplService;
 /**
  * @covers \WebVision\WvDeepltranslate\Service\DeeplService
  */
-class DeeplServiceTest extends FunctionalTestCase
+final class DeeplServiceTest extends FunctionalTestCase
 {
     /**
      * @var non-empty-string[]
