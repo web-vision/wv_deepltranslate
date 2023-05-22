@@ -25,7 +25,7 @@ update_v12() {
     composer require --no-update \
         "typo3/cms-core":"^12.4"
 
-    echo -e "💪 Enforce PHPUnit 9.x"
+    echo -e "💪 Enforce PHPUnit ^10.1"
     composer req --dev --no-update \
         "phpunit/phpunit":"^10.1"
 }
@@ -35,7 +35,7 @@ update_v11() {
     composer require --no-update \
         "typo3/cms-core":"^11.5"
 
-    echo -e "💪 Enforce PHPUnit 9.x"
+    echo -e "💪 Enforce PHPUnit ^9.6.8"
     composer req --dev --no-update \
         "phpunit/phpunit":"^9.6.8"
 }
@@ -52,7 +52,7 @@ case "$1" in
     composer_update
     ;;
 *)
-    echo -e "🌀 Usage: ddev update-to {11}" >&2
+    echo -e "🌀 Usage: ddev update-to (11|12)" >&2
     exit 0
     ;;
 esac
