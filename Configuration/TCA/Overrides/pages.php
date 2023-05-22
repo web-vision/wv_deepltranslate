@@ -1,8 +1,6 @@
 <?php
 
-if (!defined('TYPO3_MODE')) {
-    die();
-}
+defined('TYPO3') or die();
 
 (static function (): void {
     $ll = function (string $languageKey) {
