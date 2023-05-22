@@ -17,6 +17,7 @@ use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 
+// @todo Make this class final.
 class DeeplGlossaryService
 {
     private Client $client;
@@ -45,6 +46,7 @@ class DeeplGlossaryService
     {
         $response =  $this->client->getGlossaryLanguagePairs();
 
+        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
         return json_decode($response->getBody()->getContents(), true);
     }
 
@@ -58,6 +60,7 @@ class DeeplGlossaryService
     {
         $response = $this->client->getAllGlossaries();
 
+        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
         return json_decode($response->getBody()->getContents(), true);
     }
 
@@ -97,6 +100,7 @@ class DeeplGlossaryService
 
         $response = $this->client->createGlossary($name, $sourceLang, $targetLang, $entries);
 
+        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
         return json_decode($response->getBody()->getContents(), true);
     }
 
@@ -145,6 +149,7 @@ class DeeplGlossaryService
     {
         $response = $this->client->getGlossary($glossaryId);
 
+        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
         return json_decode($response->getBody()->getContents(), true);
     }
 
@@ -159,6 +164,7 @@ class DeeplGlossaryService
     {
         $response = $this->client->getGlossaryEntries($glossaryId);
 
+        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
         $jsons = json_decode($response->getBody()->getContents(), true);
 
         $entries = [];

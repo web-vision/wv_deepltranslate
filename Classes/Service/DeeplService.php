@@ -14,6 +14,7 @@ use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
+// @todo Make this class final.
 class DeeplService
 {
     /**
@@ -61,7 +62,7 @@ class DeeplService
             $sourceLanguage = '';
             $glossary['glossary_id'] = '';
         } else {
-            // TODO make glossary findable by current site
+            // @todo Make glossary findable by current site.
             $glossary = $this->glossaryRepository->getGlossaryBySourceAndTarget(
                 $sourceLanguage,
                 $targetLanguage,
@@ -125,6 +126,7 @@ class DeeplService
             return [];
         }
 
+        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
         return json_decode($response->getBody()->getContents(), true);
     }
 }

@@ -36,6 +36,7 @@ class AllowLanguageSynchronizationHook
                     }
                 }
                 if (!empty($l10nState)) {
+                    // @todo Use flag `JSON_THROW_ON_ERROR` and deal with json encoding issues.
                     $element['l10n_state'] = json_encode($l10nState);
                     $dataHandler->datamap[$table][$key] = $element;
                 }

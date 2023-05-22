@@ -18,6 +18,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
+// @todo Mark this class final.
+// @todo Consider to rename/move this as service class.
 class GlossaryRepository
 {
     /**
@@ -412,7 +414,6 @@ class GlossaryRepository
 
     protected function getTargetLanguageIsoCode(Site $site, int $languageId): string
     {
-        // TODO add support for deprecated sys_language table
         return $site->getLanguageById($languageId)->getTwoLetterIsoCode();
     }
 

@@ -7,6 +7,7 @@ namespace WebVision\WvDeepltranslate;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+// @todo Make this class final and introduce a interface for it.
 class Configuration
 {
     /**
