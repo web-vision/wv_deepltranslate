@@ -114,7 +114,7 @@ class DeeplBackendUtility
         $params['cmd']['localization']['custom']['mode'] = 'deepl';
         $href = self::buildBackendRoute('tce_db', $params);
         $title =
-            LocalizationUtility::translate(
+            (string)LocalizationUtility::translate(
                 'backend.button.translate',
                 'wv_deepltranslate',
                 [
@@ -253,7 +253,7 @@ class DeeplBackendUtility
             if ($output !== '') {
                 $output = sprintf(
                     '<option value="">%s</option>%s',
-                    htmlspecialchars(LocalizationUtility::translate('backend.label', 'wv_deepltranslate')),
+                    htmlspecialchars((string)LocalizationUtility::translate('backend.label', 'wv_deepltranslate')),
                     $output
                 );
             }

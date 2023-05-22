@@ -110,7 +110,7 @@ class DeeplRecordListController extends RecordListController
             return '';
         }
         $output = '<option value="">' . htmlspecialchars(
-            LocalizationUtility::translate(
+            (string)LocalizationUtility::translate(
                 'pages.glossary.translate',
                 'wv_deepltranslate'
             )
