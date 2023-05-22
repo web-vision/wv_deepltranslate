@@ -67,7 +67,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
         $pageId     = (int)$params['pageId'];
         $languageId = (int)$params['languageId'];
-        $mode       = $params['mode'];
+        $mode       = $params['mode'] ?? '';
 
         /** @var TranslationConfigurationProvider $translationProvider */
         $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
