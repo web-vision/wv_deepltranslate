@@ -128,6 +128,8 @@ class GlossaryRepository
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('tx_wvdeepltranslate_glossary');
 
+        // @todo Consider to add limit = 1 here, as we only want to retrieve the first result anyway. Additionally,
+        //       better convert to pure QueryBuilder usage.
         $result = $db->select(
             ['*'],
             'tx_wvdeepltranslate_glossary',
@@ -136,11 +138,13 @@ class GlossaryRepository
             ]
         );
 
+        // @todo rowCount on SELECT queries are not reliable and documented as such in the TYPO3 documentation. Beside
+        //       this, it does not really make sense to check it because it would be handled by the return anyway.
         if ($result->rowCount() === 0) {
             return null;
         }
 
-        return $result->fetch();
+        return $result->fetchAssociative() ?: null;
     }
 
     /**
@@ -203,7 +207,7 @@ class GlossaryRepository
             ['uid'],
             'pages',
             $identifiers
-        )->fetchAll() ?: [];
+        )->fetchAllAssociative() ?: [];
     }
 
     /**
@@ -323,7 +327,7 @@ class GlossaryRepository
                 $db->expr()->neq('glossary_id', $db->createNamedParameter(''))
             );
 
-        $result = $statement->execute()->fetch();
+        $result = $statement->executeQuery()->fetchAssociative();
         if ($result === false) {
             return [];
         }
@@ -352,7 +356,7 @@ class GlossaryRepository
                 )
             );
         $entries = [];
-        foreach ($statement->execute()->fetchAll() as $entry) {
+        foreach ($statement->executeQuery()->fetchAllAssociative() as $entry) {
             $entries[$entry['uid']] = $entry;
         }
         return $entries;
@@ -380,7 +384,7 @@ class GlossaryRepository
             );
 
         $localizedEntries = [];
-        foreach ($statement->execute()->fetchAll() ?? [] as $localizedEntry) {
+        foreach ($statement->executeQuery()->fetchAllAssociative() as $localizedEntry) {
             $localizedEntries[$localizedEntry['l10n_parent']] = $localizedEntry;
         }
         return $localizedEntries;
@@ -440,7 +444,7 @@ class GlossaryRepository
         } else {
             $pidConstraint = $db->expr()->eq('pid', $db->createNamedParameter($pageUid, Connection::PARAM_INT));
         }
-        $where = $db->expr()->andX(
+        $where = $db->expr()->and(
             $db->expr()->eq('source_lang', $db->createNamedParameter($sourceLanguage)),
             $db->expr()->eq('target_lang', $db->createNamedParameter($targetLanguage)),
             $pidConstraint
@@ -457,9 +461,7 @@ class GlossaryRepository
             ->from('tx_wvdeepltranslate_glossary')
             ->where($where);
 
-        $result = $statement->execute()->fetch();
-
-        return $result ?: null;
+        return $statement->executeQuery()->fetchAssociative() ?: null;
     }
 
     private function getGlossariesInRootByCurrentPage(int $pageId): array
@@ -476,10 +478,10 @@ class GlossaryRepository
             ->from('pages')
             ->where(
                 $db->expr()->in('uid', $allPages),
-                $db->expr()->eq('doktype', 254),
+                $db->expr()->eq('doktype', $db->createNamedParameter(254, Connection::PARAM_INT)),
                 $db->expr()->eq('module', $db->createNamedParameter('glossary'))
             );
-        $result = $statement->execute()->fetchAll();
+        $result = $statement->executeQuery()->fetchAllAssociative();
 
         if (!is_array($result)) {
             return [];
@@ -500,6 +502,6 @@ class GlossaryRepository
             ->set('glossary_ready', 0)
             ->where(
                 $queryBuilder->expr()->eq('pid', $pageId)
-            )->execute();
+            )->executeStatement();
     }
 }

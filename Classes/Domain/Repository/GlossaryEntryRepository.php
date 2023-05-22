@@ -35,11 +35,11 @@ class GlossaryEntryRepository
             ]
         );
 
-        return $result->fetchAll() ?: [];
+        return $result->fetchAllAssociative() ?: [];
     }
 
     /**
-     * @return array{uid: int}
+     * @return array<non-empty-string, mixed>
      */
     public function findEntryByUid(int $uid): array
     {
@@ -54,6 +54,7 @@ class GlossaryEntryRepository
             ]
         );
 
-        return $result->fetch() ?: [];
+        // @todo Should we not better returning null instead of an empty array if nor recourd could be retrieved ?
+        return $result->fetchAssociative() ?: [];
     }
 }
