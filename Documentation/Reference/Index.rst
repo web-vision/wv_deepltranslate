@@ -1,9 +1,9 @@
-.. _reference:
+..  _reference:
 
 Reference
 =========
 
-.. toctree::
+..  toctree::
     :maxdepth: 3
     :titlesonly:
 

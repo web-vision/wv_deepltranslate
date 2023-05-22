@@ -1,5 +1,5 @@
 
-.. _sponsoring:
+..  _sponsoring:
 
 Sponsors
 ========
@@ -9,12 +9,12 @@ the DeepL Translate Extension for TYPO3.
 DeepL Glossary feature sponsored by
 -----------------------------------
 
-* `Universität Osnabrück <https://www.uni-osnabrueck.de>`__
-* `Hochschule für Musik Würzburg <https://www.hfm-wuerzburg.de>`__
-* `Carl von Ossietzky Universität Oldenburg <https://uol.de/>`__
-* `Friedrich-Ebert-Stiftung <https://www.fes.de>`__
+*   `Universität Osnabrück <https://www.uni-osnabrueck.de>`__
+*   `Hochschule für Musik Würzburg <https://www.hfm-wuerzburg.de>`__
+*   `Carl von Ossietzky Universität Oldenburg <https://uol.de/>`__
+*   `Friedrich-Ebert-Stiftung <https://www.fes.de>`__
 
 DeepL "Add automatic translation flag and hint" sponsored by
 ------------------------------------------------------------
 
-* `FH Aachen <https://www.fh-aachen.de/>`__
+*   `FH Aachen <https://www.fh-aachen.de/>`__
