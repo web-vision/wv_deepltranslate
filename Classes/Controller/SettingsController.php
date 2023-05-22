@@ -104,8 +104,8 @@ class SettingsController extends ActionController
         }
 
         $this->addFlashMessage(
-            LocalizationUtility::translate('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:deprecated.deepl-be.body'),
-            LocalizationUtility::translate('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:deprecated.deepl-be.title'),
+            (string)LocalizationUtility::translate('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:deprecated.deepl-be.body'),
+            (string)LocalizationUtility::translate('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:deprecated.deepl-be.title'),
             $massagesType
         );
 
@@ -143,7 +143,7 @@ class SettingsController extends ActionController
         }
 
         $this->addFlashMessage(
-            LocalizationUtility::translate(
+            (string)LocalizationUtility::translate(
                 'settings_success',
                 'wv_deepltranslate'
             )
