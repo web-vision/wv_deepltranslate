@@ -146,27 +146,12 @@ parameters:
 			path: ../../Classes/Hooks/ButtonBarHook.php
 
 		-
-			message: "#^Parameter \\#1 \\$title of method TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\AbstractControl\\:\\:setTitle\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: ../../Classes/Hooks/ButtonBarHook.php
-
-		-
 			message: "#^There is no aspect \"frontend\\.preview\" configured so we can't figure out the exact type to return when calling TYPO3\\\\CMS\\\\Core\\\\Context\\\\Context\\:\\:getPropertyFromAspect$#"
 			count: 1
 			path: ../../Classes/Hooks/DeeplPreviewFlagGeneratePageHook.php
 
 		-
-			message: "#^Parameter \\#1 \\$message of class TYPO3\\\\CMS\\\\Core\\\\Messaging\\\\FlashMessage constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: ../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
-
-		-
 			message: "#^Parameter \\#1 \\$uid of method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntryByUid\\(\\) expects int, int\\|string given\\.$#"
-			count: 1
-			path: ../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
-
-		-
-			message: "#^Parameter \\#2 \\$title of class TYPO3\\\\CMS\\\\Core\\\\Messaging\\\\FlashMessage constructor expects string, string\\|null given\\.$#"
 			count: 1
 			path: ../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
 
@@ -189,11 +174,6 @@ parameters:
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\DatabaseRecordList\\:\\:makeLocalizationPanel\\(\\) has parameter \\$translations with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../Classes/Override/DatabaseRecordList.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, string\\|null given\\.$#"
-			count: 1
-			path: ../../Classes/Override/DeeplRecordListController.php
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\LocalizationController\\:\\:process\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
@@ -276,6 +256,11 @@ parameters:
 			path: ../../Classes/Service/DeeplService.php
 
 		-
+			message: "#^Offset 'glossary_id' on array\\{glossary_id\\: ''\\}\\|array\\{uid\\: int, glossary_name\\: string, glossary_id\\: string, glossary_lastsync\\: int, glossary_ready\\: int\\} in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: ../../Classes/Service/DeeplService.php
+
+		-
 			message: "#^Property WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplService\\:\\:\\$apiSupportedLanguages \\(array\\<string\\>\\) does not accept default value of type array\\<string, array\\>\\.$#"
 			count: 1
 			path: ../../Classes/Service/DeeplService.php
@@ -352,11 +337,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$id of static method WebVision\\\\WvDeepltranslate\\\\Utility\\\\DeeplBackendUtility\\:\\:getPageRecord\\(\\) expects int, int\\|string given\\.$#"
-			count: 1
-			path: ../../Classes/Utility/DeeplBackendUtility.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, string\\|null given\\.$#"
 			count: 1
 			path: ../../Classes/Utility/DeeplBackendUtility.php
 
