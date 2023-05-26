@@ -343,8 +343,8 @@ class DeeplBackendUtility
         self::$currentPage = [];
         $request = $GLOBALS['TYPO3_REQUEST'];
         $queryParams = $request ? $request->getQueryParams() : [];
-        if (isset($queryParams['id'])) {
-            $currentId = (int)$queryParams['id'];
+        if (isset($queryParams['id']) || isset($queryParams['pageId'])) {
+            $currentId = (int)($queryParams['id'] ?? $queryParams['pageId']);
             return self::getPageRecord($currentId);
         }
         if (isset($queryParams['cmd'])) {
