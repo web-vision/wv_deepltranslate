@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.4
+
+* [BUGFIX] Access to undefined array keys in list view by @bigahuna in https://github.com/web-vision/wv_deepltranslate/pull/240
+* [BUGFIX] Guard `LocalizationUtility::translate` with `(string)` cast by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/255
+* [BUGFIX] Avoid undefined array key warning in `LocalizationController` by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/268
+* [BUGFIX] Avoid undefined array key warning in `AllowLanguageSynchronizationHook` by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/246
+* [BUGFIX] Determine correct Preview mode in TYPO3 v9 by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/270
+* [BUGFIX] Determine glossary correct on current page by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/271
+
 ## 3.0.3
 
 * [TASK] Set branch alias for 3.0 by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/200
