@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class DeeplPreviewFlagGeneratePageHook
@@ -15,8 +17,13 @@ class DeeplPreviewFlagGeneratePageHook
     {
         $controller = $params['pObj'];
 
-        $isInPreviewMode = $controller->getContext()->hasAspect('frontend.preview')
-            && $controller->getContext()->getPropertyFromAspect('frontend.preview', 'isPreview');
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+        if ($typo3Version->getMajorVersion() < 10) {
+            $isInPreviewMode = (bool)$controller->fePreview;
+        } else {
+            $isInPreviewMode = $controller->getContext()->hasAspect('frontend.preview')
+                && $controller->getContext()->getPropertyFromAspect('frontend.preview', 'isPreview');
+        }
         if (
             !$isInPreviewMode
             || $controller->doWorkspacePreview()
