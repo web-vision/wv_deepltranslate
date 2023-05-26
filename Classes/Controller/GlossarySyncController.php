@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Controller;
 
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Http\RedirectResponse;
@@ -52,7 +53,7 @@ class GlossarySyncController
                 'glossary.sync.title',
                 'wv_deepltranslate'
             ),
-            FlashMessage::OK,
+            AbstractMessage::OK,
             true
         );
 

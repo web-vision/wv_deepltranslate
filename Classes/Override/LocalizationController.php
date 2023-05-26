@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Override;
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Doctrine\DBAL\Driver\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -160,7 +161,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
         // s. EXT:containers Xclass B13\Container\Xclasses\LocalizationController
         if (
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')
+            ExtensionManagementUtility::isLoaded('container')
             && class_exists(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class)
         ) {
             $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class);

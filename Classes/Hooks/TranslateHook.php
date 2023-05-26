@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -91,7 +92,7 @@ class TranslateHook
                 FlashMessage::class,
                 $e->getMessage(),
                 '',
-                FlashMessage::INFO
+                AbstractMessage::INFO
             );
             GeneralUtility::makeInstance(FlashMessageService::class)
                 ->getMessageQueueByIdentifier()

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use GuzzleHttp\Exception\BadResponseException;
@@ -122,7 +123,7 @@ final class DeeplGlossaryService
                 FlashMessage::class,
                 $e->getMessage(),
                 'DeepL Api',
-                FlashMessage::WARNING,
+                AbstractMessage::WARNING,
                 true
             );
             $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);

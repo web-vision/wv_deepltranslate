@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks\Glossary;
 
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
@@ -68,7 +69,7 @@ class UpdatedGlossaryEntryTermHook
                 'glossary.not-sync.title',
                 'wv_deepltranslate'
             ),
-            FlashMessage::INFO,
+            AbstractMessage::INFO,
             true
         );
 

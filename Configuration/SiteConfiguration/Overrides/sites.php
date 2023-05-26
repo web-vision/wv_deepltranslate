@@ -1,5 +1,6 @@
 <?php
 
+use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 (static function (): void {
     $ll = function (string $identifier) {
         return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:' . $identifier;
@@ -11,7 +12,7 @@
         'config' => [
             'type' => 'select',
             'renderType' => 'selectSingle',
-            'itemsProcFunc' => \WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc::class . '->getSupportedLanguageForField',
+            'itemsProcFunc' => SiteConfigSupportedLanguageItemsProcFunc::class . '->getSupportedLanguageForField',
             'items' => [],
             'minitems' => 0,
             'maxitems' => 1,

@@ -2,6 +2,8 @@
 
 defined('TYPO3') or die();
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 (static function (): void {
     $ll = function (string $languageKey) {
         return sprintf(
@@ -63,15 +65,15 @@ defined('TYPO3') or die();
         ],
     ];
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $columns);
+    ExtensionManagementUtility::addTCAcolumns('pages', $columns);
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+    ExtensionManagementUtility::addFieldsToPalette(
         'pages',
         'deepl_translate',
         'tx_wvdeepltranslate_content_not_checked, tx_wvdeepltranslate_translated_time,glossary_information'
     );
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    ExtensionManagementUtility::addToAllTCAtypes(
         'pages',
         sprintf('--div--;%s,--palette--;;deepl_translate;', $ll('pages.deepl.tab.label')),
         '',

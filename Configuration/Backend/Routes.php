@@ -1,8 +1,9 @@
 <?php
 
+use WebVision\WvDeepltranslate\Controller\GlossarySyncController;
 return [
     'glossaryupdate' => [
         'path' => '/glossary',
-        'target' => WebVision\WvDeepltranslate\Controller\GlossarySyncController::class . '::update',
+        'target' => GlossarySyncController::class . '::update',
     ],
 ];
