@@ -60,7 +60,6 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         );
 
     // add caching
-
     $services->set('cache.wvdeepltranslate')
         ->class(FrontendInterface::class)
         ->factory([service(CacheManager::class), 'getCache'])

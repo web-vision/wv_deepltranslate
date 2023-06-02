@@ -15,10 +15,10 @@ final class AjaxController
 {
     private Configuration $configuration;
 
-    public function __construct()
-    {
-        // @todo Consider to make this handed over through DI.
-        $this->configuration = GeneralUtility::makeInstance(Configuration::class);
+    public function __construct(
+        Configuration $configuration
+    ) {
+        $this->configuration = $configuration;
     }
 
     /**
