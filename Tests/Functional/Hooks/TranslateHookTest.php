@@ -105,7 +105,7 @@ final class TranslateHookTest extends FunctionalTestCase
             ->withAttribute('normalizedParams', NormalizedParams::createFromServerParams($serverParams));
 
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteConfig = $languageService->getCurrentSite('pages', 1);
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
         $content = $translateHook->translateContent(

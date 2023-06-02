@@ -46,7 +46,7 @@ final class DeeplServiceTest extends FunctionalTestCase
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE)
             ->withAttribute('normalizedParams', NormalizedParams::createFromServerParams($serverParams));
 
-        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $deeplService = $this->get(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
             'Ich möchte gern übersetzt werden!',
@@ -68,7 +68,7 @@ final class DeeplServiceTest extends FunctionalTestCase
             $translateContent = 'proton beam';
             $expectedTranslation = 'Protonenstrahl';
         }
-        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $deeplService = $this->get(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
             $translateContent,
@@ -90,7 +90,7 @@ final class DeeplServiceTest extends FunctionalTestCase
             $translateContent = 'proton beam';
             $expectedTranslation = 'Protonenstrahl';
         }
-        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $deeplService = $this->get(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
             $translateContent,
@@ -106,7 +106,7 @@ final class DeeplServiceTest extends FunctionalTestCase
      */
     public function checkSupportedTargetLanguages(): void
     {
-        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $deeplService = $this->get(DeeplService::class);
 
         static::assertContains('EN-GB', (array)$deeplService->apiSupportedLanguages['target']);
         static::assertContains('EN-US', (array)$deeplService->apiSupportedLanguages['target']);
@@ -121,7 +121,7 @@ final class DeeplServiceTest extends FunctionalTestCase
      */
     public function checkFormalitySupportedLanguages(): void
     {
-        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $deeplService = $this->get(DeeplService::class);
 
         static::assertContains('ES', (array)$deeplService->formalitySupportedLanguages);
         static::assertContains('DE', (array)$deeplService->formalitySupportedLanguages);
@@ -135,7 +135,7 @@ final class DeeplServiceTest extends FunctionalTestCase
      */
     public function checkSupportedSourceLanguages(): void
     {
-        $deeplService = GeneralUtility::makeInstance(DeeplService::class);
+        $deeplService = $this->get(DeeplService::class);
 
         static::assertContains('DE', (array)$deeplService->apiSupportedLanguages['source']);
         static::assertContains('UK', (array)$deeplService->apiSupportedLanguages['source']);
