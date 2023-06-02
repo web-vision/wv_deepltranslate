@@ -49,7 +49,7 @@ final class DeeplServiceTest extends FunctionalTestCase
         $deeplService = $this->get(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
-            'Ich möchte gern übersetzt werden!',
+            'Ich möchte gerne übersetzt werden!',
             'EN',
             'DE'
         );
@@ -63,7 +63,7 @@ final class DeeplServiceTest extends FunctionalTestCase
     public function translateContentFromEnToDe(): void
     {
         $translateContent = 'I would like to be translated!';
-        $expectedTranslation = 'Ich möchte gern übersetzt werden!';
+        $expectedTranslation = 'Ich möchte gerne übersetzt werden!';
         if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
             $translateContent = 'proton beam';
             $expectedTranslation = 'Protonenstrahl';
@@ -85,7 +85,7 @@ final class DeeplServiceTest extends FunctionalTestCase
     public function translateContentWithAutoDetectSourceParam(): void
     {
         $translateContent = 'I would like to be translated!';
-        $expectedTranslation = 'Ich möchte gern übersetzt werden!';
+        $expectedTranslation = 'Ich möchte gerne übersetzt werden!';
         if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
             $translateContent = 'proton beam';
             $expectedTranslation = 'Protonenstrahl';
