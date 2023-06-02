@@ -10,6 +10,7 @@ use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
 use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
 use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
 use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
+use WebVision\WvDeepltranslate\Hooks\TranslateHook;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
@@ -76,7 +77,12 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $containerBuilder
         ->registerForAutoconfiguration(UpdatedGlossaryEntryTermHook::class)
         ->addTag('deepl.UpdatedGlossaryEntryTermHook');
+    $containerBuilder
+        ->registerForAutoconfiguration(TranslateHook::class)
+        ->addTag('deepl.TranslateHook');
 
     $containerBuilder
         ->addCompilerPass(new SingletonPass('deepl.UpdatedGlossaryEntryTermHook'));
+    $containerBuilder
+        ->addCompilerPass(new SingletonPass('deepl.TranslateHook'));
 };

@@ -23,12 +23,13 @@ class TranslateHook
     private LanguageService $languageService;
 
     public function __construct(
-        ?PageRepository $pageRepository = null,
-        ?DeeplService $deeplService = null
+        PageRepository $pageRepository,
+        DeeplService $deeplService,
+        LanguageService $languageService
     ) {
-        $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
-        $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class);
-        $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $this->deeplService = $deeplService;
+        $this->pageRepository = $pageRepository;
+        $this->languageService = $languageService;
     }
 
     /**
