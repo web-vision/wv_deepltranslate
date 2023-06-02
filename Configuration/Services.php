@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\DependencyInjection\SingletonPass;
 use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
 use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
 use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
+use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
@@ -25,7 +26,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     // Main DI
     $services
         ->load('WebVision\\WvDeepltranslate\\', '../Classes/')
-        ->exclude('../Classes/{Domain/Model,Override/DatabaseRecordList.php}');
+        ->exclude('../Classes/{Domain/Model,Override/DatabaseRecordList.php,Override/Core11,Override/Core12}');
 
     // register console commands
     $services
@@ -82,9 +83,14 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $containerBuilder
         ->registerForAutoconfiguration(TranslateHook::class)
         ->addTag('deepl.TranslateHook');
+    $containerBuilder
+        ->registerForAutoconfiguration(SiteConfigSupportedLanguageItemsProcFunc::class)
+        ->addTag('deepl.SiteConfigSupportedLanguageItemsProcFunc');
 
     $containerBuilder
         ->addCompilerPass(new SingletonPass('deepl.UpdatedGlossaryEntryTermHook'));
     $containerBuilder
         ->addCompilerPass(new SingletonPass('deepl.TranslateHook'));
+    $containerBuilder
+        ->addCompilerPass(new SingletonPass('deepl.SiteConfigSupportedLanguageItemsProcFunc'));
 };

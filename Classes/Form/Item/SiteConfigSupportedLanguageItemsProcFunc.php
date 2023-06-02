@@ -9,14 +9,12 @@ use WebVision\WvDeepltranslate\Service\DeeplService;
 
 class SiteConfigSupportedLanguageItemsProcFunc
 {
-    /**
-     * @var DeeplService
-     */
-    private $deeplService;
+    private DeeplService $deeplService;
 
-    public function __construct()
-    {
-        $this->deeplService = GeneralUtility::makeInstance(DeeplService::class);
+    public function __construct(
+        DeeplService $deeplService
+    ){
+        $this->deeplService = $deeplService;
     }
 
     public function getSupportedLanguageForField(array &$configuration)
