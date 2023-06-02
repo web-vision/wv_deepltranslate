@@ -69,6 +69,7 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
             unset($item['description']);
             unset($item['starttime']);
             unset($item['endtime']);
+            unset($item['cruser_id']);
             $updateGlossary[] = $item;
         }
 
@@ -95,6 +96,7 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $updateGlossary = [];
         foreach ($result as $item) {
             unset($item['entries']);
+            unset($item['cruser_id']);
             $updateGlossary[] = $item;
         }
 
