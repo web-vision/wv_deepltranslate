@@ -17,12 +17,11 @@ class GlossaryListCommand extends Command
     protected DeeplGlossaryService $deeplGlossaryService;
 
     public function __construct(
-        string $name = null,
-        ?DeeplGlossaryService $deeplGlossaryService = null
+        string $name,
+        DeeplGlossaryService $deeplGlossaryService
     ) {
         parent::__construct($name);
-        $this->deeplGlossaryService = $deeplGlossaryService
-            ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
+        $this->deeplGlossaryService = $deeplGlossaryService;
     }
     protected function configure(): void
     {

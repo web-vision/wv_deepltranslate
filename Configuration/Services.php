@@ -30,6 +30,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     // register console commands
     $services
         ->set(GlossaryCleanupCommand::class)
+        ->arg('$name', 'deepl:glossary:cleanup')
         ->tag(
             'console.command',
             [
@@ -39,6 +40,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         );
     $services
         ->set(GlossarySyncCommand::class)
+        ->arg('$name', 'deepl:glossary:sync')
         ->tag(
             'console.command',
             [
@@ -48,6 +50,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         );
     $services
         ->set(GlossaryListCommand::class)
+        ->arg('$name', 'deepl:glossary:list')
         ->tag(
             'console.command',
             [

@@ -22,13 +22,13 @@ class GlossaryCleanupCommand extends Command
 
     protected GlossaryRepository $glossaryRepository;
     public function __construct(
-        string $name = null,
-        ?DeeplGlossaryService $deeplGlossaryService = null,
-        ?GlossaryRepository $glossaryRepository = null
+        string $name,
+        DeeplGlossaryService $deeplGlossaryService,
+        GlossaryRepository $glossaryRepository
     ) {
         parent::__construct($name);
-        $this->deeplGlossaryService = $deeplGlossaryService ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
-        $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
+        $this->deeplGlossaryService = $deeplGlossaryService;
+        $this->glossaryRepository = $glossaryRepository;
     }
 
     protected function configure(): void
