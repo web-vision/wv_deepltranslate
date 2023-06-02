@@ -104,7 +104,7 @@ final class LanguageServiceTest extends FunctionalTestCase
      */
     public function getCurrentSiteWithValidInformation(): void
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
         static::assertIsArray($siteInformation);
@@ -121,7 +121,7 @@ final class LanguageServiceTest extends FunctionalTestCase
      */
     public function getCurrentSiteHasNoSite(): void
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 2);
 
         static::assertNull($siteInformation);
@@ -132,7 +132,7 @@ final class LanguageServiceTest extends FunctionalTestCase
      */
     public function getCurrentSiteByUsedContentId(): void
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('tt_content', 3);
 
         static::assertIsArray($siteInformation);
@@ -149,7 +149,7 @@ final class LanguageServiceTest extends FunctionalTestCase
      */
     public function getSourceLanguageInformationIsValid(): void
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site']);
@@ -167,7 +167,7 @@ final class LanguageServiceTest extends FunctionalTestCase
      */
     public function setAutoDetectOptionForSourceLanguageNotSupported(): void
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 3);
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site']);
 
@@ -179,7 +179,7 @@ final class LanguageServiceTest extends FunctionalTestCase
      */
     public function getTargetLanguageInformationIsValid(): void
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
         $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 2);
@@ -197,7 +197,7 @@ final class LanguageServiceTest extends FunctionalTestCase
      */
     public function getTargetLanguageExceptionWhenLanguageNotExist(): void
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
         static::expectException(LanguageRecordNotFoundException::class);
@@ -210,7 +210,7 @@ final class LanguageServiceTest extends FunctionalTestCase
      */
     public function getTargetLanguageExceptionWhenLanguageIsoNotSupported(): void
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteInformation = $languageService->getCurrentSite('pages', 1);
 
         static::expectException(LanguageIsoCodeNotFoundException::class);
