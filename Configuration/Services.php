@@ -23,11 +23,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     // Main DI
     $services
         ->load('WebVision\\WvDeepltranslate\\', '../Classes/')
-        ->exclude('../Classes/{Domain/Model,Override/DatabaseRecordList.php}')
-        ->exclude('../Classes/Services/');
-    $services
-        ->load('WebVision\\WvDeepltranslate\\Service\\', '../Classes/Service/')
-        ->public();
+        ->exclude('../Classes/{Domain/Model,Override/DatabaseRecordList.php}');
 
     // register console commands
     $services
@@ -65,8 +61,13 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->args(['wvdeepltranslate']);
     $services
         ->set(DeeplService::class)
+        ->public()
         ->args(['cache', service('cache.wvdeepltranslate')]);
     $services
         ->set(DeeplGlossaryService::class)
+        ->public()
         ->args(['cache', service('cache.wvdeepltranslate')]);
+    $services
+        ->set(LanguageService::class)
+        ->public();
 };
