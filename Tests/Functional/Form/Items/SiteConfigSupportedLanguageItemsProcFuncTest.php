@@ -41,6 +41,6 @@ final class SiteConfigSupportedLanguageItemsProcFuncTest extends FunctionalTestC
         $func->getSupportedLanguageForField($fieldConfig);
 
         static::assertArrayHasKey('items', $fieldConfig);
-        static::assertTrue(count($fieldConfig['items']) > 1);
+        static::assertTrue((count($fieldConfig['items']) > 2));
     }
 }
