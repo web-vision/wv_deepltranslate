@@ -3,12 +3,13 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\DependencyInjection\SingletonPass;
 use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
 use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
 use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
+use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
@@ -55,6 +56,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         );
 
     // add caching
+
     $services->set('cache.wvdeepltranslate')
         ->class(FrontendInterface::class)
         ->factory([service(CacheManager::class), 'getCache'])
@@ -62,12 +64,19 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $services
         ->set(DeeplService::class)
         ->public()
-        ->args(['cache', service('cache.wvdeepltranslate')]);
+        ->arg('$cache', service('cache.wvdeepltranslate'));
     $services
         ->set(DeeplGlossaryService::class)
         ->public()
-        ->args(['cache', service('cache.wvdeepltranslate')]);
+        ->arg('$cache', service('cache.wvdeepltranslate'));
     $services
         ->set(LanguageService::class)
         ->public();
+
+    $containerBuilder
+        ->registerForAutoconfiguration(UpdatedGlossaryEntryTermHook::class)
+        ->addTag('deepl.UpdatedGlossaryEntryTermHook');
+
+    $containerBuilder
+        ->addCompilerPass(new SingletonPass('deepl.UpdatedGlossaryEntryTermHook'));
 };
