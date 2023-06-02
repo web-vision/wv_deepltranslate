@@ -17,9 +17,8 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
-// @todo Mark this class final.
 // @todo Consider to rename/move this as service class.
-class GlossaryRepository
+final class GlossaryRepository
 {
     /**
      * @return array<int, array{

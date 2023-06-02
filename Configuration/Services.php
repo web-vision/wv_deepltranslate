@@ -3,6 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
@@ -10,6 +11,7 @@ use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
 use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\WvDeepltranslate\Service\LanguageService;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
     $services = $containerConfigurator
@@ -63,4 +65,6 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $services
         ->set(DeeplGlossaryService::class)
         ->args(['cache', service('cache.wvdeepltranslate')]);
+    $services
+        ->set(LanguageService::class);
 };

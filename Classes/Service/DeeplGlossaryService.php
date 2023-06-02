@@ -18,8 +18,7 @@ use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 
-// @todo Make this class final.
-class DeeplGlossaryService
+final class DeeplGlossaryService
 {
     private Client $client;
 

@@ -17,8 +17,7 @@ use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
-// @todo Make this class final.
-class DeeplService
+final class DeeplService
 {
     /**
      * Default supported languages
