@@ -23,7 +23,10 @@ class SiteConfigSupportedLanguageItemsProcFunc
 
         $configuration['items'][] = ['--- Select a Language ---', null];
         foreach ($supportedLanguages as $supportedLanguage) {
-            $configuration['items'][] = [$supportedLanguage, $supportedLanguage];
+            $configuration['items'][] = [
+                ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'label' : 0) => $supportedLanguage,
+                ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'value' : 1) => $supportedLanguage,
+            ];
         }
     }
 }

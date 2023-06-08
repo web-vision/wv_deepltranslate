@@ -44,8 +44,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'label' : 0) => '',
+                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'value' : 1) => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -59,8 +59,8 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        '',
-                        0,
+                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'label' : 0) => '',
+                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'value' : 1) => 0,
                     ],
                 ],
                 'foreign_table' => 'tx_wvdeepltranslate_glossaryentry',
@@ -86,6 +86,7 @@ return [
             'l10n_mode' => '',
             'config' => [
                 'type' => 'input',
+                // @deprecated with v12. Adjusted for v12+ in `Overrides/tx_wvdeepltranslate_glossaryentry.php'
                 'eval' => 'required',
             ],
         ],

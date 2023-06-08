@@ -51,12 +51,22 @@ return [
         ],
         'glossary_lastsync' => [
             'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:glossary.glossary_lastsync',
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime',
-                'readOnly' => true,
-            ],
+            // 4.   https://review.typo3.org/c/Packages/TYPO3.CMS/+/74027
+            //      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Feature-97232-NewTCATypeDatetime.html
+            //      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Breaking-97358-RemovedEvalintFromTCATypeDatetime.html
+            'config' => (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12
+                ? [
+                    'type' => 'datetime',
+                    'format' => 'datetime',
+                    'readOnly' => true,
+                ]
+                : [
+                    'type' => 'input',
+                    'renderType' => 'inputDateTime',
+                    'eval' => 'datetime',
+                    'readOnly' => true,
+                ]
+            ,
         ],
         'glossary_ready' => [
             'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:glossary.glossary_ready',
