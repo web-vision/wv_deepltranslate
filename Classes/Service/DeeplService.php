@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use GuzzleHttp\Exception\ClientException;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -43,14 +42,18 @@ final class DeeplService
 
     private Client $client;
 
+    private LoggerInterface $logger;
+
     public function __construct(
         FrontendInterface $cache,
         Client $client,
-        GlossaryRepository $glossaryRepository
+        GlossaryRepository $glossaryRepository,
+        LoggerInterface $logger
     ) {
         $this->cache = $cache;
         $this->client = $client;
         $this->glossaryRepository = $glossaryRepository;
+        $this->logger = $logger;
 
         $this->loadSupportedLanguages();
     }
@@ -59,7 +62,6 @@ final class DeeplService
      * Deepl Api Call for retrieving translation.
      *
      * @return array<int|string, mixed>
-     * @throws DBALException
      * @throws Exception
      * @throws SiteNotFoundException
      */
@@ -137,6 +139,7 @@ final class DeeplService
         try {
             $response = $this->client->getSupportedTargetLanguage($type);
         } catch (ClientException $e) {
+            $this->logger->error($e->getMessage());
             return [];
         }
 
