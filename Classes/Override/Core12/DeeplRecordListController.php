@@ -45,17 +45,16 @@ final class DeeplRecordListController extends RecordListController
             return $originalOutput;
         }
 
-        return str_replace(
-            '<div class="col-auto">',
-            '<div class="col-auto row"><div class="col-sm-6">',
-            $originalOutput
-        )
-            . '<div class="col-sm-6">'
+        return preg_replace(
+            '/<\/div>$/',
+            '<div class="form-group">'
             . '<select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">'
             . $options
             . '</select>'
             . '</div>'
-            . '</div>';
+            . '</div>',
+        $originalOutput
+        );
     }
 
 
