@@ -65,8 +65,7 @@ return [
                     'renderType' => 'inputDateTime',
                     'eval' => 'datetime',
                     'readOnly' => true,
-                ]
-            ,
+                ],
         ],
         'glossary_ready' => [
             'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:glossary.glossary_ready',

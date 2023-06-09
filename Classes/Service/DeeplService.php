@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
-use Psr\Log\LoggerInterface;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Doctrine\DBAL\Driver\Exception;
 use GuzzleHttp\Exception\ClientException;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -86,7 +86,7 @@ final class DeeplService
 
         try {
             // @todo: check, if is needed, as GlossaryRepository::getGlossaryBySourceAndTarget returns default entry
-            if(!isset($glossary['glossary_id'])) {
+            if (!isset($glossary['glossary_id'])) {
                 $glossary['glossary_id'] = '';
             }
             $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);

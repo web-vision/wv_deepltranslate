@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 

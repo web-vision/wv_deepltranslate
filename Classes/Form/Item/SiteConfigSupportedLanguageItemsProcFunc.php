@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Form\Item;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
 class SiteConfigSupportedLanguageItemsProcFunc
@@ -13,7 +12,7 @@ class SiteConfigSupportedLanguageItemsProcFunc
 
     public function __construct(
         DeeplService $deeplService
-    ){
+    ) {
         $this->deeplService = $deeplService;
     }
 

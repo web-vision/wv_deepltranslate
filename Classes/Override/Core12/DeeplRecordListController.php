@@ -53,10 +53,9 @@ final class DeeplRecordListController extends RecordListController
             . '</select>'
             . '</div>'
             . '</div>',
-        $originalOutput
+            $originalOutput
         );
     }
-
 
     private function buildGlossaryTranslationOptionDropdown(array $siteLanguages, string $requestUri): string
     {

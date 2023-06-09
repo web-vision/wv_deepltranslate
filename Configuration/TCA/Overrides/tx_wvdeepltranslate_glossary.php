@@ -4,7 +4,6 @@ defined('TYPO3') or die();
 
 (static function (): void {
     if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
-
         // Adjust TCA configuration to be TYPO3 v12 compatible avoiding TCA automigration.
         // 1.   https://review.typo3.org/c/Packages/TYPO3.CMS/+/77626
         //      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.3/Deprecation-99739-IndexedArrayKeysForTCAItems.html

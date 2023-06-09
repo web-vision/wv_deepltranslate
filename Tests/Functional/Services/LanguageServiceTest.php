@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
 use TYPO3\CMS\Core\Site\Entity\Site;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;

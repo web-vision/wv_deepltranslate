@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use GuzzleHttp\Exception\BadResponseException;
@@ -12,6 +11,7 @@ use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -108,7 +108,6 @@ final class DeeplGlossaryService
      * @param string $glossaryId
      *
      * @return array|null
-     *
      */
     public function deleteGlossary(string $glossaryId): ?array
     {
@@ -139,7 +138,6 @@ final class DeeplGlossaryService
      *
      * @param string $glossaryId
      * @return array|null
-     *
      */
     public function glossaryInformation(string $glossaryId): ?array
     {

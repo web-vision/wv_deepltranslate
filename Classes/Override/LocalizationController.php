@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Override;
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Doctrine\DBAL\Driver\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,6 +14,7 @@ use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Versioning\VersionState;
 use WebVision\WvDeepltranslate\Service\DeeplService;

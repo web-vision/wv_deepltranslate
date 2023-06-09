@@ -1,6 +1,7 @@
 <?php
 
 use WebVision\WvDeepltranslate\Controller\Backend\AjaxController;
+
 /**
  * Definitions for routes provided by EXT:deepl
  * Contains all AJAX-based routes for entry points

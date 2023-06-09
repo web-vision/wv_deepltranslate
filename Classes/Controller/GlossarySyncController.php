@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Controller;
 
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\InvalidArgumentException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 

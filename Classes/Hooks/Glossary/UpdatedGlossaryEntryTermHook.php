@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks\Glossary;
 
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;

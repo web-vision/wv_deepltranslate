@@ -1,6 +1,7 @@
 <?php
 
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
+
 (static function (): void {
     $ll = function (string $identifier) {
         return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:' . $identifier;

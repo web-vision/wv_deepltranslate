@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -59,7 +59,7 @@ class TranslateHook
         }
 
         $customMode = $cmdmap['localization']['custom']['mode'] ?? null;
-        [$sourceLanguage,] = explode('-', (string)$cmdmap['localization']['custom']['srcLanguageId']);
+        [$sourceLanguage] = explode('-', (string)$cmdmap['localization']['custom']['srcLanguageId']);
 
         //translation mode not set to DeepL translate
         if ($customMode === null) {
