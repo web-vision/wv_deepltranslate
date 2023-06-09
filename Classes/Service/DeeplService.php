@@ -64,6 +64,7 @@ final class DeeplService
      * @return array<int|string, mixed>
      * @throws Exception
      * @throws SiteNotFoundException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function translateRequest(
         string $content,
@@ -84,6 +85,7 @@ final class DeeplService
         }
 
         try {
+            // @todo: check, if is needed, as GlossaryRepository::getGlossaryBySourceAndTarget returns default entry
             if(!isset($glossary['glossary_id'])) {
                 $glossary['glossary_id'] = '';
             }

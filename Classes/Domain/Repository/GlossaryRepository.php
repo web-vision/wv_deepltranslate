@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
 use DateTimeImmutable;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -30,7 +29,6 @@ final class GlossaryRepository
      *     entries: array<int, array{source: string, target: string}>
      * }>
      *
-     * @throws DBALException
      * @throws Exception
      * @throws SiteNotFoundException
      */
@@ -124,6 +122,7 @@ final class GlossaryRepository
     /**
      * @return array<string, mixed>|null
      * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     public function findByGlossaryId(string $glossaryId): ?array
     {
@@ -190,6 +189,7 @@ final class GlossaryRepository
 
     /**
      * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     public function findAllGlossaries(): array
     {
@@ -219,30 +219,36 @@ final class GlossaryRepository
      *     glossary_ready: int
      * }
      *
-     * @throws DBALException
      * @throws Exception
      * @throws SiteNotFoundException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlossaryBySourceAndTarget(
         string $sourceLanguage,
         string $targetLanguage,
         array $page
     ): array {
+        $defaultGlossary = [
+            'uid' => 0,
+            'glossary_id' => '',
+            'glossary_name' => 'UNDEFINED',
+            'glossary_lastsync' => 0,
+            'glossary_ready' => 0,
+        ];
         if (empty($page)) {
-            return [
-                'uid' => 0,
-                'glossary_id' => '',
-                'glossary_name' => 'UNDEFINED',
-                'glossary_lastsync' => 0,
-                'glossary_ready' => 0,
-            ];
+            return $defaultGlossary;
         }
         $lowerSourceLang = strtolower($sourceLanguage);
         $lowerTargetLang = strtolower($targetLanguage);
         if (strlen($lowerTargetLang) > 2) {
             $lowerTargetLang = substr($lowerTargetLang, 0, 2);
         }
-        return $this->getGlossary($lowerSourceLang, $lowerTargetLang, $page['uid'], true);
+        return $this->getGlossary(
+            $lowerSourceLang,
+            $lowerTargetLang,
+            $page['uid'],
+            true
+        ) ?? $defaultGlossary;
     }
 
     /**
@@ -254,7 +260,6 @@ final class GlossaryRepository
      *     glossary_lastsync: int,
      *     glossary_ready: int
      * }
-     * @throws DBALException
      * @throws Exception
      * @throws SiteNotFoundException
      */
@@ -320,8 +325,8 @@ final class GlossaryRepository
 
     /**
      * @return array<int|string, array{uid: int, glossary_id: string}>
-     * @throws DBALException
      * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlossariesDeeplConnected(): array
     {
@@ -344,8 +349,8 @@ final class GlossaryRepository
 
     /**
      * @return array<int, array{uid: int, term: string}>|array
-     * @throws DBALException
      * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getOriginalEntries(int $pageId): array
     {
@@ -374,7 +379,7 @@ final class GlossaryRepository
     /**
      * @return array<int, array{uid: int, term: string, l10n_parent: int}>
      * @throws Exception
-     * @throws DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getLocalizedEntries(int $pageId, int $languageId): array
     {
@@ -434,9 +439,9 @@ final class GlossaryRepository
      *     glossary_lastsync: int,
      *     glossary_ready: int
      * }|null
-     * @throws DBALException
      * @throws SiteNotFoundException
      * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getGlossary(
         string $sourceLanguage,
@@ -478,8 +483,8 @@ final class GlossaryRepository
 
     /**
      * @throws SiteNotFoundException
-     * @throws DBALException
      * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getGlossariesInRootByCurrentPage(int $pageId): array
     {
@@ -510,9 +515,6 @@ final class GlossaryRepository
         return $ids;
     }
 
-    /**
-     * @throws DBALException
-     */
     public function setGlossaryNotSyncOnPage(int $pageId): void
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
