@@ -1,9 +1,9 @@
+# Registration for TYPO3 backend < v12
+# @see https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Breaking-96812-NoFrontendTypoScriptBasedTemplateOverridesInTheBackend.html
+[typo3.version < "12.4"]
 module.tx_backend.view {
     partialRootPaths {
         10 = EXT:wv_deepltranslate/Resources/Private/Backend/Partials
     }
 }
-
-[typo3.version < "11.5"]
-    module.tx_backend.view.partialRootPaths.10 = EXT:wv_deepltranslate/Resources/Private/Backend/v10/Partials
 [END]
