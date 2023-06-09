@@ -81,6 +81,10 @@ final class Client
         return $this->requestFactory->request($baseUrl, 'GET', $this->mergeRequiredRequestOptions());
     }
 
+    /**
+     * @param array<int, array{source: string, target: string}> $entries
+     * @throws ClientNotValidUrlException
+     */
     public function createGlossary(
         string $glossaryName,
         string $sourceLang,

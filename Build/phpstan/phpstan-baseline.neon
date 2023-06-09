@@ -1,26 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Client\\:\\:createGlossary\\(\\) has parameter \\$entries with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../Classes/Client.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Command\\\\GlossaryListCommand\\:\\:listAllGloassaryEntriesById\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: ../../Classes/Command/GlossaryListCommand.php
-
-		-
-			message: "#^Offset 'source_lang' does not exist on array\\|null\\.$#"
-			count: 1
-			path: ../../Classes/Command/GlossaryListCommand.php
-
-		-
-			message: "#^Offset 'target_lang' does not exist on array\\|null\\.$#"
-			count: 1
-			path: ../../Classes/Command/GlossaryListCommand.php
-
-		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 3
 			path: ../../Classes/Configuration.php

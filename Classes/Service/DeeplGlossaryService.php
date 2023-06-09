@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
+use WebVision\WvDeepltranslate\Exception\ClientNotValidUrlException;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 
 final class DeeplGlossaryService
@@ -67,7 +68,7 @@ final class DeeplGlossaryService
      * Creates a glossary, entries must be formatted as [sourceText => entryText] e.g: ['Hallo' => 'Hello']
      *
      * @param string $name
-     * @param array $entries
+     * @param array<int, array{source: string, target: string}> $entries
      * @param string $sourceLang
      * @param string $targetLang
      *
@@ -82,6 +83,7 @@ final class DeeplGlossaryService
      * }
      *
      * @throws GlossaryEntriesNotExistException
+     * @throws ClientNotValidUrlException
      */
     public function createGlossary(
         string $name,
@@ -197,6 +199,7 @@ final class DeeplGlossaryService
      * @throws SiteNotFoundException
      * @throws DBALException
      * @throws Exception
+     * @throws ClientNotValidUrlException
      */
     public function syncGlossaries(int $uid): void
     {

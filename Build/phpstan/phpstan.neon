@@ -6,7 +6,7 @@ parameters:
 	# Use local .cache dir instead of /tmp
 	tmpDir: ../../.cache/phpstan
 
-	level: 8
+	level: 9
 
 	paths:
 		- ../../Classes
@@ -18,7 +18,3 @@ parameters:
 		# @todo Split the excludes into dedicated config files, after splitted PHPStan
 		# 		  configuration and baseline file have been introduced. Eventually keeping
 		- ../../Classes/Override/Core12/DeeplRecordListController.php
-
-	# @todo recheck rules.
-	inferPrivatePropertyTypeFromConstructor: true
-	reportUnmatchedIgnoredErrors: false
