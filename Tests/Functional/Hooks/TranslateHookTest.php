@@ -126,8 +126,6 @@ final class TranslateHookTest extends FunctionalTestCase
      */
     public function contentNotTranslateWithDeeplWhenLanguageNotSupported(): void
     {
-        // @todo This may be done depending on core version depending. sys_language table has been removed in v12.
-        $this->importCSVDataSet(__DIR__ . '/Fixtures/NotSupportedLanguage.csv');
         $serverParams = array_replace($_SERVER, ['HTTP_HOST' => 'example.com', 'SCRIPT_NAME' => '/typo3/index.php']);
         $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest('http://example.com/typo3/index.php', 'GET', null, $serverParams))
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE)
@@ -141,7 +139,7 @@ final class TranslateHookTest extends FunctionalTestCase
         $content = $translateHook->translateContent(
             'Hello I would like to be translated',
             [
-                'uid' => 4, // This ist the LanguageID its was Configure in SiteConfig
+                'uid' => 4, // This is the LanguageID its was Configure in SiteConfig
                 'title' => 'not supported language',
                 'language_isocode' => 'BS',
             ],
