@@ -136,16 +136,6 @@ parameters:
 			path: ../../../Classes/Override/Core12/DatabaseRecordList.php
 
 		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\Core12\\\\DeeplRecordListController\\:\\:buildGlossaryTranslationOptionDropdown\\(\\) has parameter \\$siteLanguages with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Override/Core12/DeeplRecordListController.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\Core12\\\\DeeplRecordListController\\:\\:languageSelector\\(\\) has parameter \\$siteLanguages with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Override/Core12/DeeplRecordListController.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\Core12\\\\DeeplRecordListController\\:\\:languageSelector\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: ../../../Classes/Override/Core12/DeeplRecordListController.php

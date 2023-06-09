@@ -9,7 +9,6 @@ use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -91,11 +90,16 @@ final class DeeplService
             }
             $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
         } catch (ClientException $e) {
+            if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
+                $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO;
+            } else {
+                $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO;
+            }
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
                 $e->getMessage(),
                 '',
-                AbstractMessage::INFO
+                $severity
             );
             GeneralUtility::makeInstance(FlashMessageService::class)
                 ->getMessageQueueByIdentifier()

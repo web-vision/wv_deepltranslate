@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Override\Core12;
 
+use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Backend\Controller\RecordListController;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\WorkspaceRestriction;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -18,7 +22,12 @@ use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 final class DeeplRecordListController extends RecordListController
 {
     /**
-     * @param string $requestUri
+     * @param SiteLanguage[] $siteLanguages
+     *
+     * @throws RouteNotFoundException
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @throws SiteNotFoundException
      */
     protected function languageSelector(array $siteLanguages, string $requestUri): string
     {
@@ -57,6 +66,12 @@ final class DeeplRecordListController extends RecordListController
         );
     }
 
+    /**
+     * @param SiteLanguage[] $siteLanguages
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
+     */
     private function buildGlossaryTranslationOptionDropdown(array $siteLanguages, string $requestUri): string
     {
         if (!$this->getBackendUserAuthentication()->check('tables_modify', 'pages')) {
@@ -67,7 +82,7 @@ final class DeeplRecordListController extends RecordListController
         $possiblePairs = $glossaryService->getPossibleGlossaryLanguageConfig();
         $site = GeneralUtility::makeInstance(SiteFinder::class)
             ->getSiteByPageId($this->id);
-        $defaultLanguageIsoCode = $site->getDefaultLanguage()->getTwoLetterIsoCode();
+        $defaultLanguageIsoCode = $site->getDefaultLanguage()->getLocale()->getLanguageCode();
 
         $possibleGlossaryEntryLanguages = $possiblePairs[$defaultLanguageIsoCode] ?? [];
 
@@ -76,7 +91,7 @@ final class DeeplRecordListController extends RecordListController
             if ($siteLanguage->getLanguageId() === 0) {
                 continue;
             }
-            if (in_array($siteLanguage->getTwoLetterIsoCode(), $possibleGlossaryEntryLanguages)) {
+            if (in_array($siteLanguage->getLocale()->getLanguageCode(), $possibleGlossaryEntryLanguages)) {
                 $availableTranslations[$siteLanguage->getLanguageId()] = $siteLanguage->getTitle();
             }
         }

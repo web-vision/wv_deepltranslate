@@ -62,10 +62,15 @@ final class LanguageService
      */
     public function getSourceLanguage(Site $currentSite): array
     {
+        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
+            $languageIsoCode = $currentSite->getDefaultLanguage()->getLocale()->getLanguageCode();
+        } else {
+            $languageIsoCode = $currentSite->getDefaultLanguage()->getTwoLetterIsoCode();
+        }
         $sourceLanguageRecord = [
             'uid' => $currentSite->getDefaultLanguage()->getLanguageId(),
             'title' => $currentSite->getDefaultLanguage()->getTitle(),
-            'language_isocode' => strtoupper($currentSite->getDefaultLanguage()->getTwoLetterIsoCode()),
+            'language_isocode' => strtoupper($languageIsoCode),
         ];
 
         if (!in_array(

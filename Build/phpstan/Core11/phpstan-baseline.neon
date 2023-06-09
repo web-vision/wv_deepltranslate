@@ -171,6 +171,11 @@ parameters:
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 
 		-
+			message: "#^Access to constant INFO on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
+			count: 1
+			path: ../../../Classes/Service/DeeplService.php
+
+		-
 			message: "#^Cannot assign new offset to string\\.$#"
 			count: 2
 			path: ../../../Classes/Service/DeeplService.php
@@ -189,6 +194,11 @@ parameters:
 			message: "#^Property WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplService\\:\\:\\$apiSupportedLanguages \\(array\\<string\\>\\) does not accept default value of type array\\<string, array\\>\\.$#"
 			count: 1
 			path: ../../../Classes/Service/DeeplService.php
+
+		-
+			message: "#^Cannot call method getLanguageCode\\(\\) on string\\.$#"
+			count: 1
+			path: ../../../Classes/Service/LanguageService.php
 
 		-
 			message: "#^Offset 'pid' does not exist on array\\|null\\.$#"
