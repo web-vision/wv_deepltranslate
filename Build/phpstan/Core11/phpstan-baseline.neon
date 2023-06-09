@@ -6,6 +6,11 @@ parameters:
 			path: ../../../Classes/Configuration.php
 
 		-
+			message: "#^Access to constant OK on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
+			count: 1
+			path: ../../../Classes/Controller/GlossarySyncController.php
+
+		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntriesByGlossary\\(\\) should return array\\<string, mixed\\> but returns array\\<int, array\\<string, mixed\\>\\>\\.$#"
 			count: 1
 			path: ../../../Classes/Domain/Repository/GlossaryEntryRepository.php
@@ -106,6 +111,11 @@ parameters:
 			path: ../../../Classes/Hooks/TCEmainHook.php
 
 		-
+			message: "#^Access to constant INFO on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
+			count: 1
+			path: ../../../Classes/Hooks/TranslateHook.php
+
+		-
 			message: "#^Offset 'site' does not exist on array\\{site\\: TYPO3\\\\CMS\\\\Core\\\\Site\\\\Entity\\\\Site, pageUid\\: int\\}\\|null\\.$#"
 			count: 2
 			path: ../../../Classes/Hooks/TranslateHook.php
@@ -134,6 +144,11 @@ parameters:
 			message: "#^Unsafe access to private constant WebVision\\\\WvDeepltranslate\\\\Override\\\\LocalizationController\\:\\:ACTION_LOCALIZEDEEPL_AUTO through static\\:\\:\\.$#"
 			count: 3
 			path: ../../../Classes/Override/LocalizationController.php
+
+		-
+			message: "#^Access to constant WARNING on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
+			count: 1
+			path: ../../../Classes/Service/DeeplGlossaryService.php
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:deleteGlossary\\(\\) return type has no value type specified in iterable type array\\.$#"

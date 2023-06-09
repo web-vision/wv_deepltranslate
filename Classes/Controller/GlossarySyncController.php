@@ -7,7 +7,6 @@ namespace WebVision\WvDeepltranslate\Controller;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Http\RedirectResponse;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -42,6 +41,11 @@ class GlossarySyncController
 
         $this->deeplGlossaryService->syncGlossaries((int)$processingParameters['uid']);
 
+        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
+            $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK;
+        } else {
+            $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::OK;
+        }
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
             (string)LocalizationUtility::translate(
@@ -52,7 +56,7 @@ class GlossarySyncController
                 'glossary.sync.title',
                 'wv_deepltranslate'
             ),
-            AbstractMessage::OK,
+            $severity,
             true
         );
 

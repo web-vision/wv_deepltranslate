@@ -130,7 +130,6 @@ trait SiteBasedTestTrait
             'base' => $base,
             'locale' => $preset['locale'],
             'flag' => $preset['flag'] ?? $preset['iso'] ?? '',
-            'deeplTargetLanguage' => $preset['deeplTargetLanguage'] ?: '',
             'fallbackType' => $fallbackType ?? (empty($fallbackIdentifiers) ? 'strict' : 'fallback'),
         ];
         if ((new Typo3Version())->getMajorVersion() < 12) {
@@ -148,8 +147,13 @@ trait SiteBasedTestTrait
                     'typo3Language' => $preset['iso'] ?? '',
                     'iso-639-1' => $preset['iso'] ?? '',
                     'direction' => $preset['direction'] ?? '',
-                ],
-                $preset['custom'] ?? []
+                ]
+            );
+        }
+        if ($preset['custom']) {
+            $configuration = array_replace(
+                $configuration,
+                $preset['custom']
             );
         }
 

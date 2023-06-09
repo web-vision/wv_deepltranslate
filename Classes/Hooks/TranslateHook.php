@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Hooks;
 
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -88,11 +87,16 @@ class TranslateHook
                 $sourceLanguageRecord
             );
         } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException $e) {
+            if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
+                $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO;
+            } else {
+                $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO;
+            }
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
                 $e->getMessage(),
                 '',
-                AbstractMessage::INFO
+                $severity
             );
             GeneralUtility::makeInstance(FlashMessageService::class)
                 ->getMessageQueueByIdentifier()

@@ -11,7 +11,6 @@ use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -116,15 +115,19 @@ final class DeeplGlossaryService
         try {
             $this->client->deleteGlossary($glossaryId);
         } catch (BadResponseException $e) {
-            // FlashMessage($message, $title, $severity = self::OK, $storeInSession)
             if (Environment::isCli()) {
                 throw $e;
+            }
+            if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
+                $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING;
+            } else {
+                $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING;
             }
             $message = GeneralUtility::makeInstance(
                 FlashMessage::class,
                 $e->getMessage(),
                 'DeepL Api',
-                AbstractMessage::WARNING,
+                $severity,
                 true
             );
             $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
