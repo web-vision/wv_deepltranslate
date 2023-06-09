@@ -23,6 +23,7 @@ final class LanguageServiceTest extends FunctionalTestCase
             'iso' => 'en',
             'hrefLang' => 'en-US',
             'direction' => '',
+            'deeplTargetLanguage' => '',
         ],
         'DE' => [
             'id' => 2,
@@ -31,6 +32,7 @@ final class LanguageServiceTest extends FunctionalTestCase
             'iso' => 'de',
             'hrefLang' => 'de-DE',
             'direction' => '',
+            'deeplTargetLanguage' => 'DE',
         ],
         'EB' => [
             'id' => 3,
@@ -39,6 +41,7 @@ final class LanguageServiceTest extends FunctionalTestCase
             'iso' => 'eb',
             'hrefLang' => 'en-GB',
             'direction' => '',
+            'deeplTargetLanguage' => 'EN-GB',
         ],
         'BS_default' => [
             'id' => 0,
@@ -47,6 +50,7 @@ final class LanguageServiceTest extends FunctionalTestCase
             'iso' => 'bs',
             'hrefLang' => 'bs',
             'direction' => '',
+            'deeplTargetLanguage' => '',
         ],
         'BS' => [
             'id' => 4,
@@ -55,6 +59,7 @@ final class LanguageServiceTest extends FunctionalTestCase
             'iso' => 'bs',
             'hrefLang' => 'bs',
             'direction' => '',
+            'deeplTargetLanguage' => '',
         ],
     ];
 

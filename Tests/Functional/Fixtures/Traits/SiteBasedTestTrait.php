@@ -130,6 +130,7 @@ trait SiteBasedTestTrait
             'base' => $base,
             'locale' => $preset['locale'],
             'flag' => $preset['flag'] ?? $preset['iso'] ?? '',
+            'deeplTargetLanguage' => $preset['deeplTargetLanguage'] ?: '',
             'fallbackType' => $fallbackType ?? (empty($fallbackIdentifiers) ? 'strict' : 'fallback'),
         ];
         if ((new Typo3Version())->getMajorVersion() < 12) {
