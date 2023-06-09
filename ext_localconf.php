@@ -36,18 +36,21 @@ defined('TYPO3') or die();
         'className' => \WebVision\WvDeepltranslate\Override\LocalizationController::class,
     ];
 
-    //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class] = [
-        'className' => \WebVision\WvDeepltranslate\Override\DatabaseRecordList::class,
-    ];
-
     if ($typo3version->getMajorVersion() >= 12) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Backend\\Controller\\RecordListController'] = [
-            'className' => 'WebVision\\WvDeepltranslate\\Override\\Core12\\DeeplRecordListController',
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\RecordListController::class] = [
+            'className' => \WebVision\WvDeepltranslate\Override\Core12\DeeplRecordListController::class,
+        ];
+        //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\RecordList\DatabaseRecordList::class] = [
+            'className' => \WebVision\WvDeepltranslate\Override\Core12\DatabaseRecordList::class,
         ];
     } else {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Recordlist\\Controller\\RecordListController'] = [
-            'className' => 'WebVision\\WvDeepltranslate\\Override\\Core11\\DeeplRecordListController',
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\Controller\RecordListController::class] = [
+            'className' => \WebVision\WvDeepltranslate\Override\Core11\DeeplRecordListController::class,
+        ];
+        //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class] = [
+            'className' => \WebVision\WvDeepltranslate\Override\Core11\DatabaseRecordList::class,
         ];
     }
 

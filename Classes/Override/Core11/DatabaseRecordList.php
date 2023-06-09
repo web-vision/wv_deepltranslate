@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Override;
+namespace WebVision\WvDeepltranslate\Override\Core11;
 
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
