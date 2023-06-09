@@ -53,7 +53,7 @@ final class DeeplRecordListController extends RecordListController
             . '</select>'
             . '</div>'
             . '</div>',
-            $originalOutput
+        $originalOutput
         );
     }
 
