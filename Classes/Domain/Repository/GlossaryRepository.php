@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
-use DateTimeImmutable;
+use DeepL\DeepLException;
+use DeepL\GlossaryInfo;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -29,8 +31,11 @@ final class GlossaryRepository
      *     entries: array<int, array{source: string, target: string}>
      * }>
      *
+     * @throws DBALException
      * @throws Exception
      * @throws SiteNotFoundException
+     * @throws DeepLException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlossaryInformationForSync(int $pageId): array
     {
@@ -122,57 +127,32 @@ final class GlossaryRepository
     /**
      * @return array<string, mixed>|null
      * @throws Exception
-     * @throws \Doctrine\DBAL\Exception
      */
     public function findByGlossaryId(string $glossaryId): ?array
     {
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable('tx_wvdeepltranslate_glossary');
 
-        // @todo Consider to add limit = 1 here, as we only want to retrieve the first result anyway. Additionally,
-        //       better convert to pure QueryBuilder usage.
         $result = $db->select(
             ['*'],
             'tx_wvdeepltranslate_glossary',
             [
                 'glossary_id' => $glossaryId,
-            ]
+            ],
+            [],
+            [],
+            1
         );
-
-        // @todo rowCount on SELECT queries are not reliable and documented as such in the TYPO3 documentation. Beside
-        //       this, it does not really make sense to check it because it would be handled by the return anyway.
-        if ($result->rowCount() === 0) {
-            return null;
-        }
 
         return $result->fetchAssociative() ?: null;
     }
 
-    /**
-     * @param array{
-     *     glossary_id?: string,
-     *     name?: string,
-     *     ready?: bool,
-     *     source_lang?: string,
-     *     target_lang?: string,
-     *     creation_time?: string,
-     *     entry_count?: int
-     * } $information
-     */
-    public function updateLocalGlossary(array $information, int $uid): void
+    public function updateLocalGlossary(GlossaryInfo $information, int $uid): void
     {
-        $glossarySyncTimestamp = 0;
-        if (isset($information['creation_time'])) {
-            $glossarySyncTimestamp = DateTimeImmutable::createFromFormat(
-                'Y-m-d\TH:i:s.uT',
-                $information['creation_time']
-            )->getTimestamp();
-        }
-
         $insertParams = [
-            'glossary_id' => $information['glossary_id'] ?? '',
-            'glossary_ready' => $information['ready'] ? 1 : 0,
-            'glossary_lastsync' => $glossarySyncTimestamp,
+            'glossary_id' => $information->glossaryId,
+            'glossary_ready' => $information->ready ? 1 : 0,
+            'glossary_lastsync' => $information->creationTime->getTimestamp(),
         ];
 
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -189,7 +169,6 @@ final class GlossaryRepository
 
     /**
      * @throws Exception
-     * @throws \Doctrine\DBAL\Exception
      */
     public function findAllGlossaries(): array
     {
@@ -262,6 +241,7 @@ final class GlossaryRepository
      * }
      * @throws Exception
      * @throws SiteNotFoundException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlossaryBySourceAndTargetForSync(
         string $sourceLanguage,
@@ -327,6 +307,7 @@ final class GlossaryRepository
      * @return array<int|string, array{uid: int, glossary_id: string}>
      * @throws Exception
      * @throws \Doctrine\DBAL\Exception
+     * @throws DBALException
      */
     public function getGlossariesDeeplConnected(): array
     {
@@ -351,6 +332,7 @@ final class GlossaryRepository
      * @return array<int, array{uid: int, term: string}>|array
      * @throws Exception
      * @throws \Doctrine\DBAL\Exception
+     * @throws DBALException
      */
     private function getOriginalEntries(int $pageId): array
     {
@@ -380,6 +362,7 @@ final class GlossaryRepository
      * @return array<int, array{uid: int, term: string, l10n_parent: int}>
      * @throws Exception
      * @throws \Doctrine\DBAL\Exception
+     * @throws DBALException
      */
     private function getLocalizedEntries(int $pageId, int $languageId): array
     {

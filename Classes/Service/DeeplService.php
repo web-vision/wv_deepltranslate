@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Service;
 
 use DeepL\DeepLException;
+use DeepL\Language;
+use DeepL\TextResult;
 use Doctrine\DBAL\Driver\Exception;
-use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -29,12 +30,6 @@ final class DeeplService
         'source' => [],
         'target' => [],
     ];
-
-    /**
-     * Formality supported languages
-     * @var string[]
-     */
-    public array $formalitySupportedLanguages = [];
 
     protected GlossaryRepository $glossaryRepository;
 
@@ -61,7 +56,7 @@ final class DeeplService
     /**
      * Deepl Api Call for retrieving translation.
      *
-     * @return array<int|string, mixed>
+     * @return TextResult|TextResult[]
      * @throws Exception
      * @throws SiteNotFoundException
      * @throws \Doctrine\DBAL\Exception
@@ -70,7 +65,7 @@ final class DeeplService
         string $content,
         string $targetLanguage,
         string $sourceLanguage
-    ): array {
+    ) {
         // If the source language is set to Autodetect, no glossary can be detected.
         if ($sourceLanguage === 'auto') {
             $sourceLanguage = '';
@@ -90,7 +85,7 @@ final class DeeplService
                 $glossary['glossary_id'] = '';
             }
             $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
-        } catch (ClientException $e) {
+        } catch (DeepLException $e) {
             if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
                 $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO;
             } else {
@@ -109,7 +104,7 @@ final class DeeplService
             return [];
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return $response;
     }
 
     private function loadSupportedLanguages(): void
@@ -120,13 +115,7 @@ final class DeeplService
 
             $this->cache->set($cacheIdentifier, $supportedTargetLanguages, [], 86400);
         }
-
-        foreach ($supportedTargetLanguages as $supportedLanguage) {
-            $this->apiSupportedLanguages['target'][] = $supportedLanguage['language'];
-            if ($supportedLanguage['supports_formality'] === true) {
-                $this->formalitySupportedLanguages[] = $supportedLanguage['language'];
-            }
-        }
+        $this->apiSupportedLanguages['target'] = $supportedTargetLanguages;
 
         $cacheIdentifier = 'wv-deepl-supported-languages-source';
 
@@ -135,12 +124,12 @@ final class DeeplService
 
             $this->cache->set($cacheIdentifier, $supportedSourceLanguages, [], 86400);
         }
-
-        foreach ($supportedSourceLanguages as $supportedLanguage) {
-            $this->apiSupportedLanguages['source'][] = $supportedLanguage['language'];
-        }
+        $this->apiSupportedLanguages['source'] = $supportedSourceLanguages;
     }
 
+    /**
+     * @return Language[]
+     */
     private function loadSupportedLanguagesFromAPI(string $type = 'target'): array
     {
         try {
@@ -150,7 +139,6 @@ final class DeeplService
             return [];
         }
 
-        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
-        return json_decode($response->getBody()->getContents(), true);
+        return $response;
     }
 }

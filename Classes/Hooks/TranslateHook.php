@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
+use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -122,6 +124,9 @@ class TranslateHook
      *
      * @param array{uid: int, language_isocode: string} $targetLanguageRecord
      * @param array{uid: int, language_isocode: string} $sourceLanguageRecord
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @throws SiteNotFoundException
      */
     public function translateContent(
         string $content,
@@ -137,14 +142,16 @@ class TranslateHook
                 $sourceLanguageRecord['language_isocode']
             );
 
-            if (!empty($response) && isset($response['translations'])) {
-                foreach ($response['translations'] as $translation) {
-                    if ($translation['text'] != '') {
-                        $content = htmlspecialchars_decode($translation['text'], ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
-                        break;
-                    }
+            if (is_array($response)) {
+                $content = '';
+                foreach ($response as $result) {
+                    $content .= $result->text;
                 }
+            } else {
+                $content = $response->text;
             }
+
+            $content = htmlspecialchars_decode($content, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
         }
 
         return $content;

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
+use DateTime;
+use DeepL\DeepLException;
+use DeepL\GlossaryEntries;
+use DeepL\GlossaryInfo;
+use DeepL\GlossaryLanguagePair;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\ClientException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -16,7 +19,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Exception\ClientNotValidUrlException;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 
 final class DeeplGlossaryService
@@ -40,56 +42,39 @@ final class DeeplGlossaryService
     /**
      * Calls the glossary-Endpoint and return Json-response as an array
      *
-     * @return array
+     * @return GlossaryLanguagePair[]
+     * @throws DeepLException
      */
     public function listLanguagePairs(): array
     {
-        $response =  $this->client->getGlossaryLanguagePairs();
-
-        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
-        return json_decode($response->getBody()->getContents(), true);
+        return $this->client->getGlossaryLanguagePairs();
     }
 
     /**
      * Calls the glossary-Endpoint and return Json-response as an array
      *
-     * @return array
+     * @return GlossaryInfo[]
+     * @throws DeepLException
      */
     public function listGlossaries(): array
     {
-        $response = $this->client->getAllGlossaries();
-
-        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
-        return json_decode($response->getBody()->getContents(), true);
+        return $this->client->getAllGlossaries();
     }
 
     /**
      * Creates a glossary, entries must be formatted as [sourceText => entryText] e.g: ['Hallo' => 'Hello']
      *
-     * @param string $name
      * @param array<int, array{source: string, target: string}> $entries
-     * @param string $sourceLang
-     * @param string $targetLang
-     *
-     * @return array{
-     *     glossary_id: string,
-     *     name: string,
-     *     ready: bool,
-     *     source_lang: string,
-     *     target_lang: string,
-     *     creation_time: string,
-     *     entry_count: int
-     * }
      *
      * @throws GlossaryEntriesNotExistException
-     * @throws ClientNotValidUrlException
+     * @throws DeepLException
      */
     public function createGlossary(
         string $name,
         array $entries,
         string $sourceLang = 'de',
         string $targetLang = 'en'
-    ): array {
+    ): GlossaryInfo {
         if (empty($entries)) {
             throw new GlossaryEntriesNotExistException(
                 'Glossary Entries are required',
@@ -97,10 +82,7 @@ final class DeeplGlossaryService
             );
         }
 
-        $response = $this->client->createGlossary($name, $sourceLang, $targetLang, $entries);
-
-        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
-        return json_decode($response->getBody()->getContents(), true);
+        return $this->client->createGlossary($name, $sourceLang, $targetLang, $entries);
     }
 
     /**
@@ -108,13 +90,13 @@ final class DeeplGlossaryService
      *
      * @param string $glossaryId
      *
-     * @return array|null
+     * @throws DeepLException
      */
-    public function deleteGlossary(string $glossaryId): ?array
+    public function deleteGlossary(string $glossaryId): void
     {
         try {
             $this->client->deleteGlossary($glossaryId);
-        } catch (BadResponseException $e) {
+        } catch (DeepLException $e) {
             if (Environment::isCli()) {
                 throw $e;
             }
@@ -134,51 +116,31 @@ final class DeeplGlossaryService
             $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
             $messageQueue->addMessage($message);
         }
-
-        return null;
     }
 
     /**
      * Gets information about a glossary
      *
-     * @param string $glossaryId
-     * @return array|null
+     * @throws DeepLException
      */
-    public function glossaryInformation(string $glossaryId): ?array
+    public function glossaryInformation(string $glossaryId): GlossaryInfo
     {
-        $response = $this->client->getGlossary($glossaryId);
-
-        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
-        return json_decode($response->getBody()->getContents(), true);
+        return $this->client->getGlossary($glossaryId);
     }
 
     /**
-     * Fetch glossary entries and format them as associative array [source => target]
+     * Fetch glossary entries and format them as an associative array [source => target]
      *
-     * @param string $glossaryId
-     * @return array
+     * @throws DeepLException
      */
-    public function glossaryEntries(string $glossaryId): array
+    public function glossaryEntries(string $glossaryId): GlossaryEntries
     {
-        $response = $this->client->getGlossaryEntries($glossaryId);
-
-        // @todo Use flag `JSON_THROW_ON_ERROR` and deal with decoding errors directly.
-        $jsons = json_decode($response->getBody()->getContents(), true);
-
-        $entries = [];
-        if (!empty($response)) {
-            $allEntries = explode("\n", $jsons);
-            foreach ($allEntries as $entry) {
-                $sourceAndTarget = preg_split('/\s+/', rtrim($entry));
-                if (isset($sourceAndTarget[0], $sourceAndTarget[1])) {
-                    $entries[$sourceAndTarget[0]] = $sourceAndTarget[1];
-                }
-            }
-        }
-
-        return $entries;
+        return $this->client->getGlossaryEntries($glossaryId);
     }
 
+    /**
+     * @throws DeepLException
+     */
     public function getPossibleGlossaryLanguageConfig(): array
     {
         $cacheIdentifier = 'wv-deepl-glossary-pairs';
@@ -199,10 +161,11 @@ final class DeeplGlossaryService
     }
 
     /**
+     * @throws DeepLException
+     * @throws Exception
      * @throws SiteNotFoundException
      * @throws DBALException
-     * @throws Exception
-     * @throws ClientNotValidUrlException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function syncGlossaries(int $uid): void
     {
@@ -213,7 +176,7 @@ final class DeeplGlossaryService
             if ($glossaryInformation['glossary_id'] !== '') {
                 try {
                     $this->deleteGlossary($glossaryInformation['glossary_id']);
-                } catch (ClientException $e) {
+                } catch (DeepLException $e) {
                 }
             }
 
@@ -224,8 +187,16 @@ final class DeeplGlossaryService
                     $glossaryInformation['source_lang'],
                     $glossaryInformation['target_lang']
                 );
-            } catch (GlossaryEntriesNotExistException $exception) {
-                $glossary = [];
+            } catch (DeepLException|GlossaryEntriesNotExistException $exception) {
+                $glossary = new GlossaryInfo(
+                    '',
+                    '',
+                    false,
+                    '',
+                    '',
+                    new DateTime(),
+                    0
+                );
             }
 
             $this->glossaryRepository->updateLocalGlossary(
