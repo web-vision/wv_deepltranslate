@@ -64,6 +64,7 @@
 	},
 	"require": {
 		"php": "^7.4 || ^8.0",
+		"deeplcom/deepl-php": "^1.4",
 		"ext-curl": "*",
 		"ext-json": "*",
 		"ext-pdo": "*",
@@ -74,7 +75,7 @@
 		"typo3/cms-install": "^11.5 || ^12.4"
 	},
 	"require-dev": {
-		"b13/container": "^2.2.2",
+		"b13/container": "^2.2",
 		"friendsofphp/php-cs-fixer": "^3.14.1",
 		"helhum/typo3-console": "^7.1.6 || ^8.0.2",
 		"helmich/phpunit-json-assert": "^3.4.3 || ^3.5.1",
