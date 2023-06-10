@@ -102,7 +102,7 @@ final class ClientTest extends FunctionalTestCase
     public function checkResponseFromSupportedTargetLanguage(): void
     {
         $client = new Client();
-        $response = $client->getSupportedTargetLanguage();
+        $response = $client->getSupportedLanguageByType();
 
         static::assertSame(200, $response->getStatusCode());
         $content = $response->getBody()->getContents();
@@ -115,7 +115,7 @@ final class ClientTest extends FunctionalTestCase
     public function checkJsonFromSupportedTargetLanguageIsValid(): void
     {
         $client = new Client();
-        $response = $client->getSupportedTargetLanguage();
+        $response = $client->getSupportedLanguageByType();
 
         $content = $response->getBody()->getContents();
         $jsonObject = json_decode($content);

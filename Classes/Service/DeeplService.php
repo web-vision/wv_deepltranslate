@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
+use DeepL\DeepLException;
 use Doctrine\DBAL\Driver\Exception;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
@@ -143,8 +144,8 @@ final class DeeplService
     private function loadSupportedLanguagesFromAPI(string $type = 'target'): array
     {
         try {
-            $response = $this->client->getSupportedTargetLanguage($type);
-        } catch (ClientException $e) {
+            $response = $this->client->getSupportedLanguageByType($type);
+        } catch (DeepLException $e) {
             $this->logger->error($e->getMessage());
             return [];
         }

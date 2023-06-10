@@ -4,162 +4,133 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate;
 
-use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Http\RequestFactory;
+use DeepL\DeepLException;
+use DeepL\GlossaryEntries;
+use DeepL\GlossaryInfo;
+use DeepL\GlossaryLanguagePair;
+use DeepL\Language;
+use DeepL\TextResult;
+use DeepL\TranslateTextOptions;
+use DeepL\Translator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Exception\ClientNotValidUrlException;
 
 final class Client
 {
-    private const API_VERSION = 'v2';
-
-    public const GLOSSARY_ENTRY_FORMAT = "%s\t%s\n";
-
     /**
      * @var Configuration
      */
     private $configuration;
 
-    /**
-     * @var RequestFactory
-     */
-    private $requestFactory;
+    private Translator $translator;
 
     public function __construct()
     {
         $this->configuration = GeneralUtility::makeInstance(Configuration::class);
-        $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
+        $this->translator = GeneralUtility::makeInstance(
+            Translator::class,
+            $this->configuration->getApiKey()
+        );
     }
 
-    public function translate(string $content, string $sourceLang, string $targetLang, string $glossary = ''): ResponseInterface
-    {
-        $baseUrl = $this->buildBaseUrl('translate');
-
-        $postFields = [
-            'text' => $content,
-            'source_lang' => $sourceLang,
-            'target_lang' => $targetLang,
-            'tag_handling' => 'xml',
+    /**
+     * @throws DeepLException
+     * @return TextResult|TextResult[]
+     */
+    public function translate(
+        string $content,
+        string $sourceLang,
+        string $targetLang,
+        string $glossary = ''
+    ) {
+        $options = [
+            TranslateTextOptions::FORMALITY => $this->configuration->getFormality(),
+            TranslateTextOptions::TAG_HANDLING => 'xml',
         ];
 
         if (!empty($glossary)) {
-            $postFields['glossary_id'] = $glossary;
+            $options[TranslateTextOptions::GLOSSARY] = $glossary;
         }
 
-        $postFields['formality'] = $this->configuration->getFormality();
-
-        return $this->requestFactory->request($baseUrl, 'POST', $this->mergeRequiredRequestOptions([
-            'form_params' => $postFields,
-        ]));
+        return $this->translator->translateText(
+            $content,
+            $sourceLang,
+            $targetLang,
+            $options
+        );
     }
 
-    public function getSupportedTargetLanguage(string $type = 'target'): ResponseInterface
+    /**
+     * @throws DeepLException
+     * @return Language[]
+     */
+    public function getSupportedLanguageByType(string $type = 'target'): array
     {
-        $baseUrl = $this->buildBaseUrl('languages?type=' . $type);
-
-        return $this->requestFactory->request($baseUrl, 'GET', $this->mergeRequiredRequestOptions());
+        return ($type === 'target')
+            ? $this->translator->getTargetLanguages()
+            : $this->translator->getSourceLanguages();
     }
 
-    public function getGlossaryLanguagePairs(): ResponseInterface
+    /**
+     * @throws DeepLException
+     * @return GlossaryLanguagePair[]
+     */
+    public function getGlossaryLanguagePairs(): array
     {
-        $baseUrl = $this->buildBaseUrl('glossary-language-pairs');
-
-        return $this->requestFactory->request($baseUrl, 'GET', $this->mergeRequiredRequestOptions());
+        return $this->translator->getGlossaryLanguages();
     }
 
-    public function getAllGlossaries(): ResponseInterface
+    /**
+     * @throws DeepLException
+     * @return GlossaryInfo[]
+     */
+    public function getAllGlossaries(): array
     {
-        $baseUrl = $this->buildBaseUrl('glossaries');
-
-        return $this->requestFactory->request($baseUrl, 'GET', $this->mergeRequiredRequestOptions());
+        return $this->translator->listGlossaries();
     }
 
-    public function getGlossary(string $glossaryId): ResponseInterface
+    /**
+     * @throws DeepLException
+     */
+    public function getGlossary(string $glossaryId): GlossaryInfo
     {
-        $baseUrl = $this->buildBaseUrl(sprintf('glossaries/%s', $glossaryId));
-
-        return $this->requestFactory->request($baseUrl, 'GET', $this->mergeRequiredRequestOptions());
+        return $this->translator->getGlossary($glossaryId);
     }
 
     /**
      * @param array<int, array{source: string, target: string}> $entries
-     * @throws ClientNotValidUrlException
+     * @throws DeepLException
      */
     public function createGlossary(
         string $glossaryName,
         string $sourceLang,
         string $targetLang,
-        array $entries,
-        string $entriesFormat = 'tsv'
-    ): ResponseInterface {
-        $baseUrl = $this->buildBaseUrl('glossaries');
-
-        $postFields = [
-            'name' => $glossaryName,
-            'source_lang' => $sourceLang,
-            'target_lang' => $targetLang,
-            'entries_format' => $entriesFormat,
-        ];
-
-        $formatEntries = '';
+        array $entries
+    ): GlossaryInfo {
+        $prepareEntriesForGlossary = [];
         foreach ($entries as $entry) {
-            $source = $entry['source'];
-            $target = $entry['target'];
-            $formatEntries .= sprintf(self::GLOSSARY_ENTRY_FORMAT, $source, $target);
+            $prepareEntriesForGlossary[$entry['source']] = $entry['target'];
         }
-
-        $postFields['entries'] = $formatEntries;
-
-        return $this->requestFactory->request($baseUrl, 'POST', $this->mergeRequiredRequestOptions([
-            'form_params' => $postFields,
-        ]));
-    }
-
-    public function deleteGlossary(string $glossaryId): ResponseInterface
-    {
-        $baseUrl = $this->buildBaseUrl(sprintf('glossaries/%s', $glossaryId));
-
-        return $this->requestFactory->request($baseUrl, 'DELETE', $this->mergeRequiredRequestOptions());
-    }
-
-    public function getGlossaryEntries(string $glossaryId): ResponseInterface
-    {
-        $baseUrl = $this->buildBaseUrl(sprintf('glossaries/%s/entries', $glossaryId));
-
-        return $this->requestFactory->request($baseUrl, 'GET', $this->mergeRequiredRequestOptions());
-    }
-
-    private function buildBaseUrl(string $path): string
-    {
-        $url = sprintf(
-            '%s://%s/%s/%s',
-            $this->configuration->getApiScheme(),
-            $this->configuration->getApiUrl(),
-            self::API_VERSION,
-            $path
+        return $this->translator->createGlossary(
+            $glossaryName,
+            $sourceLang,
+            $targetLang,
+            GlossaryEntries::fromEntries($prepareEntriesForGlossary)
         );
-
-        if (!GeneralUtility::isValidUrl($url)) {
-            throw new ClientNotValidUrlException(sprintf('BaseURL "%s" is not valid', $url), 1676125513);
-        }
-
-        return $url;
     }
 
     /**
-     * @param array<string, mixed> $options
-     * @return array<string, mixed>
+     * @throws DeepLException
      */
-    private function mergeRequiredRequestOptions(array $options = []): array
+    public function deleteGlossary(string $glossaryId): void
     {
-        return array_merge_recursive(
-            [
-                'headers' => [
-                    'Authorization' => sprintf('DeepL-Auth-Key %s', $this->configuration->getApiKey()),
-                    'User-Agent' => 'TYPO3.WvDeepltranslate/1.0',
-                ],
-            ],
-            $options
-        );
+        $this->translator->deleteGlossary($glossaryId);
+    }
+
+    /**
+     * @throws DeepLException
+     */
+    public function getGlossaryEntries(string $glossaryId): GlossaryEntries
+    {
+        return $this->translator->getGlossaryEntries($glossaryId);
     }
 }
