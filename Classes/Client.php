@@ -23,12 +23,16 @@ final class Client
 
     private Translator $translator;
 
-    public function __construct()
+    /**
+     * @param array<string, mixed> $options
+     */
+    public function __construct(string $apiKey = '', array $options = [])
     {
         $this->configuration = GeneralUtility::makeInstance(Configuration::class);
         $this->translator = GeneralUtility::makeInstance(
             Translator::class,
-            $this->configuration->getApiKey()
+            $apiKey ?: $this->configuration->getApiKey(),
+            $options
         );
     }
 
