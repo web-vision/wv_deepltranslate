@@ -179,10 +179,16 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         // s. EXT:containers Xclass B13\Container\Xclasses\LocalizationController
         if (
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')
-            && class_exists(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class)
         ) {
-            $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class);
-            $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
+            if (class_exists(\B13\Container\Service\RecordLocalizeSummaryModifier::class)) {
+                // since b13/container 2.1.0
+                $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Service\RecordLocalizeSummaryModifier::class);
+                $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
+            } elseif (class_exists(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class)) {
+                // before b13/container 2.1.0
+                $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class);
+                $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
+            }
         }
 
         return (new JsonResponse())->setPayload($payloadBody);
