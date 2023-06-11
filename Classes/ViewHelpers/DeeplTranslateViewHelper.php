@@ -14,7 +14,7 @@ class DeeplTranslateViewHelper extends AbstractViewHelper
 {
     private const GLOSSARY_MODE = 'glossary';
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument(
             'context',
@@ -25,6 +25,7 @@ class DeeplTranslateViewHelper extends AbstractViewHelper
     }
 
     /**
+     * @return array<int|string, mixed>
      * @throws RouteNotFoundException
      */
     public function render(): array

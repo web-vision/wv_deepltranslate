@@ -24,14 +24,10 @@ final class Configuration
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
 
-        if (isset($extensionConfiguration['apiKey'])) {
-            $this->apiKey = (string)$extensionConfiguration['apiKey'] ?? '';
-        }
+        $this->apiKey = (string)($extensionConfiguration['apiKey'] ?? '');
 
         // In einer zukünftigen version sollte "Formality" in die SiteConfig verschoben werden
-        if (isset($extensionConfiguration['deeplFormality'])) {
-            $this->formality = (string)$extensionConfiguration['deeplFormality'] ?? 'default';
-        }
+        $this->formality = (string)($extensionConfiguration['deeplFormality'] ?? 'default');
     }
 
     public function getApiKey(): string

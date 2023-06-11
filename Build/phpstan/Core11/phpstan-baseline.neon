@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
-			count: 3
-			path: ../../../Classes/Configuration.php
-
-		-
 			message: "#^Access to constant OK on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
 			count: 1
 			path: ../../../Classes/Controller/GlossarySyncController.php
@@ -19,16 +14,6 @@ parameters:
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntryByUid\\(\\) should return array\\<non\\-empty\\-string, mixed\\> but returns array\\<string, mixed\\>\\.$#"
 			count: 1
 			path: ../../../Classes/Domain/Repository/GlossaryEntryRepository.php
-
-		-
-			message: "#^Cannot call method getTimestamp\\(\\) on DateTimeImmutable\\|false\\.$#"
-			count: 1
-			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:findAllGlossaries\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getGlossariesInRootByCurrentPage\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -56,11 +41,6 @@ parameters:
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
-			message: "#^Offset 'ready' does not exist on array\\{glossary_id\\?\\: string, name\\?\\: string, ready\\?\\: bool, source_lang\\?\\: string, target_lang\\?\\: string, creation_time\\?\\: string, entry_count\\?\\: int\\}\\.$#"
-			count: 1
-			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
 			message: "#^Parameter \\#3 \\$page of method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getGlossaryBySourceAndTargetForSync\\(\\) expects array\\{uid\\: int, title\\: string\\}, array\\|null given\\.$#"
 			count: 1
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
@@ -69,11 +49,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$pageUid of method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getGlossary\\(\\) expects int, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
 			count: 1
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
-			message: "#^Argument of an invalid type string supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Form\\\\Item\\\\SiteConfigSupportedLanguageItemsProcFunc\\:\\:getSupportedLanguageForField\\(\\) has no return type specified\\.$#"
@@ -151,62 +126,12 @@ parameters:
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 
 		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:deleteGlossary\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:getPossibleGlossaryLanguageConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 
 		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:glossaryEntries\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:glossaryInformation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:listGlossaries\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:listLanguagePairs\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
-			message: "#^Variable \\$response in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
 			message: "#^Access to constant INFO on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplService.php
-
-		-
-			message: "#^Cannot assign new offset to string\\.$#"
-			count: 2
-			path: ../../../Classes/Service/DeeplService.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplService\\:\\:loadSupportedLanguagesFromAPI\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplService.php
-
-		-
-			message: "#^Offset 'glossary_id' on array\\{glossary_id\\: ''\\}\\|array\\{uid\\: int, glossary_name\\: string, glossary_id\\: string, glossary_lastsync\\: int, glossary_ready\\: int\\} in isset\\(\\) always exists and is not nullable\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplService.php
-
-		-
-			message: "#^Property WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplService\\:\\:\\$apiSupportedLanguages \\(array\\<string\\>\\) does not accept default value of type array\\<string, array\\>\\.$#"
 			count: 1
 			path: ../../../Classes/Service/DeeplService.php
 
@@ -218,11 +143,6 @@ parameters:
 		-
 			message: "#^Offset 'pid' does not exist on array\\|null\\.$#"
 			count: 1
-			path: ../../../Classes/Service/LanguageService.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, string given\\.$#"
-			count: 2
 			path: ../../../Classes/Service/LanguageService.php
 
 		-
@@ -311,39 +231,9 @@ parameters:
 			path: ../../../Classes/Utility/HtmlUtility.php
 
 		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\ViewHelpers\\\\DeeplTranslateViewHelper\\:\\:initializeArguments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: ../../../Classes/ViewHelpers/DeeplTranslateViewHelper.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\ViewHelpers\\\\DeeplTranslateViewHelper\\:\\:render\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/ViewHelpers/DeeplTranslateViewHelper.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\ClientTest\\:\\:__construct\\(\\) has parameter \\$arguments with no type specified\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/ClientTest.php
-
-		-
-			message: "#^Cannot access offset 'host' on array\\{scheme\\?\\: string, host\\?\\: string, port\\?\\: int\\<0, 65535\\>, user\\?\\: string, pass\\?\\: string, path\\?\\: string, query\\?\\: string, fragment\\?\\: string\\}\\|false\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/ConfigurationTest.php
-
-		-
-			message: "#^Cannot access offset 'port' on array\\{scheme\\?\\: string, host\\?\\: string, port\\?\\: int\\<0, 65535\\>, user\\?\\: string, pass\\?\\: string, path\\?\\: string, query\\?\\: string, fragment\\?\\: string\\}\\|false\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/ConfigurationTest.php
-
-		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\ConfigurationTest\\:\\:__construct\\(\\) has parameter \\$arguments with no type specified\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/ConfigurationTest.php
-
-		-
-			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
-			count: 5
-			path: ../../../Tests/Functional/Fixtures/ExtensionConfig.php
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\Fixtures\\\\Frontend\\\\PhpError\\:\\:__construct\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"

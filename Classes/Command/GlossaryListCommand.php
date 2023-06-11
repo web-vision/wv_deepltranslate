@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Command;
 
+use DeepL\DeepLException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,7 +50,7 @@ class GlossaryListCommand extends Command
     {
         $glossaries = $this->deeplGlossaryService->listGlossaries();
 
-        if (empty($glossaries['glossaries'])) {
+        if (empty($glossaries)) {
             $output->writeln([
                 '============',
                 'No Glossaries found.',
@@ -66,10 +67,10 @@ class GlossaryListCommand extends Command
             '============',
         ]);
 
-        $headers = array_keys($glossaries['glossaries'][0]);
+        $headers = array_keys(get_object_vars($glossaries[0]));
         $rows = [];
 
-        foreach ($glossaries['glossaries'] as $eachGlossary) {
+        foreach ($glossaries as $eachGlossary) {
             $rows[] = $eachGlossary;
         }
 
@@ -82,13 +83,19 @@ class GlossaryListCommand extends Command
 
     private function listAllGloassaryEntriesById(OutputInterface $output, string $id): void
     {
-        $entries = $this->deeplGlossaryService->glossaryEntries($id);
-        $information = $this->deeplGlossaryService->glossaryInformation($id);
-
-        if (null === $information) {
-            $output->writeln('No glossary found');
+        try {
+            $information = $this->deeplGlossaryService->glossaryInformation($id);
+            $entries = $this->deeplGlossaryService->glossaryEntries($id);
+        } catch (DeepLException $exception) {
+            $output->writeln(
+                [
+                    'Glossary not found.',
+                    $exception->getMessage()
+                ]
+            );
             return;
         }
+
         $output->writeln([
             '============',
             'List of Glossary entries',
@@ -96,11 +103,11 @@ class GlossaryListCommand extends Command
         ]);
 
         $headers = [
-            'source_lang - ' . $information['source_lang'],
-            'target_lang - ' . $information['target_lang'],
+            'source_lang - ' . $information->sourceLang,
+            'target_lang - ' . $information->targetLang,
         ];
 
-        $rows = array_map(null, array_keys($entries), $entries);
+        $rows = array_map(null, array_keys($entries->getEntries()), $entries->getEntries());
 
         $table = new Table($output);
         $table

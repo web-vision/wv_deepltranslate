@@ -151,8 +151,8 @@ final class DeeplGlossaryService
         $possiblePairs = $this->listLanguagePairs();
 
         $pairMappingArray = [];
-        foreach ($possiblePairs['supported_languages'] as $possiblePair) {
-            $pairMappingArray[$possiblePair['source_lang']][] = $possiblePair['target_lang'];
+        foreach ($possiblePairs as $possiblePair) {
+            $pairMappingArray[$possiblePair->sourceLang][] = $possiblePair->targetLang;
         }
 
         $this->cache->set($cacheIdentifier, $pairMappingArray);

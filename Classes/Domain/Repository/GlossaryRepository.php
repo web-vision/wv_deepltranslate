@@ -168,6 +168,7 @@ final class GlossaryRepository
     }
 
     /**
+     * @return array<int|string, mixed>
      * @throws Exception
      */
     public function findAllGlossaries(): array

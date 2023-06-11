@@ -24,7 +24,7 @@ final class DeeplService
      * Default supported languages
      *
      * @see https://www.deepl.com/de/docs-api/translating-text/#request
-     * @var string[]
+     * @var array{source: Language[], target: Language[]}
      */
     public array $apiSupportedLanguages =  [
         'source' => [],
@@ -80,10 +80,6 @@ final class DeeplService
         }
 
         try {
-            // @todo: check, if is needed, as GlossaryRepository::getGlossaryBySourceAndTarget returns default entry
-            if (!isset($glossary['glossary_id'])) {
-                $glossary['glossary_id'] = '';
-            }
             $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
         } catch (DeepLException $e) {
             if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {

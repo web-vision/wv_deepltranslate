@@ -15,21 +15,32 @@ abstract class DeepLTestCase extends FunctionalTestCase
 {
     use PHPMock;
 
+    /**
+     * @var string|false
+     */
     protected $authKey;
-    protected $serverUrl;
-    protected $proxyUrl;
-    protected $isMockServer;
-    protected $isMockProxyServer;
 
-    protected $sessionNoResponse;
-    protected $session429Count;
-    protected $sessionInitCharacterLimit;
-    protected $sessionInitDocumentLimit;
-    protected $sessionInitTeamDocumentLimit;
-    protected $sessionDocFailure;
-    protected $sessionDocQueueTime;
-    protected $sessionDocTranslateTime;
-    protected $sessionExpectProxy;
+    /**
+     * @var string|false
+     */
+    protected $serverUrl;
+
+    /**
+     * @var string|false
+     */
+    protected $proxyUrl;
+    protected bool $isMockServer;
+    protected bool $isMockProxyServer;
+
+    protected ?string $sessionNoResponse;
+    protected ?string $session429Count;
+    protected ?string $sessionInitCharacterLimit;
+    protected ?string $sessionInitDocumentLimit;
+    protected ?string $sessionInitTeamDocumentLimit;
+    protected ?string $sessionDocFailure;
+    protected ?int $sessionDocQueueTime;
+    protected ?int $sessionDocTranslateTime;
+    protected ?bool $sessionExpectProxy;
 
     protected const EXAMPLE_TEXT = [
         'bg' => 'протонен лъч',
@@ -72,7 +83,11 @@ abstract class DeepLTestCase extends FunctionalTestCase
     protected string $EXAMPLE_LARGE_DOCUMENT_INPUT;
     protected string $EXAMPLE_LARGE_DOCUMENT_OUTPUT;
 
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    /**
+     * @param array<int|string, mixed> $data
+     * @throws \Exception
+     */
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         $this->EXAMPLE_LARGE_DOCUMENT_INPUT = str_repeat(DeepLTestCase::EXAMPLE_TEXT['en'] . PHP_EOL, 1000);
         $this->EXAMPLE_LARGE_DOCUMENT_OUTPUT = str_repeat(DeepLTestCase::EXAMPLE_TEXT['de'] . PHP_EOL, 1000);
@@ -97,21 +112,21 @@ abstract class DeepLTestCase extends FunctionalTestCase
         parent::__construct($name, $data, $dataName);
     }
 
-    protected function needsMockServer()
+    protected function needsMockServer(): void
     {
         if (!$this->isMockServer) {
             static::markTestSkipped('Test requires mock server');
         }
     }
 
-    protected function needsMockProxyServer()
+    protected function needsMockProxyServer(): void
     {
         if (!$this->isMockProxyServer) {
             static::markTestSkipped('Test requires mock proxy server');
         }
     }
 
-    protected function needsRealServer()
+    protected function needsRealServer(): void
     {
         if ($this->isMockServer) {
             static::markTestSkipped('Test requires real server');
@@ -123,6 +138,9 @@ abstract class DeepLTestCase extends FunctionalTestCase
         return $this->getName() . '/' . Uuid::uuid4();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function sessionHeaders(): array
     {
         $result = [];
@@ -161,30 +179,21 @@ abstract class DeepLTestCase extends FunctionalTestCase
         return $result;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function makeClient(array $options = []): Client
     {
         $mergedOptions = array_replace(
             [TranslatorOptions::HEADERS => $this->sessionHeaders()],
-            $options ?? []
+            $options
         );
 
         if ($this->serverUrl !== false) {
             $mergedOptions[TranslatorOptions::SERVER_URL] = $this->serverUrl;
         }
 
-        return new Client($this->authKey, $mergedOptions);
-    }
-
-    public function makeTranslatorWithRandomAuthKey(): Translator
-    {
-        $mergedOptions = array_replace(
-            [TranslatorOptions::SERVER_URL => $this->serverUrl,
-                TranslatorOptions::HEADERS => $this->sessionHeaders()],
-            $options ?? []
-        );
-        $authKey = (string)Uuid::uuid4();
-
-        return new Translator($authKey, $mergedOptions);
+        return new Client($this->authKey ?: '', $mergedOptions);
     }
 
     public static function readFile(string $filepath): string
@@ -194,18 +203,27 @@ abstract class DeepLTestCase extends FunctionalTestCase
             return '';
         }
         $fh = fopen($filepath, 'r');
-        $content = fread($fh, filesize($filepath));
-        fclose($fh);
-        return $content;
+        $size = filesize($filepath);
+        $content = '';
+        if ($fh !== false && $size !== false) {
+            $content = fread($fh, $size);
+            fclose($fh);
+        }
+        return $content ?: '';
     }
 
-    public static function writeFile(string $filepath, string $content)
+    public static function writeFile(string $filepath, string $content): void
     {
         $fh = fopen($filepath, 'w');
-        fwrite($fh, $content);
-        fclose($fh);
+        if ($fh !== false) {
+            fwrite($fh, $content);
+            fclose($fh);
+        }
     }
 
+    /**
+     * @return string[]
+     */
     public function tempFiles(): array
     {
         $tempDir = sys_get_temp_dir() . '/deepl-php-test-' . Uuid::uuid4() . '/';
@@ -231,7 +249,10 @@ abstract class DeepLTestCase extends FunctionalTestCase
         static::fail("Expected exception containing '$needle' but nothing was thrown");
     }
 
-    public function assertExceptionClass($class, callable $function): \Exception
+    /**
+     * @param class-string $class
+     */
+    public function assertExceptionClass(string $class, callable $function): \Exception
     {
         try {
             $function();

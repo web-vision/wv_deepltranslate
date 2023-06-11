@@ -29,9 +29,7 @@ final class AjaxController
             'status' => true,
             'message' => '',
         ];
-        if ($this->configuration->getApiKey() == null
-            && $this->configuration->getApiUrl() == null
-        ) {
+        if ($this->configuration->getApiKey() == null) {
             $configurationStatus['status'] = false;
             $configurationStatus['message'] = 'Deepl settings not enabled';
         }

@@ -85,17 +85,13 @@ class GlossaryCleanupCommand extends Command
             return;
         }
 
-        $progress = new ProgressBar($output, count($glossaries['glossaries']));
+        $progress = new ProgressBar($output, count($glossaries));
         $progress->start();
 
         $removedGlossary = [];
 
-        foreach ($glossaries['glossaries'] as $eachGlossary) {
-            if (!isset($eachGlossary['glossary_id'])) {
-                continue;
-            }
-
-            $id = $eachGlossary['glossary_id'];
+        foreach ($glossaries as $glossary) {
+            $id = $glossary->glossaryId;
             $this->deeplGlossaryService->deleteGlossary($id);
             $databaseUpdated = $this->glossaryRepository->removeGlossarySync($id);
             $removedGlossary[$id] = $databaseUpdated;
