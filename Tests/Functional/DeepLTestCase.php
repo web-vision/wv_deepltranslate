@@ -72,7 +72,7 @@ abstract class DeepLTestCase extends FunctionalTestCase
     protected string $EXAMPLE_LARGE_DOCUMENT_INPUT;
     protected string $EXAMPLE_LARGE_DOCUMENT_OUTPUT;
 
-    public function __construct(?string $name = null, array $data = array(), $dataName = '')
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
         $this->EXAMPLE_LARGE_DOCUMENT_INPUT = str_repeat(DeepLTestCase::EXAMPLE_TEXT['en'] . PHP_EOL, 1000);
         $this->EXAMPLE_LARGE_DOCUMENT_OUTPUT = str_repeat(DeepLTestCase::EXAMPLE_TEXT['de'] . PHP_EOL, 1000);
@@ -100,21 +100,21 @@ abstract class DeepLTestCase extends FunctionalTestCase
     protected function needsMockServer()
     {
         if (!$this->isMockServer) {
-            self::markTestSkipped('Test requires mock server');
+            static::markTestSkipped('Test requires mock server');
         }
     }
 
     protected function needsMockProxyServer()
     {
         if (!$this->isMockProxyServer) {
-            self::markTestSkipped('Test requires mock proxy server');
+            static::markTestSkipped('Test requires mock proxy server');
         }
     }
 
     protected function needsRealServer()
     {
         if ($this->isMockServer) {
-            self::markTestSkipped('Test requires real server');
+            static::markTestSkipped('Test requires real server');
         }
     }
 
@@ -125,30 +125,30 @@ abstract class DeepLTestCase extends FunctionalTestCase
 
     private function sessionHeaders(): array
     {
-        $result = array();
+        $result = [];
         if ($this->sessionNoResponse !== null) {
-            $result['mock-server-session-no-response-count'] = strval($this->sessionNoResponse);
+            $result['mock-server-session-no-response-count'] = (string)($this->sessionNoResponse);
         }
         if ($this->session429Count !== null) {
-            $result['mock-server-session-429-count'] = strval($this->session429Count);
+            $result['mock-server-session-429-count'] = (string)($this->session429Count);
         }
         if ($this->sessionInitCharacterLimit !== null) {
-            $result['mock-server-session-init-character-limit'] = strval($this->sessionInitCharacterLimit);
+            $result['mock-server-session-init-character-limit'] = (string)($this->sessionInitCharacterLimit);
         }
         if ($this->sessionInitDocumentLimit !== null) {
-            $result['mock-server-session-init-document-limit'] = strval($this->sessionInitDocumentLimit);
+            $result['mock-server-session-init-document-limit'] = (string)($this->sessionInitDocumentLimit);
         }
         if ($this->sessionInitTeamDocumentLimit !== null) {
-            $result['mock-server-session-init-team-document-limit'] = strval($this->sessionInitTeamDocumentLimit);
+            $result['mock-server-session-init-team-document-limit'] = (string)($this->sessionInitTeamDocumentLimit);
         }
         if ($this->sessionDocFailure !== null) {
-            $result['mock-server-session-doc-failure'] = strval($this->sessionDocFailure);
+            $result['mock-server-session-doc-failure'] = (string)($this->sessionDocFailure);
         }
         if ($this->sessionDocQueueTime !== null) {
-            $result['mock-server-session-doc-queue-time'] = strval($this->sessionDocQueueTime * 1000);
+            $result['mock-server-session-doc-queue-time'] = (string)($this->sessionDocQueueTime * 1000);
         }
         if ($this->sessionDocTranslateTime !== null) {
-            $result['mock-server-session-doc-translate-time'] = strval($this->sessionDocTranslateTime * 1000);
+            $result['mock-server-session-doc-translate-time'] = (string)($this->sessionDocTranslateTime * 1000);
         }
         if ($this->sessionExpectProxy !== null) {
             $result['mock-server-session-expect-proxy'] = $this->sessionExpectProxy ? '1' : '0';
@@ -191,13 +191,12 @@ abstract class DeepLTestCase extends FunctionalTestCase
     {
         $size = filesize($filepath);
         if ($size == 0) {
-            return "";
-        } else {
-            $fh = fopen($filepath, 'r');
-            $content = fread($fh, filesize($filepath));
-            fclose($fh);
-            return $content;
+            return '';
         }
+        $fh = fopen($filepath, 'r');
+        $content = fread($fh, filesize($filepath));
+        fclose($fh);
+        return $content;
     }
 
     public static function writeFile(string $filepath, string $content)
@@ -226,10 +225,10 @@ abstract class DeepLTestCase extends FunctionalTestCase
         try {
             $function();
         } catch (\Exception $exception) {
-            $this->assertStringContainsString($needle, $exception->getMessage());
+            static::assertStringContainsString($needle, $exception->getMessage());
             return $exception;
         }
-        $this->fail("Expected exception containing '$needle' but nothing was thrown");
+        static::fail("Expected exception containing '$needle' but nothing was thrown");
     }
 
     public function assertExceptionClass($class, callable $function): \Exception
@@ -237,10 +236,10 @@ abstract class DeepLTestCase extends FunctionalTestCase
         try {
             $function();
         } catch (\Exception $exception) {
-            $this->assertEquals($class, get_class($exception));
+            static::assertEquals($class, get_class($exception));
             return $exception;
         }
-        $this->fail("Expected exception of class '$class' but nothing was thrown");
+        static::fail("Expected exception of class '$class' but nothing was thrown");
     }
 
     /**

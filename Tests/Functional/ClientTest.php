@@ -11,7 +11,6 @@ use DeepL\GlossaryLanguagePair;
 use DeepL\Language;
 use DeepL\TextResult;
 use Helmich\JsonAssert\JsonAssertions;
-use WebVision\WvDeepltranslate\Client;
 
 /**
  * @covers \WebVision\WvDeepltranslate\Client
@@ -49,8 +48,8 @@ final class ClientTest extends DeepLTestCase
             'DE'
         );
 
-        self::assertInstanceOf(TextResult::class, $response);
-        self::assertSame(self::EXAMPLE_TEXT['de'], $response->text);
+        static::assertInstanceOf(TextResult::class, $response);
+        static::assertSame(self::EXAMPLE_TEXT['de'], $response->text);
     }
 
     /**
@@ -61,8 +60,8 @@ final class ClientTest extends DeepLTestCase
         $client = $this->makeClient();
         $response = $client->getSupportedLanguageByType();
 
-        self::assertIsArray($response);
-        self::assertContainsOnlyInstancesOf(Language::class, $response);
+        static::assertIsArray($response);
+        static::assertContainsOnlyInstancesOf(Language::class, $response);
     }
 
     /**
@@ -73,8 +72,8 @@ final class ClientTest extends DeepLTestCase
         $client = $this->makeClient();
         $response = $client->getGlossaryLanguagePairs();
 
-        self::assertIsArray($response);
-        self::assertContainsOnlyInstancesOf(GlossaryLanguagePair::class, $response);
+        static::assertIsArray($response);
+        static::assertContainsOnlyInstancesOf(GlossaryLanguagePair::class, $response);
     }
 
     /**
@@ -95,10 +94,10 @@ final class ClientTest extends DeepLTestCase
             ],
         );
 
-        self::assertInstanceOf(GlossaryInfo::class, $response);
-        self::assertSame(1, $response->entryCount);
-        self::assertIsString($response->glossaryId);
-        self::assertInstanceOf(\DateTime::class, $response->creationTime);
+        static::assertInstanceOf(GlossaryInfo::class, $response);
+        static::assertSame(1, $response->entryCount);
+        static::assertIsString($response->glossaryId);
+        static::assertInstanceOf(\DateTime::class, $response->creationTime);
     }
 
     /**
@@ -109,8 +108,8 @@ final class ClientTest extends DeepLTestCase
         $client = $this->makeClient();
         $response = $client->getAllGlossaries();
 
-        self::assertIsArray($response);
-        self::assertContainsOnlyInstancesOf(GlossaryInfo::class, $response);
+        static::assertIsArray($response);
+        static::assertContainsOnlyInstancesOf(GlossaryInfo::class, $response);
     }
 
     /**
@@ -133,9 +132,9 @@ final class ClientTest extends DeepLTestCase
 
         $response = $client->getGlossary($glossary->glossaryId);
 
-        self::assertInstanceOf(GlossaryInfo::class, $response);
-        self::assertSame($glossary->glossaryId, $response->glossaryId);
-        self::assertSame(1, $response->entryCount);
+        static::assertInstanceOf(GlossaryInfo::class, $response);
+        static::assertSame($glossary->glossaryId, $response->glossaryId);
+        static::assertSame(1, $response->entryCount);
     }
 
     /**
@@ -184,7 +183,7 @@ final class ClientTest extends DeepLTestCase
 
         $response = $client->getGlossaryEntries($glossary->glossaryId);
 
-        self::assertInstanceOf(GlossaryEntries::class, $response);
-        self::assertSame(1, count($response->getEntries()));
+        static::assertInstanceOf(GlossaryEntries::class, $response);
+        static::assertSame(1, count($response->getEntries()));
     }
 }

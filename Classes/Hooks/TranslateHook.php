@@ -142,16 +142,18 @@ class TranslateHook
                 $sourceLanguageRecord['language_isocode']
             );
 
-            if (is_array($response)) {
-                $content = '';
-                foreach ($response as $result) {
-                    $content .= $result->text;
+            if ($response !== null) {
+                if (is_array($response)) {
+                    $content = '';
+                    foreach ($response as $result) {
+                        $content .= $result->text;
+                    }
+                } else {
+                    $content = $response->text;
                 }
-            } else {
-                $content = $response->text;
-            }
 
-            $content = htmlspecialchars_decode($content, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
+                $content = htmlspecialchars_decode($content, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
+            }
         }
 
         return $content;

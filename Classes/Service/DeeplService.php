@@ -56,7 +56,7 @@ final class DeeplService
     /**
      * Deepl Api Call for retrieving translation.
      *
-     * @return TextResult|TextResult[]
+     * @return TextResult|TextResult[]|null
      * @throws Exception
      * @throws SiteNotFoundException
      * @throws \Doctrine\DBAL\Exception
@@ -68,7 +68,7 @@ final class DeeplService
     ) {
         // If the source language is set to Autodetect, no glossary can be detected.
         if ($sourceLanguage === 'auto') {
-            $sourceLanguage = '';
+            $sourceLanguage = null;
             $glossary['glossary_id'] = '';
         } else {
             // @todo Make glossary findable by current site.
@@ -101,10 +101,32 @@ final class DeeplService
                 ->getMessageQueueByIdentifier()
                 ->addMessage($flashMessage);
 
-            return [];
+            return null;
         }
 
         return $response;
+    }
+
+    public function detectTargetLanguage(string $language): ?Language
+    {
+        /** @var Language $targetLanguage */
+        foreach ($this->apiSupportedLanguages['target'] as $targetLanguage) {
+            if ($targetLanguage->code === $language) {
+                return $targetLanguage;
+            }
+        }
+        return null;
+    }
+
+    public function detectSourceLanguage(string $language): ?Language
+    {
+        /** @var Language $sourceLanguage */
+        foreach ($this->apiSupportedLanguages['source'] as $sourceLanguage) {
+            if ($sourceLanguage->code === $language) {
+                return $sourceLanguage;
+            }
+        }
+        return null;
     }
 
     private function loadSupportedLanguages(): void

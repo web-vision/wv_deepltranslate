@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
+use DeepL\Language;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -52,7 +53,7 @@ final class DeeplServiceTest extends DeepLTestCase
             'DE'
         );
 
-        self::assertSame('I would like to be translated!', $responseObject['translations'][0]['text']);
+        static::assertSame('I would like to be translated!', $responseObject['translations'][0]['text']);
     }
 
     /**
@@ -60,12 +61,8 @@ final class DeeplServiceTest extends DeepLTestCase
      */
     public function translateContentFromEnToDe(): void
     {
-        $translateContent = 'I would like to be translated!';
-        $expectedTranslation = 'Ich möchte gerne übersetzt werden!';
-        if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
-            $translateContent = 'proton beam';
-            $expectedTranslation = 'Protonenstrahl';
-        }
+        $translateContent = 'proton beam';
+        $expectedTranslation = 'Protonenstrahl';
         $deeplService = $this->get(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
@@ -74,7 +71,7 @@ final class DeeplServiceTest extends DeepLTestCase
             'EN'
         );
 
-        self::assertSame($expectedTranslation, $responseObject->text);
+        static::assertSame($expectedTranslation, $responseObject->text);
     }
 
     /**
@@ -82,12 +79,8 @@ final class DeeplServiceTest extends DeepLTestCase
      */
     public function translateContentWithAutoDetectSourceParam(): void
     {
-        $translateContent = 'I would like to be translated!';
-        $expectedTranslation = 'Ich möchte gerne übersetzt werden!';
-        if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
-            $translateContent = 'proton beam';
-            $expectedTranslation = 'Protonenstrahl';
-        }
+        $translateContent = 'proton beam';
+        $expectedTranslation = 'Protonenstrahl';
         $deeplService = $this->get(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
@@ -96,7 +89,7 @@ final class DeeplServiceTest extends DeepLTestCase
             'auto'
         );
 
-        self::assertSame($expectedTranslation, $responseObject['translations'][0]['text']);
+        static::assertSame($expectedTranslation, $responseObject->text);
     }
 
     /**
@@ -104,28 +97,17 @@ final class DeeplServiceTest extends DeepLTestCase
      */
     public function checkSupportedTargetLanguages(): void
     {
+        /** @var DeeplService $deeplService */
         $deeplService = $this->get(DeeplService::class);
 
-        self::assertContains('EN-GB', (array)$deeplService->apiSupportedLanguages['target']);
-        self::assertContains('EN-US', (array)$deeplService->apiSupportedLanguages['target']);
-        self::assertContains('DE', (array)$deeplService->apiSupportedLanguages['target']);
-        self::assertContains('UK', (array)$deeplService->apiSupportedLanguages['target']);
-        self::assertNotContains('EN', (array)$deeplService->apiSupportedLanguages['target']);
-        self::assertNotContains('BS', (array)$deeplService->apiSupportedLanguages['target']);
-    }
+        static::assertContainsOnlyInstancesOf(Language::class, $deeplService->apiSupportedLanguages['target']);
 
-    /**
-     * @test
-     */
-    public function checkFormalitySupportedLanguages(): void
-    {
-        $deeplService = $this->get(DeeplService::class);
-
-        self::assertContains('ES', (array)$deeplService->formalitySupportedLanguages);
-        self::assertContains('DE', (array)$deeplService->formalitySupportedLanguages);
-        self::assertContains('NL', (array)$deeplService->formalitySupportedLanguages);
-        self::assertNotContains('EN', (array)$deeplService->formalitySupportedLanguages);
-        self::assertNotContains('BS', (array)$deeplService->formalitySupportedLanguages);
+        static::assertEquals('EN-GB', $deeplService->detectTargetLanguage('EN-GB')->code);
+        static::assertEquals('EN-US', $deeplService->detectTargetLanguage('EN-US')->code);
+        static::assertEquals('DE', $deeplService->detectTargetLanguage('DE')->code);
+        static::assertEquals('UK', $deeplService->detectTargetLanguage('UK')->code);
+        static::assertNull($deeplService->detectTargetLanguage('EN'));
+        static::assertNull($deeplService->detectTargetLanguage('BS'));
     }
 
     /**
@@ -133,13 +115,14 @@ final class DeeplServiceTest extends DeepLTestCase
      */
     public function checkSupportedSourceLanguages(): void
     {
+        /** @var DeeplService $deeplService */
         $deeplService = $this->get(DeeplService::class);
 
-        self::assertContains('DE', (array)$deeplService->apiSupportedLanguages['source']);
-        self::assertContains('UK', (array)$deeplService->apiSupportedLanguages['source']);
-        self::assertContains('EN', (array)$deeplService->apiSupportedLanguages['source']);
-        self::assertNotContains('EN-GB', (array)$deeplService->apiSupportedLanguages['source']);
-        self::assertNotContains('EN-US', (array)$deeplService->apiSupportedLanguages['source']);
-        self::assertNotContains('BS', (array)$deeplService->apiSupportedLanguages['source']);
+        static::assertEquals('DE', $deeplService->detectSourceLanguage('DE')->code);
+        static::assertEquals('UK', $deeplService->detectSourceLanguage('UK')->code);
+        static::assertEquals('EN', $deeplService->detectSourceLanguage('EN')->code);
+        static::assertNull($deeplService->detectSourceLanguage('EN-GB'));
+        static::assertNull($deeplService->detectSourceLanguage('EN-US'));
+        static::assertNull($deeplService->detectSourceLanguage('BS'));
     }
 }

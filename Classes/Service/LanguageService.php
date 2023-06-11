@@ -73,10 +73,7 @@ final class LanguageService
             'language_isocode' => strtoupper($languageIsoCode),
         ];
 
-        if (!in_array(
-            $sourceLanguageRecord['language_isocode'],
-            $this->deeplService->apiSupportedLanguages['source']
-        )) {
+        if ($this->deeplService->detectSourceLanguage($sourceLanguageRecord['language_isocode']) === null) {
             // When sources language not supported oder not exist set auto detect for deepL API
             $sourceLanguageRecord['title'] = 'auto';
             $sourceLanguageRecord['language_isocode'] = 'auto';
@@ -125,13 +122,8 @@ final class LanguageService
         $languageIsoCode = null;
 
         foreach ($this->possibleLangMatches as $possibleLangMatch) {
-            if (array_key_exists($possibleLangMatch, $language)
-                && in_array(
-                    strtoupper($language[$possibleLangMatch]),
-                    $this->deeplService->apiSupportedLanguages['target']
-                )
-            ) {
-                $languageIsoCode = strtoupper($language[$possibleLangMatch]);
+            if (array_key_exists($possibleLangMatch, $language)) {
+                $languageIsoCode = $this->deeplService->detectTargetLanguage(strtoupper($language[$possibleLangMatch]));
                 break;
             }
         }
@@ -149,7 +141,7 @@ final class LanguageService
         return [
             'uid' => $language['languageId'] ?? 0,
             'title' => $language['title'],
-            'language_isocode' => $languageIsoCode,
+            'language_isocode' => $languageIsoCode->code,
         ];
     }
 }

@@ -12,6 +12,8 @@ use DeepL\Language;
 use DeepL\TextResult;
 use DeepL\TranslateTextOptions;
 use DeepL\Translator;
+use DeepL\TranslatorOptions;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class Client
@@ -28,6 +30,14 @@ final class Client
      */
     public function __construct(string $apiKey = '', array $options = [])
     {
+        $environment = GeneralUtility::makeInstance(Environment::class);
+        if (
+            $environment->getContext()->isTesting()
+            && ($serverUrl = getenv('DEEPL_SERVER_URL'))
+        ) {
+            $apiKey = 'mock_server';
+            $options[TranslatorOptions::SERVER_URL] = $serverUrl;
+        }
         $this->configuration = GeneralUtility::makeInstance(Configuration::class);
         $this->translator = GeneralUtility::makeInstance(
             Translator::class,
@@ -42,7 +52,7 @@ final class Client
      */
     public function translate(
         string $content,
-        string $sourceLang,
+        ?string $sourceLang,
         string $targetLang,
         string $glossary = ''
     ) {
