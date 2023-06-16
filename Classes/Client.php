@@ -47,8 +47,7 @@ final class Client
     }
 
     /**
-     * @throws DeepLException
-     * @return TextResult|TextResult[]
+     * @return TextResult|TextResult[]|null
      */
     public function translate(
         string $content,
@@ -65,86 +64,104 @@ final class Client
             $options[TranslateTextOptions::GLOSSARY] = $glossary;
         }
 
-        return $this->translator->translateText(
-            $content,
-            $sourceLang,
-            $targetLang,
-            $options
-        );
+        try {
+            return $this->translator->translateText(
+                $content,
+                $sourceLang,
+                $targetLang,
+                $options
+            );
+        } catch (DeepLException $e) {
+            return null;
+        }
     }
 
     /**
-     * @throws DeepLException
      * @return Language[]
      */
     public function getSupportedLanguageByType(string $type = 'target'): array
     {
-        return ($type === 'target')
-            ? $this->translator->getTargetLanguages()
-            : $this->translator->getSourceLanguages();
+        try {
+            return ($type === 'target')
+                ? $this->translator->getTargetLanguages()
+                : $this->translator->getSourceLanguages();
+        } catch (DeepLException $e) {
+            return [];
+        }
     }
 
     /**
-     * @throws DeepLException
      * @return GlossaryLanguagePair[]
      */
     public function getGlossaryLanguagePairs(): array
     {
-        return $this->translator->getGlossaryLanguages();
+        try {
+            return $this->translator->getGlossaryLanguages();
+        } catch (DeepLException $e) {
+            return [];
+        }
     }
 
     /**
-     * @throws DeepLException
      * @return GlossaryInfo[]
      */
     public function getAllGlossaries(): array
     {
-        return $this->translator->listGlossaries();
+        try {
+            return $this->translator->listGlossaries();
+        } catch (DeepLException $e) {
+            return [];
+        }
     }
 
-    /**
-     * @throws DeepLException
-     */
-    public function getGlossary(string $glossaryId): GlossaryInfo
+    public function getGlossary(string $glossaryId): ?GlossaryInfo
     {
-        return $this->translator->getGlossary($glossaryId);
+        try {
+            return $this->translator->getGlossary($glossaryId);
+        } catch (DeepLException $e) {
+            return null;
+        }
     }
 
     /**
      * @param array<int, array{source: string, target: string}> $entries
-     * @throws DeepLException
      */
     public function createGlossary(
         string $glossaryName,
         string $sourceLang,
         string $targetLang,
         array $entries
-    ): GlossaryInfo {
+    ): ?GlossaryInfo {
         $prepareEntriesForGlossary = [];
         foreach ($entries as $entry) {
             $prepareEntriesForGlossary[$entry['source']] = $entry['target'];
         }
-        return $this->translator->createGlossary(
-            $glossaryName,
-            $sourceLang,
-            $targetLang,
-            GlossaryEntries::fromEntries($prepareEntriesForGlossary)
-        );
+        try {
+            return $this->translator->createGlossary(
+                $glossaryName,
+                $sourceLang,
+                $targetLang,
+                GlossaryEntries::fromEntries($prepareEntriesForGlossary)
+            );
+        } catch (DeepLException $e) {
+            return null;
+        }
     }
 
-    /**
-     * @throws DeepLException
-     */
     public function deleteGlossary(string $glossaryId): void
     {
-        $this->translator->deleteGlossary($glossaryId);
+        try {
+            $this->translator->deleteGlossary($glossaryId);
+        } catch (DeepLException $e) {
+        }
     }
 
-    /**
-     * @throws DeepLException
-     */
-    public function getGlossaryEntries(string $glossaryId): GlossaryEntries
+    public function getGlossaryEntries(string $glossaryId): ?GlossaryEntries
     {
-        return $this->translator->getGlossaryEntries($glossaryId);
+        try {
+            return $this->translator->getGlossaryEntries($glossaryId);
+        } catch (DeepLException $e) {
+            return null;
+        }
     }
 }

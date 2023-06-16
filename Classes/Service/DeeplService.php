@@ -79,9 +79,8 @@ final class DeeplService
             );
         }
 
-        try {
-            $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
-        } catch (DeepLException $e) {
+        $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
+        if ($response === null) {
             if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
                 $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO;
             } else {
@@ -89,15 +88,13 @@ final class DeeplService
             }
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
-                $e->getMessage(),
+                'Translation not successful',
                 '',
                 $severity
             );
             GeneralUtility::makeInstance(FlashMessageService::class)
                 ->getMessageQueueByIdentifier()
                 ->addMessage($flashMessage);
-
-            return null;
         }
 
         return $response;
@@ -150,13 +147,6 @@ final class DeeplService
      */
     private function loadSupportedLanguagesFromAPI(string $type = 'target'): array
     {
-        try {
-            $response = $this->client->getSupportedLanguageByType($type);
-        } catch (DeepLException $e) {
-            $this->logger->error($e->getMessage());
-            return [];
-        }
-
-        return $response;
+        return $this->client->getSupportedLanguageByType($type);
     }
 }

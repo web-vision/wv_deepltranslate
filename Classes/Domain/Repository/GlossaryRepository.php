@@ -34,7 +34,6 @@ final class GlossaryRepository
      * @throws DBALException
      * @throws Exception
      * @throws SiteNotFoundException
-     * @throws DeepLException
      * @throws \Doctrine\DBAL\Exception
      */
     public function getGlossaryInformationForSync(int $pageId): array

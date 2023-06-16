@@ -5,18 +5,13 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Service;
 
 use DateTime;
-use DeepL\DeepLException;
 use DeepL\GlossaryEntries;
 use DeepL\GlossaryInfo;
 use DeepL\GlossaryLanguagePair;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
@@ -43,7 +38,6 @@ final class DeeplGlossaryService
      * Calls the glossary-Endpoint and return Json-response as an array
      *
      * @return GlossaryLanguagePair[]
-     * @throws DeepLException
      */
     public function listLanguagePairs(): array
     {
@@ -54,7 +48,6 @@ final class DeeplGlossaryService
      * Calls the glossary-Endpoint and return Json-response as an array
      *
      * @return GlossaryInfo[]
-     * @throws DeepLException
      */
     public function listGlossaries(): array
     {
@@ -67,14 +60,13 @@ final class DeeplGlossaryService
      * @param array<int, array{source: string, target: string}> $entries
      *
      * @throws GlossaryEntriesNotExistException
-     * @throws DeepLException
      */
     public function createGlossary(
         string $name,
         array $entries,
         string $sourceLang = 'de',
         string $targetLang = 'en'
-    ): GlossaryInfo {
+    ): ?GlossaryInfo {
         if (empty($entries)) {
             throw new GlossaryEntriesNotExistException(
                 'Glossary Entries are required',
@@ -90,32 +82,10 @@ final class DeeplGlossaryService
      *
      * @param string $glossaryId
      *
-     * @throws DeepLException
      */
     public function deleteGlossary(string $glossaryId): void
     {
-        try {
-            $this->client->deleteGlossary($glossaryId);
-        } catch (DeepLException $e) {
-            if (Environment::isCli()) {
-                throw $e;
-            }
-            if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
-                $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING;
-            } else {
-                $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING;
-            }
-            $message = GeneralUtility::makeInstance(
-                FlashMessage::class,
-                $e->getMessage(),
-                'DeepL Api',
-                $severity,
-                true
-            );
-            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
-            $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
-            $messageQueue->addMessage($message);
-        }
+        $this->client->deleteGlossary($glossaryId);
     }
 
     /**
@@ -124,11 +94,7 @@ final class DeeplGlossaryService
      */
     public function glossaryInformation(string $glossaryId): ?GlossaryInfo
     {
-        try {
-            return $this->client->getGlossary($glossaryId);
-        } catch (DeepLException $e) {
-            return null;
-        }
+        return $this->client->getGlossary($glossaryId);
     }
 
     /**
@@ -137,11 +103,7 @@ final class DeeplGlossaryService
      */
     public function glossaryEntries(string $glossaryId): ?GlossaryEntries
     {
-        try {
-            return $this->client->getGlossaryEntries($glossaryId);
-        } catch (DeepLException $e) {
-            return null;
-        }
+        return $this->client->getGlossaryEntries($glossaryId);
     }
 
     public function getPossibleGlossaryLanguageConfig(): array
@@ -151,11 +113,7 @@ final class DeeplGlossaryService
             return $pairMappingArray;
         }
 
-        try {
-            $possiblePairs = $this->listLanguagePairs();
-        } catch (DeepLException $e) {
-            $possiblePairs = [];
-        }
+        $possiblePairs = $this->listLanguagePairs();
 
         $pairMappingArray = [];
         foreach ($possiblePairs as $possiblePair) {
@@ -168,7 +126,6 @@ final class DeeplGlossaryService
     }
 
     /**
-     * @throws DeepLException
      * @throws Exception
      * @throws SiteNotFoundException
      * @throws DBALException
@@ -181,10 +138,7 @@ final class DeeplGlossaryService
 
         foreach ($glossaries as $glossaryInformation) {
             if ($glossaryInformation['glossary_id'] !== '') {
-                try {
-                    $this->deleteGlossary($glossaryInformation['glossary_id']);
-                } catch (DeepLException $e) {
-                }
+                $this->deleteGlossary($glossaryInformation['glossary_id']);
             }
 
             try {
@@ -194,7 +148,7 @@ final class DeeplGlossaryService
                     $glossaryInformation['source_lang'],
                     $glossaryInformation['target_lang']
                 );
-            } catch (DeepLException|GlossaryEntriesNotExistException $exception) {
+            } catch (GlossaryEntriesNotExistException $exception) {
                 $glossary = new GlossaryInfo(
                     '',
                     '',
