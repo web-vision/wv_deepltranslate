@@ -106,11 +106,7 @@ final class TranslateHookTest extends FunctionalTestCase
     {
         $translateContent = 'proton beam';
         $expectedTranslation = 'Protonenstrahl';
-        /*$serverParams = array_replace($_SERVER, ['HTTP_HOST' => 'example.com', 'SCRIPT_NAME' => '/typo3/index.php']);
-        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest('http://example.com/typo3/index.php', 'GET', null, $serverParams))
-            ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE)
-            ->withAttribute('normalizedParams', NormalizedParams::createFromServerParams($serverParams));
-*/
+
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
         $languageService = $this->get(LanguageService::class);
         $siteConfig = $languageService->getCurrentSite('pages', 1);
