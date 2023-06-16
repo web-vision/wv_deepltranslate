@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
-use DeepL\DeepLException;
 use DeepL\Language;
 use DeepL\TextResult;
 use Doctrine\DBAL\Driver\Exception;
@@ -37,18 +36,14 @@ final class DeeplService
 
     private Client $client;
 
-    private LoggerInterface $logger;
-
     public function __construct(
         FrontendInterface $cache,
         Client $client,
-        GlossaryRepository $glossaryRepository,
-        LoggerInterface $logger
+        GlossaryRepository $glossaryRepository
     ) {
         $this->cache = $cache;
         $this->client = $client;
         $this->glossaryRepository = $glossaryRepository;
-        $this->logger = $logger;
 
         $this->loadSupportedLanguages();
     }

@@ -121,11 +121,6 @@ parameters:
 			path: ../../../Classes/Override/LocalizationController.php
 
 		-
-			message: "#^Access to constant WARNING on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:getPossibleGlossaryLanguageConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Service/DeeplGlossaryService.php

@@ -66,7 +66,7 @@ final class DeeplGlossaryService
         array $entries,
         string $sourceLang = 'de',
         string $targetLang = 'en'
-    ): ?GlossaryInfo {
+    ): GlossaryInfo {
         if (empty($entries)) {
             throw new GlossaryEntriesNotExistException(
                 'Glossary Entries are required',

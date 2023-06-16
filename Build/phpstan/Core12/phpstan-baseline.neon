@@ -41,13 +41,13 @@ parameters:
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
-			message: "#^PHPDoc tag @throws with type DeepL\\\\DeepLException\\|Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception\\\\SiteNotFoundException is not subtype of Throwable$#"
-			count: 1
+			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception is not subtype of Throwable$#"
+			count: 3
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
-			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception is not subtype of Throwable$#"
-			count: 3
+			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception\\\\SiteNotFoundException is not subtype of Throwable$#"
+			count: 1
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
@@ -151,7 +151,7 @@ parameters:
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 
 		-
-			message: "#^PHPDoc tag @throws with type DeepL\\\\DeepLException\\|Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception\\\\SiteNotFoundException is not subtype of Throwable$#"
+			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception\\\\SiteNotFoundException is not subtype of Throwable$#"
 			count: 1
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 

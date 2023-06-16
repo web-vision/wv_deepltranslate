@@ -131,7 +131,7 @@ final class Client
         string $sourceLang,
         string $targetLang,
         array $entries
-    ): ?GlossaryInfo {
+    ): GlossaryInfo {
         $prepareEntriesForGlossary = [];
         foreach ($entries as $entry) {
             $prepareEntriesForGlossary[$entry['source']] = $entry['target'];
@@ -144,7 +144,15 @@ final class Client
                 GlossaryEntries::fromEntries($prepareEntriesForGlossary)
             );
         } catch (DeepLException $e) {
-            return null;
+            return new GlossaryInfo(
+                '',
+                '',
+                false,
+                '',
+                '',
+                new \DateTime(),
+                0
+            );
         }
     }
 
