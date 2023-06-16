@@ -83,19 +83,17 @@ class GlossaryListCommand extends Command
 
     private function listAllGloassaryEntriesById(OutputInterface $output, string $id): void
     {
-        try {
-            $information = $this->deeplGlossaryService->glossaryInformation($id);
-            $entries = $this->deeplGlossaryService->glossaryEntries($id);
-        } catch (DeepLException $exception) {
+        $information = $this->deeplGlossaryService->glossaryInformation($id);
+        $entries = $this->deeplGlossaryService->glossaryEntries($id);
+
+        if ($information === null || $entries === null) {
             $output->writeln(
                 [
                     'Glossary not found.',
-                    $exception->getMessage(),
                 ]
             );
             return;
         }
-
         $output->writeln([
             '============',
             'List of Glossary entries',

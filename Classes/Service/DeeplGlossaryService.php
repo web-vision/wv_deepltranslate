@@ -121,26 +121,29 @@ final class DeeplGlossaryService
     /**
      * Gets information about a glossary
      *
-     * @throws DeepLException
      */
-    public function glossaryInformation(string $glossaryId): GlossaryInfo
+    public function glossaryInformation(string $glossaryId): ?GlossaryInfo
     {
-        return $this->client->getGlossary($glossaryId);
+        try {
+            return $this->client->getGlossary($glossaryId);
+        } catch (DeepLException $e) {
+            return null;
+        }
     }
 
     /**
      * Fetch glossary entries and format them as an associative array [source => target]
      *
-     * @throws DeepLException
      */
-    public function glossaryEntries(string $glossaryId): GlossaryEntries
+    public function glossaryEntries(string $glossaryId): ?GlossaryEntries
     {
-        return $this->client->getGlossaryEntries($glossaryId);
+        try {
+            return $this->client->getGlossaryEntries($glossaryId);
+        } catch (DeepLException $e) {
+            return null;
+        }
     }
 
-    /**
-     * @throws DeepLException
-     */
     public function getPossibleGlossaryLanguageConfig(): array
     {
         $cacheIdentifier = 'wv-deepl-glossary-pairs';
@@ -148,7 +151,11 @@ final class DeeplGlossaryService
             return $pairMappingArray;
         }
 
-        $possiblePairs = $this->listLanguagePairs();
+        try {
+            $possiblePairs = $this->listLanguagePairs();
+        } catch (DeepLException $e) {
+            $possiblePairs = [];
+        }
 
         $pairMappingArray = [];
         foreach ($possiblePairs as $possiblePair) {
