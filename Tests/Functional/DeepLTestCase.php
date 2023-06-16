@@ -31,15 +31,15 @@ abstract class DeepLTestCase extends FunctionalTestCase
     protected bool $isMockServer;
     protected bool $isMockProxyServer;
 
-    protected ?string $sessionNoResponse;
-    protected ?string $session429Count;
-    protected ?string $sessionInitCharacterLimit;
-    protected ?string $sessionInitDocumentLimit;
-    protected ?string $sessionInitTeamDocumentLimit;
-    protected ?string $sessionDocFailure;
-    protected ?int $sessionDocQueueTime;
-    protected ?int $sessionDocTranslateTime;
-    protected ?bool $sessionExpectProxy;
+    protected ?string $sessionNoResponse = null;
+    protected ?string $session429Count = null;
+    protected ?string $sessionInitCharacterLimit = null;
+    protected ?string $sessionInitDocumentLimit = null;
+    protected ?string $sessionInitTeamDocumentLimit = null;
+    protected ?string $sessionDocFailure = null;
+    protected ?int $sessionDocQueueTime = null;
+    protected ?int $sessionDocTranslateTime = null;
+    protected ?bool $sessionExpectProxy = null;
 
     protected const EXAMPLE_TEXT = [
         'bg' => 'протонен лъч',
