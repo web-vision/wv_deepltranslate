@@ -123,7 +123,7 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
             // TYPO3 uses ILIKE for like()/notLike() expression, and adding ESCAPE for default '\'  is disliked. Avoid it.
             (! $dbPlatform instanceof PostgreSQL94Platform)
             && (
-                (($typo3Version->getMajorVersion() === 11) && (version_compare($typo3Version->getVersion(), '11.5.27', '<=') === true))
+                (($typo3Version->getMajorVersion() === 11) && (version_compare($typo3Version->getVersion(), '11.5.28', '<=') === true))
              || (($typo3Version->getMajorVersion() === 12) && (version_compare($typo3Version->getVersion(), '12.4.1', '<=') === true))
             )
         );
