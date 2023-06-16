@@ -336,6 +336,16 @@ parameters:
 			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
 
 		-
+			message: "#^Cannot access property \\$code on DeepL\\\\Language\\|null\\.$#"
+			count: 7
+			path: ../../../Tests/Functional/Services/DeeplServiceTest.php
+
+		-
+			message: "#^Cannot access property \\$text on array\\<DeepL\\\\TextResult\\>\\|DeepL\\\\TextResult\\|null\\.$#"
+			count: 3
+			path: ../../../Tests/Functional/Services/DeeplServiceTest.php
+
+		-
 			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 3 parameters, 1\\-2 required\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
