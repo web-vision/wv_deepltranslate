@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional;
 
-use DeepL\Translator;
 use DeepL\TranslatorOptions;
 use phpmock\phpunit\PHPMock;
 use Ramsey\Uuid\Uuid;

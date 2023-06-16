@@ -90,7 +90,7 @@ class GlossaryListCommand extends Command
             $output->writeln(
                 [
                     'Glossary not found.',
-                    $exception->getMessage()
+                    $exception->getMessage(),
                 ]
             );
             return;
