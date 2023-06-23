@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\DependencyInjection\SingletonPass;
 use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
 use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
 use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
+use WebVision\WvDeepltranslate\Controller\Backend\AjaxController;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
@@ -75,6 +76,10 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->arg('$cache', service('cache.wvdeepltranslate'));
     $services
         ->set(LanguageService::class)
+        ->public();
+
+    $services
+        ->set(AjaxController::class)
         ->public();
 
     $containerBuilder
