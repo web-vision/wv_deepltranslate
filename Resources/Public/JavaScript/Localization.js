@@ -35,7 +35,7 @@ define('TYPO3/CMS/Backend/Localization', [
     },
     actions: {
       translate: $('<label />', {
-        class: 'btn btn-block btn-default t3js-option',
+        class: 'btn btn-block btn-default t3js-localization-option',
         'data-helptext': '.t3js-helptext-translate',
       })
         .html('<br>Translate')
@@ -49,7 +49,7 @@ define('TYPO3/CMS/Backend/Localization', [
           }),
         ),
       copy: $('<label />', {
-        class: 'btn btn-block btn-default t3js-option',
+        class: 'btn btn-block btn-default t3js-localization-option',
         'data-helptext': '.t3js-helptext-copy',
       })
         .html('<br>Copy')
@@ -63,7 +63,7 @@ define('TYPO3/CMS/Backend/Localization', [
           }),
         ),
       deepltranslate: $('<label />', {
-        class: 'btn btn-block btn-default t3js-option',
+        class: 'btn btn-block btn-default t3js-localization-option',
         'data-helptext': '.t3js-helptext-translate',
       })
         .html('<br>Translate<br>(DeepL)')
@@ -77,7 +77,7 @@ define('TYPO3/CMS/Backend/Localization', [
           }),
         ),
       deepltranslateAuto: $('<label />', {
-        class: 'btn btn-block btn-default t3js-option',
+        class: 'btn btn-block btn-default t3js-localization-option',
         'data-helptext': '.t3js-helptext-translate',
       })
         .html('<br>Translate<br>(DeepL)<br>(autodetect)')
@@ -135,55 +135,55 @@ define('TYPO3/CMS/Backend/Localization', [
       if ($triggerButton.data('allowTranslate')) {
         actions.push(
           '<div class="row">' +
-          '<div class="btn-group col-sm-3">' +
-          Localization.actions.translate[0].outerHTML +
-          '</div>' +
-          '<div class="col-sm-9">' +
-          '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
-          TYPO3.lang['localize.educate.translate'] +
-          '</p>' +
-          '</div>' +
+            '<div class="btn-group col-sm-3">' +
+              Localization.actions.translate[0].outerHTML +
+            '</div>' +
+            '<div class="col-sm-9">' +
+              '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
+                TYPO3.lang['localize.educate.translate'] +
+              '</p>' +
+            '</div>' +
           '</div>',
         )
 
         if ($triggerButton.data('allowCopy')) {
           actions.push(
             '<div class="row">' +
-            '<div class="col-sm-3 btn-group">' +
-            Localization.actions.copy[0].outerHTML +
-            '</div>' +
-            '<div class="col-sm-9">' +
-            '<p class="t3js-helptext t3js-helptext-copy text-muted">' +
-            TYPO3.lang['localize.educate.copy'] +
-            '</p>' +
-            '</div>' +
+              '<div class="col-sm-3 btn-group">' +
+                Localization.actions.copy[0].outerHTML +
+              '</div>' +
+              '<div class="col-sm-9">' +
+                '<p class="t3js-helptext t3js-helptext-copy text-muted">' +
+                  TYPO3.lang['localize.educate.copy'] +
+                '</p>' +
+              '</div>' +
             '</div>',
           )
         }
 
         actions.push(
           '<div class="row" id="deeplTranslateAuto">' +
-          '<div class="btn-group col-sm-3">' +
-          Localization.actions.deepltranslateAuto[0].outerHTML +
-          '</div>' +
-          '<div class="col-sm-9" id="deeplTextAuto">' +
-          '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
-          TYPO3.lang['localize.educate.deepltranslateAuto'] +
-          '</p>' +
-          '</div>' +
+            '<div class="btn-group col-sm-3">' +
+              Localization.actions.deepltranslateAuto[0].outerHTML +
+            '</div>' +
+            '<div class="col-sm-9" id="deeplTextAuto">' +
+              '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
+                TYPO3.lang['localize.educate.deepltranslateAuto'] +
+              '</p>' +
+            '</div>' +
           '</div>',
         )
 
         actions.push(
           '<div class="row" id="deeplTranslate">' +
-          '<div class="btn-group col-sm-3">' +
-          Localization.actions.deepltranslate[0].outerHTML +
-          '</div>' +
-          '<div class="col-sm-9" id="deeplText">' +
-          '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
-          TYPO3.lang['localize.educate.deepltranslate'] +
-          '</p>' +
-          '</div>' +
+            '<div class="btn-group col-sm-3">' +
+              Localization.actions.deepltranslate[0].outerHTML +
+            '</div>' +
+            '<div class="col-sm-9" id="deeplText">' +
+              '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
+                TYPO3.lang['localize.educate.deepltranslate'] +
+              '</p>' +
+            '</div>' +
           '</div>',
         )
       }
@@ -232,7 +232,7 @@ define('TYPO3/CMS/Backend/Localization', [
                       style: 'margin-top: 6px;',
                     }).append(
                       $('<label />', {
-                        class: 'btn btn-default btn-block t3js-option option',
+                        class: 'btn btn-default btn-block t3js-localization-option option',
                       })
                         .text(' ' + languageObject.title)
                         .prepend(languageObject.flagIcon)
@@ -388,7 +388,6 @@ define('TYPO3/CMS/Backend/Localization', [
                       $children.trigger('change')
                     },
                   )
-                //
               })
             },
           )
@@ -425,15 +424,30 @@ define('TYPO3/CMS/Backend/Localization', [
       }).done(function () {
         Wizard.show()
 
-        Wizard.getComponent().on('click', '.t3js-option', function (e) {
+        Wizard.getComponent().on('click', '.t3js-localization-option', function (e) {
           var $me = $(this),
             $radio = $me.find('input[type="radio"]')
 
-          if ($me.data('helptext')) {
-            var $container = $(e.delegateTarget)
-            $container.find('.t3js-helptext').addClass('text-muted')
-            $container.find($me.data('helptext')).removeClass('text-muted')
+          // if ($me.data('helptext')) {
+          //   var $container = $(e.delegateTarget)
+          //   $container.find('.t3js-helptext').addClass('text-muted')
+          //   $container.find($me.data('helptext')).removeClass('text-muted')
+          // }
+
+          if ($me.data("helptext")) {
+            const $container = $(e.delegateTarget);
+            $container
+              .find(".t3js-localization-option")
+              .removeClass("active");
+            $container
+              .find(".t3js-helptext")
+              .addClass("text-muted");
+            $me.addClass("active");
+            $container
+              .find($me.data("helptext"))
+              .removeClass("text-muted");
           }
+
           if ($radio.length > 0) {
             if (
               $radio.val() == 'localizedeepl' ||
@@ -445,7 +459,8 @@ define('TYPO3/CMS/Backend/Localization', [
                 $triggerButton.data('languageId'),
                 Localization.records,
               ).done(function (result) {
-                var responseDeepl = JSON.parse(result)
+
+                const responseDeepl = result;
                 if (responseDeepl.status == 'false') {
                   if ($radio.val() == 'localizedeepl') {
                     var divDeepl = $('#deeplText', window.parent.document)
@@ -454,7 +469,7 @@ define('TYPO3/CMS/Backend/Localization', [
                   }
                   divDeepl.prepend(
                     "<div class='alert alert-danger' id='alertClose'>  <a href='#'' class='close'  data-dismiss='alert' aria-label='close'>&times;</a>" +
-                    Localization.labels.deeplSettingsFailure +
+                      Localization.labels.deeplSettingsFailure +
                     '</div>',
                   )
                   var deeplText = $('#alertClose', window.parent.document)
