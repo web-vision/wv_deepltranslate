@@ -2,6 +2,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
 import alias from '@rollup/plugin-alias';
 import path from 'path';
 
@@ -82,18 +83,15 @@ export function typo3Resolve(config = {}) {
 }
 
 export default {
-  input: 'Sources/TypeScript/localization.js',
+  input: 'Sources/TypeScript/Localization.ts',
   output: [
     {
       file: '../Resources/Public/JavaScript/localization.js',
       format: 'es',
     },
-    {
-      file: '../Resources/Public/JavaScript/AmdBundle.js',
-      format: 'amd',
-    },
   ],
   plugins: [
+    typescript(),
     typo3Resolve(),
     resolve({
       mainFields: ['module', 'main'],

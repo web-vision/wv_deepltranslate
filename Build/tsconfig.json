@@ -12,7 +12,7 @@
 		"downlevelIteration": true,
 		"experimentalDecorators": true,
 		"useDefineForClassFields": false,
-		"noImplicitAny": true,
+		"noImplicitAny": false,
 		"noImplicitThis": true,
 		"noImplicitReturns": true,
 		"pretty": true,
@@ -20,6 +20,9 @@
 		"paths": {
 			"@typo3-core/*": [
 				"../../../.Build/vendor/typo3/cms-core/Resources/Public/JavaScript/*"
+			],
+			"@typo3-backend/*": [
+				"../../../.Build/vendor/typo3/cms-backend/Resources/Public/JavaScript/*"
 			],
 		},
 		"outDir": "./JavaScript/",
