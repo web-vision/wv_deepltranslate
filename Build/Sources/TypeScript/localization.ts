@@ -11,14 +11,13 @@
 * The TYPO3 project - inspiring people to share!
 */
 
-import DocumentService from '@typo3/core/document-service';
+import DocumentService from '@typo3-core/document-service';
 import $ from 'jquery';
-import { AjaxResponse } from '@typo3/core/ajax/ajax-response';
-import { SeverityEnum } from './enum/severity';
-import AjaxRequest from '@typo3/core/ajax/ajax-request';
-import Icons from './icons';
-import Wizard from './wizard';
-import '@typo3/backend/element/icon-element';
+import { AjaxResponse } from '@typo3-core/ajax/ajax-response';
+import { SeverityEnum } from '@typo3-backend/enum/severity';
+import AjaxRequest from '@typo3-core/ajax/ajax-request';
+import Icons from '@typo3-backend/icons';
+import Wizard from '@typo3-backend/wizard';
 
 type LanguageRecord = {
 uid: number;
@@ -47,6 +46,7 @@ private triggerButton: string = '.t3js-localize';
 private localizationMode: string = null;
 private sourceLanguage: number = null;
 private records: Array<any> = [];
+private deeplSettingsFailure = 'Please complete missing DeepL configurations.';
 
 constructor() {
     DocumentService.ready().then((): void => {
@@ -58,6 +58,8 @@ constructor() {
     const me = this;
     Icons.getIcon('actions-localize', Icons.sizes.large).then((localizeIconMarkup: string): void => {
       Icons.getIcon('actions-edit-copy', Icons.sizes.large).then((copyIconMarkup: string): void => {
+        Icons.getIcon('actions-localize-deepl', Icons.sizes.large).then((deeplIconMarkup: string): void => {
+
         $(me.triggerButton).removeClass('disabled');
 
         $(document).on('click', me.triggerButton, (e: JQueryEventObject): void => {
@@ -101,6 +103,36 @@ constructor() {
             );
             availableLocalizationModes.push('copyFromLanguage');
           }
+
+          actions.push(
+            '<div class="row" id="deeplTranslate">'
+            + '<div class="col-sm-3">'
+            + '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">'
+            + deeplIconMarkup
+            + '<input type="radio" name="mode" id="mode_deepltranslate" value="localizedeepl" style="display: none">'
+            + '<br>' + 'Translate (DeepL)' + '</label>'
+            + '</div>'
+            + '<div class="col-sm-9" id="deeplText">'
+            + '<p class="t3js-helptext t3js-helptext-copy text-body-secondary">' +  TYPO3.lang['localize.educate.deepltranslate'] + '</p>'
+            + '</div>'
+            + '</div>',
+          );
+          availableLocalizationModes.push('copyFromLanguage');
+
+          actions.push(
+            '<div class="row" id="deeplTranslateAuto">'
+            + '<div class="col-sm-3">'
+            + '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">'
+            + deeplIconMarkup
+            + '<input type="radio" name="mode" id="mode_deepltranslateauto" value="localizedeeplauto" style="display: none">'
+            + '<br>' + 'Translate<br>(DeepL)<br>(autodetect)' + '</label>'
+            + '</div>'
+            + '<div class="col-sm-9" id="deeplTextAuto">'
+            + '<p class="t3js-helptext t3js-helptext-copy text-body-secondary">' +  TYPO3.lang['localize.educate.deepltranslateAuto'] + '</p>'
+            + '</div>'
+            + '</div>',
+          );
+          availableLocalizationModes.push('copyFromLanguage');
 
           if ($triggerButton.data('allowTranslate') === 0 && $triggerButton.data('allowCopy') === 0) {
             actions.push(
@@ -162,7 +194,7 @@ constructor() {
                     const $me = $(optionEvt.currentTarget);
                     const $radio = $me.prev();
 
-                    this.sourceLanguage = $radio.val();
+                    this.sourceLanguage = $radio.val() as number;
                     Wizard.unlockNextStep();
                   });
 
@@ -324,10 +356,50 @@ constructor() {
                 $me.addClass('active');
                 $container.find($me.data('helptext')).removeClass('text-body-secondary');
               }
-              this.localizationMode = $radio.val();
+
+              // if ($radio.length > 0) {
+              //   if (
+              //     $radio.val() == 'localizedeepl' ||
+              //     $radio.val() == 'localizedeeplauto'
+              //   ) {
+
+              //     //checkdeepl settings
+              //     this.deeplSettings(
+              //       parseInt($triggerButton.data('pageId'), 10),
+              //       parseInt($triggerButton.data('languageId'), 10),
+              //       this.records,
+              //     ).then(async (result) => {
+              //       const responseDeepl = result;
+              //       if (responseDeepl.status == 'false') {
+
+              //         if ($radio.val() == 'localizedeepl') {
+              //           var divDeepl = $('#deeplText', window.parent.document)
+              //         } else {
+              //           var divDeepl = $('#deeplTextAuto', window.parent.document)
+              //         }
+              //         divDeepl.prepend(
+              //           "<div class='alert alert-danger' id='alertClose'>  <a href='#'' class='close'  data-dismiss='alert' aria-label='close'>&times;</a>" +
+              //           'Please complete missing DeepL configurations.' +
+              //           '</div>',
+              //         )
+              //         var deeplText = $('#alertClose', window.parent.document)
+              //         $(deeplText)
+              //           .fadeTo(1600, 500)
+              //           .slideUp(500, () => {
+              //             ($(deeplText) as any).alert('close')
+              //           })
+              //         Wizard.lockNextStep()
+              //       }
+              //     })
+              //   }
+              //   this.localizationMode[$radio.attr('name')] = $radio.val()
+              // }
+
+              this.localizationMode = $radio.val() as string;
               Wizard.unlockNextStep();
             });
           });
+        });
         });
       });
     });
@@ -372,6 +444,16 @@ constructor() {
    */
   private localizeRecords(pageId: number, languageId: number, uidList: Array<number>): Promise<AjaxResponse> {
     return new AjaxRequest(TYPO3.settings.ajaxUrls.records_localize).withQueryArguments({
+      pageId: pageId,
+      srcLanguageId: this.sourceLanguage,
+      destLanguageId: languageId,
+      action: this.localizationMode,
+      uidList: uidList,
+    }).get();
+  }
+
+  private deeplSettings(pageId: number, languageId: number, uidList: Array<number>): Promise<AjaxResponse> {
+    return new AjaxRequest(TYPO3.settings.ajaxUrls.deepl_check_configuration).withQueryArguments({
       pageId: pageId,
       srcLanguageId: this.sourceLanguage,
       destLanguageId: languageId,
