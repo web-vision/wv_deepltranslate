@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Hooks;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
-
+use TYPO3\CMS\Core\Information\Typo3Version;
 final class PageRendererHook
 {
     /**
@@ -15,10 +15,9 @@ final class PageRendererHook
      */
     public function renderPreProcess(array $params, PageRenderer $pageRenderer): void
     {
-        if ($pageRenderer->getApplicationType() === 'BE') {
-            // @todo Validate and check if we need to use dedicated backend modules per core version or if a central
-            //       one is compatible enough.
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization');
+        $typo3Version = new Typo3Version();
+        if ($pageRenderer->getApplicationType() === 'BE' && $typo3Version->getMajorVersion() < 12) {
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization11');
         }
     }
 }
