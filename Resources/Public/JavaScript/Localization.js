@@ -78,27 +78,255 @@ class Icons{constructor(){this.sizes=Sizes,this.states=States,this.markupIdentif
  *
  * The TYPO3 project - inspiring people to share!
  */
-class Wizard{constructor(){this.setup={slides:[],settings:{},forceSelection:!0,$carousel:null},this.originalSetup=$.extend(!0,{},this.setup);}set(e,t){return this.setup.settings[e]=t,this}addSlide(e,t,s="",i=SeverityEnum$1.info,a){const r={identifier:e,title:t,content:s,severity:i,callback:a};return this.setup.slides.push(r),this}addFinalProcessingSlide(e){return e||(e=()=>{this.dismiss();}),Icons$2.getIcon("spinner-circle-dark",Icons$2.sizes.large,null,null).then((t=>{const s=$("<div />",{class:"text-center"}).append(t);this.addSlide("final-processing-slide",top.TYPO3.lang["wizard.processing.title"],s[0].outerHTML,Severity.info,e);}))}show(){const e=this.generateSlides(),t=this.setup.slides[0],s=Modal.advanced({title:t.title,content:e,severity:t.severity,staticBackdrop:!0,buttons:[{text:top.TYPO3.lang["wizard.button.cancel"],active:!0,btnClass:"btn-default",name:"cancel",trigger:()=>{this.getComponent().trigger("wizard-dismiss");}},{text:top.TYPO3.lang["wizard.button.next"],btnClass:"btn-"+Severity.getCssClass(t.severity),name:"next"}],callback:()=>{this.addProgressBar(),this.initializeEvents(s);}});this.setup.forceSelection&&this.lockNextStep(),this.getComponent().on("wizard-visible",(()=>{this.runSlideCallback(t,this.setup.$carousel.find(".carousel-item").first());})).on("wizard-dismissed",(()=>{this.setup=$.extend(!0,{},this.originalSetup);}));}getComponent(){return null===this.setup.$carousel&&this.generateSlides(),this.setup.$carousel}dismiss(){Modal.dismiss();}lockNextStep(){const e=this.setup.$carousel.closest(".modal").find('button[name="next"]');return e.prop("disabled",!0),e}unlockNextStep(){const e=this.setup.$carousel.closest(".modal").find('button[name="next"]');return e.prop("disabled",!1),e}setForceSelection(e){this.setup.forceSelection=e;}initializeEvents(e){const t=this.setup.$carousel.closest(".modal"),s=t.find(".modal-title"),i=t.find(".modal-footer"),a=i.find('button[name="next"]');a.on("click",(()=>{this.setup.$carousel.carousel("next");})),this.setup.$carousel.on("slide.bs.carousel",(()=>{const e=this.setup.$carousel.data("currentSlide")+1,r=this.setup.$carousel.data("currentIndex")+1;s.text(this.setup.slides[r].title),this.setup.$carousel.data("currentSlide",e),this.setup.$carousel.data("currentIndex",r),e>=this.setup.$carousel.data("realSlideCount")?(t.find(".modal-header .close").remove(),i.slideUp()):i.find(".progress-bar").width(this.setup.$carousel.data("initialStep")*e+"%").text(top.TYPO3.lang["wizard.progress"].replace("{0}",e).replace("{1}",this.setup.$carousel.data("slideCount"))),a.removeClass("btn-"+Severity.getCssClass(this.setup.slides[r-1].severity)).addClass("btn-"+Severity.getCssClass(this.setup.slides[r].severity)),t.removeClass("modal-severity-"+Severity.getCssClass(this.setup.slides[r-1].severity)).addClass("modal-severity-"+Severity.getCssClass(this.setup.slides[r].severity));})).on("slid.bs.carousel",(e=>{const t=this.setup.$carousel.data("currentIndex"),s=this.setup.slides[t];this.runSlideCallback(s,$(e.relatedTarget)),this.setup.forceSelection&&this.lockNextStep();}));const r=this.getComponent();r.on("wizard-dismiss",this.dismiss),e.addEventListener("typo3-modal-hidden",(()=>{r.trigger("wizard-dismissed");})),e.addEventListener("typo3-modal-shown",(()=>{r.trigger("wizard-visible");}));}runSlideCallback(e,t){"function"==typeof e.callback&&e.callback(t,this.setup.settings,e.identifier);}addProgressBar(){const e=this.setup.$carousel.find(".carousel-item").length,t=Math.max(1,e),s=Math.round(100/t),i=this.setup.$carousel.closest(".modal").find(".modal-footer");this.setup.$carousel.data("initialStep",s).data("slideCount",t).data("realSlideCount",e).data("currentIndex",0).data("currentSlide",1),t>1&&i.prepend($("<div />",{class:"progress"}).append($("<div />",{role:"progressbar",class:"progress-bar","aria-valuemin":0,"aria-valuenow":s,"aria-valuemax":100}).width(s+"%").text(top.TYPO3.lang["wizard.progress"].replace("{0}","1").replace("{1}",t))));}generateSlides(){if(null!==this.setup.$carousel)return this.setup.$carousel;let e='<div class="carousel slide" data-bs-ride="false"><div class="carousel-inner" role="listbox">';for(const t of Object.values(this.setup.slides)){let s=t.content;"object"==typeof s&&(s=s.html()),e+='<div class="carousel-item" data-bs-slide="'+t.identifier+'">'+s+"</div>";}return e+="</div></div>",this.setup.$carousel=$(e),this.setup.$carousel.find(".carousel-item").first().addClass("active"),this.setup.$carousel}}let wizardObject;try{window.opener&&window.opener.TYPO3&&window.opener.TYPO3.Wizard&&(wizardObject=window.opener.TYPO3.Wizard),parent&&parent.window.TYPO3&&parent.window.TYPO3.Wizard&&(wizardObject=parent.window.TYPO3.Wizard),top&&top.TYPO3&&top.TYPO3.Wizard&&(wizardObject=top.TYPO3.Wizard);}catch{}wizardObject||(wizardObject=new Wizard,"undefined"!=typeof TYPO3&&(TYPO3.Wizard=wizardObject));var Wizard$1 = wizardObject;
+class Wizard {
+  constructor() {
+    (this.setup = {
+      slides: [],
+      settings: {},
+      forceSelection: !0,
+      $carousel: null,
+    }),
+      (this.originalSetup = $.extend(!0, {}, this.setup));
+  }
+  set(e, t) {
+    return (this.setup.settings[e] = t), this;
+  }
+  addSlide(e, t, s = "", i = SeverityEnum$1.info, a) {
+    const r = { identifier: e, title: t, content: s, severity: i, callback: a };
+    return this.setup.slides.push(r), this;
+  }
+  addFinalProcessingSlide(e) {
+    return (
+      e ||
+        (e = () => {
+          this.dismiss();
+        }),
+      Icons$2.getIcon("spinner-circle-dark", Icons$2.sizes.large, null, null).then(
+        (t) => {
+          const s = $("<div />", { class: "text-center" }).append(t);
+          this.addSlide(
+            "final-processing-slide",
+            top.TYPO3.lang["wizard.processing.title"],
+            s[0].outerHTML,
+            Severity.info,
+            e
+          );
+        }
+      )
+    );
+  }
+  show() {
+    const e = this.generateSlides(),
+      t = this.setup.slides[0],
+      s = Modal.advanced({
+        title: t.title,
+        content: e,
+        severity: t.severity,
+        staticBackdrop: !0,
+        buttons: [
+          {
+            text: top.TYPO3.lang["wizard.button.cancel"],
+            active: !0,
+            btnClass: "btn-default",
+            name: "cancel",
+            trigger: () => {
+              this.getComponent().trigger("wizard-dismiss");
+            },
+          },
+          {
+            text: top.TYPO3.lang["wizard.button.next"],
+            btnClass: "btn-" + Severity.getCssClass(t.severity),
+            name: "next",
+          },
+        ],
+        callback: () => {
+          this.addProgressBar(), this.initializeEvents(s);
+        },
+      });
+    this.setup.forceSelection && this.lockNextStep(),
+      this.getComponent()
+        .on("wizard-visible", () => {
+          this.runSlideCallback(
+            t,
+            this.setup.$carousel.find(".carousel-item").first()
+          );
+        })
+        .on("wizard-dismissed", () => {
+          this.setup = $.extend(!0, {}, this.originalSetup);
+        });
+  }
+  getComponent() {
+    return (
+      null === this.setup.$carousel && this.generateSlides(),
+      this.setup.$carousel
+    );
+  }
+  dismiss() {
+    Modal.dismiss();
+  }
+  lockNextStep() {
+    const e = this.setup.$carousel
+      .closest(".modal")
+      .find('button[name="next"]');
+    return e.prop("disabled", !0), e;
+  }
+  unlockNextStep() {
+    const e = this.setup.$carousel
+      .closest(".modal")
+      .find('button[name="next"]');
+    return e.prop("disabled", !1), e;
+  }
+  setForceSelection(e) {
+    this.setup.forceSelection = e;
+  }
+  initializeEvents(e) {
+    const t = this.setup.$carousel.closest(".modal"),
+      s = t.find(".modal-title"),
+      i = t.find(".modal-footer"),
+      a = i.find('button[name="next"]');
+    a.on("click", () => {
+      this.setup.$carousel.carousel("next");
+    }),
+      this.setup.$carousel
+        .on("slide.bs.carousel", () => {
+          const e = this.setup.$carousel.data("currentSlide") + 1,
+            r = this.setup.$carousel.data("currentIndex") + 1;
+          s.text(this.setup.slides[r].title),
+            this.setup.$carousel.data("currentSlide", e),
+            this.setup.$carousel.data("currentIndex", r),
+            e >= this.setup.$carousel.data("realSlideCount")
+              ? (t.find(".modal-header .close").remove(), i.slideUp())
+              : i
+                  .find(".progress-bar")
+                  .width(this.setup.$carousel.data("initialStep") * e + "%")
+                  .text(
+                    top.TYPO3.lang["wizard.progress"]
+                      .replace("{0}", e)
+                      .replace("{1}", this.setup.$carousel.data("slideCount"))
+                  ),
+            a
+              .removeClass(
+                "btn-" + Severity.getCssClass(this.setup.slides[r - 1].severity)
+              )
+              .addClass(
+                "btn-" + Severity.getCssClass(this.setup.slides[r].severity)
+              ),
+            t
+              .removeClass(
+                "modal-severity-" +
+                  Severity.getCssClass(this.setup.slides[r - 1].severity)
+              )
+              .addClass(
+                "modal-severity-" +
+                  Severity.getCssClass(this.setup.slides[r].severity)
+              );
+        })
+        .on("slid.bs.carousel", (e) => {
+          const t = this.setup.$carousel.data("currentIndex"),
+            s = this.setup.slides[t];
+          this.runSlideCallback(s, $(e.relatedTarget)),
+            this.setup.forceSelection && this.lockNextStep();
+        });
+    const r = this.getComponent();
+    r.on("wizard-dismiss", this.dismiss),
+      e.addEventListener("typo3-modal-hidden", () => {
+        r.trigger("wizard-dismissed");
+      }),
+      e.addEventListener("typo3-modal-shown", () => {
+        r.trigger("wizard-visible");
+      });
+  }
+  runSlideCallback(e, t) {
+    "function" == typeof e.callback &&
+      e.callback(t, this.setup.settings, e.identifier);
+  }
+  addProgressBar() {
+    const e = this.setup.$carousel.find(".carousel-item").length,
+      t = Math.max(1, e),
+      s = Math.round(100 / t),
+      i = this.setup.$carousel.closest(".modal").find(".modal-footer");
+    this.setup.$carousel
+      .data("initialStep", s)
+      .data("slideCount", t)
+      .data("realSlideCount", e)
+      .data("currentIndex", 0)
+      .data("currentSlide", 1),
+      t > 1 &&
+        i.prepend(
+          $("<div />", { class: "progress" }).append(
+            $("<div />", {
+              role: "progressbar",
+              class: "progress-bar",
+              "aria-valuemin": 0,
+              "aria-valuenow": s,
+              "aria-valuemax": 100,
+            })
+              .width(s + "%")
+              .text(
+                top.TYPO3.lang["wizard.progress"]
+                  .replace("{0}", "1")
+                  .replace("{1}", t)
+              )
+          )
+        );
+  }
+  generateSlides() {
+    if (null !== this.setup.$carousel) return this.setup.$carousel;
+    let e =
+      '<div class="carousel slide" data-bs-ride="false"><div class="carousel-inner" role="listbox">';
+    for (const t of Object.values(this.setup.slides)) {
+      let s = t.content;
+      "object" == typeof s && (s = s.html()),
+        (e +=
+          '<div class="carousel-item" data-bs-slide="' +
+          t.identifier +
+          '">' +
+          s +
+          "</div>");
+    }
+    return (
+      (e += "</div></div>"),
+      (this.setup.$carousel = $(e)),
+      this.setup.$carousel.find(".carousel-item").first().addClass("active"),
+      this.setup.$carousel
+    );
+  }
+}
+let wizardObject;
+try {
+  window.opener &&
+    window.opener.TYPO3 &&
+    window.opener.TYPO3.Wizard &&
+    (wizardObject = window.opener.TYPO3.Wizard),
+    parent &&
+      parent.window.TYPO3 &&
+      parent.window.TYPO3.Wizard &&
+      (wizardObject = parent.window.TYPO3.Wizard),
+    top && top.TYPO3 && top.TYPO3.Wizard && (wizardObject = top.TYPO3.Wizard);
+} catch {}
+wizardObject ||
+  ((wizardObject = new Wizard()),
+  "undefined" != typeof TYPO3 && (TYPO3.Wizard = wizardObject));
+var Wizard$1 = wizardObject;
 
 /*
-* This file is part of the TYPO3 CMS project.
-*
-* It is free software; you can redistribute it and/or modify it under
-* the terms of the GNU General Public License, either version 2
-* of the License, or any later version.
-*
-* For the full copyright and license information, please read the
-* LICENSE.txt file that was distributed with this source code.
-*
-* The TYPO3 project - inspiring people to share!
-*/
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
 class Localization {
     constructor() {
         this.triggerButton = '.t3js-localize';
         this.localizationMode = null;
         this.sourceLanguage = null;
         this.records = [];
-        this.deeplSettingsFailure = 'Please complete missing DeepL configurations.';
         documentService.ready().then(() => {
             this.initialize();
         });
@@ -116,72 +344,90 @@ class Localization {
                         const availableLocalizationModes = [];
                         let slideStep1 = '';
                         if ($triggerButton.data('allowTranslate')) {
-                            actions.push('<div class="row">'
-                                + '<div class="col-sm-3">'
-                                + '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-translate">'
-                                + localizeIconMarkup
-                                + '<input type="radio" name="mode" id="mode_translate" value="localize" style="display: none">'
-                                + '<br>' + TYPO3.lang['localize.wizard.button.translate'] + '</label>'
-                                + '</div>'
-                                + '<div class="col-sm-9">'
-                                + '<p class="t3js-helptext t3js-helptext-translate text-body-secondary">' + TYPO3.lang['localize.educate.translate'] + '</p>'
-                                + '</div>'
-                                + '</div>');
+                            actions.push('<div class="row">' +
+                                '<div class="col-sm-3">' +
+                                '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-translate">' +
+                                localizeIconMarkup +
+                                '<input type="radio" name="mode" id="mode_translate" value="localize" style="display: none">' +
+                                '<br>' +
+                                TYPO3.lang['localize.wizard.button.translate'] +
+                                '</label>' +
+                                '</div>' +
+                                '<div class="col-sm-9">' +
+                                '<p class="t3js-helptext t3js-helptext-translate text-body-secondary">' +
+                                TYPO3.lang['localize.educate.translate'] +
+                                '</p>' +
+                                '</div>' +
+                                '</div>');
                             availableLocalizationModes.push('localize');
                         }
                         if ($triggerButton.data('allowCopy')) {
-                            actions.push('<div class="row">'
-                                + '<div class="col-sm-3">'
-                                + '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">'
-                                + copyIconMarkup
-                                + '<input type="radio" name="mode" id="mode_copy" value="copyFromLanguage" style="display: none">'
-                                + '<br>' + TYPO3.lang['localize.wizard.button.copy'] + '</label>'
-                                + '</div>'
-                                + '<div class="col-sm-9">'
-                                + '<p class="t3js-helptext t3js-helptext-copy text-body-secondary">' + TYPO3.lang['localize.educate.copy'] + '</p>'
-                                + '</div>'
-                                + '</div>');
+                            actions.push('<div class="row">' +
+                                '<div class="col-sm-3">' +
+                                '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">' +
+                                copyIconMarkup +
+                                '<input type="radio" name="mode" id="mode_copy" value="copyFromLanguage" style="display: none">' +
+                                '<br>' +
+                                TYPO3.lang['localize.wizard.button.copy'] +
+                                '</label>' +
+                                '</div>' +
+                                '<div class="col-sm-9">' +
+                                '<p class="t3js-helptext t3js-helptext-copy text-body-secondary">' +
+                                TYPO3.lang['localize.educate.copy'] +
+                                '</p>' +
+                                '</div>' +
+                                '</div>');
                             availableLocalizationModes.push('copyFromLanguage');
                         }
-                        actions.push('<div class="row" id="deeplTranslate">'
-                            + '<div class="col-sm-3">'
-                            + '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">'
-                            + deeplIconMarkup
-                            + '<input type="radio" name="mode" id="mode_deepltranslate" value="localizedeepl" style="display: none">'
-                            + '<br>' + 'Translate (DeepL)' + '</label>'
-                            + '</div>'
-                            + '<div class="col-sm-9" id="deeplText">'
-                            + '<p class="t3js-helptext t3js-helptext-copy text-body-secondary">' + TYPO3.lang['localize.educate.deepltranslate'] + '</p>'
-                            + '</div>'
-                            + '</div>');
+                        actions.push('<div class="row" id="deeplTranslate">' +
+                            '<div class="col-sm-3">' +
+                            '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">' +
+                            deeplIconMarkup +
+                            '<input type="radio" name="mode" id="mode_deepltranslate" value="localizedeepl" style="display: none">' +
+                            '<br>' +
+                            TYPO3.lang['localize.educate.deepltranslateHeader'] +
+                            '</label>' +
+                            '</div>' +
+                            '<div class="col-sm-9" id="deeplText">' +
+                            '<p class="t3js-helptext t3js-helptext-copy text-body-secondary">' +
+                            TYPO3.lang['localize.educate.deepltranslate'] +
+                            '</p>' +
+                            '</div>' +
+                            '</div>');
                         availableLocalizationModes.push('copyFromLanguage');
-                        actions.push('<div class="row" id="deeplTranslateAuto">'
-                            + '<div class="col-sm-3">'
-                            + '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">'
-                            + deeplIconMarkup
-                            + '<input type="radio" name="mode" id="mode_deepltranslateauto" value="localizedeeplauto" style="display: none">'
-                            + '<br>' + 'Translate<br>(DeepL)<br>(autodetect)' + '</label>'
-                            + '</div>'
-                            + '<div class="col-sm-9" id="deeplTextAuto">'
-                            + '<p class="t3js-helptext t3js-helptext-copy text-body-secondary">' + TYPO3.lang['localize.educate.deepltranslateAuto'] + '</p>'
-                            + '</div>'
-                            + '</div>');
+                        actions.push('<div class="row" id="deeplTranslateAuto">' +
+                            '<div class="col-sm-3">' +
+                            '<label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">' +
+                            deeplIconMarkup +
+                            '<input type="radio" name="mode" id="mode_deepltranslateauto" value="localizedeeplauto" style="display: none">' +
+                            '<br>' +
+                            TYPO3.lang['localize.educate.deepltranslateHeaderAutodetect'] +
+                            '</label>' +
+                            '</div>' +
+                            '<div class="col-sm-9" id="deeplTextAuto">' +
+                            '<p class="t3js-helptext t3js-helptext-copy text-body-secondary">' +
+                            TYPO3.lang['localize.educate.deepltranslateAuto'] +
+                            '</p>' +
+                            '</div>' +
+                            '</div>');
                         availableLocalizationModes.push('copyFromLanguage');
                         if ($triggerButton.data('allowTranslate') === 0 && $triggerButton.data('allowCopy') === 0) {
-                            actions.push('<div class="row">'
-                                + '<div class="col-sm-12">'
-                                + '<div class="alert alert-warning">'
-                                + '<div class="media">'
-                                + '<div class="media-left">'
-                                + '<span class="icon-emphasized"><typo3-backend-icon identifier="actions-exclamation" size="small"></typo3-backend-icon></span>'
-                                + '</div>'
-                                + '<div class="media-body">'
-                                + '<p class="alert-message">' + TYPO3.lang['localize.educate.noTranslate'] + '</p>'
-                                + '</div>'
-                                + '</div>'
-                                + '</div>'
-                                + '</div>'
-                                + '</div>');
+                            actions.push('<div class="row">' +
+                                '<div class="col-sm-12">' +
+                                '<div class="alert alert-warning">' +
+                                '<div class="media">' +
+                                '<div class="media-left">' +
+                                '<span class="icon-emphasized"><typo3-backend-icon identifier="actions-exclamation" size="small"></typo3-backend-icon></span>' +
+                                '</div>' +
+                                '<div class="media-body">' +
+                                '<p class="alert-message">' +
+                                TYPO3.lang['localize.educate.noTranslate'] +
+                                '</p>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>');
                         }
                         slideStep1 += '<div data-bs-toggle="buttons">' + actions.join('') + '</div>';
                         Wizard$1.addSlide('localize-choose-action', TYPO3.lang['localize.wizard.header_page']
@@ -219,14 +465,15 @@ class Localization {
                                             id: id,
                                             value: languageObject.uid,
                                             style: 'display: none;',
-                                            class: 'btn-check'
+                                            class: 'btn-check',
                                         });
-                                        const $label = $('<label />', { class: 'btn btn-default d-block t3js-language-option option', 'for': id })
+                                        const $label = $('<label />', {
+                                            class: 'btn btn-default d-block t3js-language-option option',
+                                            for: id,
+                                        })
                                             .text(' ' + languageObject.title)
                                             .prepend(languageObject.flagIcon);
-                                        $languageButtons.append($('<div />', { class: 'col-sm-4' })
-                                            .append($input)
-                                            .append($label));
+                                        $languageButtons.append($('<div />', { class: 'col-sm-4' }).append($input).append($label));
                                     }
                                     $slide.empty().append($languageButtons);
                                 });
@@ -251,28 +498,33 @@ class Localization {
                                     result.records[colPos].forEach((record) => {
                                         const label = ' (' + record.uid + ') ' + record.title;
                                         this.records.push(record.uid);
-                                        $row.append($('<div />', { 'class': 'col-sm-6' }).append($('<div />', { 'class': 'input-group' }).append($('<span />', { 'class': 'input-group-addon' }).append($('<input />', {
+                                        $row.append($('<div />', { class: 'col-sm-6' }).append($('<div />', { class: 'input-group' }).append($('<span />', { class: 'input-group-addon' }).append($('<input />', {
                                             type: 'checkbox',
-                                            'class': 't3js-localization-toggle-record',
+                                            class: 't3js-localization-toggle-record',
                                             id: 'record-uid-' + record.uid,
                                             checked: 'checked',
                                             'data-uid': record.uid,
                                             'aria-label': label,
                                         })), $('<label />', {
-                                            'class': 'form-control',
+                                            class: 'form-control',
                                             for: 'record-uid-' + record.uid,
-                                        }).text(label).prepend(record.icon))));
+                                        })
+                                            .text(label)
+                                            .prepend(record.icon))));
                                     });
                                     $slide.append($('<fieldset />', {
-                                        'class': 'localization-fieldset',
-                                    }).append($('<label />').text(column).prepend($('<input />', {
-                                        'class': 't3js-localization-toggle-column',
+                                        class: 'localization-fieldset',
+                                    }).append($('<label />')
+                                        .text(column)
+                                        .prepend($('<input />', {
+                                        class: 't3js-localization-toggle-column',
                                         type: 'checkbox',
                                         checked: 'checked',
                                     })), $row));
                                 });
                                 Wizard$1.unlockNextStep();
-                                Wizard$1.getComponent().on('change', '.t3js-localization-toggle-record', (cmpEvt) => {
+                                Wizard$1.getComponent()
+                                    .on('change', '.t3js-localization-toggle-record', (cmpEvt) => {
                                     const $me = $(cmpEvt.currentTarget);
                                     const uid = $me.data('uid');
                                     const $parent = $me.closest('fieldset');
@@ -296,7 +548,8 @@ class Localization {
                                     else {
                                         Wizard$1.lockNextStep();
                                     }
-                                }).on('change', '.t3js-localization-toggle-column', (toggleEvt) => {
+                                })
+                                    .on('change', '.t3js-localization-toggle-column', (toggleEvt) => {
                                     const $me = $(toggleEvt.currentTarget);
                                     const $children = $me.closest('fieldset').find('.t3js-localization-toggle-record');
                                     $children.prop('checked', $me.is(':checked'));
@@ -341,7 +594,7 @@ class Localization {
                                 //         }
                                 //         divDeepl.prepend(
                                 //           "<div class='alert alert-danger' id='alertClose'>  <a href='#'' class='close'  data-dismiss='alert' aria-label='close'>&times;</a>" +
-                                //           'Please complete missing DeepL configurations.' +
+                                //          TYPO3.lang['localize.educate.deeplSettingsFailure'] +
                                 //           '</div>',
                                 //         )
                                 //         var deeplText = $('#alertClose', window.parent.document)
@@ -373,10 +626,12 @@ class Localization {
      * @returns {Promise<AjaxResponse>}
      */
     loadAvailableLanguages(pageId, languageId) {
-        return new AjaxRequest(TYPO3.settings.ajaxUrls.page_languages).withQueryArguments({
+        return new AjaxRequest(TYPO3.settings.ajaxUrls.page_languages)
+            .withQueryArguments({
             pageId: pageId,
             languageId: languageId,
-        }).get();
+        })
+            .get();
     }
     /**
      * Get summary for record processing
@@ -386,11 +641,13 @@ class Localization {
      * @returns {Promise<AjaxResponse>}
      */
     getSummary(pageId, languageId) {
-        return new AjaxRequest(TYPO3.settings.ajaxUrls.records_localize_summary).withQueryArguments({
+        return new AjaxRequest(TYPO3.settings.ajaxUrls.records_localize_summary)
+            .withQueryArguments({
             pageId: pageId,
             destLanguageId: languageId,
             languageId: this.sourceLanguage,
-        }).get();
+        })
+            .get();
     }
     /**
      * Localize records
@@ -401,22 +658,26 @@ class Localization {
      * @returns {Promise<AjaxResponse>}
      */
     localizeRecords(pageId, languageId, uidList) {
-        return new AjaxRequest(TYPO3.settings.ajaxUrls.records_localize).withQueryArguments({
+        return new AjaxRequest(TYPO3.settings.ajaxUrls.records_localize)
+            .withQueryArguments({
             pageId: pageId,
             srcLanguageId: this.sourceLanguage,
             destLanguageId: languageId,
             action: this.localizationMode,
             uidList: uidList,
-        }).get();
+        })
+            .get();
     }
     deeplSettings(pageId, languageId, uidList) {
-        return new AjaxRequest(TYPO3.settings.ajaxUrls.deepl_check_configuration).withQueryArguments({
+        return new AjaxRequest(TYPO3.settings.ajaxUrls.deepl_check_configuration)
+            .withQueryArguments({
             pageId: pageId,
             srcLanguageId: this.sourceLanguage,
             destLanguageId: languageId,
             action: this.localizationMode,
             uidList: uidList,
-        }).get();
+        })
+            .get();
     }
 }
 var Localization$1 = new Localization();

@@ -46,7 +46,6 @@ class Localization {
   private localizationMode: string = null;
   private sourceLanguage: number = null;
   private records: Array<any> = [];
-  private deeplSettingsFailure = 'Please complete missing DeepL configurations.';
 
   constructor() {
     DocumentService.ready().then((): void => {
@@ -118,7 +117,7 @@ class Localization {
                 deeplIconMarkup +
                 '<input type="radio" name="mode" id="mode_deepltranslate" value="localizedeepl" style="display: none">' +
                 '<br>' +
-                'Translate (DeepL)' +
+                TYPO3.lang['localize.educate.deepltranslateHeader'] +
                 '</label>' +
                 '</div>' +
                 '<div class="col-sm-9" id="deeplText">' +
@@ -137,7 +136,7 @@ class Localization {
                 deeplIconMarkup +
                 '<input type="radio" name="mode" id="mode_deepltranslateauto" value="localizedeeplauto" style="display: none">' +
                 '<br>' +
-                'Translate<br>(DeepL)<br>(autodetect)' +
+                TYPO3.lang['localize.educate.deepltranslateHeaderAutodetect'] +
                 '</label>' +
                 '</div>' +
                 '<div class="col-sm-9" id="deeplTextAuto">' +
@@ -405,7 +404,7 @@ class Localization {
                 //         }
                 //         divDeepl.prepend(
                 //           "<div class='alert alert-danger' id='alertClose'>  <a href='#'' class='close'  data-dismiss='alert' aria-label='close'>&times;</a>" +
-                //           'Please complete missing DeepL configurations.' +
+                //          TYPO3.lang['localize.educate.deeplSettingsFailure'] +
                 //           '</div>',
                 //         )
                 //         var deeplText = $('#alertClose', window.parent.document)

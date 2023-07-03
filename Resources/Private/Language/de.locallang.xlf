@@ -11,6 +11,14 @@
 				<source>Translate with DeepL</source>
 				<target>Mit DeepL übersetzen</target>
 			</trans-unit>
+			<trans-unit id="localize.educate.deepltranslateHeader">
+				<source>Translate with DeepL</source>
+				<target>Mit DeepL übersetzen</target>
+			</trans-unit>
+			<trans-unit id="localize.educate.deepltranslateHeaderAutodetect">
+				<source>Translate with DeepL (autodetect)</source>
+				<target>Mit DeepL übersetzen (autodetect)</target>
+			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
 				<source>Translating content via DeepL translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
 				<target>Beim Übersetzen von Inhalten über DeepL Translate wird eine Übersetzung aus der Ausgangssprache in die Sprache erstellt, in die Sie übersetzen , Niederländisch und Polnisch. Andere Sprachen werden ignoriert und werden standardmäßig auf die normale Übersetzungsoperation von TYPO3 umgestellt.</target>
@@ -19,6 +27,11 @@
 				<source>Translating content via DeepL translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
 				<target>Durch das Übersetzen von Inhalten über DeepL Translate (automatische Erkennung) wird eine Übersetzung aus der automatisch erkannten Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Der übersetzte Inhalt stammt vom DeepL-Übersetzungsdienst, der zu 99 Prozent genau ist. Sprachen Deutsch, Spanisch, Italienisch, Niederländisch und Polnisch. Andere Sprachen werden ignoriert und verwenden standardmäßig den normalen Übersetzungsvorgang von TYPO3.</target>
 			</trans-unit>
+			<trans-unit id="localize.educate.deeplSettingsFailure">
+				<source>Please complete missing DeepL configurations.</source>
+				<target>Bitte ergänzen Sie fehlende DeepL Konfigurationen.</target>
+			</trans-unit>
+
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
 				<source>DeepL</source>
 				<target>DeepL</target>
