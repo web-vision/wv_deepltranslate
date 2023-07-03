@@ -98,8 +98,8 @@ export default {
     }),
     alias({
       entries: [
-        { find: '@typo3-core', replacement: path.resolve('../.Build/vendor/typo3/cms-core/Resources/Public/JavaScript') },
-        { find: '@typo3-backend', replacement: path.resolve('../.Build/vendor/typo3/cms-backend/Resources/Public/JavaScript') },
+        { find: '@typo3-core', replacement: path.resolve(paths[process.env.BUILD] + '/typo3/cms-core/Resources/Public/JavaScript') },
+        { find: '@typo3-backend', replacement: path.resolve(paths[process.env.BUILD] + '/typo3/cms-backend/Resources/Public/JavaScript') },
       ]
     }),
     commonjs(),
@@ -110,5 +110,3 @@ export default {
     // terser(),
   ],
 }
-console.log(process.env.BUILD);
-console.log(path.resolve(paths[process.env.BUILD] + '/typo3/cms-core/Resources/Public/JavaScript'));

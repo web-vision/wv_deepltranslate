@@ -99,29 +99,20 @@ define('TYPO3/CMS/Backend/Localization', [
   }
 
   Localization.initialize = function () {
-    Icons.getIcon('actions-localize', Icons.sizes.large).done(function (
-      localizeIconMarkup,
-    ) {
-      Icons.getIcon('actions-edit-copy', Icons.sizes.large).done(function (
-        copyIconMarkup,
-      ) {
-        Icons.getIcon('actions-localize-deepl', Icons.sizes.large).done(
-          function (localizeDeeplIconMarkup) {
-            Icons.getIcon('actions-localize-deepl', Icons.sizes.large).done(
-              function (localizeDeeplIconMarkup) {
-                Localization.actions.translate.prepend(localizeIconMarkup)
-                Localization.actions.copy.prepend(copyIconMarkup)
-                Localization.actions.deepltranslate.prepend(
-                  localizeDeeplIconMarkup,
-                )
-                Localization.actions.deepltranslateAuto.prepend(
-                  localizeDeeplIconMarkup,
-                )
-                $(Localization.identifier.triggerButton).removeClass(
-                  'disabled',
-                )
-              },
-            )
+    Icons.getIcon('actions-localize', Icons.sizes.large).done(function (localizeIconMarkup) {
+      Icons.getIcon('actions-edit-copy', Icons.sizes.large).done(function (copyIconMarkup) {
+        Icons.getIcon('actions-localize-deepl', Icons.sizes.large).done(function (localizeDeeplIconMarkup) {
+              Localization.actions.translate.prepend(localizeIconMarkup)
+              Localization.actions.copy.prepend(copyIconMarkup)
+              Localization.actions.deepltranslate.prepend(
+                localizeDeeplIconMarkup,
+              )
+              Localization.actions.deepltranslateAuto.prepend(
+                localizeDeeplIconMarkup,
+              )
+              $(Localization.identifier.triggerButton).removeClass(
+                'disabled',
+              )
           },
         )
       })
