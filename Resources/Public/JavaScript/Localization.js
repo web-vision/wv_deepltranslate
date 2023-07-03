@@ -574,42 +574,46 @@ class Localization {
                                     $me.addClass('active');
                                     $container.find($me.data('helptext')).removeClass('text-body-secondary');
                                 }
-                                // if ($radio.length > 0) {
-                                //   if (
-                                //     $radio.val() == 'localizedeepl' ||
-                                //     $radio.val() == 'localizedeeplauto'
-                                //   ) {
-                                //     //checkdeepl settings
-                                //     this.deeplSettings(
-                                //       parseInt($triggerButton.data('pageId'), 10),
-                                //       parseInt($triggerButton.data('languageId'), 10),
-                                //       this.records,
-                                //     ).then(async (result) => {
-                                //       const responseDeepl = result;
-                                //       if (responseDeepl.status == 'false') {
-                                //         if ($radio.val() == 'localizedeepl') {
-                                //           var divDeepl = $('#deeplText', window.parent.document)
-                                //         } else {
-                                //           var divDeepl = $('#deeplTextAuto', window.parent.document)
-                                //         }
-                                //         divDeepl.prepend(
-                                //           "<div class='alert alert-danger' id='alertClose'>  <a href='#'' class='close'  data-dismiss='alert' aria-label='close'>&times;</a>" +
-                                //          TYPO3.lang['localize.educate.deeplSettingsFailure'] +
-                                //           '</div>',
-                                //         )
-                                //         var deeplText = $('#alertClose', window.parent.document)
-                                //         $(deeplText)
-                                //           .fadeTo(1600, 500)
-                                //           .slideUp(500, () => {
-                                //             ($(deeplText) as any).alert('close')
-                                //           })
-                                //         Wizard.lockNextStep()
-                                //       }
-                                //     })
-                                //   }
-                                //   this.localizationMode[$radio.attr('name')] = $radio.val()
-                                // }
-                                this.localizationMode = $radio.val();
+                                this.loadAvailableLanguages(parseInt($triggerButton.data('pageId'), 10), parseInt($triggerButton.data('languageId'), 10)).then(async (response) => {
+                                    const result = await response.resolve();
+                                    if (result.length === 1) {
+                                        this.sourceLanguage = result[0].uid;
+                                    }
+                                    else {
+                                        // This seems pretty ugly solution to finde the right language uid but its done the same way in the core... line 211-213
+                                        //  If we have more then 1 language we need to find the first radio button and check its value to get the source language
+                                        this.sourceLanguage = $radio.prev().val();
+                                    }
+                                    if ($radio.length > 0) {
+                                        if ($radio.val() == 'localizedeepl' ||
+                                            $radio.val() == 'localizedeeplauto') {
+                                            this.deeplSettings(parseInt($triggerButton.data('pageId'), 10), parseInt($triggerButton.data('languageId'), 10), this.records).then(async (result) => {
+                                                const responseDeepl = result;
+                                                if (responseDeepl.status == 'false') {
+                                                    if ($radio.val() == 'localizedeepl') {
+                                                        var divDeepl = $('#deeplText', window.parent.document);
+                                                    }
+                                                    else {
+                                                        var divDeepl = $('#deeplTextAuto', window.parent.document);
+                                                    }
+                                                    divDeepl.prepend(`
+                            <div class='alert alert-danger' id='alertClose'>  <a href='#'' class='close'  data-dismiss='alert' aria-label='close'>&times;</a>
+                              ${TYPO3.lang['localize.educate.deeplSettingsFailure']}
+                            </div>
+                          `);
+                                                    var deeplText = $('#alertClose', window.parent.document);
+                                                    $(deeplText)
+                                                        .fadeTo(1600, 500)
+                                                        .slideUp(500, () => {
+                                                        $(deeplText).alert('close');
+                                                    });
+                                                    Wizard$1.lockNextStep();
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                                this.localizationMode = $radio.val().toString();
                                 Wizard$1.unlockNextStep();
                             });
                         });
@@ -668,6 +672,9 @@ class Localization {
         })
             .get();
     }
+    /**
+     * Returns the deepl settings
+     */
     deeplSettings(pageId, languageId, uidList) {
         return new AjaxRequest(TYPO3.settings.ajaxUrls.deepl_check_configuration)
             .withQueryArguments({
