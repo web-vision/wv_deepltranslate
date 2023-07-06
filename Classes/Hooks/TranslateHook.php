@@ -152,7 +152,7 @@ class TranslateHook
         } //mode google
         elseif ($customMode == 'google') {
             $response = $this->googleService->translate(
-                $targetLanguageRecord['language_isocode'],
+                $sourceLanguageRecord['language_isocode'],
                 $targetLanguageRecord['language_isocode'],
                 $content
             );
