@@ -43,7 +43,7 @@ const typo3Prefixes = [
 const lowerDashedToUpperCamelCase = (str) => str.replace(/([-\/])([a-z])/g, (_str, sep, letter) => (sep === '/' ? '/' : '') + letter.toUpperCase());
 const paths = {
   development: '../.Build/vendor',
-  production: '../vendor',
+  production: '../.Build/vendor',
 }
 
 export function typo3Resolve(config = {}) {
