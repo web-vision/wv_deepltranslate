@@ -414,18 +414,15 @@ class Localization {
                       $radio.val() == 'localizedeepl' ||
                       $radio.val() == 'localizedeeplauto'
                     ) {
-                      this.deeplSettings(
-                        parseInt($triggerButton.data('pageId'), 10),
-                        parseInt($triggerButton.data('languageId'), 10),
-                        this.records,
-                      ).then(async (response) => {
+                      this.deeplSettings().then(async (response) => {
                         const result: AjaxControllerResponse = await response.resolve();
 
                         if (result.status === false) {
                           Wizard.lockNextStep()
 
-                          let divDeepl: HTMLElement = $radio.val() == 'localizedeepl' ?
-                            window.parent.document.querySelector('#deeplText .alert') : window.parent.document.querySelector('#deeplTextAuto .alert');
+                          let divDeepl: HTMLElement = $radio.val() == 'localizedeepl'
+                            ? window.parent.document.querySelector('#deeplText .alert')
+                            : window.parent.document.querySelector('#deeplTextAuto .alert');
 
                           divDeepl.hidden = false;
                         }
@@ -497,19 +494,12 @@ class Localization {
       })
       .get();
   }
+
   /**
-   * Returns the deepl settings
+   * Returns status of deepl configuration, is not set Deepl Button are disabled
    */
-  private deeplSettings(pageId: number, languageId: number, uidList: Array<number>): Promise<AjaxResponse> {
-    return new AjaxRequest(TYPO3.settings.ajaxUrls.deepl_check_configuration)
-      .withQueryArguments({
-        pageId: pageId,
-        srcLanguageId: this.sourceLanguage,
-        destLanguageId: languageId,
-        action: this.localizationMode,
-        uidList: uidList,
-      })
-      .get();
+  private deeplSettings(): Promise<AjaxResponse> {
+    return new AjaxRequest(TYPO3.settings.ajaxUrls.deepl_check_configuration).get();
   }
 }
 
