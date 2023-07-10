@@ -1,5 +1,63 @@
 # Changelog
 
+### 4.0.0
+
+- [TASK] Allow runners only on PR (032f3ed)
+- [TASK] Prepare release step (5765d9a)
+- [BUGFIX] Fix glossary-id handle in translate request (74cb9a8)
+- [BUGFIX] Determine glossary correct on current page (31ca4ea)
+- [BUGFIX] Determine correct Preview mode in TYPO3 v9 (bbbb3b0)
+- [TASK] Add some todo markers and comments (bfa00d3)
+- [BUGFIX] Avoid undefined array key warning in AllowLanguageSynchronizationHook  (e3947f5)
+- [TASK] Display correct versions in core switch script (82eb8e6)
+- [BUGFIX] Avoid undefined array key warning in LocalizationController (f5536d5)
+- [TASK] Streamline doctrine/dbal usages (7a8bd31)
+- [TASK] Remove obsolete version check from siteconfiguration tca (447c0bb)
+- [BUGFIX] Guard LocalizationUtility::translate with (string) cast (9b4cba1)
+- [TASK] Avoid instantiating PageRenderer in ext_localconf.php (4b8cd0e)
+- [TASK] Replace deprecated TYPO3_MODE constant usage (f79ba80)
+- [BUGFIX] Ensure docker compose v2 combat  (ddb1a6b)
+- [TASK] Mark test classes final  (906d0b1)
+- [TASK] Migrate documentation rendering to runTests.sh (72fc7d0)
+- [DOCS] Ensure correct indentation in rst-files (e6d7aad)
+- [BUGFIX] Avoid undefined array key warning in LocalizationController (f60cdcc)
+- [DOCS] Update Settings.cfg for master to main switch (812be10)
+- [BUGFIX] Avoid undefined array key warning in AllowLanguageSynchronizationHook (9c0d396)
+- [TASK] Remove extbase persistence mapping (8edb0f1)
+- [TASK] Move ajax extension config check in own class (4a6e12e)
+- [TASK] Move Icon registry to Configuration/Icons.php (1529cc9)
+- [TASK] Add TYPO3 v12 support to Build/Scripts/runTests.sh (3ffeee3)
+- [TASK] Migrate to typo3/testing-framework (5d2dd68)
+- [BUGFIX] Avoid doctrine/dbal fetchAssociative()  (5ec224f)
+- [TASK] Update README badges (87bc51e)
+- [TASK] Avoid rowCount() for select query (643ced1)
+- [TASK] Refactor Services.yaml to Services.php  (a702578)
+- [BREAKING] Remove Google Translate support (21fb2f5)
+- [REMOVE] Settings Backend module and dependencies (cf05c15)
+- [TASK] remove v9/v10 (688bf7f)
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/3.0.4...4.0.0
+
+## 3.0.4
+
+* [BUGFIX] Access to undefined array keys in list view by @bigahuna in https://github.com/web-vision/wv_deepltranslate/pull/240
+* [BUGFIX] Guard `LocalizationUtility::translate` with `(string)` cast by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/255
+* [BUGFIX] Avoid undefined array key warning in `LocalizationController` by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/268
+* [BUGFIX] Avoid undefined array key warning in `AllowLanguageSynchronizationHook` by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/246
+* [BUGFIX] Determine correct Preview mode in TYPO3 v9 by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/270
+* [BUGFIX] Determine glossary correct on current page by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/271
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/3.0.3...3.0.4
+
+## 3.0.3
+
+* [TASK] Set branch alias for 3.0 by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/200
+* [TASK] Avoid `rowCount()` for select query by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/233
+* [BUGFIX] Avoid doctrine/dbal `fetchAssociative()` by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/236
+* [BUGFIX] Fix Problem with translation no glossary given by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/235
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/3.0.2...3.0.3
+
 ## 3.0.2
 
 [BUGFIX] Glossary is not used by @calien666 in #218
