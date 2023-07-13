@@ -47,7 +47,8 @@
 		"allow-plugins": {
 			"typo3/class-alias-loader": true,
 			"typo3/cms-composer-installers": true,
-			"helhum/typo3-console-plugin": true
+			"helhum/typo3-console-plugin": true,
+			"php-http/discovery": true
 		}
 	},
 	"extra": {
