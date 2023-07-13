@@ -36,6 +36,12 @@ final class GlossarySyncButtonProvider
         $normalizedParams = $request->getAttribute('normalizedParams');
         $pageTSconfig = BackendUtility::getPagesTSconfig($id);
 
+        $page = BackendUtility::getRecord(
+            'pages',
+            $id,
+            'uid,module'
+        );
+
         if (!$id
             || $module === null
             || $normalizedParams === null
@@ -43,6 +49,8 @@ final class GlossarySyncButtonProvider
             || !$this->canCreateNewRecord($id)
             || !in_array($module->getIdentifier(), self::ALLOWED_MODULES, true)
             || ($module->getIdentifier() === 'web_list' && !$this->isCreationAllowed($pageTSconfig['mod.']['web_list.'] ?? []))
+            || !isset($page['module'])
+            || $page['module'] !== 'glossary'
         ) {
             return;
         }
