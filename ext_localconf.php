@@ -12,8 +12,6 @@ defined('TYPO3') or die();
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['wvDeepltranslate_updateGlossary']
     = \WebVision\WvDeepltranslate\Upgrades\GlossaryUpgradeWizard::class;
 
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['wv_deepltranslate'] =
-        \WebVision\WvDeepltranslate\Hooks\ButtonBarHook::class . '->getButtons';
     //allowLanguageSynchronizationHook manipulates l10n_state
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
         = \WebVision\WvDeepltranslate\Hooks\AllowLanguageSynchronizationHook::class;
@@ -52,6 +50,10 @@ defined('TYPO3') or die();
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class] = [
             'className' => \WebVision\WvDeepltranslate\Override\Core11\DatabaseRecordList::class,
         ];
+
+        // button hook changed to event, registration here only needed for v11
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['wv_deepltranslate'] =
+            \WebVision\WvDeepltranslate\Hooks\ButtonBarHook::class . '->getButtons';
     }
 
     if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {

@@ -3,6 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\DependencyInjection\SingletonPass;
@@ -10,6 +11,7 @@ use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
 use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
 use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
 use WebVision\WvDeepltranslate\Controller\Backend\AjaxController;
+use WebVision\WvDeepltranslate\Event\Listener\GlossarySyncButtonProvider;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
@@ -18,6 +20,8 @@ use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
+    $typo3version = new \TYPO3\CMS\Core\Information\Typo3Version();
+
     $services = $containerConfigurator
         ->services();
     $services->defaults()
@@ -98,4 +102,17 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->addCompilerPass(new SingletonPass('deepl.TranslateHook'));
     $containerBuilder
         ->addCompilerPass(new SingletonPass('deepl.SiteConfigSupportedLanguageItemsProcFunc'));
+
+    // register Events
+    if ($typo3version->getMajorVersion() >= 12) {
+        $services
+            ->set(GlossarySyncButtonProvider::class)
+            ->tag(
+                'event.listener',
+                [
+                    'identifier' => 'glossary.syncbutton',
+                    'event' => ModifyButtonBarEvent::class
+                ]
+            );
+    }
 };
