@@ -24,9 +24,6 @@ final class GlossarySyncButtonProvider
     private const ALLOWED_MODULES = [
         'web_layout',
         'web_list',
-        'web_info_overview',
-        'web_info_translations',
-        'web_info_pagets',
     ];
 
     public function __invoke(ModifyButtonBarEvent $event): void
