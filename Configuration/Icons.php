@@ -11,10 +11,10 @@ return [
     ],
     'actions-localize-deepl' => [
         'provider' => SvgIconProvider::class,
-        'source' => 'EXT:wv_deepltranslate/Resources/Public/actions-localize-deepl.svg',
+        'source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-deepl.svg',
     ],
     'deepl-grey-logo' => [
         'provider' => SvgIconProvider::class,
-        'source' => 'EXT:wv_deepltranslate/Resources/Public/deepl-grey.svg',
+        'source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl-grey.svg',
     ],
 ];
