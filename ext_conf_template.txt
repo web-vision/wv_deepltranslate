@@ -1,7 +1,4 @@
 # cat=Settings/O; type=string; label= Deepl API Key
 apiKey =
-# cat=Settings/O; type=string; label= Deepl API Url: Please note that with Deepl Free, the API host is https://api-free.deepl.com. This free DeepL API Key includes 500.000 words per month.You can register for new Deepl Free API here = https://www.deepl.com/pro-checkout/account?productId=1200&yearly=false&trial=false
-apiUrl = https://api.deepl.com/v2/translate
 # cat=Settings/O; type=string; label= Deepl Formality: Sets whether the translated text should lean towards formal or informal language. This feature currently only works for target languages "DE", "FR", "IT", "ES", "NL", "PL", "PT-PT", "PT-BR" and "RU". Possible options are: "default", "more" and "less"
 deeplFormality = default
-

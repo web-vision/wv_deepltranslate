@@ -31,11 +31,6 @@ class DeeplBackendUtility
 {
     private static string $apiKey = '';
 
-    /**
-     * @deprecated
-     */
-    private static string $apiUrl = '';
-
     private static string $deeplFormality = 'default';
 
     private static bool $configurationLoaded = false;
@@ -54,17 +49,6 @@ class DeeplBackendUtility
             self::loadConfiguration();
         }
         return self::$apiKey;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getApiUrl(): string
-    {
-        if (!self::$configurationLoaded) {
-            self::loadConfiguration();
-        }
-        return self::$apiUrl;
     }
 
     /**
@@ -92,7 +76,6 @@ class DeeplBackendUtility
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
         self::$apiKey = $extensionConfiguration['apiKey'];
         self::$deeplFormality = $extensionConfiguration['deeplFormality'];
-        self::$apiUrl = $extensionConfiguration['apiUrl'];
 
         self::$configurationLoaded = true;
     }

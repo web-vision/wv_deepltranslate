@@ -25,22 +25,6 @@ DeepL API Key
 
     Add your DeepL API Key here.
 
-..  confval:: apiUrl (deprecated)
-
-    :type: string
-    :Default: https://api.deepl.com/v2/translate
-
-    The API URL used for DeepL translations.
-    One of the following allowed:
-
-    https://api-free.deepl.com/v2/translate
-        The free API. This free DeepL API Key includes 500.000 words per month.
-        You can register for new `DeepL Free API`_
-
-    https://api.deepl.com/v2/translate
-        Payed API. If you need more than the 500.000 words per month,
-        register and buy a package at `DeepL Pro`_
-
 ..  confval:: deeplFormality
 
     :type: string
