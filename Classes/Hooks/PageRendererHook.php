@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Page\PageRenderer;
+
 final class PageRendererHook
 {
     /**

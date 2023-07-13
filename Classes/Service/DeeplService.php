@@ -7,7 +7,6 @@ namespace WebVision\WvDeepltranslate\Service;
 use DeepL\Language;
 use DeepL\TextResult;
 use Doctrine\DBAL\Driver\Exception;
-use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Messaging\FlashMessage;

@@ -116,7 +116,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
                 'event.listener',
                 [
                     'identifier' => 'glossary.syncbutton',
-                    'event' => ModifyButtonBarEvent::class
+                    'event' => ModifyButtonBarEvent::class,
                 ]
             );
     }

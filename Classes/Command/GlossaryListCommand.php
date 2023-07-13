@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Command;
 
-use DeepL\DeepLException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;

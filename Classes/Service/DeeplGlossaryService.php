@@ -81,7 +81,6 @@ final class DeeplGlossaryService
      * Deletes a glossary
      *
      * @param string $glossaryId
-     *
      */
     public function deleteGlossary(string $glossaryId): void
     {
@@ -90,7 +89,6 @@ final class DeeplGlossaryService
 
     /**
      * Gets information about a glossary
-     *
      */
     public function glossaryInformation(string $glossaryId): ?GlossaryInfo
     {
@@ -99,7 +97,6 @@ final class DeeplGlossaryService
 
     /**
      * Fetch glossary entries and format them as an associative array [source => target]
-     *
      */
     public function glossaryEntries(string $glossaryId): ?GlossaryEntries
     {

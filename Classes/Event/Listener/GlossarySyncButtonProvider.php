@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Event\Listener;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
@@ -75,7 +76,7 @@ final class GlossarySyncButtonProvider
             'glossaryupdate',
             $parameters
         );
-        $button->setHref($uri);
+        $button->setHref((string)$uri);
 
         // Register Button and position it
         $buttons[ButtonBar::BUTTON_POSITION_LEFT][5][] = $button;
@@ -97,6 +98,10 @@ final class GlossarySyncButtonProvider
     {
         return $GLOBALS['LANG'];
     }
+
+    /**
+     * @param array<int|string, mixed> $modTSconfig
+     */
     protected function isCreationAllowed(array $modTSconfig): bool
     {
         $allowedNewTables = GeneralUtility::trimExplode(',', $modTSconfig['allowedNewTables'] ?? '', true);
@@ -123,6 +128,9 @@ final class GlossarySyncButtonProvider
             || !$backendUser->workspaceCanCreateNewRecord(self::TABLE_NAME));
     }
 
+    /**
+     * @return array{uid: int, returnUrl: string|UriInterface}
+     */
     private function buildParamsArrayForListView(int $id): array
     {
         return [

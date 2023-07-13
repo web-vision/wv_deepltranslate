@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
-use DeepL\DeepLException;
 use DeepL\GlossaryInfo;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;

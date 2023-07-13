@@ -51,6 +51,36 @@ parameters:
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
+			message: "#^Call to method getButtonBar\\(\\) on an unknown class TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\ModifyButtonBarEvent\\.$#"
+			count: 1
+			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
+
+		-
+			message: "#^Call to method getButtons\\(\\) on an unknown class TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\ModifyButtonBarEvent\\.$#"
+			count: 1
+			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
+
+		-
+			message: "#^Call to method getIdentifier\\(\\) on an unknown class TYPO3\\\\CMS\\\\Backend\\\\Module\\\\ModuleInterface\\.$#"
+			count: 2
+			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
+
+		-
+			message: "#^Call to method setButtons\\(\\) on an unknown class TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\ModifyButtonBarEvent\\.$#"
+			count: 1
+			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
+
+		-
+			message: "#^Cannot call method getRequestUri\\(\\) on TYPO3\\\\CMS\\\\Core\\\\Http\\\\NormalizedParams\\|null\\.$#"
+			count: 1
+			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
+
+		-
+			message: "#^Parameter \\$event of method WebVision\\\\WvDeepltranslate\\\\Event\\\\Listener\\\\GlossarySyncButtonProvider\\:\\:__invoke\\(\\) has invalid type TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\ModifyButtonBarEvent\\.$#"
+			count: 1
+			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
+
+		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Form\\\\Item\\\\SiteConfigSupportedLanguageItemsProcFunc\\:\\:getSupportedLanguageForField\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php

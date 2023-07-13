@@ -66,6 +66,11 @@ parameters:
 			path: ../../../Classes/Domain/Repository/PageTreeRepository.php
 
 		-
+			message: "#^Cannot call method getRequestUri\\(\\) on TYPO3\\\\CMS\\\\Core\\\\Http\\\\NormalizedParams\\|null\\.$#"
+			count: 1
+			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
+
+		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Form\\\\Item\\\\SiteConfigSupportedLanguageItemsProcFunc\\:\\:getSupportedLanguageForField\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php
