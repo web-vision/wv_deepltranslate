@@ -1,11 +1,11 @@
-[![Latest Stable Version](https://poser.pugx.org/web-vision/wv_deepltranslate/v/stable.svg)](https://packagist.org/packages/web-vision/wv_deepltranslate)
-[![TYPO3 11.5](https://img.shields.io/badge/TYPO3-11.5-orange.svg?style=flat-square)](https://get.typo3.org/version/11)
-[![TYPO3 10.4](https://img.shields.io/badge/TYPO3-10.4-orange.svg?style=flat-square)](https://get.typo3.org/version/10)
-[![Total Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/downloads.svg)](https://packagist.org/packages/web-vision/wv_deepltranslate)
-[![Monthly Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/d/monthly)](https://packagist.org/packages/web-vision/wv_deepltranslate)
+[![Latest Stable Version](https://poser.pugx.org/web-vision/wv_deepltranslate/v/stable.svg?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
+[![TYPO3 11.5](https://img.shields.io/badge/TYPO3-11.5-green.svg?style=for-the-badge)](https://get.typo3.org/version/11)
+[![TYPO3 10.4](https://img.shields.io/badge/TYPO3-10.4-orange.svg?style=for-the-badge)](https://get.typo3.org/version/10)
+[![License](http://poser.pugx.org/web-vision/wv_deepltranslate/license?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
+[![Total Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/downloads.svg?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
+[![Monthly Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/d/monthly?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 
 # TYPO3 extension `wv_deepltranslate`
-
 
 This extension provides automated translation of pages, content and records
 to languages supported by [DeepL](https://www.deepl.com/de/docs-api/).
@@ -14,12 +14,30 @@ to languages supported by [DeepL](https://www.deepl.com/de/docs-api/).
 
 * Bulk translation via TYPO3 built-in Translation Wizard
 * Single drop down translation parallel to regular page translation
-  * Translates your page with all fields you want
+  * Translate your page with all fields you want
 * One-Click translation of single records
 * Glossary support
   * Manage your own glossaries in TYPO3
   * synchronise glossaries to DeepL API
   * translate content using your glossaries
+
+## TYPO3 v12 Early-Access-Programme
+
+A TYPO3 LTS 12 ready versions is currently available for Early-Access-Partners.
+Partners receive the following services and advantages:
+
+* Access to the latest extension version wv_deepltranslate — **Ready for TYPO3 12 LTS**
+* **Access** to code repository for **12 months**, extended access for
+  **Composer** users for **15 months** (via packagist.com)
+* Preferential access to support services
+* Your logo and link on our DeepL Translate website
+* **PREVIEW**: Access to demo instances with exclusive insights
+* **EXCLUSIVE**: Add-On Extension: Activate Translated Content — Activates all
+  translated content on a page at the touch of a button.
+
+  The tedious activation of individual content elements is no longer necessary.
+
+Find out more: https://www.web-vision.de/en/deepl.html
 
 ## Installation
 
