@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\ViewHelpers\Be;
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 /**
@@ -32,10 +33,17 @@ final class ExtensionActiveViewHelper extends AbstractConditionViewHelper
 
     public function render(): string
     {
-        $extensionName = $this->arguments['extension'];
-        if (ExtensionManagementUtility::isLoaded($extensionName)) {
+        if (self::verdict($this->arguments, $this->renderingContext)) {
             return $this->renderThenChild();
         }
         return $this->renderElseChild();
+    }
+
+    public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
+    {
+        if (ExtensionManagementUtility::isLoaded($arguments['extension'])) {
+            return true;
+        }
+        return false;
     }
 }
