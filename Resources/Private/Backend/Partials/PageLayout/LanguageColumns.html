@@ -3,9 +3,6 @@
     xmlns:deepl="http://typo3.org/ns/WebVision/WvDeepltranslate/ViewHelpers"
     xmlns:f="http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers"
 >
-<f:comment><!--
-    Use in TYPO3 v11 default
---></f:comment>
 <f:if condition="{context.pageRecord.doktype} == 254 && {context.pageRecord.module} == 'glossary'">
     <f:then><f:render section="GlossaryTranslation" arguments="{_all}"/></f:then>
     <f:else><f:render section="NormalTranslation" arguments="{_all}"/></f:else>
@@ -42,6 +39,9 @@
                                 <core:icon identifier="actions-open" />
                             </a>
                         </f:if>
+                        <deepl:be.extensionActive extension="enable_translated_content">
+                            <f:render partial="Button/EnableTranslatedContent" arguments="{_all}"/>
+                        </deepl:be.extensionActive>
                         <f:if condition="{allowEditContent} && {languageColumn.context.siteLanguage.languageId} && {languageColumn.translationData.untranslatedRecordUids}">
                             <a href="#" class="btn btn-default btn-sm t3js-localize disabled"
                                title="{languageColumn.context.translatePageTitle}"
