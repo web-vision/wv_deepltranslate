@@ -53,6 +53,12 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
             [],
             'elseArgument',
         ];
+        
+        yield 'extension provided as undefined fluid variable placeholder, await else' => [
+            '<deepl:be.extensionActive extension="{someUndefinedVariable}" then="thenArgument" else="elseArgument" />',
+            [],
+            'elseArgument',
+        ];
     }
     /**
      * @test
