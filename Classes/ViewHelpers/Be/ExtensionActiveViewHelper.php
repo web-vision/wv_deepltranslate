@@ -33,7 +33,7 @@ final class ExtensionActiveViewHelper extends AbstractConditionViewHelper
 
     public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
-        if (ExtensionManagementUtility::isLoaded($arguments['extension'])) {
+        if (ExtensionManagementUtility::isLoaded((string)($arguments['extension'] ?? ''))) {
             return true;
         }
         return false;
