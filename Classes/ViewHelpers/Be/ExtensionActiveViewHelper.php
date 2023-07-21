@@ -31,14 +31,6 @@ final class ExtensionActiveViewHelper extends AbstractConditionViewHelper
         $this->registerArgument('extension', 'string', 'The extension to check', true);
     }
 
-    public function render(): string
-    {
-        if (self::verdict($this->arguments, $this->renderingContext)) {
-            return $this->renderThenChild();
-        }
-        return $this->renderElseChild();
-    }
-
     public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
         if (ExtensionManagementUtility::isLoaded($arguments['extension'])) {
