@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\ViewHelpers\Be;
 
-use TYPO3\CMS\Core\Package\Exception\UnknownPackageException;
-use TYPO3\CMS\Core\Package\PackageManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 /**
@@ -35,12 +33,9 @@ final class ExtensionActiveViewHelper extends AbstractConditionViewHelper
     public function render(): string
     {
         $extensionName = $this->arguments['extension'];
-        $packageManager = GeneralUtility::makeInstance(PackageManager::class);
-        try {
-            $package = $packageManager->getPackage($extensionName);
-        } catch (UnknownPackageException $_) {
-            return $this->renderElseChild();
+        if (ExtensionManagementUtility::isLoaded($extensionName)) {
+            return $this->renderThenChild();
         }
-        return $this->renderThenChild();
+        return $this->renderElseChild();
     }
 }
