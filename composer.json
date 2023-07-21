@@ -123,5 +123,8 @@
 		"test:php:functional": "@test:php:unit --configuration Build/phpunit/FunctionalTests.xml",
 		"test:php:unit10": ".Build/bin/phpunit --colors=always --configuration Build/phpunit/UnitTests-10.xml",
 		"test:php:functional10": "@test:php:unit --configuration Build/phpunit/FunctionalTests-10.xml"
+	},
+	"suggest": {
+		"web-vision/enable-translated-content": "*"
 	}
 }
