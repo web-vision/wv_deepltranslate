@@ -1,3 +1,13 @@
+# !!! Custom changes
+
+When updating please respect these custom changes made.
+
+- [TASK](https://github.com/beechit/wv_deepltranslate/commit/8ff53390546825ea3b0e46e90abdcd6beb173566) Remove unneeded options in pop-up for customer
+- [TASK](https://github.com/beechit/wv_deepltranslate/commit/7344da765f660e9e74c25d2416e4d33d8cc4e367) Always add ucwords glossary items to avoid duplicates
+- [TASK](https://github.com/beechit/wv_deepltranslate/commit/42517f45b3e35cc878e6c9974aa013f6fe82aef8) Use HTML entities so customer can start using translation api
+# !!!!
+
+
 [![Latest Stable Version](https://poser.pugx.org/web-vision/wv_deepltranslate/v/stable.svg?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 [![TYPO3 11.5](https://img.shields.io/badge/TYPO3-11.5-green.svg?style=for-the-badge)](https://get.typo3.org/version/11)
 [![TYPO3 10.4](https://img.shields.io/badge/TYPO3-10.4-orange.svg?style=for-the-badge)](https://get.typo3.org/version/10)
