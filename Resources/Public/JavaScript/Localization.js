@@ -76,48 +76,6 @@ define('TYPO3/CMS/Backend/Localization', [
                         style: 'display: none',
                     }),
                 ),
-            deepltranslateAuto: $('<label />', {
-                class: 'btn btn-block btn-default t3js-option',
-                'data-helptext': '.t3js-helptext-translate',
-            })
-                .html('<br>Translate<br>(deepl)<br>(autodetect)')
-                .prepend(
-                    $('<input />', {
-                        type: 'radio',
-                        name: 'mode',
-                        id: 'mode_deepltranslateauto',
-                        value: 'localizedeeplauto',
-                        style: 'display: none',
-                    }),
-                ),
-            googletranslateAuto: $('<label />', {
-                class: 'btn btn-block btn-default t3js-option',
-                'data-helptext': '.t3js-helptext-translate',
-            })
-                .html('<br>Translate<br>(Google)<br>(autodetect)')
-                .prepend(
-                    $('<input />', {
-                        type: 'radio',
-                        name: 'mode',
-                        id: 'mode_googletranslateauto',
-                        value: 'localizegoogleauto',
-                        style: 'display: none',
-                    }),
-                ),
-            googletranslate: $('<label />', {
-                class: 'btn btn-block btn-default t3js-option',
-                'data-helptext': '.t3js-helptext-translate',
-            })
-                .html('<br>Translate<br>(Google)')
-                .prepend(
-                    $('<input />', {
-                        type: 'radio',
-                        name: 'mode',
-                        id: 'mode_googletranslate',
-                        value: 'localizegoogle',
-                        style: 'display: none',
-                    }),
-                ),
         },
         settings: {},
         records: [],
@@ -150,15 +108,6 @@ define('TYPO3/CMS/Backend/Localization', [
                                         Localization.actions.deepltranslate.prepend(
                                             localizeDeeplIconMarkup,
                                         )
-                                        Localization.actions.deepltranslateAuto.prepend(
-                                            localizeDeeplIconMarkup,
-                                        )
-                                        Localization.actions.googletranslate.prepend(
-                                            localizeGoogleIconMarkup,
-                                        )
-                                        Localization.actions.googletranslateAuto.prepend(
-                                            localizeGoogleIconMarkup,
-                                        )
                                         $(Localization.identifier.triggerButton).removeClass(
                                             'disabled',
                                         )
@@ -190,18 +139,6 @@ define('TYPO3/CMS/Backend/Localization', [
                     '</div>',
                 )
                 actions.push(
-                    '<div class="row" id="deeplTranslateAuto">' +
-                    '<div class="btn-group col-sm-3">' +
-                    Localization.actions.deepltranslateAuto[0].outerHTML +
-                    '</div>' +
-                    '<div class="col-sm-9" id="deeplTextAuto">' +
-                    '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
-                    TYPO3.lang['localize.educate.deepltranslateAuto'] +
-                    '</p>' +
-                    '</div>' +
-                    '</div>',
-                )
-                actions.push(
                     '<div class="row" id="deeplTranslate">' +
                     '<div class="btn-group col-sm-3">' +
                     Localization.actions.deepltranslate[0].outerHTML +
@@ -209,30 +146,6 @@ define('TYPO3/CMS/Backend/Localization', [
                     '<div class="col-sm-9" id="deeplText">' +
                     '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
                     TYPO3.lang['localize.educate.deepltranslate'] +
-                    '</p>' +
-                    '</div>' +
-                    '</div>',
-                )
-                actions.push(
-                    '<div class="row" id="googleTranslate">' +
-                    '<div class="btn-group col-sm-3">' +
-                    Localization.actions.googletranslate[0].outerHTML +
-                    '</div>' +
-                    '<div class="col-sm-9" id="googleText">' +
-                    '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
-                    TYPO3.lang['localize.educate.googleTranslate'] +
-                    '</p>' +
-                    '</div>' +
-                    '</div>',
-                )
-                actions.push(
-                    '<div class="row" id="googleTranslateAuto">' +
-                    '<div class="btn-group col-sm-3">' +
-                    Localization.actions.googletranslateAuto[0].outerHTML +
-                    '</div>' +
-                    '<div class="col-sm-9" id="googleTextAuto">' +
-                    '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
-                    TYPO3.lang['localize.educate.googleTranslateAuto'] +
                     '</p>' +
                     '</div>' +
                     '</div>',
