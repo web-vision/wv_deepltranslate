@@ -133,10 +133,6 @@ class TranslateHook
         string $customMode,
         array $sourceLanguageRecord
     ): string {
-
-        $content = htmlspecialchars_decode($content, ENT_QUOTES | ENT_HTML5);
-        $content = htmlentities($content);
-
         // mode deepl
         if ($customMode == 'deepl') {
             $response = $this->deeplService->translateRequest(
