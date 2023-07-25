@@ -1,6 +1,6 @@
 # !!! Custom changes
 
-When updating please respect these custom changes made.
+When updating please respect these custom changes made, check main repo if functionalities or bugfixes have been added.
 
 - [TASK](https://github.com/beechit/wv_deepltranslate/commit/8ff53390546825ea3b0e46e90abdcd6beb173566) Remove unneeded options in pop-up for customer
 - [TASK](https://github.com/beechit/wv_deepltranslate/commit/7344da765f660e9e74c25d2416e4d33d8cc4e367) Always add ucwords glossary items to avoid duplicates
