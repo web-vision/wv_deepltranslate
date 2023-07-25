@@ -104,6 +104,12 @@ final class Client
             $formatEntries .= sprintf(self::GLOSSARY_ENTRY_FORMAT, $source, $target);
         }
 
+        foreach ($entries as $entry) {
+            $source = ucwords($entry['source']);
+            $target = ucwords($entry['target']);
+            $formatEntries .= sprintf(self::GLOSSARY_ENTRY_FORMAT, $source, $target);
+        }
+
         $postFields['entries'] = $formatEntries;
 
         return $this->requestFactory->request($baseUrl, 'POST', $this->mergeRequiredRequestOptions([
