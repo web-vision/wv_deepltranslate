@@ -86,7 +86,7 @@ return [
             'l10n_mode' => '',
             'config' => [
                 'type' => 'input',
-                'eval' => 'required',
+                'eval' => 'trim,required',
             ],
         ],
     ],
