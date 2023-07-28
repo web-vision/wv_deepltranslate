@@ -99,8 +99,16 @@ final class Client
 
         $formatEntries = '';
         foreach ($entries as $entry) {
-            $source = $entry['source'];
-            $target = $entry['target'];
+            /*
+             * as the version without trimming in TCA is already published,
+             * we trim a second time here
+             * to avoid errors in DeepL client
+             */
+            $source = trim($entry['source']);
+            $target = trim($entry['target']);
+            if (empty($source) || empty($target)) {
+                continue;
+            }
             $formatEntries .= sprintf(self::GLOSSARY_ENTRY_FORMAT, $source, $target);
         }
 
