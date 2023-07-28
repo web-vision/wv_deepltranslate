@@ -134,7 +134,17 @@ final class Client
     ): GlossaryInfo {
         $prepareEntriesForGlossary = [];
         foreach ($entries as $entry) {
-            $prepareEntriesForGlossary[$entry['source']] = $entry['target'];
+            /*
+             * as the version without trimming in TCA is already published,
+             * we trim a second time here
+             * to avoid errors in DeepL client
+             */
+            $source = trim($entry['source']);
+            $target = trim($entry['target']);
+            if (empty($source) || empty($target)) {
+                continue;
+            }
+            $prepareEntriesForGlossary[$source] = $target;
         }
         try {
             return $this->translator->createGlossary(

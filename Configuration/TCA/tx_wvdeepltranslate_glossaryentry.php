@@ -84,11 +84,16 @@ return [
         'term' => [
             'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:entry.source',
             'l10n_mode' => '',
-            'config' => [
-                'type' => 'input',
-                // @deprecated with v12. Adjusted for v12+ in `Overrides/tx_wvdeepltranslate_glossaryentry.php'
-                'eval' => 'required',
-            ],
+            'config' => (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12
+                ? [
+                    'type' => 'input',
+                    'required' => true,
+                    'eval' => 'trim',
+                ]
+                : [
+                    'type' => 'input',
+                    'eval' => 'trim,reqiured',
+                ],
         ],
     ],
 ];
