@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.5
+
+* [TASK] Update readme by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/287
+* [BUGFIX] Trim glossary terms to prevent exception from DeepL API by @peterkraume in https://github.com/web-vision/wv_deepltranslate/pull/291
+* [BUGFIX] Fix google translation error "Bad language pair" by @ErHaWeb in https://github.com/web-vision/wv_deepltranslate/pull/282
+* [BUGFIX] Respect correct namespace for used `b13/container` class by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/277
+
 ## 3.0.4
 
 * [BUGFIX] Access to undefined array keys in list view by @bigahuna in https://github.com/web-vision/wv_deepltranslate/pull/240
