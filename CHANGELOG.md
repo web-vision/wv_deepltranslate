@@ -1,5 +1,21 @@
 # Changelog
 
+### 4.0.2
+
+* [TASK] Prepare backend for enable_translated_content by @calien666 in https://github.com/web-vision/wv_deepltranslate-eap/pull/35
+* [BUGFIX] remove whitspace from glossary entries by @calien666 in https://github.com/web-vision/wv_deepltranslate-eap/pull/36
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/4.0.1...4.0.2
+
+### 4.0.1
+
+* [BUGFIX] [Fix icon path](https://github.com/web-vision/wv_deepltranslate-eap/commit/04e9f0f03ece29c894ca8c78ca4981851a8894e0)
+* [TASK] [Add ModifyButtonEvent](https://github.com/web-vision/wv_deepltranslate-eap/commit/4e9149d717e847b745a70fe78ce7db0bffe2923a)
+* [BUGFIX] [Use proper Casing in files names](https://github.com/web-vision/wv_deepltranslate-eap/commit/c5a9e3df43229ab97a0779407e84cf6dedb6bf4a)
+* [BUGFIX] [Allow glossary finding in TYPO3 v12](https://github.com/web-vision/wv_deepltranslate-eap/commit/9744d5738195eb22e4d9996fadc06e28ff969923)
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/4.0.0...4.0.1
+
 ### 4.0.0
 
 - [TASK] Allow runners only on PR (032f3ed)
