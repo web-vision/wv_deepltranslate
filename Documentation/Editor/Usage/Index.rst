@@ -54,3 +54,7 @@ translation.
 
 .. figure:: /Images/Editor/translation-button-news.png
     :alt: Translation button for tx_news, one language not available in DeepL
+
+.. note::
+   Fields of custom extensions need to be properly
+   :ref:`configured <tableConfiguration>` to enable translation.
