@@ -95,6 +95,9 @@
 		"typo3/cms-workspaces": "^9.5 || ^10.4 || ^11.5",
 		"typo3/coding-standards": "^0.5"
 	},
+	"suggest": {
+		"b13/container": "Just to be loaded after EXT:container"
+	},
 	"autoload": {
 		"psr-4": {
 			"WebVision\\WvDeepltranslate\\": "Classes"
