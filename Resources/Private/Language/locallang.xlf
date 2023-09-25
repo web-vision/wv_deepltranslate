@@ -10,23 +10,19 @@
 				<source>Translate with DeepL</source>
 			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
-				<source>Translating content via Deepl translate will create a translation  from source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.
-				</source>
+				<source>Translating content via DeepL translate will create a translation from source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
 			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslateAuto" xml:space="preserve">
-				<source>Translating content via Deepl translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from deepl translation service which is 99 percentage accurate.Deepl service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages.Other languages will be ignored and will default to the normal translate operation of TYPO3.
-				</source>
+				<source><![CDATA[Translating content via DeepL translate will create a translation from <b>auto detected</b> source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.]]></source>
 			</trans-unit>
 			<trans-unit id="localize.educate.googleTranslate" xml:space="preserve">
-				<source>Translating content via Google Translate will create a translation  from source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.
-				</source>
+				<source>Translating content via Google Translate will create a translation from source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
 			</trans-unit>
 			<trans-unit id="localize.educate.googleTranslateAuto" xml:space="preserve">
-				<source>Translating content via Google Translate (autodetect) will create a translation  from auto detected source language to the language you translate to.The translated content will be from Google translation service.Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.
-				</source>
+				<source><![CDATA[Translating content via Google Translate will create a translation from <b>auto detected</b> source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>.]]></source>
 			</trans-unit>
 			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>Deepl Settings</source>
+				<source>DeepL Settings</source>
 			</trans-unit>
 			<trans-unit id="settings_success" xml:space="preserve">
 				<source>Language assignments saved successfully</source>
@@ -47,7 +43,7 @@
 				<source>Assigned Language(ISO Code)</source>
 			</trans-unit>
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
-				<source>Deepl</source>
+				<source>DeepL</source>
 			</trans-unit>
 
 			<trans-unit id="glossary.term" xml:space="preserve">
@@ -80,7 +76,7 @@
 				<source>DeepL Translate</source>
 			</trans-unit>
 			<trans-unit id="pages.tx_wvdeepltranslate_content_not_checked">
-				<source>Deepl Translated Content was not checked</source>
+				<source>DeepL Translated Content was not checked</source>
 			</trans-unit>
 			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
 				<source>Last Translated Date</source>
@@ -89,7 +85,7 @@
 				<source>Glossary Information</source>
 			</trans-unit>
 			<trans-unit id="preview.flag">
-				<source>Translated with Deepl</source>
+				<source>Translated with DeepL</source>
 			</trans-unit>
 
 			<trans-unit id="deprecated.deepl-be.title">
@@ -101,7 +97,7 @@
 				]]></source>
 			</trans-unit>
 			<trans-unit id="site_configuration.deepl.title">
-				<source>Deepl Settings</source>
+				<source>DeepL Settings</source>
 			</trans-unit>
 			<trans-unit id="site_configuration.deepl.field.label">
 				<source>Target Language (ISO Code)</source>
