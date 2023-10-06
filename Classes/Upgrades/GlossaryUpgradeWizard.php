@@ -65,10 +65,21 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 
         $updateGlossary = [];
         foreach ($result as $item) {
-            unset($item['description']);
-            unset($item['starttime']);
-            unset($item['endtime']);
-            $updateGlossary[] = $item;
+            $updateGlossary[] = [
+                'uid' => $item['uid'],
+                'pid' => $item['pid'],
+                'tstamp' => $item['tstamp'],
+                'crdate' => $item['crdate'],
+                'cruser_id' => $item['cruser_id'],
+                'deleted' => $item['deleted'],
+                'hidden' => $item['hidden'],
+                'sys_language_uid' => $item['sys_language_uid'],
+                'l10n_parent' => $item['l10n_parent'],
+                'l10n_source' => $item['l10n_source'],
+                'l10n_state' => $item['l10n_state'],
+                'l10n_diffsource' => $item['l10n_diffsource'],
+                'term' => $item['term'],
+            ];
         }
 
         $insert = GeneralUtility::makeInstance(ConnectionPool::class)
