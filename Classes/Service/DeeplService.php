@@ -55,8 +55,10 @@ class DeeplService
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $objectManager->get(SettingsRepository::class);
 
-        $this->loadSupportedLanguages();
-        $this->apiSupportedLanguages['target'] = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages['target']);
+        if (DeeplBackendUtility::isDeeplApiKeySet()) {
+            $this->loadSupportedLanguages();
+            $this->apiSupportedLanguages['target'] = $this->deeplSettingsRepository->getSupportedLanguages($this->apiSupportedLanguages['target']);
+        }
     }
 
     /**
