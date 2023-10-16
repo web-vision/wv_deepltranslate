@@ -8,11 +8,13 @@ use Doctrine\DBAL\Driver\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
+use TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -138,6 +140,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             '*'
         );
 
+        $flatRecords = [];
         while ($row = $result->fetchAssociative()) {
             BackendUtility::workspaceOL('tt_content', $row, -99, true);
             if (!$row || VersionState::cast($row['t3ver_state'])->equals(VersionState::DELETE_PLACEHOLDER)) {
@@ -152,20 +155,41 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
                 'title' => $row[$GLOBALS['TCA']['tt_content']['ctrl']['label']],
                 'uid'   => $row['uid'],
             ];
+            $flatRecords[] = $row;
         }
 
         $payloadBody = [
             'records' => $records,
-            'columns' => $this->getPageColumns($pageId, $records, $params),
+            'columns' => $this->getPageColumns($pageId, $flatRecords, $params),
         ];
+
+        /** @var Typo3Version $typo3Version */
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
 
         // s. EXT:containers Xclass B13\Container\Xclasses\LocalizationController
         if (
             ExtensionManagementUtility::isLoaded('container')
-            && class_exists(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class)
+            && $typo3Version->getMajorVersion() < 12
         ) {
-            $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class);
-            $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
+            // Supported container version >= 2.1.0
+            if (class_exists(\B13\Container\Service\RecordLocalizeSummaryModifier::class)) {
+                $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Service\RecordLocalizeSummaryModifier::class);
+                $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
+            }
+            // Supported container version <= 2.0.5
+            if (class_exists(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class)) {
+                $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class);
+                $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
+            }
+        // Supported TYPO3 v12
+        } elseif(class_exists(\TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent::class)) {
+            $event = new AfterRecordSummaryForLocalizationEvent($payloadBody['records'], $payloadBody['columns']);
+            $this->eventDispatcher->dispatch($event);
+
+            $payloadBody = [
+                'records' => $event->getRecords(),
+                'columns' => $event->getColumns(),
+            ];
         }
 
         return (new JsonResponse())->setPayload($payloadBody);
