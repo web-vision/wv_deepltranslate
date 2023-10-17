@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.0.3
+
++ [BUGFIX] Fix loading issues with container services in https://github.com/web-vision/wv_deepltranslate-eap/pull/39
+
 ### 4.0.2
 
 * [TASK] Prepare backend for enable_translated_content by @calien666 in https://github.com/web-vision/wv_deepltranslate-eap/pull/35
