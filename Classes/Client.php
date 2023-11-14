@@ -13,17 +13,23 @@ use DeepL\TextResult;
 use DeepL\TranslateTextOptions;
 use DeepL\Translator;
 use DeepL\TranslatorOptions;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-final class Client
+final class Client implements LoggerAwareInterface
 {
-    /**
-     * @var Configuration
-     */
-    private $configuration;
+    private Configuration $configuration;
 
     private Translator $translator;
+
+    protected LoggerInterface $logger;
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * @param array<string, mixed> $options
@@ -71,9 +77,15 @@ final class Client
                 $targetLang,
                 $options
             );
-        } catch (DeepLException $e) {
-            return null;
+        } catch (DeepLException $exception) {
+            $this->logger->error(sprintf(
+                '%s (%d)',
+                $exception->getMessage(),
+                $exception->getCode()
+            ));
         }
+
+        return null;
     }
 
     /**
@@ -85,9 +97,15 @@ final class Client
             return ($type === 'target')
                 ? $this->translator->getTargetLanguages()
                 : $this->translator->getSourceLanguages();
-        } catch (DeepLException $e) {
-            return [];
+        } catch (DeepLException $exception) {
+            $this->logger->error(sprintf(
+                '%s (%d)',
+                $exception->getMessage(),
+                $exception->getCode()
+            ));
         }
+
+        return [];
     }
 
     /**
@@ -97,9 +115,15 @@ final class Client
     {
         try {
             return $this->translator->getGlossaryLanguages();
-        } catch (DeepLException $e) {
-            return [];
+        } catch (DeepLException $exception) {
+            $this->logger->error(sprintf(
+                '%s (%d)',
+                $exception->getMessage(),
+                $exception->getCode()
+            ));
         }
+
+        return [];
     }
 
     /**
@@ -109,18 +133,30 @@ final class Client
     {
         try {
             return $this->translator->listGlossaries();
-        } catch (DeepLException $e) {
-            return [];
+        } catch (DeepLException $exception) {
+            $this->logger->error(sprintf(
+                '%s (%d)',
+                $exception->getMessage(),
+                $exception->getCode()
+            ));
         }
+
+        return [];
     }
 
     public function getGlossary(string $glossaryId): ?GlossaryInfo
     {
         try {
             return $this->translator->getGlossary($glossaryId);
-        } catch (DeepLException $e) {
-            return null;
+        } catch (DeepLException $exception) {
+            $this->logger->error(sprintf(
+                '%s (%d)',
+                $exception->getMessage(),
+                $exception->getCode()
+            ));
         }
+
+        return null;
     }
 
     /**
@@ -170,7 +206,12 @@ final class Client
     {
         try {
             $this->translator->deleteGlossary($glossaryId);
-        } catch (DeepLException $e) {
+        } catch (DeepLException $exception) {
+            $this->logger->error(sprintf(
+                '%s (%d)',
+                $exception->getMessage(),
+                $exception->getCode()
+            ));
         }
     }
 
@@ -178,8 +219,14 @@ final class Client
     {
         try {
             return $this->translator->getGlossaryEntries($glossaryId);
-        } catch (DeepLException $e) {
-            return null;
+        } catch (DeepLException $exception) {
+            $this->logger->error(sprintf(
+                '%s (%d)',
+                $exception->getMessage(),
+                $exception->getCode()
+            ));
         }
+
+        return null;
     }
 }

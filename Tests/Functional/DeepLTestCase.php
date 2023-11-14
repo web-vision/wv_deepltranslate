@@ -6,6 +6,7 @@ namespace WebVision\WvDeepltranslate\Tests\Functional;
 
 use DeepL\TranslatorOptions;
 use phpmock\phpunit\PHPMock;
+use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Client;
@@ -192,7 +193,10 @@ abstract class DeepLTestCase extends FunctionalTestCase
             $mergedOptions[TranslatorOptions::SERVER_URL] = $this->serverUrl;
         }
 
-        return new Client($this->authKey ?: '', $mergedOptions);
+        $client = new Client($this->authKey ?: '', $mergedOptions);
+        $client->setLogger(new NullLogger());
+
+        return $client;
     }
 
     public static function readFile(string $filepath): string
