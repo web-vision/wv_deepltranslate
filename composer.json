@@ -103,6 +103,9 @@
 		"typo3/cms-workspaces": "^11.5 || ^12.4",
 		"typo3/testing-framework": "~7.0@dev"
 	},
+	"suggest": {
+		"web-vision/enable-translated-content": "Adds enable translated content button to language columns in page view"
+	},
 	"autoload": {
 		"psr-4": {
 			"WebVision\\WvDeepltranslate\\": "Classes"
@@ -127,8 +130,5 @@
 		"test:php:functional": "@test:php:unit --configuration Build/phpunit/FunctionalTests.xml",
 		"test:php:unit10": ".Build/bin/phpunit --colors=always --configuration Build/phpunit/UnitTests-10.xml",
 		"test:php:functional10": "@test:php:unit --configuration Build/phpunit/FunctionalTests-10.xml"
-	},
-	"suggest": {
-		"web-vision/enable-translated-content": "*"
 	}
 }
