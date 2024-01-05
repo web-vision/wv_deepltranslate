@@ -13,6 +13,7 @@ use DeepL\TextResult;
 use DeepL\TranslateTextOptions;
 use DeepL\Translator;
 use DeepL\TranslatorOptions;
+use DeepL\Usage;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Core\Environment;
@@ -228,5 +229,13 @@ final class Client implements LoggerAwareInterface
         }
 
         return null;
+    }
+
+    /**
+     * @throws DeepLException
+     */
+    public function getUsage(): Usage
+    {
+        return $this->translator->getUsage();
     }
 }

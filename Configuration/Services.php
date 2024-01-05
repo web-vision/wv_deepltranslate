@@ -20,6 +20,7 @@ use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Service\UsageService;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
     $typo3version = new \TYPO3\CMS\Core\Information\Typo3Version();
@@ -87,6 +88,10 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $services
         ->set(IconOverlayGenerator::class)
         ->public();
+    $services
+        ->set(UsageService::class)
+        ->public();
+
     $services
         ->set(AjaxController::class)
         ->public();
