@@ -154,11 +154,12 @@ class DeeplBackendUtility
                 $iconFlag,
                 Icon::SIZE_SMALL
             );
-        $deeplIcon = GeneralUtility::makeInstance(IconFactory::class
-            )->getIcon(
-                'deepl-grey-logo',
-                Icon::SIZE_OVERLAY
-            );
+        $deeplIcon = GeneralUtility::makeInstance(
+            IconFactory::class
+        )->getIcon(
+            'deepl-grey-logo',
+            Icon::SIZE_OVERLAY
+        );
         GeneralUtility::makeInstance(IconRegistry::class)
             ->registerIcon(
                 $deeplTranslateIcon,
