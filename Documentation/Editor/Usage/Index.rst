@@ -12,7 +12,7 @@ Once the extension is installed and API key provided, we are good to go for
 translating content elements. On translating content element, there appears
 additional four options apart from normal translate and copy.
 
-* DeepL Translate(auto detect).
+* DeepL Translate (auto detect).
 * DeepL Translate.
 
 ..  figure:: /Images/Editor/deepl.png
