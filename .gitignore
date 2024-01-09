@@ -16,3 +16,4 @@ http-client.env.json
 Build/testing-docker/.env
 /config/
 Build/node_modules/
+/packages/
