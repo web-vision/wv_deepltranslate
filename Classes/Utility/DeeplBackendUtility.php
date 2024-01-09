@@ -137,7 +137,7 @@ class DeeplBackendUtility
         return (string)$uriBuilder->buildUriFromRoute($route, $parameters);
     }
 
-    private static function getIcon(string $iconFlag): Icon
+    public static function getIcon(string $iconFlag): Icon
     {
         $deeplTranslateIcon = sprintf('deepl-translate-%s', $iconFlag);
         $newIcon = GeneralUtility::makeInstance(IconFactory::class)
@@ -154,12 +154,11 @@ class DeeplBackendUtility
                 $iconFlag,
                 Icon::SIZE_SMALL
             );
-        $deeplIcon = GeneralUtility::makeInstance(
-            IconFactory::class
-        )->getIcon(
-            'deepl-grey-logo',
-            Icon::SIZE_OVERLAY
-        );
+        $deeplIcon = GeneralUtility::makeInstance(IconFactory::class
+            )->getIcon(
+                'deepl-grey-logo',
+                Icon::SIZE_OVERLAY
+            );
         GeneralUtility::makeInstance(IconRegistry::class)
             ->registerIcon(
                 $deeplTranslateIcon,
