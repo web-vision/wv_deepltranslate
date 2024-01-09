@@ -88,7 +88,11 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
     ExtensionManagementUtility::addFieldsToPalette(
         'pages',
         'deepl_translate',
-        'tx_wvdeepltranslate_content_not_checked, tx_wvdeepltranslate_translated_time,glossary_information'
+        implode(',', [
+            'tx_wvdeepltranslate_content_not_checked',
+            'tx_wvdeepltranslate_translated_time',
+            'glossary_information',
+        ])
     );
 
     ExtensionManagementUtility::addToAllTCAtypes(

@@ -60,7 +60,7 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
             'elseArgument',
         ];
     }
-    
+
     /**
      * @test
      * @dataProvider renderDataProvider
