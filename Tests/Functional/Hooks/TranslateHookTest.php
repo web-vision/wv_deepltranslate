@@ -11,15 +11,15 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
 use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
 /**
  * @covers \WebVision\WvDeepltranslate\Hooks\TranslateHook
  */
-final class TranslateHookTest extends FunctionalTestCase
+final class TranslateHookTest extends AbstractDeepLTestCase
 {
     use SiteBasedTestTrait;
     protected const LANGUAGE_PRESETS = [
@@ -67,13 +67,6 @@ final class TranslateHookTest extends FunctionalTestCase
                 'deeplTargetLanguage' => '',
             ],
         ],
-    ];
-
-    /**
-     * @var non-empty-string[]
-     */
-    protected array $testExtensionsToLoad = [
-        'web-vision/wv_deepltranslate',
     ];
 
     protected function setUp(): void

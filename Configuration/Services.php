@@ -7,6 +7,9 @@ use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\DependencyInjection\SingletonPass;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use WebVision\WvDeepltranslate\Client;
+use WebVision\WvDeepltranslate\ClientInterface;
 use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
 use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
 use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
@@ -23,7 +26,7 @@ use WebVision\WvDeepltranslate\Service\LanguageService;
 use WebVision\WvDeepltranslate\Service\UsageService;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
-    $typo3version = new \TYPO3\CMS\Core\Information\Typo3Version();
+    $typo3version = new Typo3Version();
 
     $services = $containerConfigurator
         ->services();
@@ -98,6 +101,8 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $services
         ->set(GlossarySyncController::class)
         ->public();
+
+    $services->alias(ClientInterface::class, Client::class);
 
     $containerBuilder
         ->registerForAutoconfiguration(UpdatedGlossaryEntryTermHook::class)

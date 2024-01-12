@@ -256,26 +256,6 @@ parameters:
 			path: ../../../Classes/Utility/HtmlUtility.php
 
 		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\ClientTest\\:\\:__construct\\(\\) has parameter \\$arguments with no type specified\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/ClientTest.php
-
-		-
-			message: "#^Call to an undefined method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\DeepLTestCase\\:\\:getName\\(\\)\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/DeepLTestCase.php
-
-		-
-			message: "#^Method PHPUnit\\\\Framework\\\\TestCase\\:\\:__construct\\(\\) invoked with 3 parameters, 1 required\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/DeepLTestCase.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of method PHPUnit\\\\Framework\\\\TestCase\\:\\:__construct\\(\\) expects non\\-empty\\-string, non\\-empty\\-string\\|null given\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/DeepLTestCase.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\Fixtures\\\\Frontend\\\\PhpError\\:\\:__construct\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Fixtures/Frontend/PhpError.php

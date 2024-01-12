@@ -5,24 +5,14 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
 use DeepL\Language;
-use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
-use TYPO3\CMS\Core\Http\NormalizedParams;
-use TYPO3\CMS\Core\Http\ServerRequest;
 use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Tests\Functional\DeepLTestCase;
+use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
 
 /**
  * @covers \WebVision\WvDeepltranslate\Service\DeeplService
  */
-final class DeeplServiceTest extends DeepLTestCase
+final class DeeplServiceTest extends AbstractDeepLTestCase
 {
-    /**
-     * @var non-empty-string[]
-     */
-    protected array $testExtensionsToLoad = [
-        'web-vision/wv_deepltranslate',
-    ];
-
     protected function setUp(): void
     {
         $this->configurationToUseInTestInstance = array_merge(
@@ -31,6 +21,7 @@ final class DeeplServiceTest extends DeepLTestCase
         );
 
         parent::setUp();
+
     }
 
     /**

@@ -246,11 +246,6 @@ parameters:
 			path: ../../../Classes/Utility/HtmlUtility.php
 
 		-
-			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\ClientTest\\:\\:__construct\\(\\) has parameter \\$arguments with no type specified\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/ClientTest.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\Fixtures\\\\Frontend\\\\PhpError\\:\\:__construct\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Fixtures/Frontend/PhpError.php

@@ -12,13 +12,13 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use WebVision\WvDeepltranslate\Client;
+use WebVision\WvDeepltranslate\ClientInterface;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 
 final class DeeplGlossaryService
 {
-    private Client $client;
+    private ClientInterface $client;
 
     private FrontendInterface $cache;
 
@@ -26,7 +26,7 @@ final class DeeplGlossaryService
 
     public function __construct(
         FrontendInterface $cache,
-        Client $client,
+        ClientInterface $client,
         GlossaryRepository $glossaryRepository
     ) {
         $this->cache = $cache;

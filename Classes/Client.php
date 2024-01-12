@@ -12,39 +12,19 @@ use DeepL\Language;
 use DeepL\TextResult;
 use DeepL\TranslateTextOptions;
 use DeepL\Translator;
-use DeepL\TranslatorOptions;
 use DeepL\Usage;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-final class Client implements LoggerAwareInterface
+/**
+ * @internal No public usage
+ */
+final class Client extends AbstractClient
 {
-    private Configuration $configuration;
-
-    private Translator $translator;
-
-    protected LoggerInterface $logger;
-
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
-    }
-
     /**
      * @param array<string, mixed> $options
      */
     public function __construct(string $apiKey = '', array $options = [])
     {
-        $environment = GeneralUtility::makeInstance(Environment::class);
-        if (
-            $environment->getContext()->isTesting()
-            && ($serverUrl = getenv('DEEPL_SERVER_URL'))
-        ) {
-            $apiKey = 'mock_server';
-            $options[TranslatorOptions::SERVER_URL] = $serverUrl;
-        }
         $this->configuration = GeneralUtility::makeInstance(Configuration::class);
         $this->translator = GeneralUtility::makeInstance(
             Translator::class,

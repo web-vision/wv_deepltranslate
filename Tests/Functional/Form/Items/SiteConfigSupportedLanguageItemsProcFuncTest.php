@@ -5,21 +5,14 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Tests\Functional\Form\Items;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
+use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
 
 /**
  * @covers \WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc
  */
-final class SiteConfigSupportedLanguageItemsProcFuncTest extends FunctionalTestCase
+final class SiteConfigSupportedLanguageItemsProcFuncTest extends AbstractDeepLTestCase
 {
-    /**
-     * @var non-empty-string[]
-     */
-    protected array $testExtensionsToLoad = [
-        'web-vision/wv_deepltranslate',
-    ];
-
     protected function setUp(): void
     {
         $this->configurationToUseInTestInstance = array_merge(

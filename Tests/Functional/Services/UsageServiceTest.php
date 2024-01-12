@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
-use DeepL\TextResult;
 use DeepL\Usage;
-use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\UsageService;
+use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
 
-class UsageServiceTest extends FunctionalTestCase
+final class UsageServiceTest extends AbstractDeepLTestCase
 {
-    /**
-     * @var non-empty-string[]
-     */
-    protected array $testExtensionsToLoad = [
-        'web-vision/wv_deepltranslate',
-    ];
+    protected ?string $sessionInitCharacterLimit = '20';
 
     protected function setUp(): void
     {
@@ -73,22 +67,17 @@ class UsageServiceTest extends FunctionalTestCase
         /** @var UsageService $usageService */
         $usageService = $this->get(UsageService::class);
 
-        $contentToTranslate = '';
-        while (strlen($translateContent) < $usageService->getCurrentUsage()->character->limit) {
-            $contentToTranslate .= sprintf(' %s', $translateContent);
-        }
-
         /** @var DeeplService $deeplService */
         $deeplService = $this->get(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
-            $contentToTranslate,
+            $translateContent,
             'DE',
             'EN'
         );
 
-        $currentUsage = $usageService->getCurrentUsage();
-
-        static::assertInstanceOf(TextResult::class, $responseObject);
+        $isLimitExceeded = $usageService->isTranslateLimitExceeded($translateContent);
+        static::assertTrue($isLimitExceeded);
     }
+
 }

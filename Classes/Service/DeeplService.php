@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Client;
+use WebVision\WvDeepltranslate\ClientInterface;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
@@ -33,11 +33,11 @@ final class DeeplService
 
     private FrontendInterface $cache;
 
-    private Client $client;
+    private ClientInterface $client;
 
     public function __construct(
         FrontendInterface $cache,
-        Client $client,
+        ClientInterface $client,
         GlossaryRepository $glossaryRepository
     ) {
         $this->cache = $cache;

@@ -10,28 +10,22 @@ use DeepL\GlossaryLanguagePair;
 use DeepL\Language;
 use DeepL\TextResult;
 use Helmich\JsonAssert\JsonAssertions;
+use WebVision\WvDeepltranslate\ClientInterface;
 
 /**
  * @covers \WebVision\WvDeepltranslate\Client
  */
-final class ClientTest extends DeepLTestCase
+final class ClientTest extends AbstractDeepLTestCase
 {
     use JsonAssertions;
 
-    /**
-     * @var non-empty-string[]
-     */
-    protected array $testExtensionsToLoad = [
-        'web-vision/wv_deepltranslate',
-    ];
-
-    public function __construct(...$arguments)
+    protected function setUp(): void
     {
-        parent::__construct(...$arguments);
         $this->configurationToUseInTestInstance = array_merge(
             $this->configurationToUseInTestInstance,
             require __DIR__ . '/Fixtures/ExtensionConfig.php'
         );
+        parent::setUp();
     }
 
     /**
@@ -40,7 +34,7 @@ final class ClientTest extends DeepLTestCase
     public function checkResponseFromTranslateContent(): void
     {
         $translateContent = self::EXAMPLE_TEXT['en'];
-        $client = $this->makeClient();
+        $client = $this->get(ClientInterface::class);
         $response = $client->translate(
             $translateContent,
             'EN',
@@ -56,7 +50,7 @@ final class ClientTest extends DeepLTestCase
      */
     public function checkResponseFromSupportedTargetLanguage(): void
     {
-        $client = $this->makeClient();
+        $client = $this->get(ClientInterface::class);
         $response = $client->getSupportedLanguageByType();
 
         static::assertIsArray($response);
@@ -68,7 +62,7 @@ final class ClientTest extends DeepLTestCase
      */
     public function checkResponseFromGlossaryLanguagePairs(): void
     {
-        $client = $this->makeClient();
+        $client = $this->get(ClientInterface::class);
         $response = $client->getGlossaryLanguagePairs();
 
         static::assertIsArray($response);
@@ -80,7 +74,7 @@ final class ClientTest extends DeepLTestCase
      */
     public function checkResponseFromCreateGlossary(): void
     {
-        $client = $this->makeClient();
+        $client = $this->get(ClientInterface::class);
         $response = $client->createGlossary(
             'Deepl-Client-Create-Function-Test:' . __FUNCTION__,
             'de',
@@ -104,7 +98,7 @@ final class ClientTest extends DeepLTestCase
      */
     public function checkResponseGetAllGlossaries(): void
     {
-        $client = $this->makeClient();
+        $client = $this->get(ClientInterface::class);
         $response = $client->getAllGlossaries();
 
         static::assertIsArray($response);
@@ -116,7 +110,7 @@ final class ClientTest extends DeepLTestCase
      */
     public function checkResponseFromGetGlossary(): void
     {
-        $client = $this->makeClient();
+        $client = $this->get(ClientInterface::class);
         $glossary = $client->createGlossary(
             'Deepl-Client-Create-Function-Test:' . __FUNCTION__,
             'de',
@@ -141,7 +135,7 @@ final class ClientTest extends DeepLTestCase
      */
     public function checkGlossaryDeletedNotCatchable(): void
     {
-        $client = $this->makeClient();
+        $client = $this->get(ClientInterface::class);
         $glossary = $client->createGlossary(
             'Deepl-Client-Create-Function-Test' . __FUNCTION__,
             'de',
@@ -166,7 +160,7 @@ final class ClientTest extends DeepLTestCase
      */
     public function checkResponseFromGetGlossaryEntries(): void
     {
-        $client = $this->makeClient();
+        $client = $this->get(ClientInterface::class);
         $glossary = $client->createGlossary(
             'Deepl-Client-Create-Function-Test:' . __FUNCTION__,
             'de',

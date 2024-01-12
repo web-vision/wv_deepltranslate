@@ -8,38 +8,51 @@ use DeepL\TranslatorOptions;
 use phpmock\phpunit\PHPMock;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\DependencyInjection\Container;
+use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Client;
+use WebVision\WvDeepltranslate\ClientInterface;
 
-abstract class DeepLTestCase extends FunctionalTestCase
+abstract class AbstractDeepLTestCase extends FunctionalTestCase
 {
     use PHPMock;
 
     /**
-     * @var string|false
+     * @var string
      */
-    protected $authKey;
+    protected $authKey = 'mock_server';
 
     /**
      * @var string|false
      */
-    protected $serverUrl;
+    protected $serverUrl = false;
 
     /**
      * @var string|false
      */
-    protected $proxyUrl;
+    protected $proxyUrl = false;
+
     protected bool $isMockServer;
+
     protected bool $isMockProxyServer;
 
     protected ?string $sessionNoResponse = null;
+
     protected ?string $session429Count = null;
+
     protected ?string $sessionInitCharacterLimit = null;
+
     protected ?string $sessionInitDocumentLimit = null;
+
     protected ?string $sessionInitTeamDocumentLimit = null;
+
     protected ?string $sessionDocFailure = null;
+
     protected ?int $sessionDocQueueTime = null;
+
     protected ?int $sessionDocTranslateTime = null;
+
     protected ?bool $sessionExpectProxy = null;
 
     protected const EXAMPLE_TEXT = [
@@ -78,19 +91,26 @@ abstract class DeepLTestCase extends FunctionalTestCase
         'zh' => '质子束',
     ];
 
-    protected const EXAMPLE_DOCUMENT_INPUT = DeepLTestCase::EXAMPLE_TEXT['en'];
-    protected const EXAMPLE_DOCUMENT_OUTPUT = DeepLTestCase::EXAMPLE_TEXT['de'];
+    /**
+     * @var non-empty-string[]
+     */
+    protected array $testExtensionsToLoad = [
+        'web-vision/wv_deepltranslate',
+        __DIR__ . '/Fixtures/Extensions/test_services_override',
+    ];
+
+    protected const EXAMPLE_DOCUMENT_INPUT = AbstractDeepLTestCase::EXAMPLE_TEXT['en'];
+
+    protected const EXAMPLE_DOCUMENT_OUTPUT = AbstractDeepLTestCase::EXAMPLE_TEXT['de'];
+
     protected string $EXAMPLE_LARGE_DOCUMENT_INPUT;
+
     protected string $EXAMPLE_LARGE_DOCUMENT_OUTPUT;
 
-    /**
-     * @param array<int|string, mixed> $data
-     * @throws \Exception
-     */
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    protected function setUp(): void
     {
-        $this->EXAMPLE_LARGE_DOCUMENT_INPUT = str_repeat(DeepLTestCase::EXAMPLE_TEXT['en'] . PHP_EOL, 1000);
-        $this->EXAMPLE_LARGE_DOCUMENT_OUTPUT = str_repeat(DeepLTestCase::EXAMPLE_TEXT['de'] . PHP_EOL, 1000);
+        $this->EXAMPLE_LARGE_DOCUMENT_INPUT = str_repeat(AbstractDeepLTestCase::EXAMPLE_TEXT['en'] . PHP_EOL, 1000);
+        $this->EXAMPLE_LARGE_DOCUMENT_OUTPUT = str_repeat(AbstractDeepLTestCase::EXAMPLE_TEXT['de'] . PHP_EOL, 1000);
 
         $this->serverUrl = getenv('DEEPL_SERVER_URL');
         $this->proxyUrl = getenv('DEEPL_PROXY_URL');
@@ -103,39 +123,18 @@ abstract class DeepLTestCase extends FunctionalTestCase
                 throw new \Exception('DEEPL_SERVER_URL environment variable must be set if using a mock server');
             }
         } else {
-            $this->authKey = getenv('DEEPL_AUTH_KEY');
-            if ($this->authKey === false) {
+            if (getenv('DEEPL_AUTH_KEY') === false) {
                 throw new \Exception('DEEPL_AUTH_KEY environment variable must be set unless using a mock server');
             }
+            $this->authKey = getenv('DEEPL_AUTH_KEY');
         }
-
-        parent::__construct($name, $data, $dataName);
-    }
-
-    protected function needsMockServer(): void
-    {
-        if (!$this->isMockServer) {
-            static::markTestSkipped('Test requires mock server');
-        }
-    }
-
-    protected function needsMockProxyServer(): void
-    {
-        if (!$this->isMockProxyServer) {
-            static::markTestSkipped('Test requires mock proxy server');
-        }
-    }
-
-    protected function needsRealServer(): void
-    {
-        if ($this->isMockServer) {
-            static::markTestSkipped('Test requires real server');
-        }
+        parent::setUp();
+        $this->instantiateMockServerClient();
     }
 
     private function makeSessionName(): string
     {
-        return $this->getName() . '/' . Uuid::uuid4();
+        return sprintf('%s/%s', self::getInstanceIdentifier(), StringUtility::getUniqueId());
     }
 
     /**
@@ -143,46 +142,44 @@ abstract class DeepLTestCase extends FunctionalTestCase
      */
     private function sessionHeaders(): array
     {
-        $result = [];
+        $headers = [];
         if ($this->sessionNoResponse !== null) {
-            $result['mock-server-session-no-response-count'] = (string)($this->sessionNoResponse);
+            $headers['mock-server-session-no-response-count'] = (string)($this->sessionNoResponse);
         }
         if ($this->session429Count !== null) {
-            $result['mock-server-session-429-count'] = (string)($this->session429Count);
+            $headers['mock-server-session-429-count'] = (string)($this->session429Count);
         }
         if ($this->sessionInitCharacterLimit !== null) {
-            $result['mock-server-session-init-character-limit'] = (string)($this->sessionInitCharacterLimit);
+            $headers['mock-server-session-init-character-limit'] = (string)($this->sessionInitCharacterLimit);
         }
         if ($this->sessionInitDocumentLimit !== null) {
-            $result['mock-server-session-init-document-limit'] = (string)($this->sessionInitDocumentLimit);
+            $headers['mock-server-session-init-document-limit'] = (string)($this->sessionInitDocumentLimit);
         }
         if ($this->sessionInitTeamDocumentLimit !== null) {
-            $result['mock-server-session-init-team-document-limit'] = (string)($this->sessionInitTeamDocumentLimit);
+            $headers['mock-server-session-init-team-document-limit'] = (string)($this->sessionInitTeamDocumentLimit);
         }
         if ($this->sessionDocFailure !== null) {
-            $result['mock-server-session-doc-failure'] = (string)($this->sessionDocFailure);
+            $headers['mock-server-session-doc-failure'] = (string)($this->sessionDocFailure);
         }
         if ($this->sessionDocQueueTime !== null) {
-            $result['mock-server-session-doc-queue-time'] = (string)($this->sessionDocQueueTime * 1000);
+            $headers['mock-server-session-doc-queue-time'] = (string)($this->sessionDocQueueTime * 1000);
         }
         if ($this->sessionDocTranslateTime !== null) {
-            $result['mock-server-session-doc-translate-time'] = (string)($this->sessionDocTranslateTime * 1000);
+            $headers['mock-server-session-doc-translate-time'] = (string)($this->sessionDocTranslateTime * 1000);
         }
         if ($this->sessionExpectProxy !== null) {
-            $result['mock-server-session-expect-proxy'] = $this->sessionExpectProxy ? '1' : '0';
+            $headers['mock-server-session-expect-proxy'] = $this->sessionExpectProxy ? '1' : '0';
         }
 
-        if (count($result) > 0) {
-            $result['mock-server-session'] = $this->makeSessionName();
-        }
+        $headers['mock-server-session'] = $this->makeSessionName();
 
-        return $result;
+        return $headers;
     }
 
     /**
      * @param array<string, mixed> $options
      */
-    public function makeClient(array $options = []): Client
+    protected function instantiateMockServerClient(array $options = []): void
     {
         $mergedOptions = array_replace(
             [TranslatorOptions::HEADERS => $this->sessionHeaders()],
@@ -193,10 +190,12 @@ abstract class DeepLTestCase extends FunctionalTestCase
             $mergedOptions[TranslatorOptions::SERVER_URL] = $this->serverUrl;
         }
 
-        $client = new Client($this->authKey ?: '', $mergedOptions);
+        $client = new Client(self::getInstanceIdentifier(), $mergedOptions);
         $client->setLogger(new NullLogger());
 
-        return $client;
+        /** @var Container $container */
+        $container = $this->getContainer();
+        $container->set(ClientInterface::class, $client);
     }
 
     public static function readFile(string $filepath): string
@@ -235,7 +234,7 @@ abstract class DeepLTestCase extends FunctionalTestCase
         $outputDocumentPath = $tempDir . 'output_document.txt';
 
         mkdir($tempDir);
-        $this->writeFile($exampleDocument, DeepLTestCase::EXAMPLE_DOCUMENT_INPUT);
+        $this->writeFile($exampleDocument, AbstractDeepLTestCase::EXAMPLE_DOCUMENT_INPUT);
         $this->writeFile($exampleLargeDocument, $this->EXAMPLE_LARGE_DOCUMENT_INPUT);
 
         return [$tempDir, $exampleDocument, $exampleLargeDocument, $outputDocumentPath];
