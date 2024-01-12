@@ -38,22 +38,16 @@ final class DeeplServiceTest extends DeepLTestCase
      */
     public function translateContentFromDeToEn(): void
     {
-        $this->needsRealServer();
-
-        $serverParams = array_replace($_SERVER, ['HTTP_HOST' => 'example.com', 'SCRIPT_NAME' => '/typo3/index.php']);
-        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest('http://example.com/typo3/index.php', 'GET', null, $serverParams))
-            ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE)
-            ->withAttribute('normalizedParams', NormalizedParams::createFromServerParams($serverParams));
-
+        /** @var DeeplService $deeplService */
         $deeplService = $this->get(DeeplService::class);
 
         $responseObject = $deeplService->translateRequest(
-            'Ich möchte gerne übersetzt werden!',
-            'EN',
+            self::EXAMPLE_TEXT['de'],
+            'EN-GB',
             'DE'
         );
 
-        static::assertSame('I would like to be translated!', $responseObject->text);
+        static::assertSame(self::EXAMPLE_TEXT['en'], $responseObject->text);
     }
 
     /**
