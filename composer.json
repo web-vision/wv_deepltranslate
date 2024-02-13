@@ -104,7 +104,8 @@
 		"typo3/testing-framework": "^7.0"
 	},
 	"suggest": {
-		"web-vision/enable-translated-content": "Adds enable translated content button to language columns in page view"
+		"web-vision/enable-translated-content": "Adds enable translated content button to language columns in page view",
+		"web-vision/deepltranslate-assets": "Enables the translation of files in FileList Modal via deepl"
 	},
 	"autoload": {
 		"psr-4": {
