@@ -9,10 +9,10 @@ parameters:
   level: 8
 
   paths:
-    - ../../../Classes
+    - ../../../Classes/
     - ../../../Tests/
 
   excludePaths:
-    - ../../../.Build
+    - ../../../.Build/*
     - ../../../Tests/Functional/Updates/Fixtures/Extension/test_extension/ext_emconf.php
-    - ../../../Classes/Override/Core11
+    - ../../../Classes/Override/Core11/*

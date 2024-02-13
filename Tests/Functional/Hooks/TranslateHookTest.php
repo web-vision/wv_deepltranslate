@@ -107,18 +107,15 @@ final class TranslateHookTest extends FunctionalTestCase
         $translateContent = 'proton beam';
         $expectedTranslation = 'Protonenstrahl';
 
+        /** @var TranslateHook $translateHook */
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
         $languageService = $this->get(LanguageService::class);
         $siteConfig = $languageService->getCurrentSite('pages', 1);
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
         $content = $translateHook->translateContent(
             $translateContent,
-            [
-                'uid' => 2,
-                'language_isocode' => 'DE',
-            ],
-            'deepl',
-            $sourceLanguageRecord
+            $sourceLanguageRecord['language_isocode'],
+            'DE',
         );
 
         static::assertSame($expectedTranslation, $content);
@@ -134,6 +131,7 @@ final class TranslateHookTest extends FunctionalTestCase
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE)
             ->withAttribute('normalizedParams', NormalizedParams::createFromServerParams($serverParams));
 
+        /** @var TranslateHook $translateHook */
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
 
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
@@ -141,13 +139,8 @@ final class TranslateHookTest extends FunctionalTestCase
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
         $content = $translateHook->translateContent(
             'Hello I would like to be translated',
-            [
-                'uid' => 4, // This is the LanguageID its was Configure in SiteConfig
-                'title' => 'not supported language',
-                'language_isocode' => 'BS',
-            ],
-            'deepl',
-            $sourceLanguageRecord
+            $sourceLanguageRecord['language_isocode'],
+            'BS'
         );
 
         static::assertSame('Hello I would like to be translated', $content);

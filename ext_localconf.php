@@ -22,6 +22,10 @@ defined('TYPO3') or die();
     //hook for translate content
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processTranslateToClass']['deepl']
         = \WebVision\WvDeepltranslate\Hooks\TranslateHook::class;
+
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['deepl']
+        = \WebVision\WvDeepltranslate\Hooks\TranslateHook::class;
+
     //hook to checkModifyAccessList for editors
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkModifyAccessList']['deepl']
         = \WebVision\WvDeepltranslate\Hooks\TCEmainHook::class;

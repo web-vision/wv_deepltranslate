@@ -116,16 +116,6 @@ parameters:
 			path: ../../../Classes/Hooks/TCEmainHook.php
 
 		-
-			message: "#^Access to constant INFO on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
-			count: 1
-			path: ../../../Classes/Hooks/TranslateHook.php
-
-		-
-			message: "#^Offset 'site' does not exist on array\\{site\\: TYPO3\\\\CMS\\\\Core\\\\Site\\\\Entity\\\\Site, pageUid\\: int\\}\\|null\\.$#"
-			count: 2
-			path: ../../../Classes/Hooks/TranslateHook.php
-
-		-
 			message: "#^Parameter \\#2 \\$currentRecordId of method WebVision\\\\WvDeepltranslate\\\\Service\\\\LanguageService\\:\\:getCurrentSite\\(\\) expects int, int\\|string given\\.$#"
 			count: 1
 			path: ../../../Classes/Hooks/TranslateHook.php

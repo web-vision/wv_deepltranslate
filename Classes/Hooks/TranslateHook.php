@@ -4,36 +4,19 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
-use Doctrine\DBAL\Driver\Exception;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Domain\Repository\PageRepository;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
-use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\LanguageService;
 
-class TranslateHook
+class TranslateHook extends AbstractTranslateHook
 {
-    protected DeeplService $deeplService;
-
-    protected PageRepository $pageRepository;
-
-    private LanguageService $languageService;
-
-    public function __construct(
-        PageRepository $pageRepository,
-        DeeplService $deeplService,
-        LanguageService $languageService
-    ) {
-        $this->deeplService = $deeplService;
-        $this->pageRepository = $pageRepository;
-        $this->languageService = $languageService;
-    }
-
     /**
      * @param array{uid: int} $languageRecord
      */
@@ -41,36 +24,37 @@ class TranslateHook
         string &$content,
         array $languageRecord,
         DataHandler $dataHandler
-    ): string {
-        $tableName = '';
-        $currentRecordId = '';
-
-        $cmdmap = $dataHandler->cmdmap;
-        foreach ($cmdmap as $key => $array) {
-            $tableName = $key;
-            foreach ($array as $innerkey => $innervalue) {
-                $currentRecordId = $innerkey;
-                break;
-            }
-            break;
+    ): void {
+        // Table Information are importen to find deepl configuration for site
+        $tableName = self::$coreProcessorsInformation['tableName'];
+        if ($tableName === null) {
+            return;
         }
 
-        if (!isset($cmdmap['localization']['custom']['srcLanguageId'])) {
-            $cmdmap['localization']['custom']['srcLanguageId'] = '';
+        // Record Information are importen to find deepl configuration for site
+        $currentRecordId = self::$coreProcessorsInformation['id'];
+        if ($currentRecordId === null) {
+            return;
         }
 
-        $customMode = $cmdmap['localization']['custom']['mode'] ?? null;
-        [$sourceLanguage] = explode('-', (string)$cmdmap['localization']['custom']['srcLanguageId']);
-
-        //translation mode not set to DeepL translate
-        if ($customMode === null) {
-            return $content;
+        // Wenn you will translate file metadata use the extension "web-vision/deepltranslate-assets"
+        if ($tableName === 'sys_file_metadata') {
+            return;
         }
 
-        $siteInformation = $this->languageService->getCurrentSite($tableName, $currentRecordId);
+        // Translation mode not set to DeepL translate skip the translation
+        if (self::$coreProcessorsInformation['mode'] !== 'deepl') {
+            return;
+        }
 
         $translatedContent = '';
         $targetLanguageRecord = [];
+
+        $siteInformation = $this->languageService->getCurrentSite($tableName, $currentRecordId);
+
+        if ($siteInformation === null) {
+            return;
+        }
 
         try {
             $sourceLanguageRecord = $this->languageService->getSourceLanguage(
@@ -84,78 +68,32 @@ class TranslateHook
 
             $translatedContent = $this->translateContent(
                 $content,
-                $targetLanguageRecord,
-                $customMode,
-                $sourceLanguageRecord
+                $sourceLanguageRecord['language_isocode'],
+                $targetLanguageRecord['language_isocode']
             );
         } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException $e) {
-            if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
-                $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO;
-            } else {
-                $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO;
+            if (!Environment::isCli()) {
+                // Flashmessage are only output in backend context
+                $flashMessage = GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    $e->getMessage(),
+                    '',
+                    -1 // Info
+                );
+                GeneralUtility::makeInstance(FlashMessageService::class)
+                    ->getMessageQueueByIdentifier()
+                    ->addMessage($flashMessage);
             }
-            $flashMessage = GeneralUtility::makeInstance(
-                FlashMessage::class,
-                $e->getMessage(),
-                '',
-                $severity
-            );
-            GeneralUtility::makeInstance(FlashMessageService::class)
-                ->getMessageQueueByIdentifier()
-                ->addMessage($flashMessage);
         }
 
         if ($translatedContent !== '') {
-            if ($content !== '' && $customMode === 'deepl' && !empty($targetLanguageRecord)) {
-                if (isset($siteInformation['pageUid'])) {
-                    $this->pageRepository->markPageAsTranslatedWithDeepl($siteInformation['pageUid'], $targetLanguageRecord);
-                }
-            }
-
-            // only the parameter reference is in use for content translate
-            $content = $translatedContent;
-        }
-
-        return $content;
-    }
-
-    /**
-     * These logics were outsourced to test them and later to resolve them in a service
-     *
-     * @param array{uid: int, language_isocode: string} $targetLanguageRecord
-     * @param array{uid: int, language_isocode: string} $sourceLanguageRecord
-     * @throws Exception
-     * @throws \Doctrine\DBAL\Exception
-     * @throws SiteNotFoundException
-     */
-    public function translateContent(
-        string $content,
-        array $targetLanguageRecord,
-        string $customMode,
-        array $sourceLanguageRecord
-    ): string {
-        // mode deepl
-        if ($customMode == 'deepl') {
-            $response = $this->deeplService->translateRequest(
-                $content,
-                $targetLanguageRecord['language_isocode'],
-                $sourceLanguageRecord['language_isocode']
-            );
-
-            if ($response !== null) {
-                if (is_array($response)) {
-                    $content = '';
-                    foreach ($response as $result) {
-                        $content .= $result->text;
-                    }
-                } else {
-                    $content = $response->text;
-                }
-
-                $content = htmlspecialchars_decode($content, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
+            if ($content !== ''
+                && !empty($targetLanguageRecord)
+            ) {
+                $this->pageRepository->markPageAsTranslatedWithDeepl($siteInformation['pageUid'], $targetLanguageRecord);
             }
         }
 
-        return $content;
+        $content = $translatedContent ?: $content;
     }
 }
