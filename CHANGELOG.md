@@ -1,5 +1,21 @@
 # Changelog
 
+### 4.1.0
+
+#### What's Changed
+
+* Extend client with simple logger by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/41
+* Repository alignment by @dot3media in https://github.com/web-vision/wv_deepltranslate-eap/pull/46
+* Upgrade composer dependencies by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/43
+* Fix spelling from javascript file module name by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/48
+* Prepare Translate Hook to use in DeepL Plugins by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/50
+
+#### New Contributors
+
+* @dot3media made their first contribution in https://github.com/web-vision/wv_deepltranslate-eap/pull/46
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/4.0.3...4.1.0
+
 ### 4.0.3
 
 + [BUGFIX] Fix loading issues with container services in https://github.com/web-vision/wv_deepltranslate-eap/pull/39
