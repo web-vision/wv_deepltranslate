@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.1.1
+
+* Update deepl icon generator by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/52
+
 ### 4.1.0
 
 #### What's Changed
