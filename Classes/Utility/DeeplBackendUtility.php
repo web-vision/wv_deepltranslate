@@ -17,13 +17,12 @@ use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\WorkspaceRestriction;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
-use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
 // @todo Make class final. Overriding a static utility class does not make much sense, but better to enforce it.
@@ -110,7 +109,8 @@ class DeeplBackendUtility
             );
 
         if ($flagIcon) {
-            $icon = self::getIcon($flagIcon);
+            $iconOverlayGenerator = GeneralUtility::makeInstance(IconOverlayGenerator::class);
+            $icon = $iconOverlayGenerator->get($flagIcon);
             $lC = $icon->render();
         } else {
             $lC = GeneralUtility::makeInstance(
@@ -137,44 +137,14 @@ class DeeplBackendUtility
         return (string)$uriBuilder->buildUriFromRoute($route, $parameters);
     }
 
+    /**
+     * @deprecated This function will no longer be used and will be removed in a later version please use it \WebVision\WvDeepltranslate\Service\IconOverlayGenerator
+     * @see IconOverlayGenerator::get()
+     */
     public static function getIcon(string $iconFlag): Icon
     {
-        $deeplTranslateIcon = sprintf('deepl-translate-%s', $iconFlag);
-        $newIcon = GeneralUtility::makeInstance(IconFactory::class)
-            ->getIcon(
-                $deeplTranslateIcon,
-                Icon::SIZE_SMALL
-            );
-
-        if ($newIcon->getIdentifier() !== 'default-not-found') {
-            return $newIcon;
-        }
-        $flagIcon = GeneralUtility::makeInstance(IconFactory::class)
-            ->getIcon(
-                $iconFlag,
-                Icon::SIZE_SMALL
-            );
-        $deeplIcon = GeneralUtility::makeInstance(
-            IconFactory::class
-        )->getIcon(
-            'deepl-grey-logo',
-            Icon::SIZE_OVERLAY
-        );
-        GeneralUtility::makeInstance(IconRegistry::class)
-            ->registerIcon(
-                $deeplTranslateIcon,
-                BitmapIconProvider::class,
-            );
-
-        $newIcon = GeneralUtility::makeInstance(IconFactory::class)
-            ->getIcon(
-                $deeplTranslateIcon,
-                Icon::SIZE_SMALL
-            );
-        $newIcon->setIdentifier($deeplTranslateIcon);
-        $newIcon->setMarkup($flagIcon->getMarkup());
-        $newIcon->setOverlayIcon($deeplIcon);
-        return $newIcon;
+        $iconOverlayGenerator = GeneralUtility::makeInstance(IconOverlayGenerator::class);
+        return $iconOverlayGenerator->get($iconFlag);
     }
 
     /**

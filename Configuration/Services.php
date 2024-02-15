@@ -18,6 +18,7 @@ use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
@@ -71,6 +72,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->class(FrontendInterface::class)
         ->factory([service(CacheManager::class), 'getCache'])
         ->args(['wvdeepltranslate']);
+
     $services
         ->set(DeeplService::class)
         ->public()
@@ -82,11 +84,12 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $services
         ->set(LanguageService::class)
         ->public();
-
+    $services
+        ->set(IconOverlayGenerator::class)
+        ->public();
     $services
         ->set(AjaxController::class)
         ->public();
-
     $services
         ->set(GlossarySyncController::class)
         ->public();
