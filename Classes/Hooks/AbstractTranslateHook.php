@@ -71,7 +71,6 @@ abstract class AbstractTranslateHook
      * @param string $id
      * @param mixed $value
      * @param int $pasteUpdate
-     * @return void
      */
     public function processCmdmap(
         string $command,

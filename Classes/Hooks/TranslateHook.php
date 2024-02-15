@@ -6,11 +6,8 @@ namespace WebVision\WvDeepltranslate\Hooks;
 
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
