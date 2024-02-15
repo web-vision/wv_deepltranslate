@@ -20,7 +20,10 @@ final class PageRendererHook
         if ($pageRenderer->getApplicationType() === 'BE' && $typo3Version->getMajorVersion() < 12) {
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/WvDeepltranslate/Localization11');
         }
-        // For some reason, the labels are not availible in JavaScript object `TYPO3.lang`. So we add them manually.
-        $pageRenderer->addInlineLanguageLabelFile('EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf');
+
+        if ($pageRenderer->getApplicationType() === 'BE') {
+            // For some reason, the labels are not availible in JavaScript object `TYPO3.lang`. So we add them manually.
+            $pageRenderer->addInlineLanguageLabelFile('EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf');
+        }
     }
 }
