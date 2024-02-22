@@ -7,10 +7,10 @@ namespace WebVision\WvDeepltranslate;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-// @todo Make this class final and introduce a interface for it.
-final class Configuration
+final class Configuration implements ConfigurationInterface, SingletonInterface
 {
     private string $apiKey = '';
 
