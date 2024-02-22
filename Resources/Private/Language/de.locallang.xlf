@@ -155,6 +155,15 @@
 				<source>Synchronise Glossaries</source>
 				<target>Glossare synchronisieren</target>
 			</trans-unit>
+
+			<trans-unit id="usages.toolbar-label">
+				<source>DeepL Translate Limit</source>
+				<target>DeepL Übersetzung Limit</target>
+			</trans-unit>
+			<trans-unit id="usages.toolbar-information">
+				<source>Information not available</source>
+				<target>Information nicht verfügbar</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

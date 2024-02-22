@@ -3,6 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
 use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -16,6 +17,7 @@ use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
 use WebVision\WvDeepltranslate\Controller\Backend\AjaxController;
 use WebVision\WvDeepltranslate\Controller\GlossarySyncController;
 use WebVision\WvDeepltranslate\Event\Listener\GlossarySyncButtonProvider;
+use WebVision\WvDeepltranslate\Event\Listener\UsageToolBarEventListener;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
@@ -133,4 +135,14 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
                 ]
             );
     }
+
+    $services
+        ->set(UsageToolBarEventListener::class)
+        ->tag(
+            'event.listener',
+            [
+                'identifier' => 'deepl.usages',
+                'event' => SystemInformationToolbarCollectorEvent::class,
+            ]
+        );
 };

@@ -146,6 +146,19 @@
 			<trans-unit id="glossary.sync.button.all">
 				<source>Synchronise Glossaries</source>
 			</trans-unit>
+
+			<trans-unit id="usages.toolbar-label">
+				<source>DeepL Translate Limit</source>
+			</trans-unit>
+			<trans-unit id="usages.toolbar-information">
+				<source>Information not available</source>
+			</trans-unit>
+			<trans-unit id="usages.flashmassage.title">
+				<source>DeepL Translate </source>
+			</trans-unit>
+			<trans-unit id="usages.flashmassage.limit.description">
+				<source>DeepL Translate Limit %s / %s</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
