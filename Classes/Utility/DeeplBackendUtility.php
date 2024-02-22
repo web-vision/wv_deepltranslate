@@ -63,6 +63,9 @@ class DeeplBackendUtility
         self::$configurationLoaded = true;
     }
 
+    /**
+     * ToDo: Migrated function to own class object "WebVision\WvDeepltranslate\Form\TranslationButtonGenerator"
+     */
     public static function buildTranslateButton(
         $table,
         $id,
@@ -132,9 +135,7 @@ class DeeplBackendUtility
     }
 
     /**
-     * @throws DBALException
-     * @throws RouteNotFoundException
-     * @throws Exception
+     * ToDo: Migrated function to own class object "WebVision\WvDeepltranslate\Form\TranslationDropdownGenerator"
      */
     public static function buildTranslateDropdown(
         $siteLanguages,
