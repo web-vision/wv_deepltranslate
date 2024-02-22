@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Utility;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -19,6 +16,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use WebVision\WvDeepltranslate\Configuration;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
@@ -29,8 +27,6 @@ use WebVision\WvDeepltranslate\Service\LanguageService;
 class DeeplBackendUtility
 {
     private static string $apiKey = '';
-
-    private static string $deeplFormality = 'default';
 
     private static bool $configurationLoaded = false;
 
@@ -50,17 +46,6 @@ class DeeplBackendUtility
         return self::$apiKey;
     }
 
-    /**
-     * @return string
-     */
-    public static function getDeeplFormality(): string
-    {
-        if (!self::$configurationLoaded) {
-            self::loadConfiguration();
-        }
-        return self::$deeplFormality;
-    }
-
     public static function isDeeplApiKeySet(): bool
     {
         if (!self::$configurationLoaded) {
@@ -72,9 +57,8 @@ class DeeplBackendUtility
 
     public static function loadConfiguration(): void
     {
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
-        self::$apiKey = $extensionConfiguration['apiKey'];
-        self::$deeplFormality = $extensionConfiguration['deeplFormality'];
+        $configuration = GeneralUtility::makeInstance(Configuration::class);
+        self::$apiKey = $configuration->getApiKey();
 
         self::$configurationLoaded = true;
     }
