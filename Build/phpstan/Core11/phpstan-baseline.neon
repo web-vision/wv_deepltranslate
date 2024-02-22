@@ -81,6 +81,11 @@ parameters:
 			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
 
 		-
+			message: "#^Cannot call method error\\(\\) on Psr\\\\Log\\\\LoggerInterface\\|null\\.$#"
+			count: 1
+			path: ../../../Classes/Event/Listener/UsageToolBarEventListener.php
+
+		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Form\\\\Item\\\\SiteConfigSupportedLanguageItemsProcFunc\\:\\:getSupportedLanguageForField\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php
@@ -121,6 +126,16 @@ parameters:
 			path: ../../../Classes/Hooks/TranslateHook.php
 
 		-
+			message: "#^Cannot access property \\$count on DeepL\\\\UsageDetail\\|null\\.$#"
+			count: 1
+			path: ../../../Classes/Hooks/UsageProcessAfterFinishHook.php
+
+		-
+			message: "#^Cannot access property \\$limit on DeepL\\\\UsageDetail\\|null\\.$#"
+			count: 1
+			path: ../../../Classes/Hooks/UsageProcessAfterFinishHook.php
+
+		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\Core11\\\\DatabaseRecordList\\:\\:makeLocalizationPanel\\(\\) has parameter \\$translations with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Override/Core11/DatabaseRecordList.php
@@ -146,7 +161,7 @@ parameters:
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 
 		-
-			message: "#^Access to constant INFO on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
+			message: "#^Cannot call method error\\(\\) on Psr\\\\Log\\\\LoggerInterface\\|null\\.$#"
 			count: 1
 			path: ../../../Classes/Service/DeeplService.php
 
@@ -164,6 +179,16 @@ parameters:
 			message: "#^Property WebVision\\\\WvDeepltranslate\\\\Service\\\\LanguageService\\:\\:\\$possibleLangMatches type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Service/LanguageService.php
+
+		-
+			message: "#^Cannot access property \\$count on DeepL\\\\UsageDetail\\|null\\.$#"
+			count: 1
+			path: ../../../Classes/Service/UsageService.php
+
+		-
+			message: "#^Cannot access property \\$limit on DeepL\\\\UsageDetail\\|null\\.$#"
+			count: 1
+			path: ../../../Classes/Service/UsageService.php
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Utility\\\\DeeplBackendUtility\\:\\:buildBackendRoute\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
@@ -429,6 +454,16 @@ parameters:
 			message: "#^Parameter \\#2 \\$coreCache of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Frontend\\\\PhpFrontend\\|null, Psr\\\\EventDispatcher\\\\EventDispatcherInterface given\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
+
+		-
+			message: "#^Cannot access property \\$character on DeepL\\\\Usage\\|null\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Services/UsageServiceTest.php
+
+		-
+			message: "#^Cannot access property \\$count on DeepL\\\\UsageDetail\\|null\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Services/UsageServiceTest.php
 
 		-
 			message: "#^Argument of an invalid type string supplied for foreach, only iterables are supported\\.$#"
