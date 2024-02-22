@@ -85,7 +85,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         /** @var DeeplService $deeplService */
         $deeplService = $this->get(DeeplService::class);
 
-        static::assertContainsOnlyInstancesOf(Language::class, $deeplService->apiSupportedLanguages['target']);
+        static::assertContainsOnlyInstancesOf(Language::class, $deeplService->getSupportLanguage()['target']);
 
         static::assertEquals('EN-GB', $deeplService->detectTargetLanguage('EN-GB')->code);
         static::assertEquals('EN-US', $deeplService->detectTargetLanguage('EN-US')->code);

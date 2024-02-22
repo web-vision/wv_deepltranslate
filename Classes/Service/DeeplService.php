@@ -10,6 +10,7 @@ use Doctrine\DBAL\Driver\Exception;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -19,18 +20,9 @@ use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
-final class DeeplService
+final class DeeplService implements LoggerAwareInterface
 {
-    /**
-     * Default supported languages
-     *
-     * @see https://www.deepl.com/de/docs-api/translating-text/#request
-     * @var array{source: Language[], target: Language[]}
-     */
-    public array $apiSupportedLanguages =  [
-        'source' => [],
-        'target' => [],
-    ];
+    use LoggerAwareTrait;
 
     protected GlossaryRepository $glossaryRepository;
 
@@ -46,8 +38,6 @@ final class DeeplService
         $this->cache = $cache;
         $this->client = $client;
         $this->glossaryRepository = $glossaryRepository;
-
-        $this->loadSupportedLanguages();
     }
 
     /**
@@ -77,21 +67,19 @@ final class DeeplService
         }
 
         $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
+
         if ($response === null) {
-            if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
-                $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO;
-            } else {
-                $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO;
+            if (!Environment::isCli() || !Environment::getContext()->isTesting()) {
+                $flashMessage = GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    'Translation not successful',
+                    '',
+                    -1
+                );
+                GeneralUtility::makeInstance(FlashMessageService::class)
+                    ->getMessageQueueByIdentifier()
+                    ->addMessage($flashMessage);
             }
-            $flashMessage = GeneralUtility::makeInstance(
-                FlashMessage::class,
-                'Translation not successful',
-                '',
-                $severity
-            );
-            GeneralUtility::makeInstance(FlashMessageService::class)
-                ->getMessageQueueByIdentifier()
-                ->addMessage($flashMessage);
         }
 
         return $response;
@@ -100,34 +88,58 @@ final class DeeplService
     public function detectTargetLanguage(string $language): ?Language
     {
         /** @var Language $targetLanguage */
-        foreach ($this->apiSupportedLanguages['target'] as $targetLanguage) {
+        foreach ($this->getSupportLanguage()['target'] as $targetLanguage) {
             if ($targetLanguage->code === $language) {
                 return $targetLanguage;
             }
         }
+
         return null;
     }
 
     public function detectSourceLanguage(string $language): ?Language
     {
         /** @var Language $sourceLanguage */
-        foreach ($this->apiSupportedLanguages['source'] as $sourceLanguage) {
+        foreach ($this->getSupportLanguage()['source'] as $sourceLanguage) {
             if ($sourceLanguage->code === $language) {
                 return $sourceLanguage;
             }
         }
+
         return null;
     }
 
-    private function loadSupportedLanguages(): void
+    /**
+     * Default supported languages
+     *
+     * @see https://www.deepl.com/de/docs-api/translating-text/#request
+     * @return array{source: Language[], target: Language[]}
+     */
+    public function getSupportLanguage(): array
     {
+        return $this->loadSupportedLanguages();
+    }
+
+    /**
+     * ToDo: Build own deepl language support object
+     *
+     * @return array{source: Language[], target: Language[]}
+     */
+    private function loadSupportedLanguages(): array
+    {
+        $apiSupportedLanguages = [
+            'source' => [],
+            'target' => [],
+        ];
+
         $cacheIdentifier = 'wv-deepl-supported-languages-target';
         if (($supportedTargetLanguages = $this->cache->get($cacheIdentifier)) === false) {
             $supportedTargetLanguages = $this->loadSupportedLanguagesFromAPI();
 
             $this->cache->set($cacheIdentifier, $supportedTargetLanguages, [], 86400);
         }
-        $this->apiSupportedLanguages['target'] = $supportedTargetLanguages;
+
+        $apiSupportedLanguages['target'] = $supportedTargetLanguages;
 
         $cacheIdentifier = 'wv-deepl-supported-languages-source';
 
@@ -136,7 +148,10 @@ final class DeeplService
 
             $this->cache->set($cacheIdentifier, $supportedSourceLanguages, [], 86400);
         }
-        $this->apiSupportedLanguages['source'] = $supportedSourceLanguages;
+
+        $apiSupportedLanguages['source'] = $supportedSourceLanguages;
+
+        return $apiSupportedLanguages;
     }
 
     /**
