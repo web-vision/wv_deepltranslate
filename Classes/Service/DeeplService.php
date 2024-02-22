@@ -7,6 +7,8 @@ namespace WebVision\WvDeepltranslate\Service;
 use DeepL\Language;
 use DeepL\TextResult;
 use Doctrine\DBAL\Driver\Exception;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -14,6 +16,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\ClientInterface;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
+use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 final class DeeplService
@@ -141,6 +144,11 @@ final class DeeplService
      */
     private function loadSupportedLanguagesFromAPI(string $type = 'target'): array
     {
-        return $this->client->getSupportedLanguageByType($type);
+        try {
+            return $this->client->getSupportedLanguageByType($type);
+        } catch (ApiKeyNotSetException $exception) {
+            $this->logger->error(sprintf('%s (%d)', $exception->getMessage(), $exception->getCode()));
+            return [];
+        }
     }
 }

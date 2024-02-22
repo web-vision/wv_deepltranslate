@@ -11,28 +11,13 @@ use DeepL\GlossaryLanguagePair;
 use DeepL\Language;
 use DeepL\TextResult;
 use DeepL\TranslateTextOptions;
-use DeepL\Translator;
 use DeepL\Usage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @internal No public usage
  */
 final class Client extends AbstractClient
 {
-    /**
-     * @param array<string, mixed> $options
-     */
-    public function __construct(string $apiKey = '', array $options = [])
-    {
-        $this->configuration = GeneralUtility::makeInstance(Configuration::class);
-        $this->translator = GeneralUtility::makeInstance(
-            Translator::class,
-            $apiKey ?: $this->configuration->getApiKey(),
-            $options
-        );
-    }
-
     /**
      * @return TextResult|TextResult[]|null
      */
@@ -52,7 +37,7 @@ final class Client extends AbstractClient
         }
 
         try {
-            return $this->translator->translateText(
+            return $this->getTranslator()->translateText(
                 $content,
                 $sourceLang,
                 $targetLang,
@@ -76,8 +61,8 @@ final class Client extends AbstractClient
     {
         try {
             return ($type === 'target')
-                ? $this->translator->getTargetLanguages()
-                : $this->translator->getSourceLanguages();
+                ? $this->getTranslator()->getTargetLanguages()
+                : $this->getTranslator()->getSourceLanguages();
         } catch (DeepLException $exception) {
             $this->logger->error(sprintf(
                 '%s (%d)',
@@ -95,7 +80,7 @@ final class Client extends AbstractClient
     public function getGlossaryLanguagePairs(): array
     {
         try {
-            return $this->translator->getGlossaryLanguages();
+            return $this->getTranslator()->getGlossaryLanguages();
         } catch (DeepLException $exception) {
             $this->logger->error(sprintf(
                 '%s (%d)',
@@ -113,7 +98,7 @@ final class Client extends AbstractClient
     public function getAllGlossaries(): array
     {
         try {
-            return $this->translator->listGlossaries();
+            return $this->getTranslator()->listGlossaries();
         } catch (DeepLException $exception) {
             $this->logger->error(sprintf(
                 '%s (%d)',
@@ -128,7 +113,7 @@ final class Client extends AbstractClient
     public function getGlossary(string $glossaryId): ?GlossaryInfo
     {
         try {
-            return $this->translator->getGlossary($glossaryId);
+            return $this->getTranslator()->getGlossary($glossaryId);
         } catch (DeepLException $exception) {
             $this->logger->error(sprintf(
                 '%s (%d)',
@@ -164,7 +149,7 @@ final class Client extends AbstractClient
             $prepareEntriesForGlossary[$source] = $target;
         }
         try {
-            return $this->translator->createGlossary(
+            return $this->getTranslator()->createGlossary(
                 $glossaryName,
                 $sourceLang,
                 $targetLang,
@@ -186,7 +171,7 @@ final class Client extends AbstractClient
     public function deleteGlossary(string $glossaryId): void
     {
         try {
-            $this->translator->deleteGlossary($glossaryId);
+            $this->getTranslator()->deleteGlossary($glossaryId);
         } catch (DeepLException $exception) {
             $this->logger->error(sprintf(
                 '%s (%d)',
@@ -199,7 +184,7 @@ final class Client extends AbstractClient
     public function getGlossaryEntries(string $glossaryId): ?GlossaryEntries
     {
         try {
-            return $this->translator->getGlossaryEntries($glossaryId);
+            return $this->getTranslator()->getGlossaryEntries($glossaryId);
         } catch (DeepLException $exception) {
             $this->logger->error(sprintf(
                 '%s (%d)',

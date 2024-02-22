@@ -6,6 +6,7 @@ namespace WebVision\WvDeepltranslate\Hooks;
 
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use WebVision\WvDeepltranslate\Domain\Repository\PageRepository;
+use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 
@@ -45,11 +46,16 @@ abstract class AbstractTranslateHook
         string $sourceLanguageIsocode,
         string $targetLanguageIsocode
     ): string {
-        $response = $this->deeplService->translateRequest(
-            $content,
-            $targetLanguageIsocode,
-            $sourceLanguageIsocode
-        );
+        try {
+            $response = $this->deeplService->translateRequest(
+                $content,
+                $targetLanguageIsocode,
+                $sourceLanguageIsocode
+            );
+        } catch (ApiKeyNotSetException $exception) {
+            // ToDo write log entry
+            return $content;
+        }
 
         if ($response === null) {
             return $content;

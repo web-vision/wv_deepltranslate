@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional;
 
+use DeepL\Translator;
 use DeepL\TranslatorOptions;
 use phpmock\phpunit\PHPMock;
 use Psr\Log\NullLogger;
@@ -13,6 +14,7 @@ use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\ClientInterface;
+use WebVision\WvDeepltranslate\ConfigurationInterface;
 
 abstract class AbstractDeepLTestCase extends FunctionalTestCase
 {
@@ -190,8 +192,29 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
             $mergedOptions[TranslatorOptions::SERVER_URL] = $this->serverUrl;
         }
 
-        $client = new Client(self::getInstanceIdentifier(), $mergedOptions);
+        $mockConfiguration = $this->getMockBuilder(ConfigurationInterface::class)
+            ->getMock();
+
+        $mockConfiguration
+            ->method('getApiKey')
+            ->willReturn(self::getInstanceIdentifier())
+        ;
+        $mockConfiguration
+            ->method('getFormality')
+            ->willReturn('default');
+
+        $client = new Client($mockConfiguration);
         $client->setLogger(new NullLogger());
+
+        // use closure to set private option for translation
+        $translator = new Translator(self::getInstanceIdentifier(), $mergedOptions);
+        \Closure::bind(
+            function (Translator $translator) {
+                $this->translator = $translator;
+            },
+            $client,
+            Client::class
+        )->call($client, $translator);
 
         /** @var Container $container */
         $container = $this->getContainer();
