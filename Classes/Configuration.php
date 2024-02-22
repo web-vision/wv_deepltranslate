@@ -26,7 +26,7 @@ final class Configuration implements ConfigurationInterface, SingletonInterface
 
         $this->apiKey = (string)($extensionConfiguration['apiKey'] ?? '');
 
-        // In einer zukünftigen version sollte "Formality" in die SiteConfig verschoben werden
+        // In a future version, "Formality" should be moved to the SiteConfig
         $this->formality = (string)($extensionConfiguration['deeplFormality'] ?? 'default');
     }
 
@@ -35,6 +35,9 @@ final class Configuration implements ConfigurationInterface, SingletonInterface
         return $this->apiKey;
     }
 
+    /**
+     * @deprecated In a future version, "Formality" should be moved to the SiteConfig
+     */
     public function getFormality(): string
     {
         return $this->formality;
