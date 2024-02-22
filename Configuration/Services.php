@@ -21,6 +21,7 @@ use WebVision\WvDeepltranslate\Event\Listener\UsageToolBarEventListener;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
+use WebVision\WvDeepltranslate\Hooks\UsageProcessAfterFinishHook;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
@@ -95,6 +96,9 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->public();
     $services
         ->set(UsageService::class)
+        ->public();
+    $services
+        ->set(UsageProcessAfterFinishHook::class)
         ->public();
 
     $services
