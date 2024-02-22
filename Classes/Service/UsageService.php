@@ -11,36 +11,45 @@ final class UsageService implements UsageServiceInterface
 {
     protected ClientInterface $client;
 
-    protected Usage $usage;
-
     public function __construct(
         ClientInterface $client
     ) {
         $this->client = $client;
-        $this->updateUsage();
     }
 
-    public function getCurrentUsage(): Usage
+    public function getCurrentUsage(): ?Usage
     {
-        $this->updateUsage();
-        return $this->usage;
+        return $this->client->getUsage();
     }
 
-    public function isTranslateLimitExceeded(string $contentToTranslate): bool
+    public function checkTranslateLimitWillBeExceeded(string $contentToTranslate): bool
     {
-        $this->updateUsage();
-        if ($this->usage->character === null) {
+        $usage = $this->getCurrentUsage();
+        if ($usage === null) {
+            return false;
+        }
+
+        if ($usage->character === null) {
             return true;
         }
-        $currentCount = $this->usage->character->count;
-        // @todo: clarify, if html tags count or not
+
+        $currentCount = $usage->character->count;
+
         $toTranslateCount = strlen(strip_tags($contentToTranslate));
 
-        return ($currentCount + $toTranslateCount) > $this->usage->character->limit;
+        return ($currentCount + $toTranslateCount) > $usage->character->limit;
     }
 
-    private function updateUsage(): void
+    /**
+     * @inheritDoc
+     */
+    public function isTranslateLimitExceeded(): bool
     {
-        $this->usage = $this->client->getUsage();
+        $usage = $this->getCurrentUsage();
+        if ($usage === null) {
+            return false;
+        }
+
+        return $usage->character->count >= $usage->character->limit;
     }
 }

@@ -55,5 +55,5 @@ interface ClientInterface extends LoggerAwareInterface
 
     public function getGlossaryEntries(string $glossaryId): ?GlossaryEntries;
 
-    public function getUsage(): Usage;
+    public function getUsage(): ?Usage;
 }

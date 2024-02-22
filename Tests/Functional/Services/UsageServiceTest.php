@@ -54,7 +54,7 @@ final class UsageServiceTest extends AbstractDeepLTestCase
         /** @var UsageService $usageService */
         $usageService = $this->get(UsageService::class);
 
-        static::assertFalse($usageService->isTranslateLimitExceeded(''));
+        static::assertFalse($usageService->checkTranslateLimitWillBeExceeded(''));
     }
 
     /**
@@ -70,14 +70,37 @@ final class UsageServiceTest extends AbstractDeepLTestCase
         /** @var DeeplService $deeplService */
         $deeplService = $this->get(DeeplService::class);
 
+        // Execute translation to check translation limit
         $responseObject = $deeplService->translateRequest(
             $translateContent,
             'DE',
             'EN'
         );
 
-        $isLimitExceeded = $usageService->isTranslateLimitExceeded($translateContent);
+        $isLimitExceeded = $usageService->checkTranslateLimitWillBeExceeded($translateContent);
         static::assertTrue($isLimitExceeded);
     }
 
+    /**
+     * @test
+     */
+    public function checkHTMLMarkupsIsNotPartOfLimit(): void
+    {
+        $translateContent = 'proton beam';
+
+        /** @var UsageService $usageService */
+        $usageService = $this->get(UsageService::class);
+
+        /** @var DeeplService $deeplService */
+        $deeplService = $this->get(DeeplService::class);
+
+        // Execute translation to check translation limit
+        $responseObject = $deeplService->translateRequest(
+            '<p>' . $translateContent . '</p>',
+            'DE',
+            'EN'
+        );
+
+        static::assertEquals(strlen($translateContent), $usageService->getCurrentUsage()->character->count);
+    }
 }

@@ -196,11 +196,18 @@ final class Client extends AbstractClient
         return null;
     }
 
-    /**
-     * @throws DeepLException
-     */
-    public function getUsage(): Usage
+    public function getUsage(): ?Usage
     {
-        return $this->translator->getUsage();
+        try {
+            return $this->getTranslator()->getUsage();
+        } catch (DeepLException $exception) {
+            $this->logger->error(sprintf(
+                '%s (%d)',
+                $exception->getMessage(),
+                $exception->getCode()
+            ));
+        }
+
+        return null;
     }
 }

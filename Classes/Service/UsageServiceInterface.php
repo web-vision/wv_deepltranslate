@@ -10,5 +10,13 @@ interface UsageServiceInterface
 {
     public function getCurrentUsage(): ?Usage;
 
-    public function isTranslateLimitExceeded(string $contentToTranslate): bool;
+    public function checkTranslateLimitWillBeExceeded(string $contentToTranslate): bool;
+
+    /**
+     * In Deepl Usages Object all limits are checked if they are reached.
+     * However, we only want to check whether the character limit has been reached.
+     *
+     * @see Usage::anyLimitReached()
+     */
+    public function isTranslateLimitExceeded(): bool;
 }
