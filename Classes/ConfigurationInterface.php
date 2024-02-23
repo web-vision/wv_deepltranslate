@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate;
 
+/**
+ * Describes required configuration value retrievement methods which are essential.
+ *
+ * @internal usage only and not meant for extending. **Should** still be considered as public and changes should
+ *           respect general deprecation policy rules as it may be accessed by consumers.
+ */
 interface ConfigurationInterface
 {
     public function getApiKey(): string;
 
     /**
-     * @deprecated In a future version, "Formality" should be moved to the SiteConfig
+     * @internal Move the `Formality` configuration to the SiteConfiguration, remove extension usage and deprecate property.
      */
     public function getFormality(): string;
 }

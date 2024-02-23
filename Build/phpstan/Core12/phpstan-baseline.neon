@@ -71,11 +71,6 @@ parameters:
 			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
 
 		-
-			message: "#^Cannot call method error\\(\\) on Psr\\\\Log\\\\LoggerInterface\\|null\\.$#"
-			count: 1
-			path: ../../../Classes/Event/Listener/UsageToolBarEventListener.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Form\\\\Item\\\\SiteConfigSupportedLanguageItemsProcFunc\\:\\:getSupportedLanguageForField\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php
@@ -121,16 +116,6 @@ parameters:
 			path: ../../../Classes/Hooks/TranslateHook.php
 
 		-
-			message: "#^Cannot access property \\$count on DeepL\\\\UsageDetail\\|null\\.$#"
-			count: 1
-			path: ../../../Classes/Hooks/UsageProcessAfterFinishHook.php
-
-		-
-			message: "#^Cannot access property \\$limit on DeepL\\\\UsageDetail\\|null\\.$#"
-			count: 1
-			path: ../../../Classes/Hooks/UsageProcessAfterFinishHook.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\Core12\\\\DatabaseRecordList\\:\\:makeLocalizationPanel\\(\\) has parameter \\$translations with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Override/Core12/DatabaseRecordList.php
@@ -171,11 +156,6 @@ parameters:
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 
 		-
-			message: "#^Cannot call method error\\(\\) on Psr\\\\Log\\\\LoggerInterface\\|null\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplService.php
-
-		-
 			message: "#^Offset 'pid' does not exist on array\\|null\\.$#"
 			count: 1
 			path: ../../../Classes/Service/LanguageService.php
@@ -184,16 +164,6 @@ parameters:
 			message: "#^Property WebVision\\\\WvDeepltranslate\\\\Service\\\\LanguageService\\:\\:\\$possibleLangMatches type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Service/LanguageService.php
-
-		-
-			message: "#^Cannot access property \\$count on DeepL\\\\UsageDetail\\|null\\.$#"
-			count: 1
-			path: ../../../Classes/Service/UsageService.php
-
-		-
-			message: "#^Cannot access property \\$limit on DeepL\\\\UsageDetail\\|null\\.$#"
-			count: 1
-			path: ../../../Classes/Service/UsageService.php
 
 		-
 			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException is not subtype of Throwable$#"
@@ -444,16 +414,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$current of method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\Services\\\\LanguageServiceTest\\:\\:mergeInstruction\\(\\) expects TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction, TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction\\|null given\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
-
-		-
-			message: "#^Cannot access property \\$character on DeepL\\\\Usage\\|null\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/Services/UsageServiceTest.php
-
-		-
-			message: "#^Cannot access property \\$count on DeepL\\\\UsageDetail\\|null\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/Services/UsageServiceTest.php
 
 		-
 			message: "#^Argument of an invalid type string supplied for foreach, only iterables are supported\\.$#"

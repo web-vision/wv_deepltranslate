@@ -35,14 +35,13 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
      */
     protected $proxyUrl = false;
 
-    protected bool $isMockServer;
+    protected bool $isMockServer = false;
 
-    protected bool $isMockProxyServer;
+    protected bool $isMockProxyServer = false;
 
     protected ?string $sessionNoResponse = null;
 
     protected ?string $session429Count = null;
-
     protected ?string $sessionInitCharacterLimit = null;
 
     protected ?string $sessionInitDocumentLimit = null;
@@ -57,6 +56,9 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
 
     protected ?bool $sessionExpectProxy = null;
 
+    /**
+     * @var array<non-empty-string, non-empty-string>
+     */
     protected const EXAMPLE_TEXT = [
         'bg' => 'протонен лъч',
         'cs' => 'protonový paprsek',
@@ -105,15 +107,14 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
 
     protected const EXAMPLE_DOCUMENT_OUTPUT = AbstractDeepLTestCase::EXAMPLE_TEXT['de'];
 
-    protected string $EXAMPLE_LARGE_DOCUMENT_INPUT;
+    protected string $EXAMPLE_LARGE_DOCUMENT_INPUT = '';
 
-    protected string $EXAMPLE_LARGE_DOCUMENT_OUTPUT;
+    protected string $EXAMPLE_LARGE_DOCUMENT_OUTPUT = '';
 
     protected function setUp(): void
     {
         $this->EXAMPLE_LARGE_DOCUMENT_INPUT = str_repeat(AbstractDeepLTestCase::EXAMPLE_TEXT['en'] . PHP_EOL, 1000);
         $this->EXAMPLE_LARGE_DOCUMENT_OUTPUT = str_repeat(AbstractDeepLTestCase::EXAMPLE_TEXT['de'] . PHP_EOL, 1000);
-
         $this->serverUrl = getenv('DEEPL_SERVER_URL');
         $this->proxyUrl = getenv('DEEPL_PROXY_URL');
         $this->isMockServer = getenv('DEEPL_MOCK_SERVER_PORT') !== false;
@@ -172,9 +173,7 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
         if ($this->sessionExpectProxy !== null) {
             $headers['mock-server-session-expect-proxy'] = $this->sessionExpectProxy ? '1' : '0';
         }
-
         $headers['mock-server-session'] = $this->makeSessionName();
-
         return $headers;
     }
 
@@ -187,18 +186,15 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
             [TranslatorOptions::HEADERS => $this->sessionHeaders()],
             $options
         );
-
         if ($this->serverUrl !== false) {
             $mergedOptions[TranslatorOptions::SERVER_URL] = $this->serverUrl;
         }
-
-        $mockConfiguration = $this->getMockBuilder(ConfigurationInterface::class)
+        $mockConfiguration = $this
+            ->getMockBuilder(ConfigurationInterface::class)
             ->getMock();
-
         $mockConfiguration
             ->method('getApiKey')
-            ->willReturn(self::getInstanceIdentifier())
-        ;
+            ->willReturn(self::getInstanceIdentifier());
         $mockConfiguration
             ->method('getFormality')
             ->willReturn('default');

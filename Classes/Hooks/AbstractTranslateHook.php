@@ -18,7 +18,7 @@ abstract class AbstractTranslateHook
     protected static array $coreProcessorsInformation = [
         'tableName' => null,
         'id' => null,
-        // ToDo: rename identifier to "deepl"
+        // @todo rename identifier to "deepl"
         'mode' => false,
     ];
 
@@ -53,7 +53,7 @@ abstract class AbstractTranslateHook
                 $sourceLanguageIsocode
             );
         } catch (ApiKeyNotSetException $exception) {
-            // ToDo write log entry
+            // @todo Add proper error logging here.
             return $content;
         }
 

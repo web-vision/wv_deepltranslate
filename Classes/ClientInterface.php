@@ -12,9 +12,16 @@ use DeepL\TextResult;
 use DeepL\Usage;
 use Psr\Log\LoggerAwareInterface;
 
+/**
+ * Interface for custom client implementation and which methods are expected.
+ *
+ * @internal use only for testing, not part of public extension API.
+ */
 interface ClientInterface extends LoggerAwareInterface
 {
     /**
+     * Dispatches an translation request towards the api.
+     *
      * @return TextResult|TextResult[]|null
      */
     public function translate(

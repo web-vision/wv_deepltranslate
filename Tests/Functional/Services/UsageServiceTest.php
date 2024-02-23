@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
 use DeepL\Usage;
+use DeepL\UsageDetail;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\UsageService;
 use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
@@ -101,6 +102,10 @@ final class UsageServiceTest extends AbstractDeepLTestCase
             'EN'
         );
 
-        static::assertEquals(strlen($translateContent), $usageService->getCurrentUsage()->character->count);
+        $usage = $usageService->getCurrentUsage();
+        static::assertInstanceOf(Usage::class, $usage);
+        $character = $usage->character;
+        static::assertInstanceOf(UsageDetail::class, $character);
+        static::assertEquals(strlen($translateContent), $character->count);
     }
 }

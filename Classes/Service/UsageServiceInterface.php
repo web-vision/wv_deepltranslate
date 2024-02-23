@@ -9,7 +9,6 @@ use DeepL\Usage;
 interface UsageServiceInterface
 {
     public function getCurrentUsage(): ?Usage;
-
     public function checkTranslateLimitWillBeExceeded(string $contentToTranslate): bool;
 
     /**

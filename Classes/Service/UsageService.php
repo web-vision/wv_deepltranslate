@@ -28,15 +28,11 @@ final class UsageService implements UsageServiceInterface
         if ($usage === null) {
             return false;
         }
-
         if ($usage->character === null) {
             return true;
         }
-
         $currentCount = $usage->character->count;
-
         $toTranslateCount = strlen(strip_tags($contentToTranslate));
-
         return ($currentCount + $toTranslateCount) > $usage->character->limit;
     }
 
@@ -46,10 +42,9 @@ final class UsageService implements UsageServiceInterface
     public function isTranslateLimitExceeded(): bool
     {
         $usage = $this->getCurrentUsage();
-        if ($usage === null) {
+        if ($usage === null || $usage->character === null) {
             return false;
         }
-
         return $usage->character->count >= $usage->character->limit;
     }
 }

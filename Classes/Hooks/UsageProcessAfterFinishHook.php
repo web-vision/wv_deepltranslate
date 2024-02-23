@@ -35,11 +35,9 @@ class UsageProcessAfterFinishHook
         }
 
         $usage = $this->usageService->getCurrentUsage();
-        if ($usage === null) {
+        if ($usage === null || $usage->character === null) {
             return;
         }
-
-        $character = $usage->character;
 
         $label = $this->getLanguageService()->sL(
             'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.flashmassage.limit.description'
@@ -55,7 +53,7 @@ class UsageProcessAfterFinishHook
 
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
-            sprintf($label, $character->count, $character->limit),
+            sprintf($label, $usage->character->count, $usage->character->limit),
             'Deepl Usage',
             $severity,
             true
