@@ -514,14 +514,14 @@ services:
         php -dxdebug.mode=off .Build/bin/typoscript-lint --ansi --config=./Build/typoscript-lint/typoscript-lint.yml
       "
 
+  # docker run --rm --pull always -v $(pwd):/project -it ghcr.io/typo3-documentation/render-guides:latest --config=Documentation
   render_documentation:
     platform: linux/amd64
-    image: ghcr.io/t3docs/render-documentation:develop
+    image: ghcr.io/typo3-documentation/render-guides:latest
     user: "${HOST_UID}"
     volumes:
-      - ${ROOT_DIR}:/PROJECT:ro
-      - ${ROOT_DIR}/Documentation-GENERATED-temp:/RESULT
-    command: makehtml
+      - ${ROOT_DIR}:/project:rw
+    command: '--config=Documentation'
 
   phpstan:
     image: ${IMAGE_PREFIX}core-testing-${DOCKER_PHP_IMAGE}:latest
