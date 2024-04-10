@@ -4,10 +4,7 @@
 # In addition, the EAP should not be pushed into the TER by mistake
 # therefore this job is deactivated
 #
-
 #name: publish
-#
-#on:
 #  push:
 #    tags:
 #      - "**"
@@ -22,7 +19,7 @@
 #
 #    steps:
 #      - name: Checkout repository
-#        uses: actions/checkout@v3
+#        uses: actions/checkout@v4
 #
 #      - name: Check tag
 #        run: |

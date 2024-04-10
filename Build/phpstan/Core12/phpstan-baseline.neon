@@ -236,11 +236,6 @@ parameters:
 			path: ../../../Classes/Utility/DeeplBackendUtility.php
 
 		-
-			message: "#^Parameter \\#2 \\$languageId of static method WebVision\\\\WvDeepltranslate\\\\Utility\\\\DeeplBackendUtility\\:\\:checkCanBeTranslated\\(\\) expects int, int\\|string given\\.$#"
-			count: 1
-			path: ../../../Classes/Utility/DeeplBackendUtility.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Utility\\\\HtmlUtility\\:\\:stripSpecificTags\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: ../../../Classes/Utility/HtmlUtility.php

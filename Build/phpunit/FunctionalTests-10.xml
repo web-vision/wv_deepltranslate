@@ -55,7 +55,5 @@
         <const name="TYPO3_TESTING_FUNCTIONAL_REMOVE_ERROR_HANDLER" value="true"/>
         <ini name="display_errors" value="1"/>
         <env name="TYPO3_CONTEXT" value="Testing"/>
-        <env name="DEEPL_MOCK_SERVER_PORT" value="3000"/>
-        <env name="DEEPL_SERVER_URL" value="deeplapi:3000"/>
     </php>
 </phpunit>

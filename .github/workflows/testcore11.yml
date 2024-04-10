@@ -2,6 +2,7 @@ name: tests core 11
 
 on:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   code-quality:
@@ -13,13 +14,16 @@ jobs:
         php-version: [ '7.4']
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Prepare dependencies for TYPO3 v11"
         run: "Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php-version }} -s composerUpdate"
 
-      - name: "Run TypoScript lint"
-        run: "Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php-version }} -s lintTypoScript"
+# Disabled, as latest installable version of TypoScript linter does not support the TYPO3 backend layout
+# override syntax in PageTSConfig files.
+# @see https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Feature-96812-OverrideBackendTemplatesWithTSconfig.html
+#      - name: "Run TypoScript lint"
+#        run: "Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php-version }} -s lintTypoScript"
 
       - name: "Run PHP lint"
         run: "Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php-version }} -s lintPhp"
@@ -42,17 +46,30 @@ jobs:
       - name: "Run PHPStan"
         run: "Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php-version }} -s phpstan"
 
+  typoscript:
+    name: "Linting TypoScript and TSConfig files"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Prepare dependencies for TYPO3 v11"
+        run: "Build/Scripts/runTests.sh -t 11 -p 8.1 -s composerUpdate"
+
+
   testsuite:
     name: all tests with core v11
     runs-on: ubuntu-22.04
-    needs: code-quality
+    needs:
+      - code-quality
+      - typoscript
     strategy:
       fail-fast: false
       matrix:
         php-version: [ '7.4', '8.0', '8.1', '8.2' ]
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Prepare dependencies for TYPO3 v11"
         run: "Build/Scripts/runTests.sh -t 11 -p ${{ matrix.php-version }} -s composerUpdate"

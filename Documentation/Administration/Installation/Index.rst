@@ -40,4 +40,4 @@ DeepL Translate supports:
 
 ..  csv-table:: Changes
     :header: "DeepL Translate version","TYPO3 Version","PHP version"
-    :file: ../../Files/versionSupport.csv
+    :file: Files/versionSupport.csv
