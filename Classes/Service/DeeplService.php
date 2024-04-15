@@ -10,11 +10,7 @@ use Doctrine\DBAL\Driver\Exception;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\ClientInterface;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
@@ -72,16 +68,9 @@ final class DeeplService implements LoggerAwareInterface
         $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossaryId);
 
         if ($response === null) {
-            if (!Environment::isCli() || !Environment::getContext()->isTesting()) {
-                $flashMessage = GeneralUtility::makeInstance(
-                    FlashMessage::class,
-                    'Translation not successful',
-                    '',
-                    -1
-                );
-                GeneralUtility::makeInstance(FlashMessageService::class)
-                    ->getMessageQueueByIdentifier()
-                    ->addMessage($flashMessage);
+            // @todo Can be replaced with `$this->logger?->` when TYPO3 v11 and therefore PHP 7.4/8.0 support is dropped.
+            if ($this->logger !== null) {
+                $this->logger->warning('Translation not successful');
             }
         }
 

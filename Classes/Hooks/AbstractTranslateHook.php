@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\PageRepository;
 use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 use WebVision\WvDeepltranslate\Service\DeeplService;
@@ -58,6 +62,18 @@ abstract class AbstractTranslateHook
         }
 
         if ($response === null) {
+            if (!Environment::isCli() || !Environment::getContext()->isTesting()) {
+                $flashMessage = GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    'Translation not successful', // ToDo use locallang label
+                    '',
+                    -1
+                );
+                GeneralUtility::makeInstance(FlashMessageService::class)
+                    ->getMessageQueueByIdentifier()
+                    ->addMessage($flashMessage);
+            }
+
             return $content;
         }
 
