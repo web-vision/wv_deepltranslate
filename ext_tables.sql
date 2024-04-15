@@ -1,8 +1,3 @@
-CREATE TABLE tx_deepl_settings
-(
-	languages_assigned text
-);
-
 CREATE TABLE tx_wvdeepltranslate_glossaryentry
 (
 	term varchar(255) default ''
