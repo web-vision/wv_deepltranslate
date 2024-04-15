@@ -53,10 +53,10 @@ final class DeeplService implements LoggerAwareInterface
         string $targetLanguage,
         string $sourceLanguage
     ) {
+        $glossaryId = '';
         // If the source language is set to Autodetect, no glossary can be detected.
         if ($sourceLanguage === 'auto') {
             $sourceLanguage = null;
-            $glossary['glossary_id'] = '';
         } else {
             // @todo Make glossary findable by current site.
             $glossary = $this->glossaryRepository->getGlossaryBySourceAndTarget(
@@ -64,9 +64,12 @@ final class DeeplService implements LoggerAwareInterface
                 $targetLanguage,
                 DeeplBackendUtility::detectCurrentPage()
             );
+            if ($glossary['glossary_id'] !== '') {
+                $glossaryId = $glossary['glossary_id'];
+            }
         }
 
-        $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
+        $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossaryId);
 
         if ($response === null) {
             if (!Environment::isCli() || !Environment::getContext()->isTesting()) {
