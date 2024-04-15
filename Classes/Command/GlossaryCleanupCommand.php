@@ -17,22 +17,10 @@ use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossaryCleanupCommand extends Command
 {
-    protected DeeplGlossaryService $deeplGlossaryService;
-
-    protected GlossaryRepository $glossaryRepository;
-    public function __construct(
-        string $name,
-        DeeplGlossaryService $deeplGlossaryService,
-        GlossaryRepository $glossaryRepository
-    ) {
-        parent::__construct($name);
-        $this->deeplGlossaryService = $deeplGlossaryService;
-        $this->glossaryRepository = $glossaryRepository;
-    }
+    use GlossaryCommandTrait;
 
     protected function configure(): void
     {
-        $this->setDescription('Cleanup Glossary entries in DeepL Database');
         $this->addOption(
             'yes',
             'y',

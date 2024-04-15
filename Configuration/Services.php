@@ -45,31 +45,31 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     // register console commands
     $services
         ->set(GlossaryCleanupCommand::class)
-        ->arg('$name', 'deepl:glossary:cleanup')
         ->tag(
             'console.command',
             [
                 'command' => 'deepl:glossary:cleanup',
+                'description' => 'Cleanup Glossary entries in DeepL Database',
                 'schedulable' => true,
             ]
         );
     $services
         ->set(GlossarySyncCommand::class)
-        ->arg('$name', 'deepl:glossary:sync')
         ->tag(
             'console.command',
             [
                 'command' => 'deepl:glossary:sync',
+                'description' => 'Sync all glossaries to DeepL API',
                 'schedulable' => true,
             ]
         );
     $services
         ->set(GlossaryListCommand::class)
-        ->arg('$name', 'deepl:glossary:list')
         ->tag(
             'console.command',
             [
                 'command' => 'deepl:glossary:list',
+                'description' => 'List Glossary entries or entries by glossary_id',
                 'schedulable' => false,
             ]
         );

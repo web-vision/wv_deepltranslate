@@ -13,18 +13,10 @@ use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossaryListCommand extends Command
 {
-    protected DeeplGlossaryService $deeplGlossaryService;
+    use GlossaryCommandTrait;
 
-    public function __construct(
-        string $name,
-        DeeplGlossaryService $deeplGlossaryService
-    ) {
-        parent::__construct($name);
-        $this->deeplGlossaryService = $deeplGlossaryService;
-    }
     protected function configure(): void
     {
-        $this->setDescription('List Glossary entries or entries by glossary_id');
         $this->addArgument(
             'glossary_id',
             InputArgument::OPTIONAL,

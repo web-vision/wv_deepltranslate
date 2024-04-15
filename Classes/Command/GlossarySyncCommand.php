@@ -14,25 +14,11 @@ use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossarySyncCommand extends Command
 {
-    protected DeeplGlossaryService $deeplGlossaryService;
+    use GlossaryCommandTrait;
 
-    protected GlossaryRepository $glossaryRepository;
-
-    public function __construct(
-        string $name,
-        DeeplGlossaryService $deeplGlossaryService,
-        GlossaryRepository $glossaryRepository
-    ) {
-        parent::__construct($name);
-        $this->deeplGlossaryService = $deeplGlossaryService;
-        $this->glossaryRepository = $glossaryRepository;
-    }
-
-    protected function initialize(
-        InputInterface $input,
-        OutputInterface $output
-    ): void {
-        $this->setDescription('Sync all glossaries to DeepL API')
+    protected function configure(): void
+    {
+        $this
             ->addOption(
                 'pageId',
                 'p',
