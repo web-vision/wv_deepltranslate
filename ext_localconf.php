@@ -5,9 +5,14 @@ defined('TYPO3') or die();
 (static function (): void {
     $typo3version = new \TYPO3\CMS\Core\Information\Typo3Version();
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:wv_deepltranslate/Configuration/TsConfig/Page/pagetsconfig.tsconfig">'
-    );
+    if ($typo3version->getMajorVersion() < 12) {
+        // @todo Remove this after TYPO3 v12 is minimal supported version.
+        // Since TYPO3 v12 `Configuration/page.tsconfig` is auto loaded and contains a include to that file, therefore
+        // it needs to be only loaded manually for TYPO3 v11 as global PageTSConfig.
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+            '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:wv_deepltranslate/Configuration/TsConfig/Page/pagetsconfig.tsconfig">'
+        );
+    }
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['wvDeepltranslate_updateGlossary']
     = \WebVision\WvDeepltranslate\Upgrades\GlossaryUpgradeWizard::class;
