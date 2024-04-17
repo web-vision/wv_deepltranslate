@@ -1,5 +1,19 @@
 # Changelog
 
+### 4.2.0
+
+* [FEATURE] Introduce Usage statistics by @calien666 in https://github.com/web-vision/wv_deepltranslate-eap/pull/45
+* [TASK] Disable publish ci workflow by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/55
+* [BUGFIX] Loading the backend locallang exclusively in the backend by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/53
+* [TASK] Use the new php based documentation rendering container by @sbuerk in https://github.com/web-vision/wv_deepltranslate-eap/pull/57
+* [TASK] Streamline command wrapper  `Build/Scripts/runTests.sh` by @sbuerk in https://github.com/web-vision/wv_deepltranslate-eap/pull/58
+* [TASK] Update DI and configuration for glossary commands by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/59
+* [TASK] Remove unused table definition from `ext_tables.sql` by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/60
+* [BUGFIX] Ensure higher precedence of partial ordering by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/61
+* [TASK] Avoid duplicate PageTS file include with TYPO3 v12  by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/62
+* [TASK] Avoid undefined array key access in `DeeplService` by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/63
+* [TASK] Move flashMassages out auf services class by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/64
+
 ### 4.1.1
 
 * Update deepl icon generator by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/52
