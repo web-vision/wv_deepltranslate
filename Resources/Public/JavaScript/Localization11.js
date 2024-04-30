@@ -12,10 +12,10 @@
  */
 
 /**
- * Module: TYPO3/CMS/Backend/Localization
+ * Module: TYPO3/CMS/WvDeepltranslate/Localization11
  * UI for localization workflow.
  */
-define('TYPO3/CMS/Backend/Localization', [
+define('TYPO3/CMS/WvDeepltranslate/Localization11', [
   'jquery',
   'TYPO3/CMS/Backend/AjaxDataHandler',
   'TYPO3/CMS/Backend/Wizard',

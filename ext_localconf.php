@@ -63,6 +63,10 @@ defined('TYPO3') or die();
             'className' => \WebVision\WvDeepltranslate\Override\Core11\DatabaseRecordList::class,
         ];
 
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\PageLayoutController::class] = [
+            'className' => \WebVision\WvDeepltranslate\Override\Core11\PageLayoutController::class,
+        ];
+
         // button hook changed to event, registration here only needed for v11
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['wv_deepltranslate'] =
             \WebVision\WvDeepltranslate\Hooks\ButtonBarHook::class . '->getButtons';
