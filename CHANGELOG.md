@@ -1,5 +1,9 @@
 # Changelog
 
+### 4.2.1
+
+* [BUGFIX] Fix loading issues with translation wizard in v11 by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/67
+
 ### 4.2.0
 
 * [FEATURE] Introduce Usage statistics by @calien666 in https://github.com/web-vision/wv_deepltranslate-eap/pull/45
