@@ -4,43 +4,30 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate;
 
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class Configuration
+final class Configuration implements ConfigurationInterface, SingletonInterface
 {
-    /**
-     * @var string
-     */
-    private $apiKey = '';
+    private string $apiKey = '';
+
+    private string $formality = '';
 
     /**
-     * @var string
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
      */
-    private $apiUrl = '';
-
-    /**
-     * @var string
-     */
-    private $formality = '';
-
     public function __construct()
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
 
-        if (isset($extensionConfiguration['apiKey'])) {
-            $this->apiKey = (string)$extensionConfiguration['apiKey'] ?? '';
-        }
+        $this->apiKey = (string)($extensionConfiguration['apiKey'] ?? '');
 
-        if (isset($extensionConfiguration['apiUrl'])) {
-            // api url free is default
-            $this->apiUrl = (string)$extensionConfiguration['apiUrl'] ?? 'https://api-free.deepl.com/';
-        }
-
-        // In einer zukünftigen version sollte "Formality" in die SiteConfig verschoben werden
-        if (isset($extensionConfiguration['deeplFormality'])) {
-            $this->formality = (string)$extensionConfiguration['deeplFormality'] ?? 'default';
-        }
+        // In a future version, "Formality" should be moved to the SiteConfig
+        $this->formality = (string)($extensionConfiguration['deeplFormality'] ?? 'default');
     }
 
     public function getApiKey(): string
@@ -48,28 +35,9 @@ class Configuration
         return $this->apiKey;
     }
 
-    public function getApiUrl(): string
-    {
-        return $this->getApiHost()
-            . ($this->getApiPort() ? ':' . $this->getApiPort() : '');
-    }
-
-    public function getApiScheme(): string
-    {
-        return parse_url($this->apiUrl)['scheme'] ?? 'https';
-    }
-
-    public function getApiHost(): string
-    {
-        return parse_url($this->apiUrl)['host'] ?? 'localhost';
-    }
-
-    public function getApiPort(): ?int
-    {
-        $port = parse_url($this->apiUrl)['port'] ?? null;
-        return $port ? (int)$port : null;
-    }
-
+    /**
+     * @deprecated In a future version, "Formality" should be moved to the SiteConfig
+     */
     public function getFormality(): string
     {
         return $this->formality;

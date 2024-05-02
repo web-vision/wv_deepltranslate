@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Hooks\Glossary;
 
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -19,16 +22,20 @@ class UpdatedGlossaryEntryTermHook
     private GlossaryEntryRepository $glossaryEntryRepository;
 
     public function __construct(
-        ?GlossaryRepository $glossaryRepository = null,
-        ?GlossaryEntryRepository $glossaryEntryRepository = null
+        GlossaryRepository $glossaryRepository,
+        GlossaryEntryRepository $glossaryEntryRepository
     ) {
-        $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
-        $this->glossaryEntryRepository = $glossaryEntryRepository ?? GeneralUtility::makeInstance(GlossaryEntryRepository::class);
+        $this->glossaryRepository = $glossaryRepository;
+        $this->glossaryEntryRepository = $glossaryEntryRepository;
     }
 
     /**
      * @param int|string $id
      * @param array{glossary: int} $fieldArray
+     *
+     * @throws DBALException
+     * @throws Exception
+     * @throws \TYPO3\CMS\Core\Exception
      */
     public function processDatamap_afterDatabaseOperations(
         string $status,
@@ -62,7 +69,7 @@ class UpdatedGlossaryEntryTermHook
                 'glossary.not-sync.title',
                 'wv_deepltranslate'
             ),
-            FlashMessage::INFO,
+            AbstractMessage::INFO,
             true
         );
 

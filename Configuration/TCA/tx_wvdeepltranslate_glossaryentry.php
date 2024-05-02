@@ -44,8 +44,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'label' : 0) => '',
+                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'value' : 1) => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -59,8 +59,8 @@ return [
                 'renderType' => 'selectSingle',
                 'items' => [
                     [
-                        '',
-                        0,
+                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'label' : 0) => '',
+                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'value' : 1) => 0,
                     ],
                 ],
                 'foreign_table' => 'tx_wvdeepltranslate_glossaryentry',
@@ -84,10 +84,16 @@ return [
         'term' => [
             'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:entry.source',
             'l10n_mode' => '',
-            'config' => [
-                'type' => 'input',
-                'eval' => 'trim,required',
-            ],
+            'config' => (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12
+                ? [
+                    'type' => 'input',
+                    'required' => true,
+                    'eval' => 'trim',
+                ]
+                : [
+                    'type' => 'input',
+                    'eval' => 'trim,reqiured',
+                ],
         ],
     ],
 ];

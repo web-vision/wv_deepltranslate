@@ -1,0 +1,9 @@
+be_users,,,,,
+,uid,pid,username,password,admin
+,2,0,"Deepl-Functional-Test BeUser","123",1
+pages,,,,,,,,
+,uid,pid,title,slug,doktype,sys_language_uid,l10n_parent,l10n_source
+,2,0,"Default Translate Page","/",1,2,1,1
+tt_content,,,,,,
+,uid,pid,header,bodytext,CType,sys_language_uid
+,1,1,"Translate deepl flag test","I had a text to translate","header",0

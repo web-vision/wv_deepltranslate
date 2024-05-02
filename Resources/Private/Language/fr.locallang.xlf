@@ -3,50 +3,28 @@
 	<file t3:id="1415814785" source-language="en" target-language="fr" datatype="plaintext" original="messages" date="2022-07-15T18:19:55Z" product-name="wv_deepltranslate">
 		<header/>
 		<body>
+			<trans-unit id="localize.educate.deepltranslateHeader">
+				<source>Translate with DeepL</source>
+				<target>Traduire avec DeepL</target>
+			</trans-unit>
+			<trans-unit id="localize.educate.deepltranslateHeaderAutodetect">
+				<source>Translate (DeepL) (autodetect)</source>
+				<target>Traduire (DeepL) (détection automatique)</target>
+			</trans-unit>
+
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
-				<source>Translating content via DeepL translate will create a translation from source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
-				<target>La traduction de contenu via DeepL translate créera une traduction de la langue source vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction DeepL qui est précis à 99 %. Le service DeepL prend en charge la traduction vers et depuis l'anglais, le français, l'allemand, l'espagnol et l'italien. , néerlandais et polonais. Les autres langues seront ignorées et utiliseront par défaut l'opération de traduction normale de TYPO3.</target>
+				<source><![CDATA[Translating content via DeepL translate will create a translation from source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.]]></source>
+				<target><![CDATA[La traduction de contenu via DeepL translate créera une traduction de la langue source vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction DeepL qui est précis à 99 %. Le service DeepL prend en charge la traduction vers et depuis l'anglais, le français, l'allemand, l'espagnol et l'italien. , néerlandais et polonais. Les autres langues seront ignorées et utiliseront par défaut l'opération de traduction normale de TYPO3.]]></target>
 			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslateAuto" xml:space="preserve">
 				<source><![CDATA[Translating content via DeepL translate will create a translation from <b>auto detected</b> source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.]]></source>
-				<source><![CDATA[La traduction de contenu via DeepL translate créera une traduction de la langue source <b>détectée automatiquement</b> vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction DeepL, qui est précis à 99 %. Langues allemande, espagnole, italienne, néerlandaise et polonaise. Les autres langues seront ignorées et utiliseront par défaut l'opération de traduction normale de TYPO3.]]></source>
+				<target><![CDATA[La traduction de contenu via DeepL translate créera une traduction de la langue source <b>détectée automatiquement</b> vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction DeepL, qui est précis à 99 %. Langues allemande, espagnole, italienne, néerlandaise et polonaise. Les autres langues seront ignorées et utiliseront par défaut l'opération de traduction normale de TYPO3.]]></target>
 			</trans-unit>
-			<trans-unit id="localize.educate.googleTranslate" xml:space="preserve">
-				<source>Translating content via Google Translate will create a translation from source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
-				<target>La traduction de contenu via Google Translate créera une traduction de la langue source vers la langue vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction Google. Le service Google prend en charge une part équitable de <![CDATA[<a href="https:// cloud.google.com/translate/docs/languages" target="_blank">langues</a>]]>.</target>
+			<trans-unit id="localize.educate.deeplSettingsFailure">
+				<source>Please complete missing DeepL configurations.</source>
+				<target>Veuillez compléter les configurations manquantes de DeepL.</target>
 			</trans-unit>
-			<trans-unit id="localize.educate.googleTranslateAuto" xml:space="preserve">
-				<source><![CDATA[Translating content via Google Translate will create a translation from <b>auto detected</b> source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>.]]></source>
-				<target><![CDATA[La traduction de contenu via Google Traduction créera une traduction de la langue source <b>détectée automatiquement</b> vers laquelle vous traduisez. Le contenu traduit proviendra du service de traduction Google. Le service Google prend en charge une part équitable de <![CDATA[<a href= "https://cloud.google.com/translate/docs/languages" target="_blank">langues</a>.]]></target>
-			</trans-unit>
-			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>DeepL Settings</source>
-				<target>DeepL Settings</target>
-			</trans-unit>
-			<trans-unit id="settings_success" xml:space="preserve">
-				<source>Language assignments saved successfully</source>
-				<target>Devoirs de langue enregistrés avec succès</target>
-			</trans-unit>
-			<trans-unit id="settings_assign" xml:space="preserve">
-				<source>Assign languages</source>
-				<target>Attribuer des langues</target>
-			</trans-unit>
-			<trans-unit id="settings_no_language" xml:space="preserve">
-				<source>No system languages found.</source>
-				<target>Aucune langue système trouvée.</target>
-			</trans-unit>
-			 <trans-unit id="languageId" xml:space="preserve">
-				<source>Language Id</source>
-				<target>Identifiant de la langue</target>
-			</trans-unit>
-			<trans-unit id="syslanguage" xml:space="preserve">
-				<source>System Language</source>
-				<target>System Language</target>
-			</trans-unit>
-			<trans-unit id="deepliso" xml:space="preserve">
-				<source>Assigned Language(ISO Code)</source>
-				<target>Langue attribuée (code ISO)</target>
-			</trans-unit>
+
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
 				<source>DeepL</source>
 				<target>DeepL</target>

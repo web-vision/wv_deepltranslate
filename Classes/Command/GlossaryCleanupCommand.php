@@ -12,29 +12,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossaryCleanupCommand extends Command
 {
-    protected DeeplGlossaryService $deeplGlossaryService;
-
-    protected GlossaryRepository $glossaryRepository;
-    public function __construct(
-        string $name = null,
-        ?DeeplGlossaryService $deeplGlossaryService = null,
-        ?GlossaryRepository $glossaryRepository = null
-    ) {
-        parent::__construct($name);
-        $this->deeplGlossaryService = $deeplGlossaryService ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
-        $this->glossaryRepository = $glossaryRepository ?? GeneralUtility::makeInstance(GlossaryRepository::class);
-    }
+    use GlossaryCommandTrait;
 
     protected function configure(): void
     {
-        $this->setDescription('Cleanup Glossary entries in DeepL Database');
         $this->addOption(
             'yes',
             'y',
@@ -57,7 +43,6 @@ class GlossaryCleanupCommand extends Command
     }
 
     /**
-     * @throws DeepLException
      * @throws DBALException
      */
     protected function execute(
@@ -66,25 +51,17 @@ class GlossaryCleanupCommand extends Command
     ): int {
         if ($input->getOption('yes') === false) {
             $output->writeln('Deletion not confirmed. Cancel.');
-            /**
-             * return 2 HAS to be for TYPO3 v9 support
-             * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
-             */
-            return 2;
+
+            return Command::INVALID;
         }
 
         $this->removeAllGlossaryEntries($output);
         $output->writeln('Success!');
 
-        /**
-         * return 0 HAS to be for TYPO3 v9 support
-         * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
-         */
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
-     * @throws DeepLException
      * @throws DBALException
      */
     private function removeAllGlossaryEntries(OutputInterface $output): void
@@ -96,17 +73,13 @@ class GlossaryCleanupCommand extends Command
             return;
         }
 
-        $progress = new ProgressBar($output, count($glossaries['glossaries']));
+        $progress = new ProgressBar($output, count($glossaries));
         $progress->start();
 
         $removedGlossary = [];
 
-        foreach ($glossaries['glossaries'] as $eachGlossary) {
-            if (!isset($eachGlossary['glossary_id'])) {
-                continue;
-            }
-
-            $id = $eachGlossary['glossary_id'];
+        foreach ($glossaries as $glossary) {
+            $id = $glossary->glossaryId;
             $this->deeplGlossaryService->deleteGlossary($id);
             $databaseUpdated = $this->glossaryRepository->removeGlossarySync($id);
             $removedGlossary[$id] = $databaseUpdated;

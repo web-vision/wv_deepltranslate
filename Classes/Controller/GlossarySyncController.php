@@ -11,7 +11,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\InvalidArgumentException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
@@ -20,18 +19,16 @@ class GlossarySyncController
     protected DeeplGlossaryService $deeplGlossaryService;
 
     public function __construct(
-        ?DeeplGlossaryService $deeplGlossaryService = null,
-        ?GlossaryRepository $glossaryRepository = null
+        DeeplGlossaryService $deeplGlossaryService
     ) {
-        $this->deeplGlossaryService = $deeplGlossaryService
-            ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
+        $this->deeplGlossaryService = $deeplGlossaryService;
     }
 
     /**
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function update(ServerRequestInterface $request)
+    public function update(ServerRequestInterface $request): RedirectResponse
     {
         $processingParameters = $request->getQueryParams();
 
@@ -44,6 +41,11 @@ class GlossarySyncController
 
         $this->deeplGlossaryService->syncGlossaries((int)$processingParameters['uid']);
 
+        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
+            $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK;
+        } else {
+            $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::OK;
+        }
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
             (string)LocalizationUtility::translate(
@@ -54,7 +56,7 @@ class GlossarySyncController
                 'glossary.sync.title',
                 'wv_deepltranslate'
             ),
-            FlashMessage::OK,
+            $severity,
             true
         );
 

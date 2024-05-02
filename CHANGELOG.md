@@ -1,5 +1,101 @@
 # Changelog
 
+### 4.2.1
+
+* [BUGFIX] Fix loading issues with translation wizard in v11 by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/67
+
+### 4.2.0
+
+* [FEATURE] Introduce Usage statistics by @calien666 in https://github.com/web-vision/wv_deepltranslate-eap/pull/45
+* [TASK] Disable publish ci workflow by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/55
+* [BUGFIX] Loading the backend locallang exclusively in the backend by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/53
+* [TASK] Use the new php based documentation rendering container by @sbuerk in https://github.com/web-vision/wv_deepltranslate-eap/pull/57
+* [TASK] Streamline command wrapper  `Build/Scripts/runTests.sh` by @sbuerk in https://github.com/web-vision/wv_deepltranslate-eap/pull/58
+* [TASK] Update DI and configuration for glossary commands by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/59
+* [TASK] Remove unused table definition from `ext_tables.sql` by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/60
+* [BUGFIX] Ensure higher precedence of partial ordering by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/61
+* [TASK] Avoid duplicate PageTS file include with TYPO3 v12  by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/62
+* [TASK] Avoid undefined array key access in `DeeplService` by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/63
+* [TASK] Move flashMassages out auf services class by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/64
+
+### 4.1.1
+
+* Update deepl icon generator by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/52
+
+### 4.1.0
+
+#### What's Changed
+
+* Extend client with simple logger by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/41
+* Repository alignment by @dot3media in https://github.com/web-vision/wv_deepltranslate-eap/pull/46
+* Upgrade composer dependencies by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/43
+* Fix spelling from javascript file module name by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/48
+* Prepare Translate Hook to use in DeepL Plugins by @NarkNiro in https://github.com/web-vision/wv_deepltranslate-eap/pull/50
+
+#### New Contributors
+
+* @dot3media made their first contribution in https://github.com/web-vision/wv_deepltranslate-eap/pull/46
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/4.0.3...4.1.0
+
+### 4.0.3
+
++ [BUGFIX] Fix loading issues with container services in https://github.com/web-vision/wv_deepltranslate-eap/pull/39
+
+### 4.0.2
+
+* [TASK] Prepare backend for enable_translated_content by @calien666 in https://github.com/web-vision/wv_deepltranslate-eap/pull/35
+* [BUGFIX] remove whitspace from glossary entries by @calien666 in https://github.com/web-vision/wv_deepltranslate-eap/pull/36
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/4.0.1...4.0.2
+
+### 4.0.1
+
+* [BUGFIX] [Fix icon path](https://github.com/web-vision/wv_deepltranslate-eap/commit/04e9f0f03ece29c894ca8c78ca4981851a8894e0)
+* [TASK] [Add ModifyButtonEvent](https://github.com/web-vision/wv_deepltranslate-eap/commit/4e9149d717e847b745a70fe78ce7db0bffe2923a)
+* [BUGFIX] [Use proper Casing in files names](https://github.com/web-vision/wv_deepltranslate-eap/commit/c5a9e3df43229ab97a0779407e84cf6dedb6bf4a)
+* [BUGFIX] [Allow glossary finding in TYPO3 v12](https://github.com/web-vision/wv_deepltranslate-eap/commit/9744d5738195eb22e4d9996fadc06e28ff969923)
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/4.0.0...4.0.1
+
+### 4.0.0
+
+- [TASK] Allow runners only on PR (032f3ed)
+- [TASK] Prepare release step (5765d9a)
+- [BUGFIX] Fix glossary-id handle in translate request (74cb9a8)
+- [BUGFIX] Determine glossary correct on current page (31ca4ea)
+- [BUGFIX] Determine correct Preview mode in TYPO3 v9 (bbbb3b0)
+- [TASK] Add some todo markers and comments (bfa00d3)
+- [BUGFIX] Avoid undefined array key warning in AllowLanguageSynchronizationHook  (e3947f5)
+- [TASK] Display correct versions in core switch script (82eb8e6)
+- [BUGFIX] Avoid undefined array key warning in LocalizationController (f5536d5)
+- [TASK] Streamline doctrine/dbal usages (7a8bd31)
+- [TASK] Remove obsolete version check from siteconfiguration tca (447c0bb)
+- [BUGFIX] Guard LocalizationUtility::translate with (string) cast (9b4cba1)
+- [TASK] Avoid instantiating PageRenderer in ext_localconf.php (4b8cd0e)
+- [TASK] Replace deprecated TYPO3_MODE constant usage (f79ba80)
+- [BUGFIX] Ensure docker compose v2 combat  (ddb1a6b)
+- [TASK] Mark test classes final  (906d0b1)
+- [TASK] Migrate documentation rendering to runTests.sh (72fc7d0)
+- [DOCS] Ensure correct indentation in rst-files (e6d7aad)
+- [BUGFIX] Avoid undefined array key warning in LocalizationController (f60cdcc)
+- [DOCS] Update Settings.cfg for master to main switch (812be10)
+- [BUGFIX] Avoid undefined array key warning in AllowLanguageSynchronizationHook (9c0d396)
+- [TASK] Remove extbase persistence mapping (8edb0f1)
+- [TASK] Move ajax extension config check in own class (4a6e12e)
+- [TASK] Move Icon registry to Configuration/Icons.php (1529cc9)
+- [TASK] Add TYPO3 v12 support to Build/Scripts/runTests.sh (3ffeee3)
+- [TASK] Migrate to typo3/testing-framework (5d2dd68)
+- [BUGFIX] Avoid doctrine/dbal fetchAssociative()  (5ec224f)
+- [TASK] Update README badges (87bc51e)
+- [TASK] Avoid rowCount() for select query (643ced1)
+- [TASK] Refactor Services.yaml to Services.php  (a702578)
+- [BREAKING] Remove Google Translate support (21fb2f5)
+- [REMOVE] Settings Backend module and dependencies (cf05c15)
+- [TASK] remove v9/v10 (688bf7f)
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/3.0.4...4.0.0
+
 ## 3.0.5
 
 * [TASK] Update readme by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/287
@@ -16,12 +112,16 @@
 * [BUGFIX] Determine correct Preview mode in TYPO3 v9 by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/270
 * [BUGFIX] Determine glossary correct on current page by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/271
 
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/3.0.3...3.0.4
+
 ## 3.0.3
 
 * [TASK] Set branch alias for 3.0 by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/200
 * [TASK] Avoid `rowCount()` for select query by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/233
 * [BUGFIX] Avoid doctrine/dbal `fetchAssociative()` by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/236
 * [BUGFIX] Fix Problem with translation no glossary given by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/235
+
+**Full Changelog**: https://github.com/web-vision/wv_deepltranslate-eap/compare/3.0.2...3.0.3
 
 ## 3.0.2
 

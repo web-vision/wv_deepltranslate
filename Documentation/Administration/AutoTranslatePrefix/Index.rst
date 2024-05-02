@@ -1,6 +1,6 @@
 ..  include:: /Includes.rst.txt
 
-.. _administration-autotranslateprefix:
+..  _administration-autotranslateprefix:
 
 Auto-translate-prefix
 =====================
@@ -11,7 +11,7 @@ possibility to implement.
 
 This information is passed in the Page Context Fluid template and can be used there to enable a page specific appearance.
 
-.. figure:: /Images/Editor/AutoTranslatePrefix/page-translation-prefix.png
+..  figure:: /Images/Editor/AutoTranslatePrefix/page-translation-prefix.png
     :alt: Page Frontend
 
 

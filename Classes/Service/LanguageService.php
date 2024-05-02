@@ -9,19 +9,21 @@ use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 
-class LanguageService
+final class LanguageService
 {
     protected DeeplService $deeplService;
 
-    protected SettingsRepository $settingsRepository;
-
-    protected bool $siteLanguageMode = true;
-
+    /**
+     * @todo TYPO3 v12 do not have hreflang & iso-639-1 directly in the raw language configurations anymore.
+     *       @link LanguageService::getTargetLanguage() for additional commets.
+     *       See: https://review.typo3.org/c/Packages/TYPO3.CMS/+/77807
+     *            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77597
+     *            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77726
+     *            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77814
+     */
     protected array $possibleLangMatches = [
         'deeplTargetLanguage',
         'hreflang',
@@ -29,18 +31,9 @@ class LanguageService
     ];
 
     public function __construct(
-        ?DeeplService $deeplService = null,
-        ?SettingsRepository $settingsRepository = null
+        DeeplService $deeplService
     ) {
-        $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
-        $this->settingsRepository = $settingsRepository ?? GeneralUtility::makeInstance(SettingsRepository::class);
-        $typo3VersionArray = VersionNumberUtility::convertVersionStringToArray(
-            VersionNumberUtility::getCurrentTypo3Version()
-        );
-
-        if (version_compare((string)$typo3VersionArray['version_main'], '11', '<')) {
-            $this->siteLanguageMode = false;
-        }
+        $this->deeplService = $deeplService;
     }
 
     /**
@@ -56,8 +49,7 @@ class LanguageService
         }
         try {
             return [
-                'site' => GeneralUtility::makeInstance(SiteFinder::class)
-                    ->getSiteByPageId($pageId),
+                'site' => GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId),
                 'pageUid' => $pageId,
             ];
         } catch (SiteNotFoundException $e) {
@@ -67,20 +59,21 @@ class LanguageService
 
     /**
      * @return array{uid: int, title: string, language_isocode: string}
-     * @throws LanguageIsoCodeNotFoundException
      */
     public function getSourceLanguage(Site $currentSite): array
     {
+        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
+            $languageIsoCode = $currentSite->getDefaultLanguage()->getLocale()->getLanguageCode();
+        } else {
+            $languageIsoCode = $currentSite->getDefaultLanguage()->getTwoLetterIsoCode();
+        }
         $sourceLanguageRecord = [
             'uid' => $currentSite->getDefaultLanguage()->getLanguageId(),
             'title' => $currentSite->getDefaultLanguage()->getTitle(),
-            'language_isocode' => strtoupper($currentSite->getDefaultLanguage()->getTwoLetterIsoCode()),
+            'language_isocode' => strtoupper($languageIsoCode),
         ];
 
-        if (!in_array(
-            $sourceLanguageRecord['language_isocode'],
-            $this->deeplService->apiSupportedLanguages['source']
-        )) {
+        if ($this->deeplService->detectSourceLanguage($sourceLanguageRecord['language_isocode']) === null) {
             // When sources language not supported oder not exist set auto detect for deepL API
             $sourceLanguageRecord['title'] = 'auto';
             $sourceLanguageRecord['language_isocode'] = 'auto';
@@ -96,100 +89,59 @@ class LanguageService
      */
     public function getTargetLanguage(Site $currentSite, int $languageId): array
     {
-        if ($this->siteLanguageMode) {
-            $languages = array_filter($currentSite->getConfiguration()['languages'], function ($value) use ($languageId) {
-                if (!is_array($value)) {
-                    return false;
-                }
-
-                if ((int)$value['languageId'] === $languageId) {
-                    return true;
-                }
-
+        // @todo TYPO3 v12 changed locale API and therefore site configuration. Configured languages do no longer
+        //       directly contains values like hreflang or iso-639-1 directly. Possible workarounds would be to
+        //       operate directly on the siteLanguage objects and no longer use the raw configuration values.
+        //       See: https://review.typo3.org/c/Packages/TYPO3.CMS/+/77807
+        //            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77597
+        //            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77726
+        //            https://review.typo3.org/c/Packages/TYPO3.CMS/+/77814
+        $languages = array_filter($currentSite->getConfiguration()['languages'], function ($value) use ($languageId) {
+            if (!is_array($value)) {
                 return false;
-            });
-
-            if (count($languages) === 0) {
-                throw new LanguageRecordNotFoundException(
-                    sprintf(
-                        'Language "%d" not found in SiteConfig "%s"',
-                        $languageId,
-                        $currentSite->getConfiguration()['websiteTitle']
-                    ),
-                    1676824459
-                );
-            }
-            $language = reset($languages);
-            $languageIsoCode = null;
-
-            foreach ($this->possibleLangMatches as $possibleLangMatch) {
-                if (array_key_exists($possibleLangMatch, $language)
-                    && in_array(
-                        strtoupper($language[$possibleLangMatch]),
-                        $this->deeplService->apiSupportedLanguages['target']
-                    )
-                ) {
-                    $languageIsoCode = strtoupper($language[$possibleLangMatch]);
-                    break;
-                }
-            }
-            if ($languageIsoCode === null) {
-                throw new LanguageIsoCodeNotFoundException(
-                    sprintf(
-                        'No API supported target found for language "%s" in site "%s"',
-                        $language['title'],
-                        $currentSite->getConfiguration()['websiteTitle']
-                    ),
-                    1676741837
-                );
             }
 
-            return [
-                'uid' => $language['languageId'] ?? 0,
-                'title' => $language['title'],
-                'language_isocode' => $languageIsoCode,
-            ];
+            if ((int)$value['languageId'] === $languageId) {
+                return true;
+            }
+
+            return false;
+        });
+
+        if (count($languages) === 0) {
+            throw new LanguageRecordNotFoundException(
+                sprintf(
+                    'Language "%d" not found in SiteConfig "%s"',
+                    $languageId,
+                    (string)($currentSite->getConfiguration()['websiteTitle'] ?? '')
+                ),
+                1676824459
+            );
         }
+        $language = reset($languages);
+        $languageIsoCode = null;
 
-        // v9 and v10 sys_language_uid goes from here
-        /** @deprecated will be removed in version 4 */
-        $targetLanguageRecord = $this->getRecordFromSysLanguage($languageId);
-
-        $targetLanguageMapping = $this->settingsRepository->getMappings((int)$targetLanguageRecord['uid']);
-        if ($targetLanguageMapping === '') {
+        foreach ($this->possibleLangMatches as $possibleLangMatch) {
+            if (array_key_exists($possibleLangMatch, $language)) {
+                $languageIsoCode = $this->deeplService->detectTargetLanguage(strtoupper($language[$possibleLangMatch]));
+                break;
+            }
+        }
+        if ($languageIsoCode === null) {
             throw new LanguageIsoCodeNotFoundException(
                 sprintf(
-                    'No API supported target found for language "%s"',
-                    $targetLanguageRecord['title']
+                    'No API supported target found for language "%s" in site "%s"',
+                    $language['title'],
+                    (string)($currentSite->getConfiguration()['websiteTitle'] ?? '')
                 ),
-                1676741846
+                1676741837
             );
         }
-        $targetLanguageRecord['language_isocode'] = strtoupper($targetLanguageMapping);
 
-        return $targetLanguageRecord;
-    }
-
-    /**
-     * @return array{uid: int, title: string, language_isocode: string}
-     * @throws LanguageRecordNotFoundException
-     */
-    private function getRecordFromSysLanguage(int $uid): array
-    {
-        $languageRecord = BackendUtility::getRecord('sys_language', $uid, 'uid,title,language_isocode');
-        if ($languageRecord === null) {
-            throw new LanguageRecordNotFoundException(
-                sprintf('No language for record with uid "%d" found.', $uid),
-                1676739761064
-            );
-        }
-        $languageRecord['language_isocode'] = strtoupper($languageRecord['language_isocode']);
-
-        return $languageRecord;
-    }
-
-    public function isSiteLanguageMode(): bool
-    {
-        return $this->siteLanguageMode;
+        return [
+            'uid' => $language['languageId'] ?? 0,
+            'title' => $language['title'],
+            'language_isocode' => $languageIsoCode->code,
+        ];
     }
 }

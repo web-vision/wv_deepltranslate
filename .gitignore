@@ -14,3 +14,6 @@ var
 http-client.env.json
 /.test-results
 Build/testing-docker/.env
+/config/
+Build/node_modules/
+vendor

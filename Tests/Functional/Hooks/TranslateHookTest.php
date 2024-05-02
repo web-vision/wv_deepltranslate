@@ -4,23 +4,69 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Hooks;
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use TYPO3\CMS\Core\Core\Bootstrap;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Http\NormalizedParams;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
 /**
  * @covers \WebVision\WvDeepltranslate\Hooks\TranslateHook
  */
-class TranslateHookTest extends FunctionalTestCase
+final class TranslateHookTest extends AbstractDeepLTestCase
 {
-    /**
-     * @var string[]
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/wv_deepltranslate',
+    use SiteBasedTestTrait;
+    protected const LANGUAGE_PRESETS = [
+        'EN' => [
+            'id' => 0,
+            'title' => 'English',
+            'locale' => 'en_US.UTF-8',
+            'iso' => 'en',
+            'hrefLang' => 'en-US',
+            'direction' => '',
+            'custom' => [
+                'deeplTargetLanguage' => '',
+            ],
+        ],
+        'DE' => [
+            'id' => 2,
+            'title' => 'Deutsch',
+            'locale' => 'de_DE',
+            'iso' => 'de',
+            'hrefLang' => 'de-DE',
+            'direction' => '',
+            'custom' => [
+                'deeplTargetLanguage' => 'DE',
+            ],
+        ],
+        'EB' => [
+            'id' => 3,
+            'title' => 'Britisch',
+            'locale' => 'en_GB',
+            'iso' => 'eb',
+            'hrefLang' => 'en-GB',
+            'direction' => '',
+            'custom' => [
+                'deeplTargetLanguage' => 'EN-GB',
+            ],
+        ],
+        'BS' => [
+            'id' => 4,
+            'title' => 'Bosnian',
+            'locale' => 'bs_BA.utf8',
+            'iso' => 'bs',
+            'hrefLang' => 'bs',
+            'direction' => '',
+            'custom' => [
+                'deeplTargetLanguage' => '',
+            ],
+        ],
     ];
 
     protected function setUp(): void
@@ -32,16 +78,18 @@ class TranslateHookTest extends FunctionalTestCase
 
         parent::setUp();
 
-        $this->importDataSet(__DIR__ . '/../Fixtures/Settings.xml');
-        $this->importDataSet(__DIR__ . '/../Fixtures/Language.xml');
-        $this->importDataSet(__DIR__ . '/../Fixtures/Pages.xml');
-        $this->setUpFrontendRootPage(
-            1,
-            [],
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/pages.csv');
+        $this->writeSiteConfiguration(
+            'acme',
+            $this->buildSiteConfiguration(1, '/', 'Home'),
             [
-                1 => 'EXT:wv_deepltranslate/Tests/Functional/Hooks/Fixtures/SiteConfig.yaml',
+                $this->buildDefaultLanguageConfiguration('EN', '/'),
+                $this->buildLanguageConfiguration('EB', '/eb/', ['EN'], 'strict'),
+                $this->buildLanguageConfiguration('DE', '/de/', ['EN'], 'strict'),
+                $this->buildLanguageConfiguration('BS', '/bs/', ['EN'], 'strict'),
             ]
         );
+        $this->setUpFrontendRootPage(1, [], []);
     }
 
     /**
@@ -49,26 +97,18 @@ class TranslateHookTest extends FunctionalTestCase
      */
     public function contentTranslateWithDeepl(): void
     {
-        $translateContent = 'Hello I would like to be translated';
-        $expectedTranslation = 'Hallo, ich möchte gerne übersetzt werden';
-        // @todo deepL api mockserver can only handle proton beam as translation, therefore use this.
-        if (defined('DEEPL_MOCKSERVER_USED') && DEEPL_MOCKSERVER_USED === true) {
-            $translateContent = 'proton beam';
-            $expectedTranslation = 'Protonenstrahl';
-        }
+        $translateContent = 'proton beam';
+        $expectedTranslation = 'Protonenstrahl';
 
+        /** @var TranslateHook $translateHook */
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
+        $languageService = $this->get(LanguageService::class);
         $siteConfig = $languageService->getCurrentSite('pages', 1);
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
         $content = $translateHook->translateContent(
             $translateContent,
-            [
-                'uid' => 2,
-                'language_isocode' => 'DE',
-            ],
-            'deepl',
-            $sourceLanguageRecord
+            $sourceLanguageRecord['language_isocode'],
+            'DE',
         );
 
         static::assertSame($expectedTranslation, $content);
@@ -79,8 +119,12 @@ class TranslateHookTest extends FunctionalTestCase
      */
     public function contentNotTranslateWithDeeplWhenLanguageNotSupported(): void
     {
-        $this->importDataSet(__DIR__ . '/Fixtures/NotSupportedLanguage.xml');
+        $serverParams = array_replace($_SERVER, ['HTTP_HOST' => 'example.com', 'SCRIPT_NAME' => '/typo3/index.php']);
+        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest('http://example.com/typo3/index.php', 'GET', null, $serverParams))
+            ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE)
+            ->withAttribute('normalizedParams', NormalizedParams::createFromServerParams($serverParams));
 
+        /** @var TranslateHook $translateHook */
         $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
 
         $languageService = GeneralUtility::makeInstance(LanguageService::class);
@@ -88,13 +132,8 @@ class TranslateHookTest extends FunctionalTestCase
         $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
         $content = $translateHook->translateContent(
             'Hello I would like to be translated',
-            [
-                'uid' => 3, // This ist the LanguageID its was Configure in SiteConfig
-                'title' => 'not supported language',
-                'language_isocode' => 'BS',
-            ],
-            'deepl',
-            $sourceLanguageRecord
+            $sourceLanguageRecord['language_isocode'],
+            'BS'
         );
 
         static::assertSame('Hello I would like to be translated', $content);
@@ -105,8 +144,9 @@ class TranslateHookTest extends FunctionalTestCase
      */
     public function translateContentElementsAndUpdatePagesProperties(): void
     {
-        $this->importDataSet(__DIR__ . '/Fixtures/BeUsersTranslateDeeplFlag.xml');
-        $this->setUpBackendUserFromFixture(2);
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/BeUsersTranslateDeeplFlag.csv');
+        $this->setUpBackendUser(2);
+        Bootstrap::initializeLanguageObject();
 
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $cmdMap = [

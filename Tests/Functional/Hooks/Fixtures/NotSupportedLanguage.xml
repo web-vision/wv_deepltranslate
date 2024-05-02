@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<dataset>
-    <sys_language>
-        <uid>5</uid>
-        <pid>0</pid>
-        <title>Bosnisch: Test to not supported deepl language</title>
-        <language_isocode>BA</language_isocode>
-    </sys_language>
-</dataset>

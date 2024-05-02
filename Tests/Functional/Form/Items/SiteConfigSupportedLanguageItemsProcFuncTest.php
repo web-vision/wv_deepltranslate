@@ -4,22 +4,15 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Form\Items;
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
+use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
 
 /**
  * @covers \WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc
  */
-class SiteConfigSupportedLanguageItemsProcFuncTest extends FunctionalTestCase
+final class SiteConfigSupportedLanguageItemsProcFuncTest extends AbstractDeepLTestCase
 {
-    /**
-     * @var string[]
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/wv_deepltranslate',
-    ];
-
     protected function setUp(): void
     {
         $this->configurationToUseInTestInstance = array_merge(
@@ -41,6 +34,6 @@ class SiteConfigSupportedLanguageItemsProcFuncTest extends FunctionalTestCase
         $func->getSupportedLanguageForField($fieldConfig);
 
         static::assertArrayHasKey('items', $fieldConfig);
-        static::assertTrue(count($fieldConfig['items']) > 1);
+        static::assertTrue((count($fieldConfig['items']) > 2));
     }
 }

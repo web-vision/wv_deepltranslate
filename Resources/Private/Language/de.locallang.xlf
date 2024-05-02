@@ -11,50 +11,27 @@
 				<source>Translate with DeepL</source>
 				<target>Mit DeepL übersetzen</target>
 			</trans-unit>
+			<trans-unit id="localize.educate.deepltranslateHeader">
+				<source>Translate with DeepL</source>
+				<target>Mit DeepL übersetzen</target>
+			</trans-unit>
+			<trans-unit id="localize.educate.deepltranslateHeaderAutodetect">
+				<source>Translate with DeepL (autodetect)</source>
+				<target>Mit DeepL übersetzen (autodetect)</target>
+			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
-				<source>Translating content via DeepL translate will create a translation from source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
-				<target>Beim Übersetzen von Inhalten über DeepL Translate wird eine Übersetzung aus der Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. DeepL bietet Übersetzungen in Englisch, Französisch, Deutsch, Spanisch, Italienisch, Niederländisch und Polnisch. Andere Sprachen werden ignoriert und werden standardmäßig auf die normale Übersetzungsoperation von TYPO3 umgestellt.</target>
+				<source><![CDATA[Translating content using DeepL Translate will create a translation from the source language to the language translation you selected. The translated content will be fetched from DeepL translation service (DeepL claims 99 percentage accuracy). The DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.]]></source>
+				<target><![CDATA[Wenn Sie Inhalte mit DeepL Translate übersetzen, wird eine Übersetzung von der Ausgangssprache in die von Ihnen ausgewählte Sprache erstellt. Der übersetzte Inhalt wird vom DeepL Übersetzungsdienst abgerufen (DeepL behauptet eine 99-prozentige Genauigkeit). Der Dienst DeepL unterstützt die Übersetzung in und aus den Sprachen Englisch, Französisch, Deutsch, Spanisch, Italienisch, Niederländisch und Polnisch. Andere Sprachen werden ignoriert und die normale Übersetzungsfunktion von TYPO3 wird verwendet.]]></target>
 			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslateAuto" xml:space="preserve">
-				<source><![CDATA[Translating content via DeepL translate will create a translation from <b>auto detected</b> source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.]]></source>
-				<target><![CDATA[Durch das Übersetzen von Inhalten über DeepL Translate wird eine Übersetzung aus der <b>automatisch erkannten</b> Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Der übersetzte Inhalt stammt vom DeepL-Übersetzungsdienst, der zu 99% genau ist. DeepL bietet Übersetzungen in Englisch, Französisch, Deutsch, Spanisch, Italienisch, Niederländisch und Polnisch. Andere Sprachen werden ignoriert und verwenden standardmäßig den normalen Übersetzungsvorgang von TYPO3.]]></target>
+				<source><![CDATA[Translating content using DeepL Translate (autodetect) will create a translation from the auto detected source language to the language translation you selected. The translated content will be fetched from DeepL translation service (DeepL claims 99 percentage accuracy). The DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.]]></source>
+				<target><![CDATA[Wenn Sie Inhalte mit DeepL Translate (automatische Erkennung) übersetzen, wird eine Übersetzung von der automatisch erkannten Ausgangssprache in die von Ihnen ausgewählte Sprache erstellt. Der übersetzte Inhalt wird vom DeepL Übersetzungsdienst abgerufen (DeepL behauptet eine 99-prozentige Genauigkeit). Der Dienst DeepL unterstützt die Übersetzung in und aus den Sprachen Englisch, Französisch, Deutsch, Spanisch, Italienisch, Niederländisch und Polnisch. Andere Sprachen werden ignoriert und die normale Übersetzungsfunktion von TYPO3 wird verwendet.]]></target>
 			</trans-unit>
-			<trans-unit id="localize.educate.googleTranslate" xml:space="preserve">
-				<source>Translating content via Google Translate will create a translation from source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
-				<target>Beim Übersetzen von Inhalten über Google Translate wird eine Übersetzung aus der Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Die übersetzten Inhalte stammen vom Google-Übersetzungsdienst. Der Google-Dienst unterstützt zahlreiche <![CDATA[<a href="https:// cloud.google.com/translate/docs/languages" target="_blank">Sprachen</a>]]>.</target>
+			<trans-unit id="localize.educate.deeplSettingsFailure">
+				<source>Please complete missing DeepL configurations.</source>
+				<target>Bitte ergänzen Sie fehlende DeepL Konfigurationen.</target>
 			</trans-unit>
-			<trans-unit id="localize.educate.googleTranslateAuto" xml:space="preserve">
-				<source><![CDATA[Translating content via Google Translate will create a translation from <b>auto detected</b> source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>.]]></source>
-				<target><![CDATA[Beim Übersetzen von Inhalten über Google Übersetzer wird eine Übersetzung aus der <b>automatisch erkannten</b> Ausgangssprache in die Sprache erstellt, in die Sie übersetzen. Die übersetzten Inhalte stammen vom Google-Übersetzungsdienst. Der Google-Dienst unterstützt zahlreiche <a href= "https://cloud.google.com/translate/docs/languages" target="_blank">Sprachen</a>.]]></target>
-			</trans-unit>
-			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>DeepL Settings</source>
-				<target>DeepL Settings</target>
-			</trans-unit>
-			<trans-unit id="settings_success" xml:space="preserve">
-				<source>Language assignments saved successfully</source>
-				<target>Sprachzuweisungen erfolgreich gespeichert</target>
-			</trans-unit>
-			<trans-unit id="settings_assign" xml:space="preserve">
-				<source>Assign languages</source>
-				<target>Sprachen zuweisen</target>
-			</trans-unit>
-			<trans-unit id="settings_no_language" xml:space="preserve">
-				<source>No system languages found.</source>
-				<target>Keine Systemsprachen gefunden.</target>
-			</trans-unit>
-			 <trans-unit id="languageId" xml:space="preserve">
-				<source>Language Id</source>
-				<target>Language Id</target>
-			</trans-unit>
-			<trans-unit id="syslanguage" xml:space="preserve">
-				<source>System Language</source>
-				<target>System Language</target>
-			</trans-unit>
-			<trans-unit id="deepliso" xml:space="preserve">
-				<source>Assigned Language(ISO Code)</source>
-				<target>Zugewiesene Sprache (ISO-Code)</target>
-			</trans-unit>
+
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
 				<source>DeepL</source>
 				<target>DeepL</target>
@@ -105,18 +82,6 @@
 			<trans-unit id="preview.flag">
 				<source>Translated with DeepL</source>
 				<target>Übersetzt mit DeepL</target>
-			</trans-unit>
-			<trans-unit id="deprecated.deepl-be.title">
-				<source>!!! Module is Deprecated !!!</source>
-				<taget>!!! Module ist Veraltet !!!</taget>
-			</trans-unit>
-			<trans-unit id="deprecated.deepl-be.body">
-				<source><![CDATA[We will remove this backend module from TYPO3 V11 and move the configuration in the site configuration.
-					This must be done because "sys_language" entries are deprecated from TYPO3 11 and are no longer considered in the translation.
-				]]></source>
-				<target><![CDATA[Wir werden ab der TYPO3 V11 dieses Backend Module auflösen und die Konfiguration in der Site Configuration verschieben.
-					Dies muss vorgenommen werden, weil "sys_language" Eintrage ab TYPO3 11 deprecated sind und im Übersetzung nicht mehr berücksichtigt werden.
-				]]></target>
 			</trans-unit>
 
 			<trans-unit id="glossary.title.count">
@@ -189,6 +154,15 @@
 			<trans-unit id="glossary.sync.button.all">
 				<source>Synchronise Glossaries</source>
 				<target>Glossare synchronisieren</target>
+			</trans-unit>
+
+			<trans-unit id="usages.toolbar-label">
+				<source>DeepL Translate Limit</source>
+				<target>DeepL Übersetzung Limit</target>
+			</trans-unit>
+			<trans-unit id="usages.toolbar-information">
+				<source>Information not available</source>
+				<target>Information nicht verfügbar</target>
 			</trans-unit>
 		</body>
 	</file>

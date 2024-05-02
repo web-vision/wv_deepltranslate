@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\ViewHelpers;
 
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
+// @todo Make this class final.
 class DeeplTranslateViewHelper extends AbstractViewHelper
 {
     private const GLOSSARY_MODE = 'glossary';
-    public function initializeArguments()
+
+    public function initializeArguments(): void
     {
         $this->registerArgument(
             'context',
@@ -21,6 +24,10 @@ class DeeplTranslateViewHelper extends AbstractViewHelper
         );
     }
 
+    /**
+     * @return array<int|string, mixed>
+     * @throws RouteNotFoundException
+     */
     public function render(): array
     {
         $options = [];
@@ -70,10 +77,12 @@ class DeeplTranslateViewHelper extends AbstractViewHelper
                 'justLocalized' => 'pages:' . $context->getPageId() . ':' . $languageMatch[$possibleLanguage],
                 'returnUrl' => $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestUri(),
             ];
+
             $redirectUrl = DeeplBackendUtility::buildBackendRoute('record_edit', $parameters);
             $params = [];
             $params['redirect'] = $redirectUrl;
             $params['cmd']['pages'][$context->getPageId()]['localize'] = $languageMatch[$possibleLanguage];
+
             if ($mode !== self::GLOSSARY_MODE) {
                 $params['cmd']['localization']['custom']['mode'] = 'deepl';
             }

@@ -3,10 +3,10 @@
 ## Description: Local TYPO3 Test runner
 ## Usage: run-tests [flags]
 ## Example: "ddev run-tests"
-## Flags: [{"Name":"version","Shorthand":"v","Type":"string","DefValue":"all","Usage":"Switch of TYPO3 version (9|10|11)"},{"Name":"filter","Shorthand":"f","Type":"string","DefValue":"MySpecialTest","Usage":"filter Test runnings"},{"Name":"test","Shorthand":"t","Type":"string","Usage":"Test mode (all|func|unit)","DefValue":"all","Name":"only-test","Shorthand":"o","Usage":"Flag triggers only tests without version update","NoOptDefVal":"1"}]
+## Flags: [{"Name":"version","Shorthand":"v","Type":"string","DefValue":"all","Usage":"Switch of TYPO3 version (11)"},{"Name":"filter","Shorthand":"f","Type":"string","DefValue":"MySpecialTest","Usage":"filter Test runnings"},{"Name":"test","Shorthand":"t","Type":"string","Usage":"Test mode (all|func|unit)","DefValue":"all","Name":"only-test","Shorthand":"o","Usage":"Flag triggers only tests without version update","NoOptDefVal":"1"}]
 ## ProjectTypes: typo3
 
-versions=(all 9 10 11)
+versions=(all 12 11)
 testcases=(all func unit)
 selectedVersion=
 testCase=all
@@ -62,6 +62,16 @@ run_functional() {
     fi
 }
 
+run_functional10() {
+    fileName=".test-results/functional-${currentVersion}.txt"
+    echo "" >$fileName
+    if [ "${filter}" = "" ]; then
+        composer test:php:functional10 -- >>$fileName
+    else
+        composer test:php:functional10 -- --filter="$filter" $fileName
+    fi
+}
+
 run_unit() {
     fileName=".test-results/unit-${currentVersion}.txt"
     echo "" >$fileName
@@ -72,17 +82,31 @@ run_unit() {
     fi
 }
 
+run_unit10() {
+    fileName=".test-results/unit-${currentVersion}.txt"
+    echo "" >$fileName
+    if [ "${filter}" = "" ]; then
+        composer test:php:unit10 >>$fileName
+    else
+        composer test:php:unit10 -- --filter="$filter" >>$fileName
+    fi
+}
+
 run_test() {
     case $testCase in
     all)
-        run_functional
-        run_unit
+        [[ "${currentVersion}" -eq 11 ]] && run_functional
+        [[ "${currentVersion}" -eq 11 ]] && run_unit
+        [[ "${currentVersion}" -eq 12 ]] && run_functional10
+        [[ "${currentVersion}" -eq 12 ]] && run_unit10
         ;;
     unit)
-        run_unit
+        [[ "${currentVersion}" -eq 11 ]] && run_unit
+        [[ "${currentVersion}" -eq 12 ]] && run_unit10
         ;;
     func)
-        run_functional
+        [[ "${currentVersion}" -eq 11 ]] && run_functional
+        [[ "${currentVersion}" -eq 12 ]] && run_functional10
         ;;
     esac
 }

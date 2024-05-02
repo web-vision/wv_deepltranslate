@@ -7,7 +7,8 @@ namespace WebVision\WvDeepltranslate\Domain\Repository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class GlossaryEntryRepository
+// @todo Consider to rename/move this as service class.
+final class GlossaryEntryRepository
 {
     /**
      * @deprecated
@@ -35,11 +36,11 @@ class GlossaryEntryRepository
             ]
         );
 
-        return $result->fetchAll() ?: [];
+        return $result->fetchAllAssociative() ?: [];
     }
 
     /**
-     * @return array{uid: int}
+     * @return array<non-empty-string, mixed>
      */
     public function findEntryByUid(int $uid): array
     {
@@ -54,6 +55,7 @@ class GlossaryEntryRepository
             ]
         );
 
-        return $result->fetch() ?: [];
+        // @todo Should we not better returning null instead of an empty array if nor recourd could be retrieved ?
+        return $result->fetchAssociative() ?: [];
     }
 }

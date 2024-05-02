@@ -9,24 +9,14 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossaryListCommand extends Command
 {
-    protected DeeplGlossaryService $deeplGlossaryService;
+    use GlossaryCommandTrait;
 
-    public function __construct(
-        string $name = null,
-        ?DeeplGlossaryService $deeplGlossaryService = null
-    ) {
-        parent::__construct($name);
-        $this->deeplGlossaryService = $deeplGlossaryService
-            ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
-    }
     protected function configure(): void
     {
-        $this->setDescription('List Glossary entries or entries by glossary_id');
         $this->addArgument(
             'glossary_id',
             InputArgument::OPTIONAL,
@@ -43,19 +33,15 @@ class GlossaryListCommand extends Command
             return 0;
         }
 
-        /**
-         * return 0 HAS to be for TYPO3 v9 support
-         * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
-         */
         $this->listAllGloassaryEntries($output);
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function listAllGloassaryEntries(OutputInterface $output): void
     {
         $glossaries = $this->deeplGlossaryService->listGlossaries();
 
-        if (empty($glossaries['glossaries'])) {
+        if (empty($glossaries)) {
             $output->writeln([
                 '============',
                 'No Glossaries found.',
@@ -72,10 +58,10 @@ class GlossaryListCommand extends Command
             '============',
         ]);
 
-        $headers = array_keys($glossaries['glossaries'][0]);
+        $headers = array_keys(get_object_vars($glossaries[0]));
         $rows = [];
 
-        foreach ($glossaries['glossaries'] as $eachGlossary) {
+        foreach ($glossaries as $eachGlossary) {
             $rows[] = $eachGlossary;
         }
 
@@ -86,11 +72,19 @@ class GlossaryListCommand extends Command
             ->render();
     }
 
-    private function listAllGloassaryEntriesById(OutputInterface $output, $id): void
+    private function listAllGloassaryEntriesById(OutputInterface $output, string $id): void
     {
-        $entries = $this->deeplGlossaryService->glossaryEntries($id);
         $information = $this->deeplGlossaryService->glossaryInformation($id);
+        $entries = $this->deeplGlossaryService->glossaryEntries($id);
 
+        if ($information === null || $entries === null) {
+            $output->writeln(
+                [
+                    'Glossary not found.',
+                ]
+            );
+            return;
+        }
         $output->writeln([
             '============',
             'List of Glossary entries',
@@ -98,11 +92,11 @@ class GlossaryListCommand extends Command
         ]);
 
         $headers = [
-            'source_lang - ' . $information['source_lang'],
-            'target_lang - ' . $information['target_lang'],
+            'source_lang - ' . $information->sourceLang,
+            'target_lang - ' . $information->targetLang,
         ];
 
-        $rows = array_map(null, array_keys($entries), $entries);
+        $rows = array_map(null, array_keys($entries->getEntries()), $entries->getEntries());
 
         $table = new Table($output);
         $table

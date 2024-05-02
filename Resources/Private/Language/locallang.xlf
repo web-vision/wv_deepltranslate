@@ -9,39 +9,24 @@
 			<trans-unit id="backend.label">
 				<source>Translate with DeepL</source>
 			</trans-unit>
+			<trans-unit id="localize.educate.deepltranslateHeader">
+				<source>Translate with DeepL</source>
+			</trans-unit>
+			<trans-unit id="localize.educate.deepltranslateHeaderAutodetect">
+				<source>Translate with DeepL (autodetect)</source>
+			</trans-unit>
+
 			<trans-unit id="localize.educate.deepltranslate" xml:space="preserve">
 				<source>Translating content via DeepL translate will create a translation from source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.</source>
 			</trans-unit>
 			<trans-unit id="localize.educate.deepltranslateAuto" xml:space="preserve">
 				<source><![CDATA[Translating content via DeepL translate will create a translation from <b>auto detected</b> source language to the language you translate to. The translated content will be from DeepL translation service which is 99% accurate. DeepL service supports translation to and from English, French, German, Spanish, Italian, Dutch, and Polish languages. Other languages will be ignored and will default to the normal translate operation of TYPO3.]]></source>
 			</trans-unit>
-			<trans-unit id="localize.educate.googleTranslate" xml:space="preserve">
-				<source>Translating content via Google Translate will create a translation from source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <![CDATA[<a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>]]>.</source>
+
+			<trans-unit id="localize.educate.deeplSettingsFailure">
+				<source>Please complete missing DeepL configurations.</source>
 			</trans-unit>
-			<trans-unit id="localize.educate.googleTranslateAuto" xml:space="preserve">
-				<source><![CDATA[Translating content via Google Translate will create a translation from <b>auto detected</b> source language to the language you translate to. The translated content will be from Google translation service. Google service supports a fair share of <a href="https://cloud.google.com/translate/docs/languages" target="_blank">languages</a>.]]></source>
-			</trans-unit>
-			<trans-unit id="deepl_settings" xml:space="preserve">
-				<source>DeepL Settings</source>
-			</trans-unit>
-			<trans-unit id="settings_success" xml:space="preserve">
-				<source>Language assignments saved successfully</source>
-			</trans-unit>
-			<trans-unit id="settings_assign" xml:space="preserve">
-				<source>Assign languages</source>
-			</trans-unit>
-			<trans-unit id="settings_no_language" xml:space="preserve">
-				<source>No system languages found.</source>
-			</trans-unit>
-			 <trans-unit id="languageId" xml:space="preserve">
-				<source>Language Id</source>
-			</trans-unit>
-			<trans-unit id="syslanguage" xml:space="preserve">
-				<source>System Language</source>
-			</trans-unit>
-			<trans-unit id="deepliso" xml:space="preserve">
-				<source>Assigned Language(ISO Code)</source>
-			</trans-unit>
+
 			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
 				<source>DeepL</source>
 			</trans-unit>
@@ -88,14 +73,6 @@
 				<source>Translated with DeepL</source>
 			</trans-unit>
 
-			<trans-unit id="deprecated.deepl-be.title">
-				<source>!!! Module is Deprecated !!!</source>
-			</trans-unit>
-			<trans-unit id="deprecated.deepl-be.body">
-				<source><![CDATA[We will remove this backend module from TYPO3 V11 and move the configuration in the site configuration.
-					This must be done because "sys_language" entries are deprecated from TYPO3 11 and are no longer considered in the translation.
-				]]></source>
-			</trans-unit>
 			<trans-unit id="site_configuration.deepl.title">
 				<source>DeepL Settings</source>
 			</trans-unit>
@@ -166,6 +143,19 @@
 			</trans-unit>
 			<trans-unit id="glossary.sync.button.all">
 				<source>Synchronise Glossaries</source>
+			</trans-unit>
+
+			<trans-unit id="usages.toolbar-label">
+				<source>DeepL Translate Limit</source>
+			</trans-unit>
+			<trans-unit id="usages.toolbar-information">
+				<source>Information not available</source>
+			</trans-unit>
+			<trans-unit id="usages.flashmassage.title">
+				<source>DeepL Translate </source>
+			</trans-unit>
+			<trans-unit id="usages.flashmassage.limit.description">
+				<source>DeepL Translate Limit %s / %s</source>
 			</trans-unit>
 		</body>
 	</file>

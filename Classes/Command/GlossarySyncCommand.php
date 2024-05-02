@@ -9,34 +9,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
 class GlossarySyncCommand extends Command
 {
-    protected DeeplGlossaryService $deeplGlossaryService;
+    use GlossaryCommandTrait;
 
-    protected GlossaryRepository $glossaryRepository;
-
-    public function __construct(
-        string $name = null,
-        ?DeeplGlossaryService $deeplGlossaryService = null,
-        ?GlossaryRepository $glossaryRepository = null
-    ) {
-        parent::__construct($name);
-        $this->deeplGlossaryService = $deeplGlossaryService
-            ?? GeneralUtility::makeInstance(DeeplGlossaryService::class);
-        $this->glossaryRepository = $glossaryRepository
-            ?? GeneralUtility::makeInstance(GlossaryRepository::class);
-    }
-
-    protected function initialize(
-        InputInterface $input,
-        OutputInterface $output
-    ): void {
-        $this->setDescription('Sync all glossaries to DeepL API')
+    protected function configure(): void
+    {
+        $this
             ->addOption(
                 'pageId',
                 'p',
@@ -47,7 +29,6 @@ class GlossarySyncCommand extends Command
     }
 
     /**
-     * @throws DeepLException
      * @throws SiteNotFoundException
      */
     protected function execute(
@@ -64,10 +45,6 @@ class GlossarySyncCommand extends Command
             $this->deeplGlossaryService->syncGlossaries($glossary['uid']);
         }
 
-        /**
-         * return 0 HAS to be for TYPO3 v9 support
-         * @see https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html#return-value
-         */
-        return 0;
+        return Command::SUCCESS;
     }
 }

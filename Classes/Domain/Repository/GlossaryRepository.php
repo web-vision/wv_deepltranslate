@@ -4,24 +4,23 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
-use DateTimeImmutable;
+use DeepL\GlossaryInfo;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Service\Client\DeepLException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
-class GlossaryRepository
+// @todo Consider to rename/move this as service class.
+final class GlossaryRepository
 {
     /**
-     * @param int $pageId
      * @return array<int, array{
      *     glossary_name: string,
      *     uid: int,
@@ -30,8 +29,11 @@ class GlossaryRepository
      *     target_lang: string,
      *     entries: array<int, array{source: string, target: string}>
      * }>
+     *
+     * @throws DBALException
+     * @throws Exception
      * @throws SiteNotFoundException
-     * @throws DeepLException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlossaryInformationForSync(int $pageId): array
     {
@@ -42,6 +44,7 @@ class GlossaryRepository
             'pages',
             $pageId
         );
+
         $entries = $this->getOriginalEntries($pageId);
         $localizationLanguageIds = $this->getAvailableLocalizations($pageId);
         $site = GeneralUtility::makeInstance(SiteFinder::class)
@@ -61,13 +64,13 @@ class GlossaryRepository
             ->getPossibleGlossaryLanguageConfig();
 
         foreach ($availableLanguagePairs as $sourceLang => $availableTargets) {
-            // no entry to possible source in current page
+            // no entry to possible source in the current page
             if (!isset($localizationArray[$sourceLang])) {
                 continue;
             }
 
             foreach ($availableTargets as $targetLang) {
-                // target not configured in current page
+                // target isn't configured in the current page
                 if (!isset($localizationArray[$targetLang])) {
                     continue;
                 }
@@ -121,6 +124,7 @@ class GlossaryRepository
 
     /**
      * @return array<string, mixed>|null
+     * @throws Exception
      */
     public function findByGlossaryId(string $glossaryId): ?array
     {
@@ -132,41 +136,21 @@ class GlossaryRepository
             'tx_wvdeepltranslate_glossary',
             [
                 'glossary_id' => $glossaryId,
-            ]
+            ],
+            [],
+            [],
+            1
         );
 
-        if ($result->rowCount() === 0) {
-            return null;
-        }
-
-        return $result->fetch();
+        return $result->fetchAssociative() ?: null;
     }
 
-    /**
-     * @param array{
-     *     glossary_id?: string,
-     *     name?: string,
-     *     ready?: bool,
-     *     source_lang?: string,
-     *     target_lang?: string,
-     *     creation_time?: string,
-     *     entry_count?: int
-     * } $information
-     */
-    public function updateLocalGlossary(array $information, int $uid): void
+    public function updateLocalGlossary(GlossaryInfo $information, int $uid): void
     {
-        $glossarySyncTimestamp = 0;
-        if (isset($information['creation_time'])) {
-            $glossarySyncTimestamp = DateTimeImmutable::createFromFormat(
-                'Y-m-d\TH:i:s.uT',
-                $information['creation_time']
-            )->getTimestamp();
-        }
-
         $insertParams = [
-            'glossary_id' => $information['glossary_id'] ?? '',
-            'glossary_ready' => $information['ready'] ? 1 : 0,
-            'glossary_lastsync' => $glossarySyncTimestamp,
+            'glossary_id' => $information->glossaryId,
+            'glossary_ready' => $information->ready ? 1 : 0,
+            'glossary_lastsync' => $information->creationTime->getTimestamp(),
         ];
 
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -181,12 +165,10 @@ class GlossaryRepository
         );
     }
 
-    public function hasGlossariesOnPage(int $pageId): bool
-    {
-        $glossaries = $this->findAllGlossaries($pageId);
-        return count($glossaries) > 0;
-    }
-
+    /**
+     * @return array<int|string, mixed>
+     * @throws Exception
+     */
     public function findAllGlossaries(): array
     {
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -202,7 +184,7 @@ class GlossaryRepository
             ['uid'],
             'pages',
             $identifiers
-        )->fetchAll() ?: [];
+        )->fetchAllAssociative() ?: [];
     }
 
     /**
@@ -214,28 +196,37 @@ class GlossaryRepository
      *     glossary_lastsync: int,
      *     glossary_ready: int
      * }
-     * @throws DBALException
+     *
+     * @throws Exception
+     * @throws SiteNotFoundException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlossaryBySourceAndTarget(
         string $sourceLanguage,
         string $targetLanguage,
         array $page
     ): array {
+        $defaultGlossary = [
+            'uid' => 0,
+            'glossary_id' => '',
+            'glossary_name' => 'UNDEFINED',
+            'glossary_lastsync' => 0,
+            'glossary_ready' => 0,
+        ];
         if (empty($page)) {
-            return [
-                'uid' => 0,
-                'glossary_id' => '',
-                'glossary_name' => 'UNDEFINED',
-                'glossary_lastsync' => 0,
-                'glossary_ready' => 0,
-            ];
+            return $defaultGlossary;
         }
         $lowerSourceLang = strtolower($sourceLanguage);
         $lowerTargetLang = strtolower($targetLanguage);
         if (strlen($lowerTargetLang) > 2) {
             $lowerTargetLang = substr($lowerTargetLang, 0, 2);
         }
-        return $this->getGlossary($lowerSourceLang, $lowerTargetLang, $page['uid'], true) ?? [];
+        return $this->getGlossary(
+            $lowerSourceLang,
+            $lowerTargetLang,
+            $page['uid'],
+            true
+        ) ?? $defaultGlossary;
     }
 
     /**
@@ -247,6 +238,9 @@ class GlossaryRepository
      *     glossary_lastsync: int,
      *     glossary_ready: int
      * }
+     * @throws Exception
+     * @throws SiteNotFoundException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlossaryBySourceAndTargetForSync(
         string $sourceLanguage,
@@ -310,6 +304,8 @@ class GlossaryRepository
 
     /**
      * @return array<int|string, array{uid: int, glossary_id: string}>
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      * @throws DBALException
      */
     public function getGlossariesDeeplConnected(): array
@@ -323,7 +319,7 @@ class GlossaryRepository
                 $db->expr()->neq('glossary_id', $db->createNamedParameter(''))
             );
 
-        $result = $statement->execute()->fetch();
+        $result = $statement->executeQuery()->fetchAssociative();
         if ($result === false) {
             return [];
         }
@@ -333,6 +329,9 @@ class GlossaryRepository
 
     /**
      * @return array<int, array{uid: int, term: string}>|array
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @throws DBALException
      */
     private function getOriginalEntries(int $pageId): array
     {
@@ -352,7 +351,7 @@ class GlossaryRepository
                 )
             );
         $entries = [];
-        foreach ($statement->execute()->fetchAll() as $entry) {
+        foreach ($statement->executeQuery()->fetchAllAssociative() ?: [] as $entry) {
             $entries[$entry['uid']] = $entry;
         }
         return $entries;
@@ -360,6 +359,9 @@ class GlossaryRepository
 
     /**
      * @return array<int, array{uid: int, term: string, l10n_parent: int}>
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @throws DBALException
      */
     private function getLocalizedEntries(int $pageId, int $languageId): array
     {
@@ -380,7 +382,7 @@ class GlossaryRepository
             );
 
         $localizedEntries = [];
-        foreach ($statement->execute()->fetchAll() ?? [] as $localizedEntry) {
+        foreach ($statement->executeQuery()->fetchAllAssociative() as $localizedEntry) {
             $localizedEntries[$localizedEntry['l10n_parent']] = $localizedEntry;
         }
         return $localizedEntries;
@@ -394,7 +396,7 @@ class GlossaryRepository
         $translations = GeneralUtility::makeInstance(TranslationConfigurationProvider::class)
             ->translationInfo('pages', $pageId);
 
-        // Error string given, if not matching. return empty array then
+        // Error string given, if not matching. Return an empty array then
         if (!is_array($translations)) {
             return [];
         }
@@ -408,7 +410,6 @@ class GlossaryRepository
 
     protected function getTargetLanguageIsoCode(Site $site, int $languageId): string
     {
-        // TODO add support for deprecated sys_language table
         return $site->getLanguageById($languageId)->getTwoLetterIsoCode();
     }
 
@@ -420,7 +421,9 @@ class GlossaryRepository
      *     glossary_lastsync: int,
      *     glossary_ready: int
      * }|null
-     * @throws DBALException
+     * @throws SiteNotFoundException
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     private function getGlossary(
         string $sourceLanguage,
@@ -440,7 +443,7 @@ class GlossaryRepository
         } else {
             $pidConstraint = $db->expr()->eq('pid', $db->createNamedParameter($pageUid, Connection::PARAM_INT));
         }
-        $where = $db->expr()->andX(
+        $where = $db->expr()->and(
             $db->expr()->eq('source_lang', $db->createNamedParameter($sourceLanguage)),
             $db->expr()->eq('target_lang', $db->createNamedParameter($targetLanguage)),
             $pidConstraint
@@ -457,17 +460,20 @@ class GlossaryRepository
             ->from('tx_wvdeepltranslate_glossary')
             ->where($where);
 
-        $result = $statement->execute()->fetch();
-
-        return $result ?: null;
+        return $statement->executeQuery()->fetchAssociative() ?: null;
     }
 
+    /**
+     * @throws SiteNotFoundException
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     */
     private function getGlossariesInRootByCurrentPage(int $pageId): array
     {
         $site = GeneralUtility::makeInstance(SiteFinder::class)
             ->getSiteByPageId($pageId);
         $rootPage = $site->getRootPageId();
-        $allPages = GeneralUtility::makeInstance(QueryGenerator::class)
+        $allPages = GeneralUtility::makeInstance(PageTreeRepository::class)
             ->getTreeList($rootPage, 999);
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('pages');
@@ -476,10 +482,10 @@ class GlossaryRepository
             ->from('pages')
             ->where(
                 $db->expr()->in('uid', $allPages),
-                $db->expr()->eq('doktype', 254),
+                $db->expr()->eq('doktype', $db->createNamedParameter(254, Connection::PARAM_INT)),
                 $db->expr()->eq('module', $db->createNamedParameter('glossary'))
             );
-        $result = $statement->execute()->fetchAll();
+        $result = $statement->executeQuery()->fetchAllAssociative();
 
         if (!is_array($result)) {
             return [];
@@ -500,6 +506,6 @@ class GlossaryRepository
             ->set('glossary_ready', 0)
             ->where(
                 $queryBuilder->expr()->eq('pid', $pageId)
-            )->execute();
+            )->executeStatement();
     }
 }

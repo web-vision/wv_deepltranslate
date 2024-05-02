@@ -1,6 +1,6 @@
-.. include:: /Includes.rst.txt
+..  include:: /Includes.rst.txt
 
-.. _installation:
+..  _installation:
 
 Installation
 ============
@@ -22,7 +22,7 @@ extension by one of the following methods:
     Switch to :guilabel:`Get Extensions` and search for the extension key
     *wv_deepltranslate* and import the extension from the repository.
 
-#. **Get it from typo3.org**:
+#.  **Get it from typo3.org**:
     You can always get current version from `TER`_ by downloading the zip
     version. Upload the file afterwards in the Extension Manager.
 
@@ -31,13 +31,13 @@ and :ref:`configure <extensionConfiguration>` it.
 Inside your own site configuration follow the instructions for
 :ref:`table configuration <tableConfiguration>`.
 
-.. _TER: https://extensions.typo3.org/extension/wv_deepltranslate
+..  _TER: https://extensions.typo3.org/extension/wv_deepltranslate
 
 Compatibility
 -------------
 
 DeepL Translate supports:
 
-.. csv-table:: Changes
+..  csv-table:: Changes
     :header: "DeepL Translate version","TYPO3 Version","PHP version"
-    :file: ../../Files/versionSupport.csv
+    :file: Files/versionSupport.csv

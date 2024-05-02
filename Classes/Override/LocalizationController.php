@@ -4,31 +4,21 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Override;
 
-/*
- * This file is part of the TYPO3 CMS project.
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
+use Doctrine\DBAL\Driver\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
+use TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Versioning\VersionState;
-use WebVision\WvDeepltranslate\Configuration;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 
 /**
@@ -43,21 +33,15 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
     private const ACTION_LOCALIZEDEEPL_AUTO = 'localizedeeplauto';
 
-    private const ACTION_LOCALIZEGOOGLE = 'localizegoogle';
-
-    private const ACTION_LOCALIZEGOOGLE_AUTO = 'localizegoogleauto';
-
     protected DeeplService $deeplService;
 
     protected PageRenderer $pageRenderer;
-    private Configuration $configuration;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $this->configuration = GeneralUtility::makeInstance(Configuration::class);
         $this->deeplService = GeneralUtility::makeInstance(DeeplService::class);
         $this->pageRenderer->addInlineLanguageLabelFile('EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf');
     }
@@ -107,9 +91,9 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             })
         );
 
-        //for deepl and google auto modes
+        //for DeepL auto mode
         if (!empty($availableLanguages)) {
-            if ($mode == 'localizedeeplauto' || $mode == 'localizegoogleauto') {
+            if ($mode == 'localizedeeplauto') {
                 foreach ($availableLanguages as &$availableLanguage) {
                     $availableLanguage['uid']     = 'auto-' . $availableLanguage['uid'];
                     $availableLanguage['ISOcode'] = 'AUT';
@@ -134,6 +118,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      *
      * @param ServerRequestInterface $request
      * @return ResponseInterface
+     * @throws Exception
      */
     public function getRecordLocalizeSummary(ServerRequestInterface $request): ResponseInterface
     {
@@ -145,7 +130,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         $pageId         = (int)$params['pageId'];
         $destLanguageId = (int)$params['destLanguageId'];
         //getting source language id
-        $languageId = $this->getSourceLanguageid($params['languageId']);
+        $languageId = $this->getSourceLanguageId($params['languageId']);
 
         $records = [];
         $result  = $this->localizationRepository->getRecordsToCopyDatabaseResult(
@@ -155,7 +140,8 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
             '*'
         );
 
-        while ($row = $result->fetch()) {
+        $flatRecords = [];
+        while ($row = $result->fetchAssociative()) {
             BackendUtility::workspaceOL('tt_content', $row, -99, true);
             if (!$row || VersionState::cast($row['t3ver_state'])->equals(VersionState::DELETE_PLACEHOLDER)) {
                 continue;
@@ -169,26 +155,41 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
                 'title' => $row[$GLOBALS['TCA']['tt_content']['ctrl']['label']],
                 'uid'   => $row['uid'],
             ];
+            $flatRecords[] = $row;
         }
 
         $payloadBody = [
             'records' => $records,
-            'columns' => $this->getPageColumns($pageId, $records, $params),
+            'columns' => $this->getPageColumns($pageId, $flatRecords, $params),
         ];
+
+        /** @var Typo3Version $typo3Version */
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
 
         // s. EXT:containers Xclass B13\Container\Xclasses\LocalizationController
         if (
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')
+            ExtensionManagementUtility::isLoaded('container')
+            && $typo3Version->getMajorVersion() < 12
         ) {
+            // Supported container version >= 2.1.0
             if (class_exists(\B13\Container\Service\RecordLocalizeSummaryModifier::class)) {
-                // since b13/container 2.1.0
                 $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Service\RecordLocalizeSummaryModifier::class);
                 $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
-            } elseif (class_exists(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class)) {
-                // before b13/container 2.1.0
+            }
+            // Supported container version <= 2.0.5
+            if (class_exists(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class)) {
                 $recordLocalizeSummaryModifier = GeneralUtility::makeInstance(\B13\Container\Xclasses\RecordLocalizeSummaryModifier::class);
                 $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
             }
+            // Supported TYPO3 v12
+        } elseif(class_exists(\TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent::class)) {
+            $event = new AfterRecordSummaryForLocalizationEvent($payloadBody['records'], $payloadBody['columns']);
+            $this->eventDispatcher->dispatch($event);
+
+            $payloadBody = [
+                'records' => $event->getRecords(),
+                'columns' => $event->getColumns(),
+            ];
         }
 
         return (new JsonResponse())->setPayload($payloadBody);
@@ -207,7 +208,12 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         }
 
         //additional constraint ACTION_LOCALIZEDEEPL
-        if ($params['action'] !== static::ACTION_COPY && $params['action'] !== static::ACTION_LOCALIZE && $params['action'] !== static::ACTION_LOCALIZEDEEPL && $params['action'] !== static::ACTION_LOCALIZEDEEPL_AUTO && $params['action'] !== static::ACTION_LOCALIZEGOOGLE && $params['action'] !== static::ACTION_LOCALIZEGOOGLE_AUTO) {
+        if (
+            $params['action'] !== static::ACTION_COPY
+            && $params['action'] !== static::ACTION_LOCALIZE
+            && $params['action'] !== static::ACTION_LOCALIZEDEEPL
+            && $params['action'] !== static::ACTION_LOCALIZEDEEPL_AUTO
+        ) {
             $response = new Response('php://temp', 400, ['Content-Type' => 'application/json; charset=utf-8']);
             $response->getBody()->write('Invalid action "' . $params['action'] . '" called.');
             return $response;
@@ -217,7 +223,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
         $params['uidList'] = $this->filterInvalidUids(
             (int)$params['pageId'],
             (int)$params['destLanguageId'],
-            $this->getSourceLanguageid($params['srcLanguageId']),
+            $this->getSourceLanguageId($params['srcLanguageId']),
             $params['uidList']
         );
 
@@ -242,16 +248,20 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
 
         if (isset($params['uidList']) && is_array($params['uidList'])) {
             foreach ($params['uidList'] as $currentUid) {
-                if ($params['action'] === static::ACTION_LOCALIZE || $params['action'] === static::ACTION_LOCALIZEDEEPL || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO || $params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO) {
+                if (
+                    $params['action'] === static::ACTION_LOCALIZE
+                    || $params['action'] === static::ACTION_LOCALIZEDEEPL
+                    || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO
+                ) {
                     $cmd['tt_content'][$currentUid] = [
                         'localize' => $destLanguageId,
                     ];
                     //setting mode and source language for deepl translate.
-                    if ($params['action'] === static::ACTION_LOCALIZEDEEPL || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO) {
+                    if (
+                        $params['action'] === static::ACTION_LOCALIZEDEEPL
+                        || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO
+                    ) {
                         $cmd['localization']['custom']['mode']          = 'deepl';
-                        $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
-                    } elseif ($params['action'] === static::ACTION_LOCALIZEGOOGLE || $params['action'] === static::ACTION_LOCALIZEGOOGLE_AUTO) {
-                        $cmd['localization']['custom']['mode']          = 'google';
                         $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
                     }
                 } else {
@@ -268,31 +278,9 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
     }
 
     /**
-     * check deepl Settings (url,apikey).
-     * @param ServerRequestInterface $request
-     * @return array
+     * Return source language ID from source language string
      */
-    public function checkdeeplSettings(ServerRequestInterface $request)
-    {
-        $result = [];
-        if ($this->configuration->getApiKey() != null && $this->configuration->getApiUrl() != null) {
-            $result['status'] = 'true';
-        } else {
-            $result['status']  = 'false';
-            $result['message'] = 'Deepl settings not enabled';
-        }
-
-        $result = json_encode($result);
-        echo $result;
-        exit;
-    }
-
-    /**
-     * Return source language Id from source language string
-     * @param string $srcLanguage
-     * @return int
-     */
-    public function getSourceLanguageid($srcLanguage)
+    public function getSourceLanguageId(string $srcLanguage): int
     {
         $langParam = explode('-', $srcLanguage);
         if (count($langParam) > 1) {

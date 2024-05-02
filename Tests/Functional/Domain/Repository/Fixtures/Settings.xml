@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<dataset>
-    <tx_deepl_settings>
-        <uid>1</uid>
-        <pid>0</pid>
-        <languages_assigned>a:1:{i:1;s:2:"de";}</languages_assigned>
-    </tx_deepl_settings>
-</dataset>

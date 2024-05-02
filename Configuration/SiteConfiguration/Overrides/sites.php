@@ -1,15 +1,8 @@
 <?php
 
-(static function () {
-    $typo3VersionArray = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionStringToArray(
-        \TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version()
-    );
+use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 
-    // before v11 we dont use this field
-    if (version_compare((string)$typo3VersionArray['version_main'], '11', '<')) {
-        return;
-    }
-
+(static function (): void {
     $ll = function (string $identifier) {
         return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:' . $identifier;
     };
@@ -20,7 +13,7 @@
         'config' => [
             'type' => 'select',
             'renderType' => 'selectSingle',
-            'itemsProcFunc' => \WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc::class . '->getSupportedLanguageForField',
+            'itemsProcFunc' => SiteConfigSupportedLanguageItemsProcFunc::class . '->getSupportedLanguageForField',
             'items' => [],
             'minitems' => 0,
             'maxitems' => 1,

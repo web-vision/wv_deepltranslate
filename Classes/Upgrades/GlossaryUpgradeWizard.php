@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Upgrades;
 
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Platforms\PostgreSQL94Platform;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Updates\ChattyInterface;
 use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
@@ -60,8 +61,8 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $result = $connection
             ->select('*')
             ->from('tx_wvdeepltranslate_domain_model_glossaries')
-            ->execute()
-            ->fetchAll(FetchMode::ASSOCIATIVE);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $updateGlossary = [];
         foreach ($result as $item) {
@@ -99,12 +100,13 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $result = $connection
             ->select('*')
             ->from('tx_wvdeepltranslate_domain_model_glossariessync')
-            ->execute()
-            ->fetchAll(FetchMode::ASSOCIATIVE);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $updateGlossary = [];
         foreach ($result as $item) {
             unset($item['entries']);
+            unset($item['cruser_id']);
             $updateGlossary[] = $item;
         }
 
@@ -120,34 +122,50 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $this->output->writeln(sprintf('<info>Migrated %d glossaries</info>', $inserted));
         $this->output->writeln('<info>Preparing backend access rights migration</info>');
 
-        $db = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getQueryBuilderForTable('be_groups');
+        $db = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_groups');
+
+        // TYPO3 does not add a proper "ESCAPE ''" suffix to like statements. This worked a long time, but for some
+        // database version and systems, it does no longer work. Until TYPO3 adds an option for the escaped value or
+        // autoset it, we need to handle this by our own.
+        $typo3Version = new Typo3Version();
+        $dbPlatform = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('be_groups')->getDatabasePlatform();
+        $escapeFixNeeded = (
+            // TYPO3 uses ILIKE for like()/notLike() expression, and adding ESCAPE for default '\'  is disliked. Avoid it.
+            (! $dbPlatform instanceof PostgreSQL94Platform)
+            && (
+                (($typo3Version->getMajorVersion() === 11) && (version_compare($typo3Version->getVersion(), '11.5.28', '<=') === true))
+             || (($typo3Version->getMajorVersion() === 12) && (version_compare($typo3Version->getVersion(), '12.4.1', '<=') === true))
+            )
+        );
+        $escapeSuffix = $escapeFixNeeded ? sprintf(' ESCAPE %s', $db->quote('\\')) : '';
+        $v1 = $db->escapeLikeWildcards('tx_wvdeepltranslate_domain_model_glossariessync');
+        $v2 = $db->escapeLikeWildcards('tx_wvdeepltranslate_domain_model_glossaries');
+
         $statement = $db
             ->select('*')
             ->from('be_groups')
             ->where(
-                $db->expr()->orX(
+                $db->expr()->or(
                     $db->expr()->like(
-                        'tables_modify',
-                        $db->createNamedParameter('%' . $db->escapeLikeWildcards('tx_wvdeepltranslate_domain_model_glossariessync') . '%')
+                        'be_groups.tables_modify',
+                        $db->createNamedParameter('%' . $v1 . '%') . $escapeSuffix
                     ),
                     $db->expr()->like(
-                        'tables_modify',
-                        $db->createNamedParameter('%' . $db->escapeLikeWildcards('tx_wvdeepltranslate_domain_model_glossaries') . '%')
+                        'be_groups.tables_modify',
+                        $db->createNamedParameter('%' . $v2 . '%') . $escapeSuffix
                     ),
                     $db->expr()->like(
-                        'tables_select',
-                        $db->createNamedParameter('%' . $db->escapeLikeWildcards('tx_wvdeepltranslate_domain_model_glossariessync') . '%')
+                        'be_groups.tables_select',
+                        $db->createNamedParameter('%' . $v1 . '%') . $escapeSuffix
                     ),
                     $db->expr()->like(
-                        'tables_select',
-                        $db->createNamedParameter('%' . $db->escapeLikeWildcards('tx_wvdeepltranslate_domain_model_glossaries') . '%')
+                        'be_groups.tables_select',
+                        $db->createNamedParameter('%' . $v2 . '%') . $escapeSuffix
                     )
                 )
             );
 
-        $result = $statement->execute()->fetchAll(FetchMode::ASSOCIATIVE);
-
+        $result = $statement->executeQuery()->fetchAllAssociative();
         $countBeGroups = 0;
         foreach ($result as $group) {
             $replaced = false;
@@ -200,13 +218,14 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $this->output->writeln(sprintf('<info>Updated %d backend groups</info>', $countBeGroups));
 
         $pagesQueryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-        $pagesModuleResult = $pagesQueryBuilder->update('pages')
+        $pagesModuleResult = $pagesQueryBuilder
+            ->update('pages')
             ->set('module', 'glossary')
             ->where(
                 $pagesQueryBuilder->expr()->eq('doktype', 254),
                 $pagesQueryBuilder->expr()->eq('module', $pagesQueryBuilder->createNamedParameter('wv_deepltranslate'))
             )
-            ->execute();
+            ->executeStatement();
 
         $this->output->writeln(sprintf('<info>Update %d sys-folder module</info>', (int)$pagesModuleResult));
 
@@ -240,8 +259,8 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $count = (int)$queryBuilder
             ->count('*')
             ->from('tx_wvdeepltranslate_domain_model_glossaries')
-            ->execute()
-            ->fetchColumn(0);
+            ->executeQuery()
+            ->fetchOne();
 
         return $count > 0;
     }
