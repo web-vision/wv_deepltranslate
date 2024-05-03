@@ -66,12 +66,11 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 
         $updateGlossary = [];
         foreach ($result as $item) {
-            $updateGlossary[] = [
+            $formatItem = [
                 'uid' => $item['uid'],
                 'pid' => $item['pid'],
                 'tstamp' => $item['tstamp'],
                 'crdate' => $item['crdate'],
-                'cruser_id' => $item['cruser_id'],
                 'deleted' => $item['deleted'],
                 'hidden' => $item['hidden'],
                 'sys_language_uid' => $item['sys_language_uid'],
@@ -81,6 +80,12 @@ class GlossaryUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
                 'l10n_diffsource' => $item['l10n_diffsource'],
                 'term' => $item['term'],
             ];
+
+            if ((new Typo3Version())->getMajorVersion() < 12) {
+                $formatItem['cruser_id'] = $item['cruser_id'];
+            }
+
+            $updateGlossary[] = $formatItem;
         }
 
         $insert = GeneralUtility::makeInstance(ConnectionPool::class)
