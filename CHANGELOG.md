@@ -1,5 +1,10 @@
 # Changelog
 
+### 4.3.1
+
+* Resolve phpstan issues that block the pipeline by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/325
+* Update README.md by @borishinzer in https://github.com/web-vision/wv_deepltranslate/pull/324
+
 ### 4.3.0
 
 Public Release from EAP
