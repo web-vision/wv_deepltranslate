@@ -7,35 +7,30 @@
 
 # TYPO3 extension `wv_deepltranslate`
 
-This extension provides automated translation of pages, content and records
-to languages supported by [DeepL](https://www.deepl.com/de/docs-api/).
+This extension provides automated translation of pages, content and records in TYPO3
+for languages supported by [DeepL](https://www.deepl.com/de/docs-api/).
 
 ## Features
 
-* Bulk translation via TYPO3 built-in Translation Wizard
+* Translate content elements via TYPO3 built-in translation wizard
 * Single drop down translation parallel to regular page translation
   * Translate your page with all fields you want
 * One-Click translation of single records
 * Glossary support
   * Manage your own glossaries in TYPO3
-  * synchronise glossaries to DeepL API
-  * translate content using your glossaries
+  * Synchronise glossaries to DeepL API
+  * Translate content using your glossaries
 
-## TYPO3 v12 Early-Access-Programme
+## Early-Access-Programm
 
-A TYPO3 LTS 12 ready versions is currently available for Early-Access-Partners.
-Partners receive the following services and advantages:
+Early access partners of DeepL Translate will benefit from exclusive access to all add-ons, developer preview versions, access to private GitHub repositories, priority support, logo placement and a backlink on the official website. You will also get access to the DeepL Translate version 5.0 announced for TYPO3 v13.
 
-* Access to the latest extension version wv_deepltranslate — **Ready for TYPO3 12 LTS**
-* **Access** to code repository for **12 months**, extended access for
-  **Composer** users for **15 months** (via packagist.com)
-* Preferential access to support services
-* Your logo and link on our DeepL Translate website
-* **PREVIEW**: Access to demo instances with exclusive insights
-* **EXCLUSIVE**: Add-On Extension: Activate Translated Content — Activates all
-  translated content on a page at the touch of a button.
+The following add-ons are currently available as part of the Early Access Program:
 
-  The tedious activation of individual content elements is no longer necessary.
+* **DeepL Translate Assets**: Translation of file meta data with DeepL
+* **DeepL Translate Auto-Renew**: Automatic creation of pages and content elements in translations, renewal of translations when the original language changes
+* **DeepL Translate Bulk**: Bulk translation of pages and content based on the page tree
+* **Enable Translated Content**: Activation of all translated content elements with one click
 
 Find out more: https://www.web-vision.de/en/deepl.html
 
