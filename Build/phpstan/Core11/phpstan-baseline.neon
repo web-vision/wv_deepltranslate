@@ -126,6 +126,11 @@ parameters:
 			path: ../../../Classes/Override/Core11/DatabaseRecordList.php
 
 		-
+			message: "#^Cannot call method fetch\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
+			count: 1
+			path: ../../../Classes/Override/Core11/DeeplRecordListController.php
+
+		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Override\\\\LocalizationController\\:\\:process\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Override/LocalizationController.php
@@ -251,8 +256,8 @@ parameters:
 			path: ../../../Tests/Functional/Fixtures/Frontend/PhpError.php
 
 		-
-			message: "#^Cannot access offset 'tx_wvdeepltranslate…' on array\\<string, mixed\\>\\|false\\.$#"
-			count: 2
+			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Result\\:\\:fetch\\(\\)\\.$#"
+			count: 1
 			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
 
 		-
@@ -323,11 +328,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$current of method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\Hooks\\\\TranslateHookTest\\:\\:mergeInstruction\\(\\) expects TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction, TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction\\|null given\\.$#"
 			count: 1
-			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$array of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertArrayHasKey\\(\\) expects array\\|ArrayAccess, array\\<string, mixed\\>\\|false given\\.$#"
-			count: 2
 			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
 
 		-
