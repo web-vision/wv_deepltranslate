@@ -8,12 +8,12 @@ use DateTime;
 use DeepL\GlossaryEntries;
 use DeepL\GlossaryInfo;
 use DeepL\GlossaryLanguagePair;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use WebVision\WvDeepltranslate\ClientInterface;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
+use WebVision\WvDeepltranslate\Exception\FailedToCreateGlossaryException;
 use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
 
 final class DeeplGlossaryService
@@ -125,13 +125,17 @@ final class DeeplGlossaryService
     /**
      * @throws Exception
      * @throws SiteNotFoundException
-     * @throws DBALException
      * @throws \Doctrine\DBAL\Exception
      */
     public function syncGlossaries(int $uid): void
     {
-        $glossaries = $this->glossaryRepository
-            ->getGlossaryInformationForSync($uid);
+        $glossaries = $this->glossaryRepository->getGlossaryInformationForSync($uid);
+        if (empty($glossaries)) {
+            throw new FailedToCreateGlossaryException(
+                'Glossary can not created, the TYPO3 information are invalide.',
+                1714987594661
+            );
+        }
 
         foreach ($glossaries as $glossaryInformation) {
             if ($glossaryInformation['glossary_id'] !== '') {

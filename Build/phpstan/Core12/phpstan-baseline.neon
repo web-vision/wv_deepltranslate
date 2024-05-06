@@ -146,11 +146,6 @@ parameters:
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 
 		-
-			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception\\\\SiteNotFoundException is not subtype of Throwable$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
 			message: "#^Offset 'pid' does not exist on array\\|null\\.$#"
 			count: 1
 			path: ../../../Classes/Service/LanguageService.php
