@@ -17,13 +17,6 @@ you can use:
 
     vendor/bin/typo3 deepl:glossary:list
 
-or, with `typo3_console`_ installed:
-
-..  code-block:: bash
-
-    vendor/bin/typo3cms deepl:glossary:list
-
-
 This will give you an overview of API connected glossaries,
 number of entries, creation date and Glossary DeepL ID.
 
