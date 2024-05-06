@@ -60,12 +60,6 @@ CLI Command).
 
     vendor/bin/typo3 deepl:glossary:sync
 
-or, with `typo3_console`_ installed:
-
-..  code-block:: bash
-
-    vendor/bin/typo3cms deepl:glossary:sync
-
 Accepts pageId as option. If not given, syncs all available glossaries.
 
 ..  _typo3_console: https://extensions.typo3.org/extension/typo3_console

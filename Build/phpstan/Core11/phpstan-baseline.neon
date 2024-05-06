@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Access to constant OK on an unknown class TYPO3\\\\CMS\\\\Core\\\\Type\\\\ContextualFeedbackSeverity\\.$#"
-			count: 1
-			path: ../../../Classes/Controller/GlossarySyncController.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntriesByGlossary\\(\\) should return array\\<string, mixed\\> but returns array\\<int, array\\<string, mixed\\>\\>\\.$#"
 			count: 1
 			path: ../../../Classes/Domain/Repository/GlossaryEntryRepository.php
