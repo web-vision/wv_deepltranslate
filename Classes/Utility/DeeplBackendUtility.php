@@ -355,9 +355,10 @@ class DeeplBackendUtility
                 [$id] = array_keys($values);
                 if ($possibleTable === 'pages') {
                     self::$currentPage = self::getPageRecord($id);
+                } else {
+                    $pageId = self::getPageIdFromRecord($possibleTable, $id);
+                    self::$currentPage = self::getPageRecord($pageId);
                 }
-                $pageId = self::getPageIdFromRecord($possibleTable, $id);
-                self::$currentPage = self::getPageRecord($pageId);
             }
         }
 
