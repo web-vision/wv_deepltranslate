@@ -32,7 +32,9 @@ final class GlossarySyncButtonProvider
         $buttons = $event->getButtons();
         $request = $this->getRequest();
 
-        $id = (int)($request->getParsedBody()['id'] ?? $request->getQueryParams()['id'] ?? 0);
+        $requestParams = $request->getQueryParams();
+
+        $id = (int)($requestParams['id'] ?? 0);
         $module = $request->getAttribute('module');
         $normalizedParams = $request->getAttribute('normalizedParams');
         $pageTSconfig = BackendUtility::getPagesTSconfig($id);
