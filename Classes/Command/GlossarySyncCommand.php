@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Command;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GlossarySyncCommand extends Command
 {
     use GlossaryCommandTrait;
+
+    private SymfonyStyle $io;
 
     protected function configure(): void
     {
@@ -24,25 +25,32 @@ class GlossarySyncCommand extends Command
                 'p',
                 InputOption::VALUE_OPTIONAL,
                 'Page to sync, not set, sync all glossaries',
-                0
+                null
             );
     }
 
-    /**
-     * @throws SiteNotFoundException
-     */
-    protected function execute(
-        InputInterface $input,
-        OutputInterface $output
-    ): int {
-        $pageId = (int)$input->getOption('pageId');
-        $glossaries = [$pageId];
-        if ($pageId === 0) {
-            $glossaries = $this->glossaryRepository->findAllGlossaries();
-        }
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $this->io = new SymfonyStyle($input, $output);
+        $this->io->title('Glossary Sync');
 
-        foreach ($glossaries as $glossary) {
-            $this->deeplGlossaryService->syncGlossaries($glossary['uid']);
+        try {
+            $pageId = $input->getOption('pageId');
+            if ($pageId !== null) {
+                $glossaries[] = ['uid' => (int)$pageId];
+            } else {
+                $glossaries = $this->glossaryRepository->findAllGlossaries();
+            }
+
+            $this->io->progressStart(count($glossaries));
+            foreach ($glossaries as $glossary) {
+                $this->deeplGlossaryService->syncGlossaries($glossary['uid']);
+                $this->io->progressAdvance();
+            }
+            $this->io->progressFinish();
+        } catch (Exception $exception) {
+            $this->io->error(sprintf('%s (%s)', $exception->getMessage(), $exception->getCode()));
+            return Command::FAILURE;
         }
 
         return Command::SUCCESS;

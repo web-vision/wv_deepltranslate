@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException is not subtype of Throwable$#"
-			count: 2
-			path: ../../../Classes/Command/GlossaryCleanupCommand.php
-
-		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntriesByGlossary\\(\\) should return array\\<string, mixed\\> but returns array\\<int, array\\<string, mixed\\>\\>\\.$#"
 			count: 1
 			path: ../../../Classes/Domain/Repository/GlossaryEntryRepository.php
@@ -147,11 +142,6 @@ parameters:
 
 		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Service\\\\DeeplGlossaryService\\:\\:getPossibleGlossaryLanguageConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Service/DeeplGlossaryService.php
-
-		-
-			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception\\\\SiteNotFoundException is not subtype of Throwable$#"
 			count: 1
 			path: ../../../Classes/Service/DeeplGlossaryService.php
 

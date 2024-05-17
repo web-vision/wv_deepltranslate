@@ -115,17 +115,23 @@
 				<source>Create new Glossary translation</source>
 			</trans-unit>
 
+			<trans-unit id="glossary.sync.title">
+				<source>DeepL sync ready</source>
+			</trans-unit>
 			<trans-unit id="glossary.sync.message">
 				<source>Synchronization with DeepL is done. Your glossaries are ready to use.</source>
 			</trans-unit>
-			<trans-unit id="glossary.sync.title">
-				<source>DeepL Sync ready</source>
+			<trans-unit id="glossary.sync.title.invalid">
+				<source>DeepL glossary sync invalid</source>
+			</trans-unit>
+			<trans-unit id="glossary.sync.message.invalid">
+				<source>Glossary synchronization with DeepL error. Your glossaries has no entries or is invalid.</source>
+			</trans-unit>
+			<trans-unit id="glossary.not-sync.title">
+				<source>DeepL glossary is out of sync</source>
 			</trans-unit>
 			<trans-unit id="glossary.not-sync.message">
 				<source>Glossary synchronization with DeepL is pending. Your glossaries are not operational.</source>
-			</trans-unit>
-			<trans-unit id="glossary.not-sync.title">
-				<source>DeepL Glossary is out of Sync</source>
 			</trans-unit>
 
 			<trans-unit id="glossaryentry">

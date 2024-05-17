@@ -17,13 +17,6 @@ you can use:
 
     vendor/bin/typo3 deepl:glossary:list
 
-or, with `typo3_console`_ installed:
-
-..  code-block:: bash
-
-    vendor/bin/typo3cms deepl:glossary:list
-
-
 This will give you an overview of API connected glossaries,
 number of entries, creation date and Glossary DeepL ID.
 
@@ -34,15 +27,13 @@ Due to sync failures it is useful, to delete all DeepL glossaries.
 
 ..  code-block:: bash
 
-    vendor/bin/typo3 deepl:glossary:cleanup
-
-or, with `typo3_console`_ installed:
+    vendor/bin/typo3 deepl:glossary:cleanup --all
 
 ..  code-block:: bash
 
-    vendor/bin/typo3cms deepl:glossary:cleanup
+    vendor/bin/typo3 deepl:glossary:cleanup --glossaryId 123-123
 
-This command retrieves information about all glossaries in DeepL API
+This command retrieves information about all glossaries or one glossary in DeepL API
 registered and deletes them from API. Additionally, each glossary ID
 is checked against the database and if found, the database record is
 updated.
@@ -68,12 +59,6 @@ CLI Command).
 ..  code-block:: bash
 
     vendor/bin/typo3 deepl:glossary:sync
-
-or, with `typo3_console`_ installed:
-
-..  code-block:: bash
-
-    vendor/bin/typo3cms deepl:glossary:sync
 
 Accepts pageId as option. If not given, syncs all available glossaries.
 

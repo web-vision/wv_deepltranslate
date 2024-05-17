@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Controller;
 
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use WebVision\WvDeepltranslate\Exception\FailedToCreateGlossaryException;
 use WebVision\WvDeepltranslate\Exception\InvalidArgumentException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 
@@ -18,10 +20,14 @@ class GlossarySyncController
 {
     protected DeeplGlossaryService $deeplGlossaryService;
 
+    private FlashMessageService $flashMessageService;
+
     public function __construct(
-        DeeplGlossaryService $deeplGlossaryService
+        DeeplGlossaryService $deeplGlossaryService,
+        FlashMessageService $flashMessageService
     ) {
         $this->deeplGlossaryService = $deeplGlossaryService;
+        $this->flashMessageService = $flashMessageService;
     }
 
     /**
@@ -33,36 +39,49 @@ class GlossarySyncController
         $processingParameters = $request->getQueryParams();
 
         if (!isset($processingParameters['uid'])) {
-            throw new InvalidArgumentException(
-                'No ID given for glossary synchronization',
-                1676935668643
-            );
+            $this->flashMessageService
+                ->getMessageQueueByIdentifier()
+                ->enqueue((new FlashMessage(
+                    'No ID given for glossary synchronization',
+                    '',
+                    2,
+                    true
+                )));
+            return new RedirectResponse($processingParameters['returnUrl']);
         }
 
-        $this->deeplGlossaryService->syncGlossaries((int)$processingParameters['uid']);
-
-        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
-            $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK;
-        } else {
-            $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::OK;
+        // Check page configuration of glossary type
+        /** @var array{uid: int, doktype: string|int, module: string} $pages */
+        $pages = BackendUtility::getRecord('pages', (int)$processingParameters['uid']);
+        if ((int)$pages['doktype'] !== PageRepository::DOKTYPE_SYSFOLDER && $pages['module'] !== 'glossary') {
+            $this->flashMessageService->getMessageQueueByIdentifier()->enqueue(new FlashMessage(
+                sprintf('Page "%d" not configured for glossary synchronization.', $pages['uid']),
+                (string)LocalizationUtility::translate(
+                    'glossary.sync.title.invalid',
+                    'wv_deepltranslate'
+                ),
+                2,
+                true
+            ));
+            return new RedirectResponse($processingParameters['returnUrl']);
         }
-        $flashMessage = GeneralUtility::makeInstance(
-            FlashMessage::class,
-            (string)LocalizationUtility::translate(
-                'glossary.sync.message',
-                'wv_deepltranslate'
-            ),
-            (string)LocalizationUtility::translate(
-                'glossary.sync.title',
-                'wv_deepltranslate'
-            ),
-            $severity,
-            true
-        );
 
-        GeneralUtility::makeInstance(FlashMessageService::class)
-            ->getMessageQueueByIdentifier()
-            ->enqueue($flashMessage);
+        try {
+            $this->deeplGlossaryService->syncGlossaries((int)$processingParameters['uid']);
+            $this->flashMessageService->getMessageQueueByIdentifier()->enqueue(new FlashMessage(
+                (string)LocalizationUtility::translate('glossary.sync.message', 'wv_deepltranslate'),
+                (string)LocalizationUtility::translate('glossary.sync.title', 'wv_deepltranslate'),
+                0, // OK
+                true
+            ));
+        } catch (FailedToCreateGlossaryException $exception) {
+            $this->flashMessageService->getMessageQueueByIdentifier()->enqueue(new FlashMessage(
+                (string)LocalizationUtility::translate('glossary.sync.message.invalid', 'wv_deepltranslate'),
+                (string)LocalizationUtility::translate('glossary.sync.title.invalid', 'wv_deepltranslate'),
+                2, // Error
+                true
+            ));
+        }
 
         return new RedirectResponse($processingParameters['returnUrl']);
     }
