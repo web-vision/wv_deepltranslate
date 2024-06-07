@@ -11,6 +11,7 @@ use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
@@ -470,31 +471,46 @@ final class GlossaryRepository
      */
     private function getGlossariesInRootByCurrentPage(int $pageId): array
     {
-        $site = GeneralUtility::makeInstance(SiteFinder::class)
-            ->getSiteByPageId($pageId);
-        $rootPage = $site->getRootPageId();
-        $allPages = GeneralUtility::makeInstance(PageTreeRepository::class)
-            ->getTreeList($rootPage, 999);
         $db = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('pages');
-        $statement = $db
+
+        $result = $db
             ->select('uid')
             ->from('pages')
             ->where(
-                $db->expr()->in('uid', $allPages),
-                $db->expr()->eq('doktype', $db->createNamedParameter(254, Connection::PARAM_INT)),
+                $db->expr()->eq(
+                    'doktype',
+                    $db->createNamedParameter(
+                        PageRepository::DOKTYPE_SYSFOLDER,
+                        Connection::PARAM_INT
+                    )
+                ),
                 $db->expr()->eq('module', $db->createNamedParameter('glossary'))
-            );
-        $result = $statement->executeQuery()->fetchAllAssociative();
+            )->executeQuery();
 
-        if (!is_array($result)) {
+        $rows = $result->fetchAllAssociative();
+        if (count($rows) === 0) {
             return [];
         }
+
+        $rootPage = $this->findRootPageId($pageId);
+
         $ids = [];
-        foreach ($result as $row) {
+        foreach ($rows as $row) {
+            $glossaryRootPageID = $this->findRootPageId($row['uid']);
+            if ($glossaryRootPageID !== $rootPage) {
+                continue;
+            }
+
             $ids[] = $row['uid'];
         }
         return $ids;
+    }
+
+    private function findRootPageId(int $pageId): int
+    {
+        $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
+        return $site->getRootPageId();
     }
 
     public function setGlossaryNotSyncOnPage(int $pageId): void
