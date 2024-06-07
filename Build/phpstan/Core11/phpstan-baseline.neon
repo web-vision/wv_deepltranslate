@@ -236,6 +236,11 @@ parameters:
 			path: ../../../Classes/Utility/HtmlUtility.php
 
 		-
+			message: "#^Parameter \\#2 \\$length of function fread expects int\\<1, max\\>, int\\<0, max\\> given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/AbstractDeepLTestCase.php
+
+		-
 			message: "#^Method WebVision\\\\WvDeepltranslate\\\\Tests\\\\Functional\\\\Fixtures\\\\Frontend\\\\PhpError\\:\\:__construct\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Fixtures/Frontend/PhpError.php
