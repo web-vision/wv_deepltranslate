@@ -39,22 +39,39 @@ abstract class AbstractClient implements ClientInterface
         if ($this->translator instanceof Translator) {
             return $this->translator;
         }
-
         if ($this->configuration->getApiKey() === '') {
             throw new ApiKeyNotSetException('The api key ist not set', 1708081233823);
         }
-
+        $proxyUrl = $this->getConfiguredSystemProxy();
         $options = [];
-        if (
-            isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])
-            && $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'] !== ''
+        if ($proxyUrl !== null) {
+            $options[TranslatorOptions::PROXY] = $proxyUrl;
+        }
+        $this->translator = new Translator($this->configuration->getApiKey(), $options);
+        return $this->translator;
+    }
+
+    /**
+     * Determines the configured TYPO3 proxy url for http(s) requests, dealing with
+     * the fact that this could be a single url or an array of urls per protocol.
+     */
+    protected function getConfiguredSystemProxy(): ?string
+    {
+        if (empty($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])) {
+            return null;
+        }
+        if (is_string($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])
             && GeneralUtility::isValidUrl($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])
         ) {
-            $options[TranslatorOptions::PROXY] = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
+            return $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
         }
-
-        $this->translator = new Translator($this->configuration->getApiKey(), $options);
-
-        return $this->translator;
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'])
+            && is_string($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'])
+            && $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'] !== ''
+            && GeneralUtility::isValidUrl($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'])
+        ) {
+            return $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'];
+        }
+        return null;
     }
 }
