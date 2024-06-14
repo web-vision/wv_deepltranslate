@@ -1,0 +1,28 @@
+<html
+    data-namespace-typo3-fluid="true"
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+>
+<f:layout name="Widget/Widget" />
+
+<f:section name="main">
+    <f:for as="item" each="{usages}" >
+        <div class="mb-3">
+            <h4>{item.label}</h4>
+            <p>
+                <b>{f:translate(key: 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.count')}</b>: {item.usage.count -> f:format.number(thousandsSeparator: '.', decimalSeparator: '', decimals: 0)}
+                <br>
+                <b>{f:translate(key: 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.limit')}</b>: {item.usage.limit -> f:format.number(thousandsSeparator: '.', decimalSeparator: '', decimals: 0)}
+            </p>
+            <f:variable name="procss">{item.usage.count / item.usage.limit * 100}</f:variable>
+            <div class="progress" role="progressbar" aria-label="Usage" aria-valuenow="{procss}" aria-valuemin="0" aria-valuemax="100" style="height: 50%">
+                <div class="progress-bar" style="width: {procss}%">{item.usage.count -> f:format.number(thousandsSeparator: '.', decimalSeparator: '', decimals: 0)}</div>
+            </div>
+        </div>
+    </f:for>
+</f:section>
+
+<f:section name="footer">
+    <f:render partial="Widget/Button" arguments="{button: button}"/>
+</f:section>
+
+</html>

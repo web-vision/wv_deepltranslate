@@ -92,6 +92,7 @@
 		"ramsey/uuid": "^4.2",
 		"saschaegerer/phpstan-typo3": "^1.9",
 		"typo3/cms-belog": "^11.5 || ^12.4",
+		"typo3/cms-dashboard": "^11.5 || ^12.4",
 		"typo3/cms-extensionmanager": "^11.5 || ^12.4",
 		"typo3/cms-filelist": "^11.5 || ^12.4",
 		"typo3/cms-fluid-styled-content": "^11.5 || ^12.4",
