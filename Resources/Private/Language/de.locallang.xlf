@@ -164,6 +164,28 @@
 				<source>Information not available</source>
 				<target>Information nicht verfügbar</target>
 			</trans-unit>
+
+			<!-- Widget -->
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.title">
+				<source>DeepL Usage</source>
+				<target>DeepL Verwendung</target>
+			</trans-unit>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.description">
+				<source></source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.character">
+				<source>Character</source>
+				<target>Zeichen</target>
+			</trans-unit>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.count">
+				<source>Count</source>
+				<target>Zähler</target>
+			</trans-unit>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.limit">
+				<source>Limit</source>
+				<target>Begrenzung</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

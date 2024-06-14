@@ -163,6 +163,23 @@
 			<trans-unit id="usages.flashmassage.limit.description">
 				<source>DeepL Translate Limit %s / %s</source>
 			</trans-unit>
+
+			<!-- Widget -->
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.title">
+				<source>DeepL Usage</source>
+			</trans-unit>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.description">
+				<source></source>
+			</trans-unit>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.character">
+				<source>Character</source>
+			</trans-unit>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.count">
+				<source>Count</source>
+			</trans-unit>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.limit">
+				<source>Limit</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
