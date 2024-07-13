@@ -15,6 +15,9 @@ Go to :guilabel:`Admin Tools > Settings > Extension Configuration`.
 
 Open the settings for :guilabel:`wv_deepltranslate` and add your API key.
 
+.. figure:: /Images/Reference/configuration.png
+    :alt: The Extension configuration settings showing two input fields for DeepL API key and default formality
+
 The extension is set up to auto-detect the corresponding DeepL API URL.
 
 .. _sitesetup:
@@ -23,12 +26,15 @@ Set up translation language
 
 #. Go to :guilabel:`Site Management > Sites` and edit your site configuration
 #. Switch to tab `Languages` and open your target
+    .. figure:: /Images/Administration/site-config-deepl-settings-empty.png
+        :alt: Site settings for a TYPO3 language showing empty DeepL Target Language dropdown
 #. Go to :guilabel:`DeepL Settings` and set up your `Target Language (ISO Code)`
-#. Save
+    .. figure:: /Images/Administration/site-config-selected-target.png
+        :alt: Selected target now set to German
 
 .. note::
-    Although the dropdown can also be set in the standard language, it makes no sense
-    to define a target language for the source language.
+    Although the drop-down list can also be set in the default language, there is
+    no point in defining a target language for the source language.
 
 Configure tables
 ----------------
