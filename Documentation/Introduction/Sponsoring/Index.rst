@@ -3,8 +3,8 @@
 
 Sponsors
 ========
-We appreciate very much the sponsorships of the developments and features for
-the DeepL Translate Extension for TYPO3.
+We very much appreciate the sponsorship of the development and features of the
+DeepL Translate Extension for TYPO3.
 
 DeepL Glossary feature sponsored by
 -----------------------------------
