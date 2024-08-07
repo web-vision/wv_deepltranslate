@@ -3,8 +3,9 @@
 #
 # web-vision/wv_deepltranslate test runner based on docker/podman.
 #
-
-trap 'cleanUp;exit 2' SIGINT
+if [ "${CI}" != "true" ]; then
+    trap 'echo "runTests.sh SIGINT signal emitted";cleanUp;exit 2' SIGINT
+fi
 
 waitFor() {
     local HOST=${1}
@@ -62,7 +63,7 @@ handleDbmsOptions() {
                 exit 1
             fi
             [ -z "${DBMS_VERSION}" ] && DBMS_VERSION="8.0"
-            if ! [[ ${DBMS_VERSION} =~ ^(5.5|5.6|5.7|8.0)$ ]]; then
+            if ! [[ ${DBMS_VERSION} =~ ^(5.5|5.6|5.7|8.0|8.1|8.2|8.3|8.4)$ ]]; then
                 echo "Invalid combination -d ${DBMS} -i ${DBMS_VERSION}" >&2
                 echo >&2
                 echo "Use \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
@@ -204,6 +205,10 @@ Options:
             - 5.6   unmaintained since 2021-02
             - 5.7   maintained until 2023-10
             - 8.0   maintained until 2026-04 (default)
+            - 8.1   unmaintained since 2023-10
+            - 8.2   unmaintained since 2024-01
+            - 8.3   maintained until 2024-04
+            - 8.4   maintained until 2032-04 LTS
         With "-d postgres":
             - 10    unmaintained since 2022-11-10 (default)
             - 11    maintained until 2023-11-09
@@ -219,13 +224,14 @@ Options:
             - 11: (default) use TYPO3 v11
             - 12: use TYPO3 v12
 
-    -p <7.4|8.0|8.1|8.2|8.3>
+    -p <7.4|8.0|8.1|8.2|8.3|8.4>
         Specifies the PHP minor version to be used
             - 7.4: (default) use PHP 7.4
             - 8.0: use PHP 8.0
             - 8.1: use PHP 8.1
             - 8.2: use PHP 8.2
             - 8.3: use PHP 8.3
+            - 8.4: use PHP 8.4
 
     -x
         Only with -s functional|functionalDeprecated|unit|unitDeprecated|unitRandom|acceptance|acceptanceInstall
@@ -332,7 +338,7 @@ while getopts "a:b:s:d:i:p:t:xy:o:nhu" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.4|8.0|8.1|8.2|8.3)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(7.4|8.0|8.1|8.2|8.3|8.4)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;
@@ -385,6 +391,7 @@ fi
 handleDbmsOptions
 
 COMPOSER_ROOT_VERSION="4.1.x-dev"
+CONTAINER_INTERACTIVE="-it --init"
 HOST_UID=$(id -u)
 USERSET=""
 if [ $(uname) != "Darwin" ]; then
@@ -402,10 +409,6 @@ ROOT_DIR="${PWD}"
 mkdir -p .Build/.cache
 mkdir -p .Build/Web/typo3temp/var/tests
 
-IMAGE_PREFIX="docker.io/"
-# Non-CI fetches TYPO3 images (php and nodejs) from ghcr.io
-TYPO3_IMAGE_PREFIX="ghcr.io/typo3/"
-CONTAINER_INTERACTIVE="-it --init"
 
 IS_CORE_CI=0
 # ENV var "CI" is set by gitlab-ci. We use it here to distinct 'local' and 'CI' environment.
@@ -424,14 +427,14 @@ if [[ -z "${CONTAINER_BIN}" ]]; then
     fi
 fi
 
-IMAGE_PHP="${TYPO3_IMAGE_PREFIX}core-testing-$(echo "php${PHP_VERSION}" | sed -e 's/\.//'):latest"
-IMAGE_ALPINE="${IMAGE_PREFIX}alpine:3.8"
+IMAGE_PHP="ghcr.io/typo3/core-testing-$(echo "php${PHP_VERSION}" | sed -e 's/\.//'):latest"
+IMAGE_ALPINE="docker.io/alpine:3.8"
 IMAGE_DOCS="ghcr.io/typo3-documentation/render-guides:latest"
-IMAGE_SELENIUM="${IMAGE_PREFIX}selenium/standalone-chrome:4.0.0-20211102"
-IMAGE_MARIADB="${IMAGE_PREFIX}mariadb:${DBMS_VERSION}"
-IMAGE_MYSQL="${IMAGE_PREFIX}mysql:${DBMS_VERSION}"
-IMAGE_POSTGRES="${IMAGE_PREFIX}postgres:${DBMS_VERSION}-alpine"
-IMAGE_DEEPL="${IMAGE_PREFIX}sbuerk/sbuerk-testing-deeplapimockserver:latest"
+IMAGE_SELENIUM="docker.io/selenium/standalone-chrome:4.0.0-20211102"
+IMAGE_MARIADB="docker.io/mariadb:${DBMS_VERSION}"
+IMAGE_MYSQL="docker.io/mysql:${DBMS_VERSION}"
+IMAGE_POSTGRES="docker.io/postgres:${DBMS_VERSION}-alpine"
+IMAGE_DEEPL="docker.io/sbuerk/sbuerk-testing-deeplapimockserver:latest"
 
 
 # Detect arm64 and use a seleniarm image.
@@ -439,9 +442,9 @@ IMAGE_DEEPL="${IMAGE_PREFIX}sbuerk/sbuerk-testing-deeplapimockserver:latest"
 # So for the time being we have to use seleniarm image.
 ARCH=$(uname -m)
 if [ ${ARCH} = "arm64" ]; then
-    IMAGE_SELENIUM="${IMAGE_PREFIX}seleniarm/standalone-chromium:4.1.2-20220227"
-    echo "Architecture" ${ARCH} "requires" ${IMAGE_SELENIUM} "to run acceptance tests."
+    IMAGE_SELENIUM="docker.io/seleniarm/standalone-chromium:4.1.2-20220227"
 fi
+echo "Architecture" ${ARCH} "requires" ${IMAGE_SELENIUM} "to run acceptance tests."
 
 # Set $1 to first mass argument, this is the optional test file or test directory to execute
 shift $((OPTIND - 1))
@@ -620,12 +623,12 @@ case ${TEST_SUITE} in
         ;;
     update)
         # pull typo3/core-testing-* versions of those ones that exist locally
-        echo "> pull ${TYPO3_IMAGE_PREFIX}core-testing-* versions of those ones that exist locally"
-        ${CONTAINER_BIN} images "${TYPO3_IMAGE_PREFIX}core-testing-*" --format "{{.Repository}}:{{.Tag}}" | xargs -I {} ${CONTAINER_BIN} pull {}
+        echo "> pull ghcr.io/typo3/core-testing-* versions of those ones that exist locally"
+        ${CONTAINER_BIN} images "ghcr.io/typo3/core-testing-*" --format "{{.Repository}}:{{.Tag}}" | xargs -I {} ${CONTAINER_BIN} pull {}
         echo ""
         # remove "dangling" typo3/core-testing-* images (those tagged as <none>)
-        echo "> remove \"dangling\" ${TYPO3_IMAGE_PREFIX}/core-testing-* images (those tagged as <none>)"
-        ${CONTAINER_BIN} images --filter "reference=${TYPO3_IMAGE_PREFIX}/core-testing-*" --filter "dangling=true" --format "{{.ID}}" | xargs -I {} ${CONTAINER_BIN} rmi -f {}
+        echo "> remove \"dangling\" ghcr.io/typo3/core-testing-* images (those tagged as <none>)"
+        ${CONTAINER_BIN} images --filter "reference=ghcr.io/typo3/core-testing-*" --filter "dangling=true" --format "{{.ID}}" | xargs -I {} ${CONTAINER_BIN} rmi -f {}
         echo ""
         ;;
     *)
@@ -644,6 +647,7 @@ echo "" >&2
 echo "###########################################################################" >&2
 echo "Result of ${TEST_SUITE}" >&2
 echo "Container runtime: ${CONTAINER_BIN}" >&2
+echo "Container suffix: ${SUFFIX}"
 if [[ ${IS_CORE_CI} -eq 1 ]]; then
     echo "Environment: CI" >&2
 else
