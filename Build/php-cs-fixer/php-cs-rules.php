@@ -59,6 +59,10 @@ return (new PhpCsFixer\Config())
         'phpdoc_trim' => true,
         'no_superfluous_elseif' => true,
         'no_useless_else' => true,
+        'nullable_type_declaration' => [
+            'syntax' => 'question_mark',
+        ],
+        'nullable_type_declaration_for_default_null_value' => true,
         'phpdoc_types' => true,
         'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
         'return_type_declaration' => ['space_before' => 'none'],
