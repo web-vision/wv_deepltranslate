@@ -5,11 +5,10 @@
 Auto-translate-prefix
 =====================
 
-To enable tagging for Automatically Translated Pages and Content
-the page activation of translated pages was extended in order to implement a control
-possibility to implement.
+To enable the tagging of automatically translated pages and content, the page
+activation of translated pages has been extended to provide a means of control.
 
-This information is passed in the Page Context Fluid template and can be used there to enable a page specific appearance.
+This information is passed to the Page Context Fluid template, where it can be used to create a page-specific look.
 
 ..  figure:: /Images/Editor/AutoTranslatePrefix/page-translation-prefix.png
     :alt: Page Frontend
@@ -18,7 +17,7 @@ This information is passed in the Page Context Fluid template and can be used th
 ----
 
 
-To make this easy can also be used in the extension Partial.
+To make this easier, you can also use the extension partial.
 
 ..  code-block:: html
 

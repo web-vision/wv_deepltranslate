@@ -2,11 +2,25 @@
 
 ..  _updates:
 
+=======
 Updates
 =======
 
+Version 3.x > 4.x
+=================
+
+If you are upgrading from 3.x on TYPO3 11 LTS to 12 LTS and you have used the site
+config setup for translations, you can simply update.
+
+Upgrade with Core Upgrade
+-------------------------
+
+If you are upgrading from a TYPO3 version below v11, you need to define the target
+languages in the site configuration. See :ref:`sitesetup<Site Setup section>`
+in this documentation.
+
 Version 2.x > 3.x
------------------
+=================
 
 ..  note:: This Upgrade is only needed, if you are using glossary functionality.
 

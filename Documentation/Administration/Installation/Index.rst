@@ -5,8 +5,8 @@
 Installation
 ============
 
-The extension needs to be installed as any other extension of TYPO3 CMS. Get the
-extension by one of the following methods:
+The extension has to be installed like any other TYPO3 CMS extension.
+You can download the extension using one of the following methods:
 
 #.  **Use composer**:
     Run
@@ -28,7 +28,7 @@ extension by one of the following methods:
 
 and :ref:`configure <extensionConfiguration>` it.
 
-Inside your own site configuration follow the instructions for
+Within your own site configuration follow the instructions for
 :ref:`table configuration <tableConfiguration>`.
 
 ..  _TER: https://extensions.typo3.org/extension/wv_deepltranslate
