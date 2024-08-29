@@ -22,10 +22,6 @@ class ClientTest extends UnitTestCase
             ->method('getApiKey')
             ->willReturn('');
 
-        $mockConfiguration
-            ->method('getFormality')
-            ->willReturn('default');
-
         return $mockConfiguration;
     }
 

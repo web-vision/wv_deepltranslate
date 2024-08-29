@@ -13,9 +13,4 @@ namespace WebVision\WvDeepltranslate;
 interface ConfigurationInterface
 {
     public function getApiKey(): string;
-
-    /**
-     * @internal Move the `Formality` configuration to the SiteConfiguration, remove extension usage and deprecate property.
-     */
-    public function getFormality(): string;
 }

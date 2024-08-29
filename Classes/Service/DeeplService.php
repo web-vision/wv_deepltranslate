@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Service;
 
 use DeepL\Language;
-use DeepL\TextResult;
-use Doctrine\DBAL\Driver\Exception;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use WebVision\WvDeepltranslate\ClientInterface;
+use WebVision\WvDeepltranslate\Domain\Dto\TranslateContext;
 use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
@@ -37,68 +35,138 @@ final class DeeplService implements LoggerAwareInterface
     }
 
     /**
-     * Deepl Api Call for retrieving translation.
+     * DeepL Api Call and format text to use in TYPO3
+     * This function does not support formality languages please use DeeplService::translateContent()
      *
-     * @return TextResult|TextResult[]|null
-     * @throws Exception
-     * @throws SiteNotFoundException
-     * @throws \Doctrine\DBAL\Exception
+     * @deprecated Please use this function @see DeeplService::translateContent()
      */
     public function translateRequest(
         string $content,
         string $targetLanguage,
         string $sourceLanguage
-    ) {
-        $glossaryId = '';
+    ): string {
+        $translateContext = new TranslateContext($content);
+        $translateContext->setSourceLanguageCode($sourceLanguage);
+        $translateContext->setTargetLanguageCode($targetLanguage);
+
+        return $this->translateContent($translateContext);
+    }
+
+    /**
+     * Deepl Api Call and formart text to use in TYPO3
+     */
+    public function translateContent(TranslateContext $translateContext): string
+    {
         // If the source language is set to Autodetect, no glossary can be detected.
-        if ($sourceLanguage === 'auto') {
-            $sourceLanguage = null;
-        } else {
+        if ($translateContext->getSourceLanguageCode() !== null) {
             // @todo Make glossary findable by current site.
             $glossary = $this->glossaryRepository->getGlossaryBySourceAndTarget(
-                $sourceLanguage,
-                $targetLanguage,
+                $translateContext->getSourceLanguageCode(),
+                $translateContext->getTargetLanguageCode(),
                 DeeplBackendUtility::detectCurrentPage()
             );
-            if ($glossary['glossary_id'] !== '') {
-                $glossaryId = $glossary['glossary_id'];
-            }
+
+            $translateContext->setGlossaryId($glossary['glossary_id']);
         }
 
-        $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossaryId);
+        try {
+            $response = $this->client->translate(
+                $translateContext->getContent(),
+                $translateContext->getSourceLanguageCode(),
+                $translateContext->getTargetLanguageCode(),
+                $translateContext->getGlossaryId(),
+                $translateContext->getFormality()
+            );
+        } catch (ApiKeyNotSetException $exception) {
+            // @todo Add proper error logging here.
+            return $translateContext->getContent();
+        }
 
         if ($response === null) {
             // @todo Can be replaced with `$this->logger?->` when TYPO3 v11 and therefore PHP 7.4/8.0 support is dropped.
             if ($this->logger !== null) {
                 $this->logger->warning('Translation not successful');
             }
+
+            return '';
         }
 
-        return $response;
+        if (is_array($response)) {
+            $content = '';
+            foreach ($response as $result) {
+                $content .= $result->text;
+            }
+        } else {
+            $content = $response->text;
+        }
+
+        return htmlspecialchars_decode($content, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
     }
 
-    public function detectTargetLanguage(string $language): ?Language
+    /**
+     * ToDo: Maybe rename the function to "findSupportedTargetLanguage".
+     */
+    public function detectTargetLanguage(string $languageCode): ?Language
     {
-        /** @var Language $targetLanguage */
-        foreach ($this->getSupportLanguage()['target'] as $targetLanguage) {
-            if ($targetLanguage->code === $language) {
-                return $targetLanguage;
+        return $this->findSupportedLanguages(
+            $this->getSupportLanguage()['target'],
+            $languageCode
+        );
+    }
+
+    public function isTargetLanguageSupported(string $languageCode): bool
+    {
+        $supportedTargetLanguage = $this->getSupportLanguage()['target'];
+        $language = $this->findSupportedLanguages($supportedTargetLanguage, $languageCode);
+        return $language !== null;
+    }
+
+    /**
+     * ToDo: Maybe rename the function to "findSupportedSourceLanguage".
+     */
+    public function detectSourceLanguage(string $languageCode): ?Language
+    {
+        return $this->findSupportedLanguages(
+            $this->getSupportLanguage()['source'],
+            $languageCode
+        );
+    }
+
+    public function isSourceLanguageSupported(string $languageCode): bool
+    {
+        $supportedTargetLanguage = $this->getSupportLanguage()['source'];
+        $language = $this->findSupportedLanguages($supportedTargetLanguage, $languageCode);
+        return $language !== null;
+    }
+
+    /**
+     * @param Language[] $langauges
+     *
+     * @return Language|null
+     */
+    private function findSupportedLanguages(array $langauges, string $languageCode): ?Language
+    {
+        foreach ($langauges as $supportedLanguage) {
+            if ($supportedLanguage->code === $languageCode) {
+                return $supportedLanguage;
             }
         }
 
         return null;
     }
 
-    public function detectSourceLanguage(string $language): ?Language
+    public function hasLanguageFormalitySupport(string $languageCode): bool
     {
-        /** @var Language $sourceLanguage */
-        foreach ($this->getSupportLanguage()['source'] as $sourceLanguage) {
-            if ($sourceLanguage->code === $language) {
-                return $sourceLanguage;
+        $languages = array_filter(
+            $this->getSupportLanguage()['target'],
+            function (Language $targetLanguage) use ($languageCode) {
+                return $targetLanguage->code === $languageCode;
             }
-        }
+        );
+        /** @var Language $language */
+        $language = array_shift($languages);
 
-        return null;
+        return $language->supportsFormality !== null ? $language->supportsFormality : false;
     }
 
     /**

@@ -73,14 +73,36 @@
 				<source>Translated with DeepL</source>
 			</trans-unit>
 
+			<!-- SiteConfiguration labels -->
 			<trans-unit id="site_configuration.deepl.title">
 				<source>DeepL Settings</source>
 			</trans-unit>
-			<trans-unit id="site_configuration.deepl.field.label">
+			<trans-unit id="site_configuration.deepl.field.targetlanguage.label">
 				<source>Target Language (ISO Code)</source>
 			</trans-unit>
-			<trans-unit id="site_configuration.deepl.field.description">
-				<source>Select which target languages to use for DeepL when translating a record into the language</source>
+			<trans-unit id="site_configuration.deepl.field.targetlanguage.description">
+				<source>Select which target language to use for DeepL when translating a record into that language.</source>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.label">
+				<source>Formality</source>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.description">
+				<source></source>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.default">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.more">
+				<source>More formal language</source>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.less">
+				<source>More informal language</source>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.prefer_more">
+				<source>Prefer more language, fallback default</source>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.prefer_less">
+				<source>Prefer informal language, fallback default</source>
 			</trans-unit>
 
 			<trans-unit id="glossary.title.count">

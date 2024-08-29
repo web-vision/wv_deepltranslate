@@ -14,8 +14,6 @@ final class Configuration implements ConfigurationInterface, SingletonInterface
 {
     private string $apiKey = '';
 
-    private string $formality = '';
-
     /**
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
@@ -25,21 +23,10 @@ final class Configuration implements ConfigurationInterface, SingletonInterface
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('wv_deepltranslate');
 
         $this->apiKey = (string)($extensionConfiguration['apiKey'] ?? '');
-
-        // In a future version, "Formality" should be moved to the SiteConfig
-        $this->formality = (string)($extensionConfiguration['deeplFormality'] ?? 'default');
     }
 
     public function getApiKey(): string
     {
         return $this->apiKey;
-    }
-
-    /**
-     * @deprecated In a future version, "Formality" should be moved to the SiteConfig
-     */
-    public function getFormality(): string
-    {
-        return $this->formality;
     }
 }

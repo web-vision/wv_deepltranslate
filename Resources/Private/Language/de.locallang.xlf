@@ -84,6 +84,48 @@
 				<target>Übersetzt mit DeepL</target>
 			</trans-unit>
 
+			<!-- SiteConfiguration labels -->
+			<trans-unit id="site_configuration.deepl.title">
+				<source>DeepL Settings</source>
+				<target>DeepL Einstellungen</target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.targetlanguage.label">
+				<source>Target Language (ISO Code)</source>
+				<target>Zielsprache</target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.targetlanguage.description">
+				<source>Select which target language to use for DeepL when translating a record into that language.</source>
+				<target>Wählen Sie, welche Zielsprache für DeepL verwendet werden soll, wenn Sie einen Datensatz in die Sprache übersetzen.</target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.label">
+				<source>Formality</source>
+				<target>Förmlichkeit</target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.description">
+				<source></source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.default">
+				<source>Default</source>
+				<target>Default</target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.more">
+				<source>More formal language</source>
+				<target>Formalere Sprache</target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.less">
+				<source>More informal language</source>
+				<target>Mehr informelle Sprache</target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.prefer_more">
+				<source>Prefer more formal language, fallback default</source>
+				<target>Förmlichere Sprache bevorzugen, Fallback-Standard</target>
+			</trans-unit>
+			<trans-unit id="site_configuration.deepl.field.formality.items.prefer_less">
+				<source>Prefer informal language, fallback default</source>
+				<target>Informelle Sprache bevorzugen, Fallback-Standard</target>
+			</trans-unit>
+
 			<trans-unit id="glossary.title.count">
 				<source>entries</source>
 				<target>Einträge</target>

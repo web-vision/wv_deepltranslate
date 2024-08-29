@@ -33,6 +33,8 @@ abstract class AbstractClient implements ClientInterface
 
     /**
      * Wrapper function to handel ApiKey exception
+     *
+     * @throws ApiKeyNotSetException
      */
     protected function getTranslator(): Translator
     {

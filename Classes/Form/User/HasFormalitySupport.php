@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+namespace WebVision\WvDeepltranslate\Form\User;
+
+use TYPO3\CMS\Backend\Form\FormDataProvider\EvaluateDisplayConditions;
+use WebVision\WvDeepltranslate\Service\DeeplService;
+
+class HasFormalitySupport
+{
+    private DeeplService $deeplService;
+
+    public function __construct(
+        DeeplService $deeplService
+    ) {
+        $this->deeplService = $deeplService;
+    }
+
+    /**
+     * @param array{record?: array{deeplTargetLanguage?: array<int, string>|string|null}} $params
+
+     * @return bool
+     */
+    public function checkFormalitySupport(array $params, EvaluateDisplayConditions $conditions): bool
+    {
+        if (!isset($params['record'])) {
+            return false;
+        }
+
+        $record = $params['record'];
+        if (!isset($record['deeplTargetLanguage'])) {
+            return false;
+        }
+
+        if (is_array($record['deeplTargetLanguage'])) {
+            $deeplTargetLanguage = array_pop($record['deeplTargetLanguage']);
+        } else {
+            $deeplTargetLanguage = $record['deeplTargetLanguage'];
+        }
+
+        if ($deeplTargetLanguage === null) {
+            return false;
+        }
+
+        return $this->deeplService->hasLanguageFormalitySupport($deeplTargetLanguage);
+    }
+}

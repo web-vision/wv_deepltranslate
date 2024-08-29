@@ -10,6 +10,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
 use WebVision\WvDeepltranslate\Service\LanguageService;
@@ -101,10 +102,14 @@ final class TranslateHookTest extends AbstractDeepLTestCase
         $expectedTranslation = 'Protonenstrahl';
 
         /** @var TranslateHook $translateHook */
-        $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
+        $translateHook = $this->get(TranslateHook::class);
         $languageService = $this->get(LanguageService::class);
-        $siteConfig = $languageService->getCurrentSite('pages', 1);
-        $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
+
+        /** @var SiteFinder $siteFinder */
+        $siteFinder = $this->get(SiteFinder::class);
+        $siteConfig = $siteFinder->getSiteByPageId(1);
+
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig);
         $content = $translateHook->translateContent(
             $translateContent,
             $sourceLanguageRecord['language_isocode'],
@@ -125,18 +130,20 @@ final class TranslateHookTest extends AbstractDeepLTestCase
             ->withAttribute('normalizedParams', NormalizedParams::createFromServerParams($serverParams));
 
         /** @var TranslateHook $translateHook */
-        $translateHook = GeneralUtility::makeInstance(TranslateHook::class);
+        $translateHook = $this->get(TranslateHook::class);
+        $languageService = $this->get(LanguageService::class);
+        /** @var SiteFinder $siteFinder */
+        $siteFinder = $this->get(SiteFinder::class);
+        $siteConfig = $siteFinder->getSiteByPageId(1);
 
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
-        $siteConfig = $languageService->getCurrentSite('pages', 1);
-        $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig['site']);
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteConfig);
         $content = $translateHook->translateContent(
             'Hello I would like to be translated',
             $sourceLanguageRecord['language_isocode'],
             'BS'
         );
 
-        static::assertSame('Hello I would like to be translated', $content);
+        static::assertSame('', $content);
     }
 
     /**
