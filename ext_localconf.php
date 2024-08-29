@@ -15,7 +15,9 @@ defined('TYPO3') or die();
     }
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['wvDeepltranslate_updateGlossary']
-    = \WebVision\WvDeepltranslate\Upgrades\GlossaryUpgradeWizard::class;
+        = \WebVision\WvDeepltranslate\Upgrades\GlossaryUpgradeWizard::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['wvDeepltranslate_formalityUpgrade']
+        = \WebVision\WvDeepltranslate\Upgrades\FormalityUpgradeWizard::class;
 
     //allowLanguageSynchronizationHook manipulates l10n_state
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 
-use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\LanguageService;
@@ -109,57 +109,15 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
     /**
      * @test
      */
-    public function getCurrentSiteWithValidInformation(): void
-    {
-        $languageService = $this->get(LanguageService::class);
-        $siteInformation = $languageService->getCurrentSite('pages', 1);
-
-        static::assertIsArray($siteInformation);
-        static::assertArrayHasKey('site', $siteInformation);
-        static::assertArrayHasKey('pageUid', $siteInformation);
-
-        static::assertInstanceOf(Site::class, $siteInformation['site']);
-        static::assertIsInt($siteInformation['pageUid']);
-        static::assertSame(1, $siteInformation['pageUid']);
-    }
-
-    /**
-     * @test
-     */
-    public function getCurrentSiteHasNoSite(): void
-    {
-        $languageService = $this->get(LanguageService::class);
-        $siteInformation = $languageService->getCurrentSite('pages', 2);
-
-        static::assertNull($siteInformation);
-    }
-
-    /**
-     * @test
-     */
-    public function getCurrentSiteByUsedContentId(): void
-    {
-        $languageService = $this->get(LanguageService::class);
-        $siteInformation = $languageService->getCurrentSite('tt_content', 3);
-
-        static::assertIsArray($siteInformation);
-        static::assertArrayHasKey('site', $siteInformation);
-        static::assertArrayHasKey('pageUid', $siteInformation);
-
-        static::assertInstanceOf(Site::class, $siteInformation['site']);
-        static::assertIsInt($siteInformation['pageUid']);
-        static::assertSame(1, $siteInformation['pageUid']);
-    }
-
-    /**
-     * @test
-     */
     public function getSourceLanguageInformationIsValid(): void
     {
+        /** @var LanguageService $languageService */
         $languageService = $this->get(LanguageService::class);
-        $siteInformation = $languageService->getCurrentSite('pages', 1);
+        /** @var SiteFinder $siteFinder */
+        $siteFinder = $this->get(SiteFinder::class);
+        $siteInformation = $siteFinder->getSiteByPageId(1);
 
-        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site']);
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation);
 
         static::assertArrayHasKey('uid', $sourceLanguageRecord);
         static::assertArrayHasKey('title', $sourceLanguageRecord);
@@ -174,9 +132,13 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
      */
     public function setAutoDetectOptionForSourceLanguageNotSupported(): void
     {
+        /** @var LanguageService $languageService */
         $languageService = $this->get(LanguageService::class);
-        $siteInformation = $languageService->getCurrentSite('pages', 3);
-        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation['site']);
+        /** @var SiteFinder $siteFinder */
+        $siteFinder = $this->get(SiteFinder::class);
+        $siteInformation = $siteFinder->getSiteByPageId(3);
+
+        $sourceLanguageRecord = $languageService->getSourceLanguage($siteInformation);
 
         static::assertContains('auto', $sourceLanguageRecord);
     }
@@ -186,10 +148,13 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
      */
     public function getTargetLanguageInformationIsValid(): void
     {
+        /** @var LanguageService $languageService */
         $languageService = $this->get(LanguageService::class);
-        $siteInformation = $languageService->getCurrentSite('pages', 1);
+        /** @var SiteFinder $siteFinder */
+        $siteFinder = $this->get(SiteFinder::class);
+        $siteInformation = $siteFinder->getSiteByPageId(1);
 
-        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation['site'], 2);
+        $sourceLanguageRecord = $languageService->getTargetLanguage($siteInformation, 2);
 
         static::assertArrayHasKey('uid', $sourceLanguageRecord);
         static::assertArrayHasKey('title', $sourceLanguageRecord);
@@ -204,12 +169,15 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
      */
     public function getTargetLanguageExceptionWhenLanguageNotExist(): void
     {
+        /** @var LanguageService $languageService */
         $languageService = $this->get(LanguageService::class);
-        $siteInformation = $languageService->getCurrentSite('pages', 1);
+        /** @var SiteFinder $siteFinder */
+        $siteFinder = $this->get(SiteFinder::class);
+        $siteInformation = $siteFinder->getSiteByPageId(1);
 
         static::expectException(LanguageRecordNotFoundException::class);
         static::expectExceptionMessage('Language "1" not found in SiteConfig "Home"');
-        $languageService->getTargetLanguage($siteInformation['site'], 1);
+        $languageService->getTargetLanguage($siteInformation, 1);
     }
 
     /**
@@ -217,11 +185,14 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
      */
     public function getTargetLanguageExceptionWhenLanguageIsoNotSupported(): void
     {
+        /** @var LanguageService $languageService */
         $languageService = $this->get(LanguageService::class);
-        $siteInformation = $languageService->getCurrentSite('pages', 1);
+        /** @var SiteFinder $siteFinder */
+        $siteFinder = $this->get(SiteFinder::class);
+        $siteInformation = $siteFinder->getSiteByPageId(1);
 
         static::expectException(LanguageIsoCodeNotFoundException::class);
         static::expectExceptionMessage('No API supported target found for language "Bosnian" in site "Home"');
-        $languageService->getTargetLanguage($siteInformation['site'], 4);
+        $languageService->getTargetLanguage($siteInformation, 4);
     }
 }

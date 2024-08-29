@@ -12,6 +12,7 @@ use DeepL\Language;
 use DeepL\TextResult;
 use DeepL\TranslateTextOptions;
 use DeepL\Usage;
+use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 
 /**
  * @internal No public usage
@@ -20,15 +21,18 @@ final class Client extends AbstractClient
 {
     /**
      * @return TextResult|TextResult[]|null
+     *
+     * @throws ApiKeyNotSetException
      */
     public function translate(
         string $content,
         ?string $sourceLang,
         string $targetLang,
-        string $glossary = ''
+        string $glossary = '',
+        string $formality = ''
     ) {
         $options = [
-            TranslateTextOptions::FORMALITY => $this->configuration->getFormality(),
+            TranslateTextOptions::FORMALITY => $formality ?: 'default',
             TranslateTextOptions::TAG_HANDLING => 'xml',
         ];
 
@@ -56,6 +60,8 @@ final class Client extends AbstractClient
 
     /**
      * @return Language[]
+     *
+     * @throws ApiKeyNotSetException
      */
     public function getSupportedLanguageByType(string $type = 'target'): array
     {
@@ -76,6 +82,8 @@ final class Client extends AbstractClient
 
     /**
      * @return GlossaryLanguagePair[]
+     *
+     * @throws ApiKeyNotSetException
      */
     public function getGlossaryLanguagePairs(): array
     {
@@ -94,6 +102,8 @@ final class Client extends AbstractClient
 
     /**
      * @return GlossaryInfo[]
+     *
+     * @throws ApiKeyNotSetException
      */
     public function getAllGlossaries(): array
     {
@@ -110,6 +120,9 @@ final class Client extends AbstractClient
         return [];
     }
 
+    /**
+     * @throws ApiKeyNotSetException
+     */
     public function getGlossary(string $glossaryId): ?GlossaryInfo
     {
         try {
@@ -127,6 +140,8 @@ final class Client extends AbstractClient
 
     /**
      * @param array<int, array{source: string, target: string}> $entries
+     *
+     * @throws ApiKeyNotSetException
      */
     public function createGlossary(
         string $glossaryName,
@@ -168,6 +183,9 @@ final class Client extends AbstractClient
         }
     }
 
+    /**
+     * @throws ApiKeyNotSetException
+     */
     public function deleteGlossary(string $glossaryId): void
     {
         try {
@@ -181,6 +199,9 @@ final class Client extends AbstractClient
         }
     }
 
+    /**
+     * @throws ApiKeyNotSetException
+     */
     public function getGlossaryEntries(string $glossaryId): ?GlossaryEntries
     {
         try {
@@ -196,6 +217,9 @@ final class Client extends AbstractClient
         return null;
     }
 
+    /**
+     * @throws ApiKeyNotSetException
+     */
     public function getUsage(): ?Usage
     {
         try {

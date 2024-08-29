@@ -19,6 +19,7 @@ use WebVision\WvDeepltranslate\Controller\GlossarySyncController;
 use WebVision\WvDeepltranslate\Event\Listener\GlossarySyncButtonProvider;
 use WebVision\WvDeepltranslate\Event\Listener\UsageToolBarEventListener;
 use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
+use WebVision\WvDeepltranslate\Form\User\HasFormalitySupport;
 use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
 use WebVision\WvDeepltranslate\Hooks\UsageProcessAfterFinishHook;
@@ -119,6 +120,9 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $containerBuilder
         ->registerForAutoconfiguration(SiteConfigSupportedLanguageItemsProcFunc::class)
         ->addTag('deepl.SiteConfigSupportedLanguageItemsProcFunc');
+    $containerBuilder
+        ->registerForAutoconfiguration(HasFormalitySupport::class)
+        ->addTag('deepl.HasFormalitySupport');
 
     $containerBuilder
         ->addCompilerPass(new SingletonPass('deepl.UpdatedGlossaryEntryTermHook'));
@@ -126,6 +130,8 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->addCompilerPass(new SingletonPass('deepl.TranslateHook'));
     $containerBuilder
         ->addCompilerPass(new SingletonPass('deepl.SiteConfigSupportedLanguageItemsProcFunc'));
+    $containerBuilder
+        ->addCompilerPass(new SingletonPass('deepl.HasFormalitySupport'));
 
     // register Events
     if ($typo3version->getMajorVersion() >= 12) {

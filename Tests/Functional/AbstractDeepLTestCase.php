@@ -195,9 +195,6 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
         $mockConfiguration
             ->method('getApiKey')
             ->willReturn(self::getInstanceIdentifier());
-        $mockConfiguration
-            ->method('getFormality')
-            ->willReturn('default');
 
         $client = new Client($mockConfiguration);
         $client->setLogger(new NullLogger());

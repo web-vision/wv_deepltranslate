@@ -12,8 +12,10 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\WorkspaceRestriction;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Configuration;
@@ -216,21 +218,17 @@ class DeeplBackendUtility
 
     public static function checkCanBeTranslated(int $pageId, int $languageId): bool
     {
-        $languageService = GeneralUtility::makeInstance(LanguageService::class);
-        $site = $languageService->getCurrentSite('pages', $pageId);
-        if ($site === null) {
-            return false;
-        }
         try {
-            $languageService->getSourceLanguage($site['site']);
-        } catch (LanguageIsoCodeNotFoundException $e) {
+            /** @var LanguageService $languageService */
+            $languageService = GeneralUtility::makeInstance(LanguageService::class);
+            $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
+
+            $languageService->getSourceLanguage($site);
+            $languageService->getTargetLanguage($site, $languageId);
+        } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException|SiteNotFoundException $e) {
             return false;
         }
-        try {
-            $languageService->getTargetLanguage($site['site'], $languageId);
-        } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException $e) {
-            return false;
-        }
+
         return true;
     }
 

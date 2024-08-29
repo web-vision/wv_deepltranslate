@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Service;
 
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
-use TYPO3\CMS\Core\Site\SiteFinder;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 
@@ -37,28 +33,7 @@ final class LanguageService
     }
 
     /**
-     * @return array{site: Site, pageUid: int}|null
-     */
-    public function getCurrentSite(string $tableName, int $currentRecordId): ?array
-    {
-        if ($tableName === 'pages') {
-            $pageId = $currentRecordId;
-        } else {
-            $currentPageRecord = BackendUtility::getRecord($tableName, $currentRecordId);
-            $pageId = (int)$currentPageRecord['pid'];
-        }
-        try {
-            return [
-                'site' => GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId),
-                'pageUid' => $pageId,
-            ];
-        } catch (SiteNotFoundException $e) {
-            return null;
-        }
-    }
-
-    /**
-     * @return array{uid: int, title: string, language_isocode: string}
+     * @return array{uid: int, title: string, language_isocode: string, languageCode: string}
      */
     public function getSourceLanguage(Site $currentSite): array
     {
@@ -71,19 +46,21 @@ final class LanguageService
             'uid' => $currentSite->getDefaultLanguage()->getLanguageId(),
             'title' => $currentSite->getDefaultLanguage()->getTitle(),
             'language_isocode' => strtoupper($languageIsoCode),
+            'languageCode' => strtoupper($languageIsoCode),
         ];
 
-        if ($this->deeplService->detectSourceLanguage($sourceLanguageRecord['language_isocode']) === null) {
+        if (!$this->deeplService->isSourceLanguageSupported($sourceLanguageRecord['language_isocode'])) {
             // When sources language not supported oder not exist set auto detect for deepL API
             $sourceLanguageRecord['title'] = 'auto';
             $sourceLanguageRecord['language_isocode'] = 'auto';
+            $sourceLanguageRecord['languageCode'] = 'auto';
         }
 
         return $sourceLanguageRecord;
     }
 
     /**
-     * @return array{uid: int, title: string, language_isocode: string}
+     * @return array{uid: int, title: string, language_isocode: string, languageCode: string, formality: string}
      * @throws LanguageRecordNotFoundException
      * @throws LanguageIsoCodeNotFoundException
      */
@@ -119,15 +96,22 @@ final class LanguageService
             );
         }
         $language = reset($languages);
-        $languageIsoCode = null;
+        $languageCode = null;
 
         foreach ($this->possibleLangMatches as $possibleLangMatch) {
-            if (array_key_exists($possibleLangMatch, $language)) {
-                $languageIsoCode = $this->deeplService->detectTargetLanguage(strtoupper($language[$possibleLangMatch]));
-                break;
+            if (!array_key_exists($possibleLangMatch, $language)) {
+                continue;
             }
+
+            if (!$this->deeplService->isTargetLanguageSupported(strtoupper($language[$possibleLangMatch]))) {
+                continue;
+            }
+
+            $languageCode = strtoupper($language[$possibleLangMatch]);
+            break;
         }
-        if ($languageIsoCode === null) {
+
+        if ($languageCode === null) {
             throw new LanguageIsoCodeNotFoundException(
                 sprintf(
                     'No API supported target found for language "%s" in site "%s"',
@@ -141,7 +125,9 @@ final class LanguageService
         return [
             'uid' => $language['languageId'] ?? 0,
             'title' => $language['title'],
-            'language_isocode' => $languageIsoCode->code,
+            'language_isocode' => $languageCode,
+            'languageCode' => $languageCode,
+            'formality' => $language['deeplFormality'] ?? '',
         ];
     }
 }
