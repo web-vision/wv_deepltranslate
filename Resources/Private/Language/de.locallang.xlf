@@ -199,12 +199,24 @@
 			</trans-unit>
 
 			<trans-unit id="usages.toolbar-label">
-				<source>DeepL Translate Limit</source>
+				<source>DeepL Translate Quota</source>
 				<target>DeepL Übersetzung Limit</target>
+			</trans-unit>
+			<trans-unit id="usages.toolbar.message">
+				<source>%s / %s</source>
+				<target>%s / %s</target>
 			</trans-unit>
 			<trans-unit id="usages.toolbar-information">
 				<source>Information not available</source>
 				<target>Information nicht verfügbar</target>
+			</trans-unit>
+			<trans-unit id="usages.flashmassage.title">
+				<source>DeepL usage and quota</source>
+				<target>DeepL Nutzung und Limits</target>
+			</trans-unit>
+			<trans-unit id="usages.flashmassage.limit.description">
+				<source>DeepL translations for current billing period: %s of %s characters</source>
+				<target>DeepL Übersetzungen für den aktuellen Abrechnungszeitraum: %s von %s Zeichen</target>
 			</trans-unit>
 
 			<!-- Widget -->
@@ -213,20 +225,16 @@
 				<target>DeepL Verwendung</target>
 			</trans-unit>
 			<trans-unit id="widgets.deepltranslate.widget.useswidget.description">
-				<source></source>
-				<target></target>
+				<source>Show a DeepL usage bar</source>
+				<target>Zeige einen Fortschrittsbalken für die DeepL Nutzung</target>
 			</trans-unit>
 			<trans-unit id="widgets.deepltranslate.widget.useswidget.character">
 				<source>Character</source>
 				<target>Zeichen</target>
 			</trans-unit>
-			<trans-unit id="widgets.deepltranslate.widget.useswidget.count">
-				<source>Count</source>
-				<target>Zähler</target>
-			</trans-unit>
-			<trans-unit id="widgets.deepltranslate.widget.useswidget.limit">
-				<source>Limit</source>
-				<target>Begrenzung</target>
+			<trans-unit id="widgets.deepltranslate.widget.useswidget.message">
+				<source>DeepL translations for current billing period: %s of %s characters</source>
+				<target>DeepL Übersetzungen für aktuellen Abrechnungszeitraum: %s von %s Zeichen</target>
 			</trans-unit>
 		</body>
 	</file>
