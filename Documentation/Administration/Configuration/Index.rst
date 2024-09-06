@@ -11,14 +11,16 @@ Set up API and formality
 .. attention::
     Before using the DeepL API, you need to get an API key from your `DeepL Profile`_.
 
-Go to :guilabel:`Admin Tools > Settings > Extension Configuration`.
+Go to the :ref:`extension configuration <extensionConfiguration>`
+in :guilabel:`Admin Tools > Settings > Extension Configuration`.
 
 Open the settings for :guilabel:`wv_deepltranslate` and add your API key.
 
 .. figure:: /Images/Reference/configuration.png
     :alt: The Extension configuration settings showing two input fields for DeepL API key and default formality
 
-The extension is set up to auto-detect the corresponding DeepL API URL.
+The correct DeepL API endpoint for free or pro plans is auto-detected
+by the extension and the given API key format.
 
 .. _sitesetup:
 Set up translation language
@@ -39,8 +41,8 @@ Set up translation language
 Configure tables
 ----------------
 
-If not default set, you need to define the `l10n_mode` for the fields you want to
-have translatable by `wv_deepltranslate`.
+If not set by default, you need to define the `l10n_mode` for the fields you
+want to have translatable by `wv_deepltranslate`.
 
 See the :ref:`tableConfiguration<table configuration>` for details.
 
