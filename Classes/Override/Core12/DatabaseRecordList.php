@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Override\Core12;
 
+use WebVision\WvDeepltranslate\Access\AllowedTranslateAccess;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
 /**
@@ -23,41 +24,43 @@ class DatabaseRecordList extends \TYPO3\CMS\Backend\RecordList\DatabaseRecordLis
     {
         $out = parent::makeLocalizationPanel($table, $row, $translations);
 
-        if ($out) {
-            if (!DeeplBackendUtility::isDeeplApiKeySet()) {
-                return $out;
-            }
+        if (!DeeplBackendUtility::isDeeplApiKeySet()) {
+            return $out;
+        }
 
-            // glossaries should not be auto translated by DeepL
-            if ($table === 'tx_wvdeepltranslate_glossaryentry') {
-                return $out;
-            }
+        // glossaries should not be auto translated by DeepL
+        if ($table === 'tx_wvdeepltranslate_glossaryentry') {
+            return $out;
+        }
 
-            $pageId = (int)($table === 'pages' ? $row['uid'] : $row['pid']);
-            // All records excluding pages
-            $possibleTranslations = $this->possibleTranslations;
-            if ($table === 'pages') {
-                // Calculate possible translations for pages
-                $possibleTranslations = array_map(static fn ($siteLanguage) => $siteLanguage->getLanguageId(), $this->languagesAllowedForUser);
-                $possibleTranslations = array_filter($possibleTranslations, static fn ($languageUid) => $languageUid > 0);
-            }
-            $languageInformation = $this->translateTools->getSystemLanguages($pageId);
-            foreach ($possibleTranslations as $lUid_OnPage) {
-                if ($this->isEditable($table)
-                    && !$this->isRecordDeletePlaceholder($row)
-                    && !isset($translations[$lUid_OnPage])
-                    && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)
-                    && DeeplBackendUtility::checkCanBeTranslated($pageId, $lUid_OnPage)
-                ) {
-                    $out .= DeeplBackendUtility::buildTranslateButton(
-                        $table,
-                        $row['uid'],
-                        $lUid_OnPage,
-                        $this->listURL(),
-                        $languageInformation[$lUid_OnPage]['title'],
-                        $languageInformation[$lUid_OnPage]['flagIcon']
-                    );
-                }
+        if (!$this->getBackendUserAuthentication()->check('custom_options', AllowedTranslateAccess::ALLOWED_TRANSLATE_OPTION_VALUE)) {
+            return $out;
+        }
+
+        $pageId = (int)($table === 'pages' ? $row['uid'] : $row['pid']);
+        // All records excluding pages
+        $possibleTranslations = $this->possibleTranslations;
+        if ($table === 'pages') {
+            // Calculate possible translations for pages
+            $possibleTranslations = array_map(static fn ($siteLanguage) => $siteLanguage->getLanguageId(), $this->languagesAllowedForUser);
+            $possibleTranslations = array_filter($possibleTranslations, static fn ($languageUid) => $languageUid > 0);
+        }
+        $languageInformation = $this->translateTools->getSystemLanguages($pageId);
+        foreach ($possibleTranslations as $lUid_OnPage) {
+            if ($this->isEditable($table)
+                && !$this->isRecordDeletePlaceholder($row)
+                && !isset($translations[$lUid_OnPage])
+                && $this->getBackendUserAuthentication()->checkLanguageAccess($lUid_OnPage)
+                && DeeplBackendUtility::checkCanBeTranslated($pageId, $lUid_OnPage)
+            ) {
+                $out .= DeeplBackendUtility::buildTranslateButton(
+                    $table,
+                    $row['uid'],
+                    $lUid_OnPage,
+                    $this->listURL(),
+                    $languageInformation[$lUid_OnPage]['title'],
+                    $languageInformation[$lUid_OnPage]['flagIcon']
+                );
             }
         }
 

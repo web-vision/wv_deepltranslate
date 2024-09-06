@@ -150,48 +150,51 @@ class Localization {
                                 '</div>');
                             availableLocalizationModes.push('copyFromLanguage');
                         }
-                        actions.push(`
-            <div class="row" id="deeplTranslate">
-                <div class="col-sm-3">
-                  <label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">
-                    ${deeplIconMarkup}
-                    <input type="radio" name="mode" id="mode_deepltranslate" value="localizedeepl" style="display: none">
-                    <br>
-                    ${TYPO3.lang['localize.educate.deepltranslateHeader']}
-                  </label>
-                </div>
-                <div class="col-sm-9" id="deeplText">
-                  <div class='alert alert-danger' id='alertClose' hidden>  <a href='#'' class='close'  data-bs-dismiss='alert' aria-label='close'>&times;</a>
-                    ${TYPO3.lang['localize.educate.deeplSettingsFailure']}
-                  </div>
-                  <p class="t3js-helptext t3js-helptext-copy text-body-secondary">
-                    ${TYPO3.lang['localize.educate.deepltranslate']}
-                  </p>
-                </div>
-              </div>
-              `);
-                        availableLocalizationModes.push('copyFromLanguage');
-                        actions.push(`
-            <div class="row" id="deeplTranslateAuto">
-                <div class="col-sm-3">
-                  <label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">
-                    ${deeplIconMarkup}
-                    <input type="radio" name="mode" id="mode_deepltranslateauto" value="localizedeeplauto" style="display: none">
-                    <br>
-                    ${TYPO3.lang['localize.educate.deepltranslateHeaderAutodetect']}
-                  </label>
-                </div>
-                <div class="col-sm-9" id="deeplTextAuto" >
-                  <div class='alert alert-danger' id='alertClose' hidden>  <a href='#'' class='close'  data-bs-dismiss='alert' aria-label='close'>&times;</a>
-                    ${TYPO3.lang['localize.educate.deeplSettingsFailure']}
-                  </div>
-                  <p class="t3js-helptext t3js-helptext-copy text-body-secondary">
-                   ${TYPO3.lang['localize.educate.deepltranslateAuto']}
-                  </p>
-                </div>
-              </div>
-              `);
-                        availableLocalizationModes.push('copyFromLanguage');
+                        if ($triggerButton.data('allowDeeplTranslate')) {
+                          actions.push(`
+                            <div class="row" id="deeplTranslate">
+                                <div class="col-sm-3">
+                                  <label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">
+                                    ${deeplIconMarkup}
+                                    <input type="radio" name="mode" id="mode_deepltranslate" value="localizedeepl" style="display: none">
+                                    <br>
+                                    ${TYPO3.lang['localize.educate.deepltranslateHeader']}
+                                  </label>
+                                </div>
+                                <div class="col-sm-9" id="deeplText">
+                                  <div class='alert alert-danger' id='alertClose' hidden>  <a href='#'' class='close'  data-bs-dismiss='alert' aria-label='close'>&times;</a>
+                                    ${TYPO3.lang['localize.educate.deeplSettingsFailure']}
+                                  </div>
+                                  <p class="t3js-helptext t3js-helptext-copy text-body-secondary">
+                                    ${TYPO3.lang['localize.educate.deepltranslate']}
+                                  </p>
+                                </div>
+                              </div>
+                              `);
+                          availableLocalizationModes.push('copyFromLanguage');
+                          actions.push(`
+                          <div class="row" id="deeplTranslateAuto">
+                              <div class="col-sm-3">
+                                <label class="btn btn-default d-block t3js-localization-option" data-helptext=".t3js-helptext-copy">
+                                  ${deeplIconMarkup}
+                                  <input type="radio" name="mode" id="mode_deepltranslateauto" value="localizedeeplauto" style="display: none">
+                                  <br>
+                                  ${TYPO3.lang['localize.educate.deepltranslateHeaderAutodetect']}
+                                </label>
+                              </div>
+                              <div class="col-sm-9" id="deeplTextAuto" >
+                                <div class='alert alert-danger' id='alertClose' hidden>  <a href='#'' class='close'  data-bs-dismiss='alert' aria-label='close'>&times;</a>
+                                  ${TYPO3.lang['localize.educate.deeplSettingsFailure']}
+                                </div>
+                                <p class="t3js-helptext t3js-helptext-copy text-body-secondary">
+                                 ${TYPO3.lang['localize.educate.deepltranslateAuto']}
+                                </p>
+                              </div>
+                            </div>
+                            `);
+                          availableLocalizationModes.push('copyFromLanguage');
+
+                        }
                         if ($triggerButton.data('allowTranslate') === 0 && $triggerButton.data('allowCopy') === 0) {
                             actions.push('<div class="row">' +
                                 '<div class="col-sm-12">' +
