@@ -49,9 +49,9 @@ class UsageProcessAfterFinishHook
         $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
         $notificationQueue = $flashMessageService->getMessageQueueByIdentifier();
 
-        $severity = -1;  // Info
+        $severity = FlashMessage::INFO;
         if ($this->usageService->isTranslateLimitExceeded()) {
-            $severity = 1;  // Warning
+            $severity = FlashMessage::WARNING;
         }
 
         $flashMessage = GeneralUtility::makeInstance(

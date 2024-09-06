@@ -7,6 +7,7 @@ namespace WebVision\WvDeepltranslate\Event\Listener;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
+use TYPO3\CMS\Backend\Toolbar\Enumeration\InformationStatus;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 use WebVision\WvDeepltranslate\Service\UsageService;
@@ -52,6 +53,7 @@ class UsageToolBarEventListener implements LoggerAwareInterface
             $title,
             sprintf($message, $this->formatNumber($usage->character->count), $this->formatNumber($usage->character->limit)),
             'actions-localize-deepl',
+            InformationStatus::STATUS_NOTICE,
         );
     }
 
