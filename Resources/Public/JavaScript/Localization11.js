@@ -152,31 +152,33 @@ define('TYPO3/CMS/WvDeepltranslate/Localization11', [
           )
         }
 
-        actions.push(
-          '<div class="row" id="deeplTranslateAuto">' +
+        if ($triggerButton.data('allowDeeplTranslate')) {
+          actions.push(
+            '<div class="row" id="deeplTranslateAuto">' +
             '<div class="btn-group col-sm-3">' +
-              Localization.actions.deepltranslateAuto[0].outerHTML +
+            Localization.actions.deepltranslateAuto[0].outerHTML +
             '</div>' +
             '<div class="col-sm-9" id="deeplTextAuto">' +
-              '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
-                TYPO3.lang['localize.educate.deepltranslateAuto'] +
-              '</p>' +
+            '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
+            TYPO3.lang['localize.educate.deepltranslateAuto'] +
+            '</p>' +
             '</div>' +
-          '</div>',
-        )
+            '</div>',
+          )
 
-        actions.push(
-          '<div class="row" id="deeplTranslate">' +
+          actions.push(
+            '<div class="row" id="deeplTranslate">' +
             '<div class="btn-group col-sm-3">' +
-              Localization.actions.deepltranslate[0].outerHTML +
+            Localization.actions.deepltranslate[0].outerHTML +
             '</div>' +
             '<div class="col-sm-9" id="deeplText">' +
-              '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
-                TYPO3.lang['localize.educate.deepltranslate'] +
-              '</p>' +
+            '<p class="t3js-helptext t3js-helptext-translate text-muted">' +
+            TYPO3.lang['localize.educate.deepltranslate'] +
+            '</p>' +
             '</div>' +
-          '</div>',
-        )
+            '</div>',
+          )
+        }
       }
 
       slideStep1 +=

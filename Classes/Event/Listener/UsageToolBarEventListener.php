@@ -30,7 +30,7 @@ class UsageToolBarEventListener implements LoggerAwareInterface
             $usage = $this->usageService->getCurrentUsage();
             // @todo Decide to handle empty UsageDetail later and add systeminformation with a default
             //       (no limit retrieved) instead of simply omitting it here now.
-            if($usage === null || $usage->character === null) {
+            if ($usage === null || $usage->character === null) {
                 return;
             }
         } catch (ApiKeyNotSetException $exception) {

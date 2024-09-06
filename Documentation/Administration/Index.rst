@@ -12,5 +12,6 @@ Administration
 
     Installation/Index
     Configuration/Index
+    Access/Index
     AutoTranslatePrefix/Index
     Updates/Index
