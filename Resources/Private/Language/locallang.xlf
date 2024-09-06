@@ -180,7 +180,7 @@
 				<source>Information not available</source>
 			</trans-unit>
 			<trans-unit id="usages.flashmassage.title">
-				<source>DeepL Translate </source>
+				<source>DeepL usage and quota</source>
 			</trans-unit>
 			<trans-unit id="usages.flashmassage.limit.description">
 				<source>DeepL Translate Limit %s / %s</source>
