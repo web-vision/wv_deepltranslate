@@ -3,6 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
 use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -28,6 +29,7 @@ use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
 use WebVision\WvDeepltranslate\Service\LanguageService;
 use WebVision\WvDeepltranslate\Service\UsageService;
+use WebVision\WvDeepltranslate\Widgets\UsageWidget;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
     $typo3version = new Typo3Version();
@@ -155,4 +157,19 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
                 'event' => SystemInformationToolbarCollectorEvent::class,
             ]
         );
+
+    $services->set('widgets.deepltranslate.widget.useswidget')
+        ->class(UsageWidget::class)
+        ->arg('$view', new Reference('dashboard.views.widget'))
+        ->arg('$options', [])
+        ->tag('dashboard.widget', [
+            'identifier' => 'widgets-deepl-uses',
+            'groupNames' => 'deepl',
+            'title' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.title',
+            'description' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.description',
+            'iconIdentifier' => 'content-widget-list',
+            'height' => 'medium',
+            'width' => 'small',
+        ])
+    ;
 };
