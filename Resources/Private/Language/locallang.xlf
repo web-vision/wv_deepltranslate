@@ -183,7 +183,7 @@
 				<source>DeepL usage and quota</source>
 			</trans-unit>
 			<trans-unit id="usages.flashmassage.limit.description">
-				<source>DeepL Translate Limit %s / %s</source>
+				<source>DeepL translations for current billing period: %s of %s characters</source>
 			</trans-unit>
 
 			<!-- Translation Access | be_groups -->

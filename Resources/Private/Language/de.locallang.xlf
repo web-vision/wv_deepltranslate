@@ -206,6 +206,14 @@
 				<source>Information not available</source>
 				<target>Information nicht verfügbar</target>
 			</trans-unit>
+			<trans-unit id="usages.flashmassage.title">
+				<source>DeepL usage and quota</source>
+				<target>DeepL Nutzung und Limits</target>
+			</trans-unit>
+			<trans-unit id="usages.flashmassage.limit.description">
+				<source>DeepL translations for current billing period: %s of %s characters</source>
+				<target>DeepL Übersetzungen für den aktuellen Abrechnungszeitraum: %s von %s Zeichen</target>
+			</trans-unit>
 
 			<!-- Widget -->
 			<trans-unit id="widgets.deepltranslate.widget.useswidget.title">

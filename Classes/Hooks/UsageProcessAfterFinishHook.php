@@ -56,7 +56,7 @@ class UsageProcessAfterFinishHook
 
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
-            sprintf($message, $usage->character->count, $usage->character->limit),
+            sprintf($message, $this->formatNumber($usage->character->count), $this->formatNumber($usage->character->limit)),
             $title,
             $severity,
             true
@@ -68,5 +68,10 @@ class UsageProcessAfterFinishHook
     private function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
+    }
+
+    private function formatNumber(int $number): string
+    {
+        return number_format($number, 0, ',', '.');
     }
 }
