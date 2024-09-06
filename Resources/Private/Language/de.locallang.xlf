@@ -199,8 +199,12 @@
 			</trans-unit>
 
 			<trans-unit id="usages.toolbar-label">
-				<source>DeepL Translate Limit</source>
+				<source>DeepL Translate Quota</source>
 				<target>DeepL Übersetzung Limit</target>
+			</trans-unit>
+			<trans-unit id="usages.toolbar.message">
+				<source>%s / %s</source>
+				<target>%s / %s</target>
 			</trans-unit>
 			<trans-unit id="usages.toolbar-information">
 				<source>Information not available</source>
