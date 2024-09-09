@@ -39,22 +39,26 @@ class UsageProcessAfterFinishHook
             return;
         }
 
-        $label = $this->getLanguageService()->sL(
+        $title = $this->getLanguageService()->sL(
+            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.flashmassage.title'
+        );
+        $message = $this->getLanguageService()->sL(
             'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.flashmassage.limit.description'
         );
+
+        $severity = $this->determineSeverity($usage->character->count, $usage->character->limit);
+        // Reduce noise - Don't bother editors with low quota usage messages
+        if ($severity === FlashMessage::NOTICE) {
+            return;
+        }
 
         $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
         $notificationQueue = $flashMessageService->getMessageQueueByIdentifier();
 
-        $severity = -1;  // Info
-        if ($this->usageService->isTranslateLimitExceeded()) {
-            $severity = 1;  // Warning
-        }
-
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
-            sprintf($label, $usage->character->count, $usage->character->limit),
-            'Deepl Usage',
+            sprintf($message, $this->formatNumber($usage->character->count), $this->formatNumber($usage->character->limit)),
+            $title,
             $severity,
             true
         );
@@ -65,5 +69,38 @@ class UsageProcessAfterFinishHook
     private function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
+    }
+
+    /**
+     * Make large API limits easier to read
+     *
+     * @param int $number Any large integer - 5000000
+     * @return string Formated, better readable string variant of the integer - 5.000.000
+     */
+    private function formatNumber(int $number): string
+    {
+        return number_format($number, 0, ',', '.');
+    }
+
+    /**
+     * Calculate the message severity based on the quota usage rate
+     *
+     * @param int $characterCount Already translated characters in the current billing period
+     * @param int $characterLimit Total character limit in the current billing period
+     * @return int Severity level
+     */
+    private function determineSeverity(int $characterCount, int $characterLimit): int
+    {
+        $quotaUtilization = ($characterCount / $characterLimit) * 100;
+        if ($quotaUtilization >= 100) {
+            return FlashMessage::ERROR;
+        }
+        if ($quotaUtilization >= 98) {
+            return FlashMessage::WARNING;
+        }
+        if ($quotaUtilization >= 90) {
+            return FlashMessage::INFO;
+        }
+        return FlashMessage::NOTICE;
     }
 }

@@ -8,14 +8,23 @@
     <f:for as="item" each="{usages}" >
         <div class="mb-3">
             <h4>{item.label}</h4>
+            <f:variable name="count" value="{item.usage.count -> f:format.number(thousandsSeparator: '.', decimalSeparator: '', decimals: 0)}" />
+            <f:variable name="limit" value="{item.usage.limit -> f:format.number(thousandsSeparator: '.', decimalSeparator: '', decimals: 0)}" />
+            <f:variable name="percentage">{item.usage.count / item.usage.limit * 100}</f:variable>
+            <f:if condition="{percentage} >= 98">
+                <f:variable name="severity" value="warning" />
+            </f:if>
+            <f:if condition="{percentage} >= 100">
+                <f:variable name="severity" value="danger" />
+            </f:if>
             <p>
-                <b>{f:translate(key: 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.count')}</b>: {item.usage.count -> f:format.number(thousandsSeparator: '.', decimalSeparator: '', decimals: 0)}
-                <br>
-                <b>{f:translate(key: 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.limit')}</b>: {item.usage.limit -> f:format.number(thousandsSeparator: '.', decimalSeparator: '', decimals: 0)}
+                <f:translate
+                    key="LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.message"
+                    arguments="{0: count, 1: limit}"
+                />
             </p>
-            <f:variable name="procss">{item.usage.count / item.usage.limit * 100}</f:variable>
             <div class="progress" role="progressbar" aria-label="Usage" aria-valuenow="{procss}" aria-valuemin="0" aria-valuemax="100" style="height: 50%">
-                <div class="progress-bar" style="width: {procss}%">{item.usage.count -> f:format.number(thousandsSeparator: '.', decimalSeparator: '', decimals: 0)}</div>
+                <div class="progress-bar" style="width: {percentage}%; --bs-progress-bar-bg: var(--bs-{severity -> f:or(alternative: 'info')});">&nbsp;</div>
             </div>
         </div>
     </f:for>

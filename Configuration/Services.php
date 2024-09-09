@@ -168,7 +168,7 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
             'title' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.title',
             'description' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.description',
             'iconIdentifier' => 'content-widget-list',
-            'height' => 'medium',
+            'height' => 'small',
             'width' => 'small',
         ])
     ;
