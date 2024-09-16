@@ -107,7 +107,8 @@
 	"suggest": {
         "b13/container": "Just to be loaded after EXT:container",
 		"web-vision/enable-translated-content": "Adds enable translated content button to language columns in page view",
-		"web-vision/deepltranslate-assets": "Enables the translation of files in FileList Modal via deepl"
+		"web-vision/deepltranslate-assets": "Enables the translation of files in FileList Modal via deepl",
+		"typo3/cms-dashboard": "Install the package to enable the widgets from deepltranslate packages"
 	},
 	"autoload": {
 		"psr-4": {
