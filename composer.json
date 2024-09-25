@@ -70,7 +70,7 @@
 		"ext-curl": "*",
 		"ext-json": "*",
 		"ext-pdo": "*",
-		"deeplcom/deepl-php": "^1.6",
+		"deeplcom/deepl-php": ">=1.6.0 <=1.8.0",
 		"typo3/cms-backend": "^11.5 || ^12.4",
 		"typo3/cms-core": "^11.5 || ^12.4",
 		"typo3/cms-extbase": "^11.5 || ^12.4",
