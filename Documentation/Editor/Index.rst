@@ -2,7 +2,7 @@
 
 ..  _editor:
 
-Editors
+Editors manuel
 =======
 
 How editors work with *wv_deepltranslate* is described in the following chapters.
