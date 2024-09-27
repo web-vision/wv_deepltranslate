@@ -21,7 +21,6 @@ web_environment:
     - typo3DatabasePassword=root
     - typo3DatabaseUsername=root
 nodejs_version: "16"
-DEEPL_API_KEY: ""
 
 # Key features of DDEV's config.yaml:
 
