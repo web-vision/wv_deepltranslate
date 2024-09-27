@@ -39,22 +39,25 @@ class UsageProcessAfterFinishHook
             return;
         }
 
-        $label = $this->getLanguageService()->sL(
+        $title = $this->getLanguageService()->sL(
+            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.flashmassage.title'
+        );
+        $message = $this->getLanguageService()->sL(
             'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.flashmassage.limit.description'
         );
 
         $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
         $notificationQueue = $flashMessageService->getMessageQueueByIdentifier();
 
-        $severity = -1;  // Info
+        $severity = FlashMessage::INFO;
         if ($this->usageService->isTranslateLimitExceeded()) {
-            $severity = 1;  // Warning
+            $severity = FlashMessage::WARNING;
         }
 
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
-            sprintf($label, $usage->character->count, $usage->character->limit),
-            'Deepl Usage',
+            sprintf($message, $this->formatNumber($usage->character->count), $this->formatNumber($usage->character->limit)),
+            $title,
             $severity,
             true
         );
@@ -65,5 +68,10 @@ class UsageProcessAfterFinishHook
     private function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
+    }
+
+    private function formatNumber(int $number): string
+    {
+        return number_format($number, 0, ',', '.');
     }
 }
