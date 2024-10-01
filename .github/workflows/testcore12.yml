@@ -12,6 +12,33 @@ jobs:
       fail-fast: false
       matrix:
         php-version: [ '8.1']
+    permissions:
+      # actions: read|write|none
+      actions: none
+      # checks: read|write|none
+      checks: none
+      # contents: read|write|none
+      contents: read
+      # deployments: read|write|none
+      deployments: none
+      # id-token: read|write|none
+      id-token: none
+      # issues: read|write|none
+      issues: none
+      # discussions: read|write|none
+      discussions: none
+      # packages: read|write|none
+      packages: read
+      # pages: read|write|none
+      pages: none
+      # pull-requests: read|write|none
+      pull-requests: none
+      # repository-projects: read|write|none
+      repository-projects: read
+      # security-events: read|write|none
+      security-events: none
+      # statuses: read|write|none
+      statuses: none
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -51,6 +78,33 @@ jobs:
       fail-fast: false
       matrix:
         php-version: [ '8.1', '8.2', '8.3' ]
+    permissions:
+      # actions: read|write|none
+      actions: none
+      # checks: read|write|none
+      checks: none
+      # contents: read|write|none
+      contents: read
+      # deployments: read|write|none
+      deployments: none
+      # id-token: read|write|none
+      id-token: none
+      # issues: read|write|none
+      issues: none
+      # discussions: read|write|none
+      discussions: none
+      # packages: read|write|none
+      packages: read
+      # pages: read|write|none
+      pages: none
+      # pull-requests: read|write|none
+      pull-requests: none
+      # repository-projects: read|write|none
+      repository-projects: read
+      # security-events: read|write|none
+      security-events: none
+      # statuses: read|write|none
+      statuses: none
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
