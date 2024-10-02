@@ -1,5 +1,5 @@
 [![Latest Stable Version](https://poser.pugx.org/web-vision/wv_deepltranslate/v/stable.svg?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
-[![License](http://poser.pugx.org/web-vision/wv_deepltranslate/license?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
+[![License](https://poser.pugx.org/web-vision/wv_deepltranslate/license?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 [![TYPO3 11.5](https://img.shields.io/badge/TYPO3-11.5-green.svg?style=for-the-badge)](https://get.typo3.org/version/11)
 [![TYPO3 12.4](https://img.shields.io/badge/TYPO3-12.4-green.svg?style=for-the-badge)](https://get.typo3.org/version/12)
 [![Total Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/downloads.svg?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
@@ -21,6 +21,8 @@ for languages supported by [DeepL](https://www.deepl.com/de/docs-api/).
   * Synchronise glossaries to DeepL API
   * Translate content using your glossaries
 
+![Screenshot](Documentation/Images/example-of-deepl-translation-selection-in-typo3-backend.png)
+
 ## Early-Access-Programm
 
 Early access partners of DeepL Translate will benefit from exclusive access to all add-ons, developer preview versions, access to private GitHub repositories, priority support, logo placement and a backlink on the official website. You will also get access to the DeepL Translate version 5.0 announced for TYPO3 v13.
@@ -38,26 +40,29 @@ Find out more: https://www.web-vision.de/en/deepl.html
 
 Install with your favour:
 
-* [TER](https://extensions.typo3.org/extension/wv_deepltranslate/)
-* Extension Manager
-* composer
+* [Composer](https://packagist.org/packages/web-vision/wv_deepltranslate)
+* [TER / Extension Manager](https://extensions.typo3.org/extension/wv_deepltranslate/)
+* [Git](https://github.com/web-vision/wv_deepltranslate)
 
 We prefer composer installation:
 ```bash
 composer req web-vision/wv_deepltranslate
 ```
 
-|                  | URL                                                               |
-|------------------|-------------------------------------------------------------------|
-| **Repository:**  | https://github.com/web-vision/wv_deepltranslate                   |
-| **Read online:** | https://docs.typo3.org/p/web-vision/wv_deepltranslate/main/en-us/ |
-| **TER:**         | https://extensions.typo3.org/extension/wv_deepltranslate/         |
+The DeepL translation buttons are only displayed once you have set up the API
+and desired target languages. Read the documentation to find out how to do this.
+
+## Documentation
+
+Read online: https://docs.typo3.org/p/web-vision/wv_deepltranslate/main/en-us/
 
 ## Sponsors
+
 We appreciate very much the sponsorships of the developments and features in
 the DeepL Translate Extension for TYPO3.
 
 ### DeepL Glossary feature sponsored by
+
 * [Universität Osnabrück](https://www.uni-osnabrueck.de)
 * [Hochschule für Musik Würzburg](https://www.hfm-wuerzburg.de)
 * [Carl von Ossietzky Universität Oldenburg](https://uol.de/)
