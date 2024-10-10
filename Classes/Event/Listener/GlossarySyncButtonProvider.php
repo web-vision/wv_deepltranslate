@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use WebVision\WvDeepltranslate\Access\AllowedGlossarySyncAccess;
 
 final class GlossarySyncButtonProvider
 {
@@ -58,7 +59,11 @@ final class GlossarySyncButtonProvider
             return;
         }
 
-        $parameters = $this->buildParamsArrayForListView($id);
+        if (!$this->getBackendUserAuthentication()->check('custom_options', AllowedGlossarySyncAccess::ALLOWED_GLOSSARY_SYNC)) {
+            return;
+        }
+
+        $parameters = $this->buildParamsArrayForListView((int)$id);
         $title = (string)LocalizationUtility::translate(
             'glossary.sync.button.all',
             'wv_deepltranslate'

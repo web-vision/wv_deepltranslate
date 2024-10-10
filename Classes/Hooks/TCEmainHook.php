@@ -7,6 +7,9 @@ namespace WebVision\WvDeepltranslate\Hooks;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\DataHandling\DataHandlerCheckModifyAccessListHookInterface;
 
+/**
+ * ToDo: Rename this class to "AllowedTableForCommandHandler"
+ */
 class TCEmainHook implements DataHandlerCheckModifyAccessListHookInterface
 {
     /**

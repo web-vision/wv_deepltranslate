@@ -49,6 +49,7 @@
                                data-has-elements="{languageColumn.translationData.hasTranslations as integer}"
                                data-allow-copy="{languageColumn.allowTranslateCopy as integer}"
                                data-allow-translate="{languageColumn.allowTranslate as integer}"
+                               data-allow-deepl-translate="{deepl:be.access.deeplTranslateAllowed(then: '1', else: '0')}"
                                data-table="tt_content"
                                data-page-id="{context.pageId}"
                                data-language-id="{languageColumn.context.siteLanguage.languageId}"
@@ -147,40 +148,44 @@
                     </f:for>
                 </select>
             </div>
-            <f:alias map="{deeplLanguages: '{deepl:deeplTranslate(context: \'{context}\')}'}">
-                <f:if condition="{deeplLanguages -> f:count()} > 0">
+            <deepl:be.access.deeplTranslateAllowed>
+                <f:alias map="{deeplLanguages: '{deepl:deeplTranslate(context: \'{context}\')}'}">
+                    <f:if condition="{deeplLanguages -> f:count()} > 0">
+                        <div class="col row">
+                            <label class="col-sm-4 col">{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
+                            <div class="col col-sm-8">
+                                <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
+                                    <option><f:translate key="backend.label" extensionName="wv_deepltranslate" /></option>
+                                    <f:for each="{deeplLanguages}" as="languageName" key="url">
+                                        <option value="{url}">{languageName}</option>
+                                    </f:for>
+                                </select>
+                            </div>
+                        </div>
+                    </f:if>
+                </f:alias>
+            </deepl:be.access.deeplTranslateAllowed>
+        </div>
+    </f:if>
+</f:section>
+<f:section name="GlossaryTranslation">
+    <deepl:be.access.deeplTranslateAllowed>
+        <f:alias map="{deeplLanguages: '{deepl:deeplTranslate(context: \'{context}\')}'}">
+            <f:if condition="{deeplLanguages -> f:count()} > 0">
+                <div class="row row-cols-auto align-items-end g-3 mb-3">
                     <div class="col row">
-                        <label class="col-sm-4 col">{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
                         <div class="col col-sm-8">
                             <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
-                                <option><f:translate key="backend.label" extensionName="wv_deepltranslate" /></option>
+                                <option><f:translate key="pages.glossary.translate" extensionName="wv_deepltranslate" /></option>
                                 <f:for each="{deeplLanguages}" as="languageName" key="url">
                                     <option value="{url}">{languageName}</option>
                                 </f:for>
                             </select>
                         </div>
                     </div>
-                </f:if>
-            </f:alias>
-        </div>
-    </f:if>
-</f:section>
-<f:section name="GlossaryTranslation">
-    <f:alias map="{deeplLanguages: '{deepl:deeplTranslate(context: \'{context}\')}'}">
-        <f:if condition="{deeplLanguages -> f:count()} > 0">
-            <div class="row row-cols-auto align-items-end g-3 mb-3">
-                <div class="col row">
-                    <div class="col col-sm-8">
-                        <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
-                            <option><f:translate key="pages.glossary.translate" extensionName="wv_deepltranslate" /></option>
-                            <f:for each="{deeplLanguages}" as="languageName" key="url">
-                                <option value="{url}">{languageName}</option>
-                            </f:for>
-                        </select>
-                    </div>
                 </div>
-            </div>
-        </f:if>
-    </f:alias>
+            </f:if>
+        </f:alias>
+    </deepl:be.access.deeplTranslateAllowed>
 </f:section>
 </html>
