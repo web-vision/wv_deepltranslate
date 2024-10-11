@@ -182,7 +182,7 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
                 $payloadBody = $recordLocalizeSummaryModifier->rebuildPayload($payloadBody);
             }
             // Supported TYPO3 v12
-        } elseif(class_exists(\TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent::class)) {
+        } elseif (class_exists(\TYPO3\CMS\Backend\Controller\Event\AfterRecordSummaryForLocalizationEvent::class)) {
             $event = new AfterRecordSummaryForLocalizationEvent($payloadBody['records'], $payloadBody['columns']);
             $this->eventDispatcher->dispatch($event);
 

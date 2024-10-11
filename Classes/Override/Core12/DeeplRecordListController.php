@@ -16,6 +16,8 @@ use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use WebVision\WvDeepltranslate\Access\AllowedGlossarySyncAccess;
+use WebVision\WvDeepltranslate\Access\AllowedTranslateAccess;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
@@ -41,6 +43,10 @@ final class DeeplRecordListController extends RecordListController
         }
 
         if (!DeeplBackendUtility::isDeeplApiKeySet()) {
+            return $originalOutput;
+        }
+
+        if (!$this->getBackendUserAuthentication()->check('custom_options', AllowedTranslateAccess::ALLOWED_TRANSLATE_OPTION_VALUE)) {
             return $originalOutput;
         }
 
@@ -75,6 +81,10 @@ final class DeeplRecordListController extends RecordListController
     private function buildGlossaryTranslationOptionDropdown(array $siteLanguages, string $requestUri): string
     {
         if (!$this->getBackendUserAuthentication()->check('tables_modify', 'pages')) {
+            return '';
+        }
+
+        if (!$this->getBackendUserAuthentication()->check('custom_options', AllowedGlossarySyncAccess::ALLOWED_GLOSSARY_SYNC)) {
             return '';
         }
 

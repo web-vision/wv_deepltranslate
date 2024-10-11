@@ -1,0 +1,12 @@
+be_users,,,,,
+,uid,pid,username,password,admin,description,usergroup
+,2,0,"Deepl-Functional-Test BeUser","123",1,"with glossary button access","1"
+,3,0,"Deepl-Functional-Test BeUser 2","123",1,"without glossary button asses","1"
+be_groups
+,uid,pid,title,custom_options
+,1,0,"glossage_allowed","deepltranslate:allowedGlossarySync"
+pages,,,,,,,,
+,uid,pid,title,slug,doktype,sys_language_uid,l10n_parent,l10n_source,module
+,2,0,"Default Translate Page","/",1,2,1,1,""
+,3,0,"Glossary Module Page","/",254,2,1,1,"glossary"
+,4,0,"Glossary Module Page","/",254,2,1,1,""

@@ -17,4 +17,8 @@ return [
         'provider' => SvgIconProvider::class,
         'source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl-grey.svg',
     ],
+    'deepl-logo' => [
+        'provider' => SvgIconProvider::class,
+        'source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
+    ],
 ];

@@ -23,6 +23,7 @@ use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTra
 final class TranslateHookTest extends AbstractDeepLTestCase
 {
     use SiteBasedTestTrait;
+
     protected const LANGUAGE_PRESETS = [
         'EN' => [
             'id' => 0,
