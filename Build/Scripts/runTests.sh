@@ -434,7 +434,7 @@ IMAGE_SELENIUM="docker.io/selenium/standalone-chrome:4.0.0-20211102"
 IMAGE_MARIADB="docker.io/mariadb:${DBMS_VERSION}"
 IMAGE_MYSQL="docker.io/mysql:${DBMS_VERSION}"
 IMAGE_POSTGRES="docker.io/postgres:${DBMS_VERSION}-alpine"
-IMAGE_DEEPL="docker.io/sbuerk/sbuerk-testing-deeplapimockserver:latest"
+IMAGE_DEEPL="ghcr.io/web-vision/wv-deeplmockapi-server:latest"
 
 
 # Detect arm64 and use a seleniarm image.
@@ -629,6 +629,14 @@ case ${TEST_SUITE} in
         # remove "dangling" typo3/core-testing-* images (those tagged as <none>)
         echo "> remove \"dangling\" ghcr.io/typo3/core-testing-* images (those tagged as <none>)"
         ${CONTAINER_BIN} images --filter "reference=ghcr.io/typo3/core-testing-*" --filter "dangling=true" --format "{{.ID}}" | xargs -I {} ${CONTAINER_BIN} rmi -f {}
+        echo ""
+        # pull ghcr.io/web-vision/ versions of those ones that exist locally
+        echo "> pull ghcr.io/web-vision/* versions of those ones that exist locally"
+        ${CONTAINER_BIN} images "ghcr.io/web-vision/*" --format "{{.Repository}}:{{.Tag}}" | xargs -I {} ${CONTAINER_BIN} pull {}
+        echo ""
+        # remove "dangling" ghcr.io/web-vision/ images (those tagged as <none>)
+        echo "> remove \"dangling\" ghcr.io/web-vision/* images (those tagged as <none>)"
+        ${CONTAINER_BIN} images --filter "reference=ghcr.io/web-vision/*" --filter "dangling=true" --format "{{.ID}}" | xargs -I {} ${CONTAINER_BIN} rmi -f {}
         echo ""
         ;;
     *)

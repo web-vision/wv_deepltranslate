@@ -9,7 +9,7 @@ services:
     # This is the name of the container. It is recommended to follow the same
     # name convention used in the main docker-compose.yml file.
     container_name: ddev-${DDEV_SITENAME}-deeplmockserver
-    image: sbuerk/sbuerk-testing-deeplapimockserver:latest
+    image: ghcr.io/web-vision/wv-deeplmockapi-server:latest
     # These labels ensure this service is discoverable by ddev.
     labels:
       com.ddev.site-name: ${DDEV_SITENAME}
