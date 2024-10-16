@@ -7,6 +7,7 @@ namespace WebVision\WvDeepltranslate\Event\Listener;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
+use TYPO3\CMS\Backend\Toolbar\Enumeration\InformationStatus;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 use WebVision\WvDeepltranslate\Service\UsageService;
@@ -40,19 +41,35 @@ class UsageToolBarEventListener implements LoggerAwareInterface
             }
             return;
         }
+
+        $title = $this->getLanguageService()->sL(
+            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.toolbar-label'
+        );
+        $message = $this->getLanguageService()->sL(
+            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.toolbar.message'
+        );
+
         $systemInformation->getToolbarItem()->addSystemInformation(
-            $this->getLanguageService()->sL('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.toolbar-label'),
-            sprintf(
-                '%d / %d',
-                $usage->character->count,
-                $usage->character->limit
-            ),
+            $title,
+            sprintf($message, $this->formatNumber($usage->character->count), $this->formatNumber($usage->character->limit)),
             'actions-localize-deepl',
+            InformationStatus::STATUS_NOTICE,
         );
     }
 
     private function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
+    }
+
+    /**
+     * Make large API limits easier to read
+     *
+     * @param int $number Any large integer - 5000000
+     * @return string Formated, better readable string variant of the integer - 5.000.000
+     */
+    private function formatNumber(int $number): string
+    {
+        return number_format($number, 0, ',', '.');
     }
 }

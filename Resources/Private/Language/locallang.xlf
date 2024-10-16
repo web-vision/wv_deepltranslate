@@ -174,16 +174,19 @@
 			</trans-unit>
 
 			<trans-unit id="usages.toolbar-label">
-				<source>DeepL Translate Limit</source>
+				<source>DeepL Translate Quota</source>
+			</trans-unit>
+			<trans-unit id="usages.toolbar.message">
+				<source>%s / %s</source>
 			</trans-unit>
 			<trans-unit id="usages.toolbar-information">
 				<source>Information not available</source>
 			</trans-unit>
 			<trans-unit id="usages.flashmassage.title">
-				<source>DeepL Translate </source>
+				<source>DeepL usage and quota</source>
 			</trans-unit>
 			<trans-unit id="usages.flashmassage.limit.description">
-				<source>DeepL Translate Limit %s / %s</source>
+				<source>DeepL translations for current billing period: %s of %s characters</source>
 			</trans-unit>
 
 			<!-- Translation Access | be_groups -->
