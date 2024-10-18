@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace WebVision\WvDeepltranslate\Domain\Repository;
 
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 // @todo Consider to rename/move this as service class.
 final class GlossaryEntryRepository
 {
+    protected Connection $connection;
+
+    public function __construct(ConnectionPool $connectionPool)
+    {
+        $this->connection = $connectionPool->getConnectionForTable('tx_wvdeepltranslate_glossaryentry');
+    }
+
     /**
      * @deprecated
      */
@@ -25,10 +32,7 @@ final class GlossaryEntryRepository
      */
     public function findEntriesByGlossary(int $parentId): array
     {
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('tx_wvdeepltranslate_glossaryentry');
-
-        $result = $connection->select(
+        $result = $this->connection->select(
             ['*'],
             'tx_wvdeepltranslate_glossaryentry',
             [
@@ -44,10 +48,7 @@ final class GlossaryEntryRepository
      */
     public function findEntryByUid(int $uid): array
     {
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('tx_wvdeepltranslate_glossaryentry');
-
-        $result = $connection->select(
+        $result = $this->connection->select(
             ['*'],
             'tx_wvdeepltranslate_glossaryentry',
             [
@@ -57,5 +58,16 @@ final class GlossaryEntryRepository
 
         // @todo Should we not better returning null instead of an empty array if nor recourd could be retrieved ?
         return $result->fetchAssociative() ?: [];
+    }
+
+    public function findBy(array $identifiers): ?array
+    {
+        $result = $this->connection->select(
+            ['*'],
+            'tx_wvdeepltranslate_glossaryentry',
+            $identifiers
+        )->fetchAssociative();
+
+        return is_array($result) ? $result : null;
     }
 }
