@@ -14,6 +14,7 @@ use TYPO3\CMS\Dashboard\WidgetRegistry;
 use WebVision\WvDeepltranslate\Client;
 use WebVision\WvDeepltranslate\ClientInterface;
 use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
+use WebVision\WvDeepltranslate\Command\GlossaryCsvImportCommand;
 use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
 use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
 use WebVision\WvDeepltranslate\Controller\Backend\AjaxController;
@@ -75,6 +76,16 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
                 'command' => 'deepl:glossary:list',
                 'description' => 'List Glossary entries or entries by glossary_id',
                 'schedulable' => false,
+            ]
+        );
+    $services
+        ->set(GlossaryCsvImportCommand::class)
+        ->tag(
+            'console.command',
+            [
+                'command' => 'deepl:glossary:import',
+                'description' => 'Import glossary entries from a csv file',
+                'schedulable' => true,
             ]
         );
 
