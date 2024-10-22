@@ -7,6 +7,7 @@ namespace WebVision\WvDeepltranslate;
 use DeepL\Translator;
 use DeepL\TranslatorOptions;
 use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
 
@@ -44,36 +45,9 @@ abstract class AbstractClient implements ClientInterface
         if ($this->configuration->getApiKey() === '') {
             throw new ApiKeyNotSetException('The api key ist not set', 1708081233823);
         }
-        $proxyUrl = $this->getConfiguredSystemProxy();
-        $options = [];
-        if ($proxyUrl !== null) {
-            $options[TranslatorOptions::PROXY] = $proxyUrl;
-        }
+        $options[TranslatorOptions::HTTP_CLIENT] = GeneralUtility::makeInstance(GuzzleClientFactory::class)->getClient();
         $this->translator = new Translator($this->configuration->getApiKey(), $options);
         return $this->translator;
     }
 
-    /**
-     * Determines the configured TYPO3 proxy url for http(s) requests, dealing with
-     * the fact that this could be a single url or an array of urls per protocol.
-     */
-    protected function getConfiguredSystemProxy(): ?string
-    {
-        if (empty($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])) {
-            return null;
-        }
-        if (is_string($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])
-            && GeneralUtility::isValidUrl($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])
-        ) {
-            return $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
-        }
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'])
-            && is_string($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'])
-            && $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'] !== ''
-            && GeneralUtility::isValidUrl($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'])
-        ) {
-            return $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'];
-        }
-        return null;
-    }
 }
