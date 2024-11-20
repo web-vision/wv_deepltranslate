@@ -34,7 +34,7 @@ class ButtonBarHook
             return $buttons;
         }
 
-        /** @var array{uid: int, doktype: int, module: string} $page */
+        /** @var array{uid: int, doktype?: int, module?: string}|null $page */
         $page = BackendUtility::getRecord(
             'pages',
             $queryParams['id'],
@@ -42,8 +42,9 @@ class ButtonBarHook
         );
 
         if (
-            (int)$page['doktype'] !== PageRepository::DOKTYPE_SYSFOLDER
-            || $page['module'] !== 'glossary'
+            $page === null
+            || (int)($page['doktype'] ?? 0) !== PageRepository::DOKTYPE_SYSFOLDER
+            || ($page['module'] ?? '') !== 'glossary'
         ) {
             return $buttons;
         }
