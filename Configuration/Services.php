@@ -29,6 +29,7 @@ use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
 use WebVision\WvDeepltranslate\Service\UsageService;
 use WebVision\WvDeepltranslate\Widgets\UsageWidget;
 
@@ -84,6 +85,9 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->factory([service(CacheManager::class), 'getCache'])
         ->args(['wvdeepltranslate']);
 
+    $services
+        ->set(ProcessingInstruction::class)
+        ->arg('$runtimeCache', service('cache.runtime'));
     $services
         ->set(DeeplService::class)
         ->public()

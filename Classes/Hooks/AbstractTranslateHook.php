@@ -17,33 +17,27 @@ use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
 
 abstract class AbstractTranslateHook
 {
-    /**
-     * @var array{tableName: string|null, id: string|int|null, mode: string|false}
-     */
-    protected static array $coreProcessorsInformation = [
-        'tableName' => null,
-        'id' => null,
-        // @todo rename identifier to "deepl"
-        'mode' => false,
-    ];
-
     protected DeeplService $deeplService;
 
     protected PageRepository $pageRepository;
 
     protected LanguageService $languageService;
+    protected ProcessingInstruction $processingInstruction;
 
     public function __construct(
         PageRepository $pageRepository,
         DeeplService $deeplService,
-        LanguageService $languageService
+        LanguageService $languageService,
+        ProcessingInstruction $processingInstruction
     ) {
         $this->deeplService = $deeplService;
         $this->pageRepository = $pageRepository;
         $this->languageService = $languageService;
+        $this->processingInstruction = $processingInstruction;
     }
 
     /**
@@ -133,9 +127,6 @@ abstract class AbstractTranslateHook
         if ($commandIsProcessed !== false) {
             return;
         }
-
-        self::$coreProcessorsInformation['tableName'] = $table;
-        self::$coreProcessorsInformation['id'] = $id;
-        self::$coreProcessorsInformation['mode'] = $dataHandler->cmdmap['localization']['custom']['mode'] ?? false;
+        $this->processingInstruction->setProcessingInstruction($table, $id, $dataHandler->cmdmap['localization']['custom']['mode'] ?? false);
     }
 }

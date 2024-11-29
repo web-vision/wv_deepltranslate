@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\WvDeepltranslate\Configuration;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
@@ -24,6 +25,7 @@ use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
 use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
 
 // @todo Make class final. Overriding a static utility class does not make much sense, but better to enforce it.
 class DeeplBackendUtility
@@ -253,28 +255,22 @@ class DeeplBackendUtility
     /**
      * @return array{uid: int, title: string}|array<empty>
      */
-    public static function detectCurrentPage(): array
+    public static function detectCurrentPage(ProcessingInstruction $processingInstruction): array
     {
         self::$currentPage = [];
-        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
-        $queryParams = $request ? $request->getQueryParams() : [];
-        if (isset($queryParams['id']) || isset($queryParams['pageId'])) {
-            $currentId = (int)($queryParams['id'] ?? $queryParams['pageId']);
-            return self::getPageRecord($currentId);
-        }
-        if (isset($queryParams['cmd'])) {
-            foreach ($queryParams['cmd'] as $possibleTable => $values) {
-                if ($possibleTable === 'localization') {
-                    continue;
-                }
-                [$id] = array_keys($values);
-                if ($possibleTable === 'pages') {
-                    self::$currentPage = self::getPageRecord($id);
-                } else {
-                    $pageId = self::getPageIdFromRecord($possibleTable, $id);
-                    self::$currentPage = self::getPageRecord($pageId);
-                }
-            }
+
+        if ($processingInstruction->getProcessingTable() === 'pages') {
+            self::$currentPage = self::getPageRecord((int)$processingInstruction->getProcessingId());
+        } elseif (
+            $processingInstruction->getProcessingTable() !== null
+            && strlen($processingInstruction->getProcessingTable()) > 0
+            && MathUtility::canBeInterpretedAsInteger($processingInstruction->getProcessingId())
+        ) {
+            $pageId = self::getPageIdFromRecord(
+                (string)$processingInstruction->getProcessingTable(),
+                (int)$processingInstruction->getProcessingId()
+            );
+            self::$currentPage = self::getPageRecord($pageId);
         }
 
         return self::$currentPage;
@@ -300,6 +296,6 @@ class DeeplBackendUtility
             $id,
             'pid'
         );
-        return $record['pid'];
+        return (int)($record['pid'] ?? null);
     }
 }

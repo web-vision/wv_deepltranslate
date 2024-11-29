@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Hooks\TranslateHook;
 use WebVision\WvDeepltranslate\Service\LanguageService;
+use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
 use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
 use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
@@ -92,6 +93,10 @@ final class TranslateHookTest extends AbstractDeepLTestCase
             ]
         );
         $this->setUpFrontendRootPage(1, [], []);
+
+        /** @var ProcessingInstruction $processingInstruction */
+        $processingInstruction = $this->get(ProcessingInstruction::class);
+        $processingInstruction->setProcessingInstruction(null, null, true);
     }
 
     /**

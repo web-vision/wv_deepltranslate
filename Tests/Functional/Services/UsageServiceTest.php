@@ -7,6 +7,7 @@ namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
 use DeepL\Usage;
 use DeepL\UsageDetail;
 use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
 use WebVision\WvDeepltranslate\Service\UsageService;
 use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
 
@@ -22,6 +23,10 @@ final class UsageServiceTest extends AbstractDeepLTestCase
         );
 
         parent::setUp();
+
+        /** @var ProcessingInstruction $processingInstruction */
+        $processingInstruction = $this->get(ProcessingInstruction::class);
+        $processingInstruction->setProcessingInstruction(null, null, true);
     }
 
     /**
