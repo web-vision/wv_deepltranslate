@@ -1,0 +1,7 @@
+pages,,,,,
+,"uid","pid","title","subtitle","sys_language_uid",l10n_parent
+,1,0,"Deepl-Functional-Test","",0,0
+,2,1,"Glossary","",0,0
+,3,1,"Glossar","",1,2
+,4,1,"proton beam","glossary term",0,0
+,5,1,"Protonenstrahl","Glossareintrag",1,4

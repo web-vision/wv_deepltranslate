@@ -22,13 +22,13 @@ class TranslateHook extends AbstractTranslateHook
         DataHandler $dataHandler
     ): void {
         // Table Information are importen to find deepl configuration for site
-        $tableName = self::$coreProcessorsInformation['tableName'];
+        $tableName = $this->processingInstruction->getProcessingTable();
         if ($tableName === null) {
             return;
         }
 
         // Record Information are importen to find deepl configuration for site
-        $currentRecordId = self::$coreProcessorsInformation['id'];
+        $currentRecordId = $this->processingInstruction->getProcessingId();
         if ($currentRecordId === null) {
             return;
         }
@@ -39,7 +39,7 @@ class TranslateHook extends AbstractTranslateHook
         }
 
         // Translation mode not set to DeepL translate skip the translation
-        if (self::$coreProcessorsInformation['mode'] !== 'deepl') {
+        if ($this->processingInstruction->isDeeplMode() === false) {
             return;
         }
 

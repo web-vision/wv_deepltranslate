@@ -23,15 +23,18 @@ final class DeeplService implements LoggerAwareInterface
     private FrontendInterface $cache;
 
     private ClientInterface $client;
+    private ProcessingInstruction $processingInstruction;
 
     public function __construct(
         FrontendInterface $cache,
         ClientInterface $client,
-        GlossaryRepository $glossaryRepository
+        GlossaryRepository $glossaryRepository,
+        ProcessingInstruction $processingInstruction
     ) {
         $this->cache = $cache;
         $this->client = $client;
         $this->glossaryRepository = $glossaryRepository;
+        $this->processingInstruction = $processingInstruction;
     }
 
     /**
@@ -57,13 +60,20 @@ final class DeeplService implements LoggerAwareInterface
      */
     public function translateContent(TranslateContext $translateContext): string
     {
+        if ($this->processingInstruction->isDeeplMode() === false) {
+            // @todo Can be replaced with `$this->logger?->` when TYPO3 v11 and therefore PHP 7.4/8.0 support is dropped.
+            if ($this->logger !== null) {
+                $this->logger->warning('DeepL mode not set. Exit.');
+            }
+            return $translateContext->getContent();
+        }
         // If the source language is set to Autodetect, no glossary can be detected.
         if ($translateContext->getSourceLanguageCode() !== null) {
             // @todo Make glossary findable by current site.
             $glossary = $this->glossaryRepository->getGlossaryBySourceAndTarget(
                 $translateContext->getSourceLanguageCode(),
                 $translateContext->getTargetLanguageCode(),
-                DeeplBackendUtility::detectCurrentPage()
+                DeeplBackendUtility::detectCurrentPage($this->processingInstruction)
             );
 
             $translateContext->setGlossaryId($glossary['glossary_id']);

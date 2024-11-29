@@ -13,6 +13,7 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -50,7 +51,11 @@ final class GlossaryRepository
         $localizationLanguageIds = $this->getAvailableLocalizations($pageId);
         $site = GeneralUtility::makeInstance(SiteFinder::class)
             ->getSiteByPageId($pageId);
-        $sourceLangIsoCode = $site->getDefaultLanguage()->getTwoLetterIsoCode();
+        if ((new Typo3Version())->getMajorVersion() >= 12) {
+            $sourceLangIsoCode = $site->getDefaultLanguage()->getLocale()->getLanguageCode();
+        } else {
+            $sourceLangIsoCode = $site->getDefaultLanguage()->getTwoLetterIsoCode();
+        }
 
         $localizationArray[$sourceLangIsoCode] = $entries;
 
@@ -225,7 +230,7 @@ final class GlossaryRepository
         return $this->getGlossary(
             $lowerSourceLang,
             $lowerTargetLang,
-            $page['uid'],
+            (int)$page['uid'],
             true
         ) ?? $defaultGlossary;
     }
@@ -254,7 +259,7 @@ final class GlossaryRepository
             $lowerTargetLang = substr($lowerTargetLang, 0, 2);
         }
 
-        $result = $this->getGlossary($lowerSourceLang, $lowerTargetLang, $page['uid']);
+        $result = $this->getGlossary($lowerSourceLang, $lowerTargetLang, (int)$page['uid']);
 
         if ($result === null) {
             $insert = [
@@ -403,7 +408,7 @@ final class GlossaryRepository
         }
         $availableTranslations = [];
         foreach ($translations['translations'] as $translation) {
-            $availableTranslations[] = $translation['sys_language_uid'];
+            $availableTranslations[] = (int)$translation['sys_language_uid'];
         }
 
         return $availableTranslations;
@@ -411,7 +416,11 @@ final class GlossaryRepository
 
     protected function getTargetLanguageIsoCode(Site $site, int $languageId): string
     {
-        return $site->getLanguageById($languageId)->getTwoLetterIsoCode();
+        if ((new Typo3Version())->getMajorVersion() >= 12) {
+            return $site->getLanguageById($languageId)->getLocale()->getLanguageCode();
+        } else {
+            return $site->getLanguageById($languageId)->getTwoLetterIsoCode();
+        }
     }
 
     /**

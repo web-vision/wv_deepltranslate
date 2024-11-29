@@ -1,0 +1,14 @@
+pages
+,"uid","pid",doktype,"title",subtitle,"sys_language_uid","l10n_parent","slug"
+,1,0,1,"Deepl-Functional-Test","",0,0,"/"
+,2,1,254,"Glossary","",0,0,""
+,3,1,254,"Glossar","",1,2,""
+,4,1,1,"proton beam","glossary term",0,0,"/proton-beam"
+tx_wvdeepltranslate_glossaryentry
+,uid,pid,term,sys_language_uid,l10n_parent
+,1,2,"glossary term",0,0
+,2,2,"Glossareintrag",1,1
+"be_users"
+,"uid","pid","tstamp","username","password","admin","disable","starttime","endtime","options","crdate","workspace_perms","deleted","TSconfig","lastlogin","workspace_id"
+# The password is "password"
+,1,0,1366642540,"admin","$1$tCrlLajZ$C0sikFQQ3SWaFAZ1Me0Z/1",1,0,0,0,0,1366642540,1,0,,1371033743,0
