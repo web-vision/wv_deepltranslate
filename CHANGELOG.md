@@ -1,5 +1,29 @@
 # Changelog
 
+### 4.4.0
+
+* [BUGFIX] Detected current page right for pages by @Mabahe in https://github.com/web-vision/wv_deepltranslate/pull/329
+* [BUGFIX] Streamline Glossary Command and fix some Bug by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/326
+* [BUGFIX] Use TYPO3 configured proxy for DeepL client by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/331
+* [BUGFIX] Mitigate unrelated page traversal for glossary lookup by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/335
+* [BUGFIX] Ensure full compatible for proxy setting to retrieve Translator by @staempfli-webteam in https://github.com/web-vision/wv_deepltranslate/pull/336
+* [TASK] Remove locallang overrides and tca description registry by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/339
+* [TASK] Avoid implicitly nullable class method parameter by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/345
+* [TASK] Run pipelines in php 8.3 by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/347
+* [TASK] Streamline tooling by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/351
+* [FEATURE] Refactor formality translation context handling. by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/353
+* [TASK] Create deepl usage widget by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/338
+* [TASK] Set the deepl-php requirement strict by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/363
+* [BUGFIX] Conditionally add dashboard widget by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/362
+* [TASK] Update documentation by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/348
+* [FEATURE] Introduce translate access features for backend user groups by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/361
+* [TASK] Replace `DeepL Mock Api Server` container image by @sbuerk in https://github.com/web-vision/wv_deepltranslate/pull/364
+* [TASK] Fix badge and add more verbose links to needed configuration docs by @pixelbrackets in https://github.com/web-vision/wv_deepltranslate/pull/365
+* [BUGFIX] Use TYPO3 http client by @Mabahe in https://github.com/web-vision/wv_deepltranslate/pull/372
+* [TASK] Usage treshold & severity levels by @pixelbrackets in https://github.com/web-vision/wv_deepltranslate/pull/358
+* [BUGFIX] Return buttons if page is not callable by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/374
+* [BUGFIX] Working with glossary without a request not possible by @calien666 in https://github.com/web-vision/wv_deepltranslate/pull/375
+
 ### 4.3.1
 
 * Resolve phpstan issues that block the pipeline by @NarkNiro in https://github.com/web-vision/wv_deepltranslate/pull/325
