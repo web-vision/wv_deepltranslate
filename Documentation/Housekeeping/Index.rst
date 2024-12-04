@@ -61,4 +61,27 @@ CLI command).
 
 Accepts pageId as option. If not given, syncs all available glossaries.
 
+Import
+-------
+
+It is possible to import glossary entries from a csv file.
+
+..  code-block:: bash
+
+    vendor/bin/typo3 deepl:glossary:import --pageId 123 --csvFilePath ./import.csv --csvSeparator \; --targetSysLanguage 1
+
+pageId of the page where the records are imported to.
+The csvFilePath configures which file should be used for importing.
+The csvSeparator option declares the seperator used in the csv file.
+The targetSysLanguage defines the translated language. The TYPO3 sys_language_uid must be provided.
+
+The format of csv file must be two columns per row.
+The left column is the original (source) language and the right column is the localization (target) language.
+
+Example csv file:
+..  code-block:: bash
+    "english Label";"englische Übersetzung"
+    "another Label";"eine andere Übersetzung"
+    "console command";"Konsolenbefehl"
+
 ..  _typo3_console: https://extensions.typo3.org/extension/typo3_console

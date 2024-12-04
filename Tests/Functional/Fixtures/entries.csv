@@ -1,0 +1,7 @@
+tx_wvdeepltranslate_glossaryentry,,,,,
+,"uid","pid","l10n_parent","sys_language_uid","term"
+,1,1,0,0,"test one"
+,2,1,1,1,"test eins"
+,3,1,0,0,"test two"
+,4,1,3,1,"test zwei"
+
