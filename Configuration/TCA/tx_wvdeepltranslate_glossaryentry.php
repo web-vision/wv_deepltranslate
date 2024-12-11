@@ -83,16 +83,11 @@ return [
         'term' => [
             'label' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:entry.source',
             'l10n_mode' => '',
-            'config' => (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12
-                ? [
-                    'type' => 'input',
-                    'required' => true,
-                    'eval' => 'trim',
-                ]
-                : [
-                    'type' => 'input',
-                    'eval' => 'trim,reqiured',
-                ],
+            'config' => [
+                'type' => 'input',
+                'required' => true,
+                'eval' => 'trim',
+            ],
         ],
     ],
 ];
