@@ -26,6 +26,7 @@ $EM_CONF[$_EXTKEY] = [
         ],
         'conflicts' => [
             'recordlist_thumbnail' => '*',
+            'deepltranslate_core' => '*',
         ],
         'suggests' => [],
     ],

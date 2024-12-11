@@ -39,7 +39,8 @@
 		"source": "https://github.com/web-vision/wv_deepltranslate"
 	},
 	"conflict": {
-		"studiomitte/recordlist-thumbnail": "*"
+		"studiomitte/recordlist-thumbnail": "*",
+		"webvision/deepltranslate-core": "*"
 	},
 	"config": {
 		"vendor-dir": ".Build/vendor",
@@ -62,7 +63,7 @@
 			"app-dir": ".Build"
 		},
 		"branch-alias": {
-			"dev-main": "4.x.x-dev"
+			"dev-4": "4.x.x-dev"
 		}
 	},
 	"require": {
