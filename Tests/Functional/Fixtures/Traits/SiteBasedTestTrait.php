@@ -77,6 +77,23 @@ trait SiteBasedTestTrait
         }
     }
 
+    /**
+     * @param array<non-empty-string, mixed> $additionalRootConfiguration
+     * @return array<string, mixed>
+     */
+    protected function buildSiteConfiguration(
+        int $rootPageId,
+        string $base = '',
+        string $websiteTitle='',
+        array $additionalRootConfiguration = []
+    ): array {
+        return array_merge([
+            'rootPageId' => $rootPageId,
+            'base' => $base,
+            'websiteTitle' => $websiteTitle,
+        ], $additionalRootConfiguration);
+    }
+
     protected function createSiteConfiguration(string $path): SiteConfiguration
     {
         if ((new Typo3Version())->getMajorVersion() < 12) {
@@ -91,18 +108,6 @@ trait SiteBasedTestTrait
             $this->get(EventDispatcherInterface::class),
             $this->get('cache.core')
         );
-    }
-
-    protected function buildSiteConfiguration(
-        int $rootPageId,
-        string $base = '',
-        string $websiteTitle=''
-    ): array {
-        return [
-            'rootPageId' => $rootPageId,
-            'base' => $base,
-            'websiteTitle' => $websiteTitle,
-        ];
     }
 
     protected function buildDefaultLanguageConfiguration(

@@ -1,0 +1,8 @@
+pages
+,uid,pid,title,sys_language_uid,l10n_parent,doktype,media
+,1,0,"proton beam",0,0,1,1
+,2,0,"Protonenstrahl",1,1,1,1
+sys_file_reference
+,uid,pid,uid_local,uid_foreign,tablenames,fieldname,sys_language_uid,title,l10n_parent
+,1,1,1,1,pages,media,0,"proton beam",0
+,2,1,1,2,pages,media,1,"Protonenstrahl",1

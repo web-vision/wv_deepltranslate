@@ -418,9 +418,9 @@ final class GlossaryRepository
     {
         if ((new Typo3Version())->getMajorVersion() >= 12) {
             return $site->getLanguageById($languageId)->getLocale()->getLanguageCode();
-        } else {
-            return $site->getLanguageById($languageId)->getTwoLetterIsoCode();
         }
+        return $site->getLanguageById($languageId)->getTwoLetterIsoCode();
+
     }
 
     /**
