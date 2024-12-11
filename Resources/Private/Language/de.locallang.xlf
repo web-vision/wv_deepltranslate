@@ -83,6 +83,10 @@
 				<source>Translated with DeepL</source>
 				<target>Übersetzt mit DeepL</target>
 			</trans-unit>
+			<trans-unit id="translated_with_deepl">
+				<source>Translated with DeepL</source>
+				<target>Übersetzt mit DeepL</target>
+			</trans-unit>
 
 			<!-- SiteConfiguration labels -->
 			<trans-unit id="site_configuration.deepl.title">

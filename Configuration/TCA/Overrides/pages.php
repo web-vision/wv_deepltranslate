@@ -5,17 +5,10 @@ defined('TYPO3') or die();
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 (static function (): void {
-    $ll = function (string $languageKey) {
-        return sprintf(
-            'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:%s',
-            $languageKey
-        );
-    };
-
     $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = [
-        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'label' : 0) => 'DeepL Glossary',
-        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'value' : 1) => 'glossary',
-        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'icon' : 2) => 'apps-pagetree-folder-contains-glossary',
+        'label' => 'DeepL Glossary',
+        'value' => 'glossary',
+        'icon' => 'apps-pagetree-folder-contains-glossary',
     ];
     $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-glossary']
         = 'apps-pagetree-folder-contains-glossary';
@@ -25,18 +18,18 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
             'exclude' => 0,
             'l10n_display' => 'hideDiff',
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'label' => $ll('pages.tx_wvdeepltranslate_content_not_checked'),
+            'label' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:pages.tx_wvdeepltranslate_content_not_checked',
             'config' => [
                 'type' => 'check',
                 'items' => [
                     [
-                        ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'label' : 0) => $ll('traslated_with_deepl'),
+                        'label' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:translated_with_deepl',
                     ],
                 ],
             ],
         ],
         'glossary_information' => [
-            'label' => $ll('pages.glossary_information'),
+            'label' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:pages.glossary_information',
             'displayCond' => [
                 'AND' => [
                     'FIELD:doktype:=:254',
@@ -56,7 +49,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
         'exclude' => 0,
         'l10n_display' => 'hideDiff',
         'displayCond' => 'FIELD:sys_language_uid:>:0',
-        'label' => $ll('pages.tx_wvdeepltranslate_translated_time'),
+        'label' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:pages.tx_wvdeepltranslate_translated_time',
         'config' => [
             'type' => 'datetime',
             'format' => 'datetime',
@@ -79,7 +72,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
     ExtensionManagementUtility::addToAllTCAtypes(
         'pages',
-        sprintf('--div--;%s,--palette--;;deepl_translate;', $ll('pages.deepl.tab.label')),
+        sprintf('--div--;%s,--palette--;;deepl_translate;', 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:pages.deepl.tab.label'),
         '',
         'after:language'
     );
