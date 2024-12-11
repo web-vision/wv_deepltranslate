@@ -1,5 +1,10 @@
 # Changelog
 
+### 4.4.1
+
+* [BUGFIX] Refactor to ProcessingInstruction lost DeepL mode information by @calien666 in https://github.com/web-vision/deepltranslate-core/pull/378
+* [BUGFIX] Fix regression on editor setup needed by @calien666 in https://github.com/web-vision/deepltranslate-core/pull/380
+
 ### 4.4.0
 
 * [BUGFIX] Detected current page right for pages by @Mabahe in https://github.com/web-vision/wv_deepltranslate/pull/329
