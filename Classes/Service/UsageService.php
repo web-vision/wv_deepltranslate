@@ -7,8 +7,10 @@ namespace WebVision\Deepltranslate\Core\Service;
 use DeepL\Usage;
 use TYPO3\CMS\Backend\Toolbar\Enumeration\InformationStatus;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use WebVision\Deepltranslate\Core\ClientInterface;
+use WebVision\Deepltranslate\Core\Event\Listener\UsageToolBarEventListener;
+use WebVision\Deepltranslate\Core\Hooks\UsageProcessAfterFinishHook;
 
 final class UsageService implements UsageServiceInterface
 {
@@ -73,25 +75,34 @@ final class UsageService implements UsageServiceInterface
     /**
      * Calculate the message severity based on the quota usage rate
      *
+     * Only to be used in {@see UsageProcessAfterFinishHook::processCmdmap_afterFinish()}.
+     *
      * @param int $characterCount Already translated characters in the current billing period
      * @param int $characterLimit Total character limit in the current billing period
-     * @return int Severity level
+     * @return ContextualFeedbackSeverity Severity level
+     *
+     * @internal to be used only within `web-vision/deepltranslate-core`, not part of public API.
      */
-    public function determineSeverity(int $characterCount, int $characterLimit): int
+    public function determineSeverity(int $characterCount, int $characterLimit): ContextualFeedbackSeverity
     {
         $quotaUtilization = ($characterCount / $characterLimit) * 100;
         if ($quotaUtilization >= 100) {
-            return FlashMessage::ERROR;
+            return ContextualFeedbackSeverity::ERROR;
         }
         if ($quotaUtilization >= 98) {
-            return FlashMessage::WARNING;
+            return ContextualFeedbackSeverity::WARNING;
         }
         if ($quotaUtilization >= 90) {
-            return FlashMessage::INFO;
+            return ContextualFeedbackSeverity::INFO;
         }
-        return FlashMessage::NOTICE;
+        return ContextualFeedbackSeverity::NOTICE;
     }
 
+    /**
+     * Used only in {@see UsageToolBarEventListener::__invoke()}.
+     *
+     * @internal to be used only within `web-vision/deepltranslate-core`, not part of public API.
+     */
     public function determineSeverityForSystemInformation(int $characterCount, int $characterLimit): string
     {
         $quotaUtilization = ($characterCount / $characterLimit) * 100;

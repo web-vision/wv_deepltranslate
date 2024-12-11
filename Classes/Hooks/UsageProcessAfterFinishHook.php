@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\Deepltranslate\Core\Service\UsageService;
 
@@ -48,7 +49,7 @@ class UsageProcessAfterFinishHook
 
         $severity = $this->usageService->determineSeverity($usage->character->count, $usage->character->limit);
         // Reduce noise - Don't bother editors with low quota usage messages
-        if ($severity === FlashMessage::NOTICE) {
+        if ($severity === ContextualFeedbackSeverity::NOTICE) {
             return;
         }
 
