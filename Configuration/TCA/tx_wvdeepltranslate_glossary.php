@@ -10,7 +10,6 @@ return [
         'default_sortby' => 'uid',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'delete' => 'deleted',
         'hideTable' => true,
         'versioningWS' => false,
