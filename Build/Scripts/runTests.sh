@@ -568,15 +568,6 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     lintTypoScript)
-        # @todo Remove this after a working version for lower php has been released OR minimum PHP version raised.
-        # @see https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Feature-96812-OverrideBackendTemplatesWithTSconfig.html
-        if [ "${PHP_VERSION}" == "7.4" -o "${PHP_VERSION}" == "7.4" ]; then
-            echo " ERROR: Wrong php version ${PHP_VERSION}"
-            echo "   -t -s lintTypoScript requires to be executed at least with PHP8.1 with a proper"
-            echo "   -t -s composerUpdate run before to retrieve a linter version which can deal with"
-            echo "   TYPO3 v12 PageTSConfig backend template override syntax"
-            exit 1
-        fi
         COMMAND="php -dxdebug.mode=off .Build/bin/typoscript-lint --ansi --config=./Build/typoscript-lint/typoscript-lint.yml"
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name lint-php-${SUFFIX} -e COMPOSER_CACHE_DIR=.Build/.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
