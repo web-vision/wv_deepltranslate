@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate;
+namespace WebVision\Deepltranslate\Core;
 
 use DeepL\Translator;
 use DeepL\TranslatorOptions;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
+use WebVision\Deepltranslate\Core\Exception\ApiKeyNotSetException;
 
 /**
  * @internal No public usage

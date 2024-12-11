@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Hooks\Glossary;
+namespace WebVision\Deepltranslate\Core\Hooks\Glossary;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
@@ -12,8 +12,8 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossaryEntryRepository;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
+use WebVision\Deepltranslate\Core\Domain\Repository\GlossaryEntryRepository;
+use WebVision\Deepltranslate\Core\Domain\Repository\GlossaryRepository;
 
 class UpdatedGlossaryEntryTermHook
 {
@@ -63,11 +63,11 @@ class UpdatedGlossaryEntryTermHook
         $flashMessage = new FlashMessage(
             (string)LocalizationUtility::translate(
                 'glossary.not-sync.message',
-                'wv_deepltranslate'
+                'deepltranslate_core'
             ),
             (string)LocalizationUtility::translate(
                 'glossary.not-sync.title',
-                'wv_deepltranslate'
+                'deepltranslate_core'
             ),
             AbstractMessage::INFO,
             true

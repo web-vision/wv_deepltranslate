@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Service;
+namespace WebVision\Deepltranslate\Core\Service;
 
 use DeepL\Usage;
 use TYPO3\CMS\Backend\Toolbar\Enumeration\InformationStatus;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use WebVision\WvDeepltranslate\ClientInterface;
+use WebVision\Deepltranslate\Core\ClientInterface;
 
 final class UsageService implements UsageServiceInterface
 {
@@ -60,25 +59,14 @@ final class UsageService implements UsageServiceInterface
      */
     public function formatNumber(int $number)
     {
-        // @todo typo3/cms-core:>=12 remove polyfill switch, as php-intl is
-        //       then a hard requirement and the polyfill is not needed
-        if ((new Typo3Version())->getMajorVersion() <= 12 && !extension_loaded('intl')) {
-            if (!class_exists(\NumberFormatter::class)) {
-                return number_format($number);
+        $language = 'en';
+        if ($this->getBackendUser() !== null) {
+            $uc = $this->getBackendUser()->uc;
+            if (is_array($uc) && array_key_exists('lang', $uc)) {
+                $language = $uc['lang'];
             }
-            // TYPO3 v11 has a Symfony Polyfill, but this ony allows
-            // locale en or null, so we call with default parameter.
-            $numberFormatter = new \NumberFormatter('en', \NumberFormatter::DECIMAL);
-        } else {
-            $language = 'en';
-            if ($this->getBackendUser() !== null) {
-                $uc = $this->getBackendUser()->uc;
-                if (is_array($uc) && array_key_exists('lang', $uc)) {
-                    $language = $uc['lang'];
-                }
-            }
-            $numberFormatter = new \NumberFormatter($language, \NumberFormatter::DECIMAL);
         }
+        $numberFormatter = new \NumberFormatter($language, \NumberFormatter::DECIMAL);
         return $numberFormatter->format($number);
     }
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Override\Core12;
+namespace WebVision\Deepltranslate\Core\Override\Core12;
 
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Backend\Controller\RecordListController;
@@ -16,10 +16,10 @@ use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use WebVision\WvDeepltranslate\Access\AllowedGlossarySyncAccess;
-use WebVision\WvDeepltranslate\Access\AllowedTranslateAccess;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
-use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
+use WebVision\Deepltranslate\Core\Access\AllowedGlossarySyncAccess;
+use WebVision\Deepltranslate\Core\Access\AllowedTranslateAccess;
+use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
+use WebVision\Deepltranslate\Core\Utility\DeeplBackendUtility;
 
 final class DeeplRecordListController extends RecordListController
 {
@@ -136,7 +136,7 @@ final class DeeplRecordListController extends RecordListController
         $output = '<option value="">' . htmlspecialchars(
             LocalizationUtility::translate(
                 'pages.glossary.translate',
-                'wv_deepltranslate'
+                'deepltranslate_core'
             )
         ) . '</option>';
 

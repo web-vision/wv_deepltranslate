@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Service;
+namespace WebVision\Deepltranslate\Core\Service;
 
 use DeepL\Usage;
 

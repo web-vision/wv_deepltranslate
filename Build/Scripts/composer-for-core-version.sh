@@ -22,22 +22,10 @@ composer_update() {
 
 update_v12() {
     echo -e "💪 Enforce TYPO3 v12"
+    php -dxdebug.mode=off $(which composer) require --dev --no-update \
+        "phpunit/phpunit":"^10.5"
     php -dxdebug.mode=off $(which composer) require --no-update \
-        "typo3/cms-core":"^12.4"
-
-    echo -e "💪 Enforce PHPUnit ^10.1"
-    php -dxdebug.mode=off $(which composer) req --dev --no-update \
-        "phpunit/phpunit":"^10.1"
-}
-
-update_v11() {
-    echo -e "💪 Enforce TYPO3 v11"
-    php -dxdebug.mode=off $(which composer) require --no-update \
-        "typo3/cms-core":"^11.5"
-
-    echo -e "💪 Enforce PHPUnit ^9.6.8"
-    php -dxdebug.mode=off $(which composer) req --dev --no-update \
-        "phpunit/phpunit":"^9.6.8"
+        "typo3/cms-core":"^12.4.2"
 }
 
 case "$1" in
@@ -46,13 +34,8 @@ case "$1" in
     update_v12
     composer_update
     ;;
-11)
-    composer_cleanup
-    update_v11
-    composer_update
-    ;;
 *)
-    echo -e "🌀 Usage: ddev update-to (11|12)" >&2
+    echo -e "🌀 Usage: ddev update-to (12)" >&2
     exit 0
     ;;
 esac

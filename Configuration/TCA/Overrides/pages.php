@@ -7,7 +7,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 (static function (): void {
     $ll = function (string $languageKey) {
         return sprintf(
-            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:%s',
+            'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:%s',
             $languageKey
         );
     };

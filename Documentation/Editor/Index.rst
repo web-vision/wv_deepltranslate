@@ -5,7 +5,7 @@
 Editors manuel
 =======
 
-How editors work with *wv_deepltranslate* is described in the following chapters.
+How editors work with *deepltranslate_core* is described in the following chapters.
 
 ..  toctree::
     :maxdepth: 2

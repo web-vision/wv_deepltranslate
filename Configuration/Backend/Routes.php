@@ -1,6 +1,6 @@
 <?php
 
-use WebVision\WvDeepltranslate\Controller\GlossarySyncController;
+use WebVision\Deepltranslate\Core\Controller\GlossarySyncController;
 
 return [
     'glossaryupdate' => [

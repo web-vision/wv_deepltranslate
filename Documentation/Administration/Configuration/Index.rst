@@ -14,7 +14,7 @@ Set up API
 Go to the :ref:`extension configuration <extensionConfiguration>`
 in :guilabel:`Admin Tools > Settings > Extension Configuration`.
 
-Open the settings for :guilabel:`wv_deepltranslate` and add your API key.
+Open the settings for :guilabel:`deepltranslate_core` and add your API key.
 
 .. figure:: /Images/Reference/configuration.png
     :alt: The Extension configuration settings showing two input fields for DeepL API key
@@ -84,7 +84,7 @@ Configure tables
 ----------------
 
 If not set by default, you need to define the `l10n_mode` for the fields you
-want to have translatable by `wv_deepltranslate`.
+want to have translatable by `deepltranslate_core`.
 
 See the :ref:`tableConfiguration<table configuration>` for details.
 

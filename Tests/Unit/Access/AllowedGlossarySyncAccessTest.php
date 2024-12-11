@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Unit\Access;
+namespace WebVision\Deepltranslate\Core\Tests\Unit\Access;
 
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-use WebVision\WvDeepltranslate\Access\AccessItemInterface;
-use WebVision\WvDeepltranslate\Access\AllowedGlossarySyncAccess;
+use WebVision\Deepltranslate\Core\Access\AccessItemInterface;
+use WebVision\Deepltranslate\Core\Access\AllowedGlossarySyncAccess;
 
 class AllowedGlossarySyncAccessTest extends UnitTestCase
 {

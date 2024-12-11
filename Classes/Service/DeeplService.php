@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Service;
+namespace WebVision\Deepltranslate\Core\Service;
 
 use DeepL\Language;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use WebVision\WvDeepltranslate\ClientInterface;
-use WebVision\WvDeepltranslate\Domain\Dto\TranslateContext;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
-use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
+use WebVision\Deepltranslate\Core\ClientInterface;
+use WebVision\Deepltranslate\Core\Domain\Dto\TranslateContext;
+use WebVision\Deepltranslate\Core\Domain\Repository\GlossaryRepository;
+use WebVision\Deepltranslate\Core\Exception\ApiKeyNotSetException;
+use WebVision\Deepltranslate\Core\Utility\DeeplBackendUtility;
 
 final class DeeplService implements LoggerAwareInterface
 {

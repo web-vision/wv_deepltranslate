@@ -5,10 +5,10 @@
 ================
 
 :Extension key:
-    wv_deepltranslate
+    deepltranslate_core
 
 :Package name:
-    web-vision/wv_deepltranslate
+    web-vision/deepltranslate-core
 
 :Version:
     |release|

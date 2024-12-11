@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Hooks;
+namespace WebVision\Deepltranslate\Core\Hooks;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
 
@@ -17,7 +17,7 @@ final class PageRendererHook
     {
         if ($pageRenderer->getApplicationType() === 'BE') {
             // For some reason, the labels are not availible in JavaScript object `TYPO3.lang`. So we add them manually.
-            $pageRenderer->addInlineLanguageLabelFile('EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf');
+            $pageRenderer->addInlineLanguageLabelFile('EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf');
         }
     }
 }

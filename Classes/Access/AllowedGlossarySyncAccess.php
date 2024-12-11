@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Access;
+namespace WebVision\Deepltranslate\Core\Access;
 
 final class AllowedGlossarySyncAccess implements AccessItemInterface
 {
@@ -15,12 +15,12 @@ final class AllowedGlossarySyncAccess implements AccessItemInterface
 
     public function getTitle(): string
     {
-        return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:be_groups.deepltranslate_access.items.allowedGlossarySync.title';
+        return 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:be_groups.deepltranslate_access.items.allowedGlossarySync.title';
     }
 
     public function getDescription(): string
     {
-        return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:be_groups.deepltranslate_access.items.allowedGlossarySync.description';
+        return 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:be_groups.deepltranslate_access.items.allowedGlossarySync.description';
     }
 
     public function getIconIdentifier(): string

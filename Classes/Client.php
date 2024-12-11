@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate;
+namespace WebVision\Deepltranslate\Core;
 
 use DeepL\DeepLException;
 use DeepL\GlossaryEntries;
@@ -12,7 +12,7 @@ use DeepL\Language;
 use DeepL\TextResult;
 use DeepL\TranslateTextOptions;
 use DeepL\Usage;
-use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
+use WebVision\Deepltranslate\Core\Exception\ApiKeyNotSetException;
 
 /**
  * @internal No public usage

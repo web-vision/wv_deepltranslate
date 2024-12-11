@@ -2,7 +2,7 @@
 
 return [
     'EXTENSIONS' => [
-        'wv_deepltranslate' => [
+        'deepltranslate_core' => [
             'apiKey' => 'mock_server',
         ],
     ],

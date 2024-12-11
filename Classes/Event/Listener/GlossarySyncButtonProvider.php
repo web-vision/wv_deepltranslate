@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Event\Listener;
+namespace WebVision\Deepltranslate\Core\Event\Listener;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -17,7 +17,7 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use WebVision\WvDeepltranslate\Access\AllowedGlossarySyncAccess;
+use WebVision\Deepltranslate\Core\Access\AllowedGlossarySyncAccess;
 
 final class GlossarySyncButtonProvider
 {
@@ -66,7 +66,7 @@ final class GlossarySyncButtonProvider
         $parameters = $this->buildParamsArrayForListView((int)$id);
         $title = (string)LocalizationUtility::translate(
             'glossary.sync.button.all',
-            'wv_deepltranslate'
+            'deepltranslate_core'
         );
         // Style button
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);

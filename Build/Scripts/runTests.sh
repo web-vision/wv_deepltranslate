@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# web-vision/wv_deepltranslate test runner based on docker/podman.
+# web-vision/deepltranslate-core test runner based on docker/podman.
 #
 if [ "${CI}" != "true" ]; then
     trap 'echo "runTests.sh SIGINT signal emitted";cleanUp;exit 2' SIGINT
@@ -47,7 +47,7 @@ handleDbmsOptions() {
                 exit 1
             fi
             [ -z "${DBMS_VERSION}" ] && DBMS_VERSION="10.4"
-            if ! [[ ${DBMS_VERSION} =~ ^(10.2|10.3|10.4|10.5|10.6|10.7|10.8|10.9|10.10|10.11|11.0|11.1)$ ]]; then
+            if ! [[ ${DBMS_VERSION} =~ ^(10.4|10.5|10.6|10.7|10.8|10.9|10.10|10.11|11.0|11.1)$ ]]; then
                 echo "Invalid combination -d ${DBMS} -i ${DBMS_VERSION}" >&2
                 echo >&2
                 echo "Use \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
@@ -63,7 +63,7 @@ handleDbmsOptions() {
                 exit 1
             fi
             [ -z "${DBMS_VERSION}" ] && DBMS_VERSION="8.0"
-            if ! [[ ${DBMS_VERSION} =~ ^(5.5|5.6|5.7|8.0|8.1|8.2|8.3|8.4)$ ]]; then
+            if ! [[ ${DBMS_VERSION} =~ ^(8.0|8.1|8.2|8.3|8.4)$ ]]; then
                 echo "Invalid combination -d ${DBMS} -i ${DBMS_VERSION}" >&2
                 echo >&2
                 echo "Use \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
@@ -201,9 +201,6 @@ Options:
             - 11.0   development series
             - 11.1   short-term development series
         With "-d mysql":
-            - 5.5   unmaintained since 2018-12 (default)
-            - 5.6   unmaintained since 2021-02
-            - 5.7   maintained until 2023-10
             - 8.0   maintained until 2026-04 (default)
             - 8.1   unmaintained since 2023-10
             - 8.2   unmaintained since 2024-01
@@ -218,17 +215,14 @@ Options:
             - 15    maintained until 2027-11-11
             - 16    maintained until 2028-11-09
 
-    -t <11|12>
+    -t <12>
         Only with -s composerInstall|composerInstallMin|composerInstallMax
         Specifies the TYPO3 CORE Version to be used
-            - 11: (default) use TYPO3 v11
-            - 12: use TYPO3 v12
+            - 12: (default) use TYPO3 v12
 
-    -p <7.4|8.0|8.1|8.2|8.3|8.4>
+    -p <8.1|8.2|8.3|8.4>
         Specifies the PHP minor version to be used
-            - 7.4: (default) use PHP 7.4
-            - 8.0: use PHP 8.0
-            - 8.1: use PHP 8.1
+            - 8.1: (default) use PHP 8.1
             - 8.2: use PHP 8.2
             - 8.3: use PHP 8.3
             - 8.4: use PHP 8.4
@@ -298,9 +292,9 @@ fi
 
 # Option defaults
 TEST_SUITE="unit"
-CORE_VERSION="11"
+CORE_VERSION="12"
 DBMS="sqlite"
-PHP_VERSION="7.4"
+PHP_VERSION="8.1"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
 PHPUNIT_RANDOM=""
@@ -338,13 +332,13 @@ while getopts "a:b:s:d:i:p:t:xy:o:nhu" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.4|8.0|8.1|8.2|8.3|8.4)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2|8.3|8.4)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;
         t)
             CORE_VERSION=${OPTARG}
-            if ! [[ ${CORE_VERSION} =~ ^(11|12)$ ]]; then
+            if ! [[ ${CORE_VERSION} =~ ^(12)$ ]]; then
                 INVALID_OPTIONS+=("t ${OPTARG}")
             fi
             ;;
@@ -390,7 +384,7 @@ fi
 
 handleDbmsOptions
 
-COMPOSER_ROOT_VERSION="4.1.x-dev"
+COMPOSER_ROOT_VERSION="5.x.x-dev"
 CONTAINER_INTERACTIVE="-it --init"
 HOST_UID=$(id -u)
 USERSET=""

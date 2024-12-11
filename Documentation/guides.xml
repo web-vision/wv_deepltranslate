@@ -5,12 +5,12 @@
         links-are-relative="true"
 >
     <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
-               project-home="https://github.com/web-vision/wv_deepltranslate"
+               project-home="https://github.com/web-vision/deepltranslate-core"
                project-contact="hello@web-vision.de"
-               project-repository="https://github.com/web-vision/wv_deepltranslate"
-               project-issues="https://github.com/web-vision/wv_deepltranslate/issues"
+               project-repository="https://github.com/web-vision/deepltranslate-core"
+               project-issues="https://github.com/web-vision/deepltranslate-core/issues"
                edit-on-github-branch="main"
-               edit-on-github="web-vision/wv_deepltranslate"
+               edit-on-github="web-vision/deepltranslate-core"
                typo3-core-preferred="stable"
     />
     <project title="DeepL Translate"

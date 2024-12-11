@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Services;
 
 use DeepL\Language;
-use WebVision\WvDeepltranslate\Domain\Dto\TranslateContext;
-use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
-use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\Deepltranslate\Core\Domain\Dto\TranslateContext;
+use WebVision\Deepltranslate\Core\Service\DeeplService;
+use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
+use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
 
 /**
- * @covers \WebVision\WvDeepltranslate\Service\DeeplService
+ * @covers \WebVision\Deepltranslate\Core\Service\DeeplService
  */
 final class DeeplServiceTest extends AbstractDeepLTestCase
 {

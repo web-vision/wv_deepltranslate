@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional;
+namespace WebVision\Deepltranslate\Core\Tests\Functional;
 
 use DeepL\Translator;
 use DeepL\TranslatorOptions;
@@ -12,9 +12,9 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\DependencyInjection\Container;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
-use WebVision\WvDeepltranslate\Client;
-use WebVision\WvDeepltranslate\ClientInterface;
-use WebVision\WvDeepltranslate\ConfigurationInterface;
+use WebVision\Deepltranslate\Core\Client;
+use WebVision\Deepltranslate\Core\ClientInterface;
+use WebVision\Deepltranslate\Core\ConfigurationInterface;
 
 abstract class AbstractDeepLTestCase extends FunctionalTestCase
 {
@@ -99,7 +99,7 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
      * @var non-empty-string[]
      */
     protected array $testExtensionsToLoad = [
-        'web-vision/wv_deepltranslate',
+        'web-vision/deepltranslate-core',
         __DIR__ . '/Fixtures/Extensions/test_services_override',
     ];
 

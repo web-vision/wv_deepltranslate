@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\ViewHelpers;
+namespace WebVision\Deepltranslate\Core\ViewHelpers;
 
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
+use WebVision\Deepltranslate\Core\Utility\DeeplBackendUtility;
 
 // @todo Make this class final.
 class DeeplTranslateViewHelper extends AbstractViewHelper

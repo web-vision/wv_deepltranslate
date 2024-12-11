@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Services;
 
 use TYPO3\CMS\Core\Site\SiteFinder;
-use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
-use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
-use WebVision\WvDeepltranslate\Service\LanguageService;
-use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
-use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
+use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
+use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
+use WebVision\Deepltranslate\Core\Service\LanguageService;
+use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
 final class LanguageServiceTest extends AbstractDeepLTestCase
 {

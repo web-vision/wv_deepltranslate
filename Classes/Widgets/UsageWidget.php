@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Widgets;
+namespace WebVision\Deepltranslate\Core\Widgets;
 
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use WebVision\WvDeepltranslate\Service\UsageService;
+use WebVision\Deepltranslate\Core\Service\UsageService;
 
 class UsageWidget implements WidgetInterface
 {
@@ -42,7 +42,7 @@ class UsageWidget implements WidgetInterface
 
         // Workaround to make the widget template available in two TYPO3 versions
         $templateRootPaths = $this->view->getTemplateRootPaths();
-        $templateRootPaths[1718368476557] = 'EXT:wv_deepltranslate/Resources/Private/Backend/Templates/';
+        $templateRootPaths[1718368476557] = 'EXT:deepltranslate_core/Resources/Private/Backend/Templates/';
         $this->view->setTemplateRootPaths($templateRootPaths);
 
         $currentUsage = $usageService->getCurrentUsage();
@@ -50,7 +50,7 @@ class UsageWidget implements WidgetInterface
         $this->view->assignMultiple([
             'usages' => [
                 [
-                    'label' => $this->getLanguageService()->sL('LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.character'),
+                    'label' => $this->getLanguageService()->sL('LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.character'),
                     'usage' => $currentUsage !== null ? $currentUsage->character : [],
                 ],
             ],

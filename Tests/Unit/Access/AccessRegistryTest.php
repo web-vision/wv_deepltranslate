@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Unit\Access;
+namespace WebVision\Deepltranslate\Core\Tests\Unit\Access;
 
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-use WebVision\WvDeepltranslate\Access\AccessItemInterface;
-use WebVision\WvDeepltranslate\Access\AccessRegistry;
+use WebVision\Deepltranslate\Core\Access\AccessItemInterface;
+use WebVision\Deepltranslate\Core\Access\AccessRegistry;
 
 /**
- * @covers \WebVision\WvDeepltranslate\Access\AccessRegistry.php
+ * @covers \WebVision\Deepltranslate\Core\Access\AccessRegistry.php
  */
 class AccessRegistryTest extends UnitTestCase
 {

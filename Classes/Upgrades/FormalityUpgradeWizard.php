@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Upgrades;
+namespace WebVision\Deepltranslate\Core\Upgrades;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
@@ -13,7 +13,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Updates\ChattyInterface;
 use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
-use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\Deepltranslate\Core\Service\DeeplService;
 
 class FormalityUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 {
@@ -50,8 +50,9 @@ class FormalityUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
         $deeplService = GeneralUtility::makeInstance(DeeplService::class);
 
         $globalFormality = 'default';
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['wv_deepltranslate']['deeplFormality'])) {
-            $globalFormality = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['wv_deepltranslate']['deeplFormality'];
+        // @todo Reevaluate with old extension key 4.x and how to handle this.
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['deepltranslate_core']['deeplFormality'])) {
+            $globalFormality = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['deepltranslate_core']['deeplFormality'];
         }
 
         try {

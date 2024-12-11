@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Hooks;
+namespace WebVision\Deepltranslate\Core\Hooks;
 
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
@@ -10,7 +10,7 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Service\UsageService;
+use WebVision\Deepltranslate\Core\Service\UsageService;
 
 class UsageProcessAfterFinishHook
 {
@@ -40,10 +40,10 @@ class UsageProcessAfterFinishHook
         }
 
         $title = $this->getLanguageService()->sL(
-            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.flashmassage.title'
+            'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:usages.flashmassage.title'
         );
         $message = $this->getLanguageService()->sL(
-            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.flashmassage.limit.description'
+            'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:usages.flashmassage.limit.description'
         );
 
         $severity = $this->usageService->determineSeverity($usage->character->count, $usage->character->limit);

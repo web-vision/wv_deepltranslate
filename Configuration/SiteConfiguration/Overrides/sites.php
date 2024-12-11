@@ -1,10 +1,10 @@
 <?php
 
-use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
+use WebVision\Deepltranslate\Core\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 
 (static function (): void {
     $ll = function (string $identifier) {
-        return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:' . $identifier;
+        return 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:' . $identifier;
     };
 
     $GLOBALS['SiteConfiguration']['site_language']['columns']['deeplTargetLanguage'] = [
@@ -26,7 +26,7 @@ use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFun
         'description' => $ll('site_configuration.deepl.field.formality.description'),
         'displayCond' => [
             'AND' => [
-                'USER:' . \WebVision\WvDeepltranslate\Form\User\HasFormalitySupport::class . '->checkFormalitySupport',
+                'USER:' . \WebVision\Deepltranslate\Core\Form\User\HasFormalitySupport::class . '->checkFormalitySupport',
             ],
         ],
         'config' => [
@@ -66,7 +66,7 @@ use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFun
 
     $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem'] = str_replace(
         '--palette--;;default,',
-        '--palette--;;default, --palette--;LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:site_configuration.deepl.title;deepl,',
+        '--palette--;;default, --palette--;LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:site_configuration.deepl.title;deepl,',
         $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem']
     );
 })();

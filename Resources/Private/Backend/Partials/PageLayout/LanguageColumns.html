@@ -1,6 +1,6 @@
 <html
     data-namespace-typo3-fluid="true"
-    xmlns:deepl="http://typo3.org/ns/WebVision/WvDeepltranslate/ViewHelpers"
+    xmlns:deepl="http://typo3.org/ns/WebVision/Deepltranslate/CoreViewHelpers"
     xmlns:f="http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers"
 >
 <f:if condition="{context.pageRecord.doktype} == 254 && {context.pageRecord.module} == 'glossary'">
@@ -152,10 +152,10 @@
                 <f:alias map="{deeplLanguages: '{deepl:deeplTranslate(context: \'{context}\')}'}">
                     <f:if condition="{deeplLanguages -> f:count()} > 0">
                         <div class="col row">
-                            <label class="col-sm-4 col">{f:translate(key: 'backend.label', extensionName: 'wv_deepltranslate')}</label>
+                            <label class="col-sm-4 col">{f:translate(key: 'backend.label', extensionName: 'deepltranslate_core')}</label>
                             <div class="col col-sm-8">
                                 <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
-                                    <option><f:translate key="backend.label" extensionName="wv_deepltranslate" /></option>
+                                    <option><f:translate key="backend.label" extensionName="deepltranslate_core" /></option>
                                     <f:for each="{deeplLanguages}" as="languageName" key="url">
                                         <option value="{url}">{languageName}</option>
                                     </f:for>
@@ -176,7 +176,7 @@
                     <div class="col row">
                         <div class="col col-sm-8">
                             <select class="form-select" name="createNewLanguage" data-global-event="change" data-action-navigate="$value">
-                                <option><f:translate key="pages.glossary.translate" extensionName="wv_deepltranslate" /></option>
+                                <option><f:translate key="pages.glossary.translate" extensionName="deepltranslate_core" /></option>
                                 <f:for each="{deeplLanguages}" as="languageName" key="url">
                                     <option value="{url}">{languageName}</option>
                                 </f:for>

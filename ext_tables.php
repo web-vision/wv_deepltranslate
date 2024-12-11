@@ -1,14 +1,14 @@
 <?php
 
-use WebVision\WvDeepltranslate\Access\AccessRegistry;
+use WebVision\Deepltranslate\Core\Access\AccessRegistry;
 
 defined('TYPO3') or die();
 
 (function () {
     $iconProviderConfiguration = [
         \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class => [
-            'actions-localize-deepl' => ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-deepl.svg'],
-            'actions-localize-google' => ['source' => 'EXT:wv_deepltranslate/Resources/Public/Icons/actions-localize-google.svg'],
+            'actions-localize-deepl' => ['source' => 'EXT:deepltranslate_core/Resources/Public/Icons/actions-localize-deepl.svg'],
+            'actions-localize-google' => ['source' => 'EXT:deepltranslate_core/Resources/Public/Icons/actions-localize-google.svg'],
         ],
     ];
 

@@ -11,27 +11,27 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\DependencyInjection\SingletonPass;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Dashboard\WidgetRegistry;
-use WebVision\WvDeepltranslate\Client;
-use WebVision\WvDeepltranslate\ClientInterface;
-use WebVision\WvDeepltranslate\Command\GlossaryCleanupCommand;
-use WebVision\WvDeepltranslate\Command\GlossaryListCommand;
-use WebVision\WvDeepltranslate\Command\GlossarySyncCommand;
-use WebVision\WvDeepltranslate\Controller\Backend\AjaxController;
-use WebVision\WvDeepltranslate\Controller\GlossarySyncController;
-use WebVision\WvDeepltranslate\Event\Listener\GlossarySyncButtonProvider;
-use WebVision\WvDeepltranslate\Event\Listener\UsageToolBarEventListener;
-use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
-use WebVision\WvDeepltranslate\Form\User\HasFormalitySupport;
-use WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
-use WebVision\WvDeepltranslate\Hooks\TranslateHook;
-use WebVision\WvDeepltranslate\Hooks\UsageProcessAfterFinishHook;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
-use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
-use WebVision\WvDeepltranslate\Service\LanguageService;
-use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
-use WebVision\WvDeepltranslate\Service\UsageService;
-use WebVision\WvDeepltranslate\Widgets\UsageWidget;
+use WebVision\Deepltranslate\Core\Client;
+use WebVision\Deepltranslate\Core\ClientInterface;
+use WebVision\Deepltranslate\Core\Command\GlossaryCleanupCommand;
+use WebVision\Deepltranslate\Core\Command\GlossaryListCommand;
+use WebVision\Deepltranslate\Core\Command\GlossarySyncCommand;
+use WebVision\Deepltranslate\Core\Controller\Backend\AjaxController;
+use WebVision\Deepltranslate\Core\Controller\GlossarySyncController;
+use WebVision\Deepltranslate\Core\Event\Listener\GlossarySyncButtonProvider;
+use WebVision\Deepltranslate\Core\Event\Listener\UsageToolBarEventListener;
+use WebVision\Deepltranslate\Core\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
+use WebVision\Deepltranslate\Core\Form\User\HasFormalitySupport;
+use WebVision\Deepltranslate\Core\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
+use WebVision\Deepltranslate\Core\Hooks\TranslateHook;
+use WebVision\Deepltranslate\Core\Hooks\UsageProcessAfterFinishHook;
+use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
+use WebVision\Deepltranslate\Core\Service\DeeplService;
+use WebVision\Deepltranslate\Core\Service\IconOverlayGenerator;
+use WebVision\Deepltranslate\Core\Service\LanguageService;
+use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
+use WebVision\Deepltranslate\Core\Service\UsageService;
+use WebVision\Deepltranslate\Core\Widgets\UsageWidget;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
     $typo3version = new Typo3Version();
@@ -44,8 +44,8 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
 
     // Main DI
     $services
-        ->load('WebVision\\WvDeepltranslate\\', '../Classes/')
-        ->exclude('../Classes/{Domain/Model,Override/DatabaseRecordList.php,Override/Core11,Override/Core12}');
+        ->load('WebVision\\Deepltranslate\\Core\\', '../Classes/')
+        ->exclude('../Classes/{Domain/Model,Override/Core12}');
 
     // register console commands
     $services
@@ -141,17 +141,15 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->addCompilerPass(new SingletonPass('deepl.HasFormalitySupport'));
 
     // register Events
-    if ($typo3version->getMajorVersion() >= 12) {
-        $services
-            ->set(GlossarySyncButtonProvider::class)
-            ->tag(
-                'event.listener',
-                [
-                    'identifier' => 'glossary.syncbutton',
-                    'event' => ModifyButtonBarEvent::class,
-                ]
-            );
-    }
+    $services
+        ->set(GlossarySyncButtonProvider::class)
+        ->tag(
+            'event.listener',
+            [
+                'identifier' => 'glossary.syncbutton',
+                'event' => ModifyButtonBarEvent::class,
+            ]
+        );
 
     $services
         ->set(UsageToolBarEventListener::class)
@@ -175,8 +173,8 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
             ->tag('dashboard.widget', [
                 'identifier' => 'widgets-deepl-uses',
                 'groupNames' => 'deepl',
-                'title' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.title',
-                'description' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.description',
+                'title' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.title',
+                'description' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.description',
                 'iconIdentifier' => 'content-widget-list',
                 'height' => 'small',
                 'width' => 'small',

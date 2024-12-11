@@ -1,6 +1,6 @@
 <?php
 
-use WebVision\WvDeepltranslate\Controller\Backend\AjaxController;
+use WebVision\Deepltranslate\Core\Controller\Backend\AjaxController;
 
 /**
  * Definitions for routes provided by EXT:deepl

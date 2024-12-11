@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Hooks;
+namespace WebVision\Deepltranslate\Core\Hooks;
 
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
-use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
+use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
+use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
 
 class TranslateHook extends AbstractTranslateHook
 {
