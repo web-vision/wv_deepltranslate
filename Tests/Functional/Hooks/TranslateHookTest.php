@@ -189,8 +189,11 @@ final class TranslateHookTest extends AbstractDeepLTestCase
             'pages',
             [
                 'uid' => 2,
-            ]
-        )->fetch();
+            ],
+            [],
+            [],
+            1,
+        )->fetchAssociative();
 
         static::assertArrayHasKey('tx_wvdeepltranslate_content_not_checked', $pageRow);
         static::assertSame(1, (int)$pageRow['tx_wvdeepltranslate_content_not_checked']);
