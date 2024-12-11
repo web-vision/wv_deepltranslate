@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate;
+namespace WebVision\Deepltranslate\Core;
 
 /**
  * Describes required configuration value retrievement methods which are essential.

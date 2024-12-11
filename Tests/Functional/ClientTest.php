@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional;
+namespace WebVision\Deepltranslate\Core\Tests\Functional;
 
 use DeepL\GlossaryEntries;
 use DeepL\GlossaryInfo;
@@ -10,10 +10,10 @@ use DeepL\GlossaryLanguagePair;
 use DeepL\Language;
 use DeepL\TextResult;
 use Helmich\JsonAssert\JsonAssertions;
-use WebVision\WvDeepltranslate\ClientInterface;
+use WebVision\Deepltranslate\Core\ClientInterface;
 
 /**
- * @covers \WebVision\WvDeepltranslate\Client
+ * @covers \WebVision\Deepltranslate\Core\Client
  */
 final class ClientTest extends AbstractDeepLTestCase
 {

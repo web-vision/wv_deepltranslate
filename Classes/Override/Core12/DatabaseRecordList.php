@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Override\Core12;
+namespace WebVision\Deepltranslate\Core\Override\Core12;
 
-use WebVision\WvDeepltranslate\Access\AllowedTranslateAccess;
-use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
+use WebVision\Deepltranslate\Core\Access\AllowedTranslateAccess;
+use WebVision\Deepltranslate\Core\Utility\DeeplBackendUtility;
 
 /**
  * Class for rendering of Web>List module

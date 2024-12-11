@@ -13,7 +13,8 @@ can be defined via the following options in the user group settings.
 
 ..  note::
 
-    In order to be able to use the backend group authorisations, an update to the latest version of the `wv_deepltranslate` is required.
+    In order to be able to use the backend group authorisations, an update to the latest version
+    of the :php:`deepltranslate_core` (:php:`web-vision/deepltranslate-core`).
 
 ..  confval:: Allowed Translate
 

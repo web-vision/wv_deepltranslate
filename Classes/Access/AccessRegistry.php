@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Access;
+namespace WebVision\Deepltranslate\Core\Access;
 
 use TYPO3\CMS\Core\SingletonInterface;
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Command;
+namespace WebVision\Deepltranslate\Core\Command;
 
-use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use WebVision\Deepltranslate\Core\Domain\Repository\GlossaryRepository;
+use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
 
 trait GlossaryCommandTrait
 {

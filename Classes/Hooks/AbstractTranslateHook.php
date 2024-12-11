@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Hooks;
+namespace WebVision\Deepltranslate\Core\Hooks;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Core\Environment;
@@ -11,13 +11,13 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Domain\Dto\TranslateContext;
-use WebVision\WvDeepltranslate\Domain\Repository\PageRepository;
-use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
-use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
-use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\LanguageService;
-use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
+use WebVision\Deepltranslate\Core\Domain\Dto\TranslateContext;
+use WebVision\Deepltranslate\Core\Domain\Repository\PageRepository;
+use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
+use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
+use WebVision\Deepltranslate\Core\Service\DeeplService;
+use WebVision\Deepltranslate\Core\Service\LanguageService;
+use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
 
 abstract class AbstractTranslateHook
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Form\Item;
+namespace WebVision\Deepltranslate\Core\Form\Item;
 
 use DeepL\Language;
-use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\Deepltranslate\Core\Service\DeeplService;
 
 class SiteConfigSupportedLanguageItemsProcFunc
 {
@@ -25,8 +25,8 @@ class SiteConfigSupportedLanguageItemsProcFunc
         /** @var Language $supportedLanguage */
         foreach ($supportedLanguages as $supportedLanguage) {
             $configuration['items'][] = [
-                ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'label' : 0) => $supportedLanguage->name,
-                ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12 ? 'value' : 1) => $supportedLanguage->code,
+                'label' => $supportedLanguage->name,
+                'value' => $supportedLanguage->code,
             ];
         }
     }

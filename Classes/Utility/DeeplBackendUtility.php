@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Utility;
+namespace WebVision\Deepltranslate\Core\Utility;
 
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -19,13 +19,13 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use WebVision\WvDeepltranslate\Configuration;
-use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
-use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
-use WebVision\WvDeepltranslate\Service\IconOverlayGenerator;
-use WebVision\WvDeepltranslate\Service\LanguageService;
-use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
+use WebVision\Deepltranslate\Core\Configuration;
+use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
+use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
+use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
+use WebVision\Deepltranslate\Core\Service\IconOverlayGenerator;
+use WebVision\Deepltranslate\Core\Service\LanguageService;
+use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
 
 // @todo Make class final. Overriding a static utility class does not make much sense, but better to enforce it.
 class DeeplBackendUtility
@@ -68,7 +68,7 @@ class DeeplBackendUtility
     }
 
     /**
-     * ToDo: Migrated function to own class object "WebVision\WvDeepltranslate\Form\TranslationButtonGenerator"
+     * ToDo: Migrated function to own class object "WebVision\Deepltranslate\Core\Form\TranslationButtonGenerator"
      */
     public static function buildTranslateButton(
         $table,
@@ -93,7 +93,7 @@ class DeeplBackendUtility
         $title =
             (string)LocalizationUtility::translate(
                 'backend.button.translate',
-                'wv_deepltranslate',
+                'deepltranslate_core',
                 [
                     htmlspecialchars($languageTitle),
                 ]
@@ -129,7 +129,7 @@ class DeeplBackendUtility
     }
 
     /**
-     * @deprecated This function will no longer be used and will be removed in a later version please use it \WebVision\WvDeepltranslate\Service\IconOverlayGenerator
+     * @deprecated This function will no longer be used and will be removed in a later version please use it \WebVision\Deepltranslate\Core\Service\IconOverlayGenerator
      * @see IconOverlayGenerator::get()
      */
     public static function getIcon(string $iconFlag): Icon
@@ -139,7 +139,7 @@ class DeeplBackendUtility
     }
 
     /**
-     * ToDo: Migrated function to own class object "WebVision\WvDeepltranslate\Form\TranslationDropdownGenerator"
+     * ToDo: Migrated function to own class object "WebVision\Deepltranslate\Core\Form\TranslationDropdownGenerator"
      */
     public static function buildTranslateDropdown(
         $siteLanguages,
@@ -208,7 +208,7 @@ class DeeplBackendUtility
             if ($output !== '') {
                 $output = sprintf(
                     '<option value="">%s</option>%s',
-                    htmlspecialchars((string)LocalizationUtility::translate('backend.label', 'wv_deepltranslate')),
+                    htmlspecialchars((string)LocalizationUtility::translate('backend.label', 'deepltranslate_core')),
                     $output
                 );
             }

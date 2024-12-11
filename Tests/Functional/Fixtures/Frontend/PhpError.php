@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Frontend;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Frontend;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

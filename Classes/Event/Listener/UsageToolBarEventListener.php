@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Event\Listener;
+namespace WebVision\Deepltranslate\Core\Event\Listener;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
 use TYPO3\CMS\Core\Localization\LanguageService;
-use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
-use WebVision\WvDeepltranslate\Service\UsageService;
+use WebVision\Deepltranslate\Core\Exception\ApiKeyNotSetException;
+use WebVision\Deepltranslate\Core\Service\UsageService;
 
 class UsageToolBarEventListener implements LoggerAwareInterface
 {
@@ -42,10 +42,10 @@ class UsageToolBarEventListener implements LoggerAwareInterface
         }
 
         $title = $this->getLanguageService()->sL(
-            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.toolbar-label'
+            'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:usages.toolbar-label'
         );
         $message = $this->getLanguageService()->sL(
-            'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:usages.toolbar.message'
+            'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:usages.toolbar.message'
         );
 
         $severity = $this->usageService->determineSeverityForSystemInformation($usage->character->count, $usage->character->limit);

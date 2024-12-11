@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Controller;
+namespace WebVision\Deepltranslate\Core\Controller;
 
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -12,9 +12,9 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use WebVision\WvDeepltranslate\Exception\FailedToCreateGlossaryException;
-use WebVision\WvDeepltranslate\Exception\InvalidArgumentException;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use WebVision\Deepltranslate\Core\Exception\FailedToCreateGlossaryException;
+use WebVision\Deepltranslate\Core\Exception\InvalidArgumentException;
+use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
 
 class GlossarySyncController
 {
@@ -58,7 +58,7 @@ class GlossarySyncController
                 sprintf('Page "%d" not configured for glossary synchronization.', $pages['uid']),
                 (string)LocalizationUtility::translate(
                     'glossary.sync.title.invalid',
-                    'wv_deepltranslate'
+                    'deepltranslate_core'
                 ),
                 2,
                 true
@@ -69,15 +69,15 @@ class GlossarySyncController
         try {
             $this->deeplGlossaryService->syncGlossaries((int)$processingParameters['uid']);
             $this->flashMessageService->getMessageQueueByIdentifier()->enqueue(new FlashMessage(
-                (string)LocalizationUtility::translate('glossary.sync.message', 'wv_deepltranslate'),
-                (string)LocalizationUtility::translate('glossary.sync.title', 'wv_deepltranslate'),
+                (string)LocalizationUtility::translate('glossary.sync.message', 'deepltranslate_core'),
+                (string)LocalizationUtility::translate('glossary.sync.title', 'deepltranslate_core'),
                 0, // OK
                 true
             ));
         } catch (FailedToCreateGlossaryException $exception) {
             $this->flashMessageService->getMessageQueueByIdentifier()->enqueue(new FlashMessage(
-                (string)LocalizationUtility::translate('glossary.sync.message.invalid', 'wv_deepltranslate'),
-                (string)LocalizationUtility::translate('glossary.sync.title.invalid', 'wv_deepltranslate'),
+                (string)LocalizationUtility::translate('glossary.sync.message.invalid', 'deepltranslate_core'),
+                (string)LocalizationUtility::translate('glossary.sync.title.invalid', 'deepltranslate_core'),
                 2, // Error
                 true
             ));

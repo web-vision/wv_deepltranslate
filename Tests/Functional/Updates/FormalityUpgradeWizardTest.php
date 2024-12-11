@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Updates;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Updates;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
-use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
-use WebVision\WvDeepltranslate\Upgrades\FormalityUpgradeWizard;
+use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
+use WebVision\Deepltranslate\Core\Upgrades\FormalityUpgradeWizard;
 
 class FormalityUpgradeWizardTest extends AbstractDeepLTestCase
 {
@@ -69,7 +69,7 @@ class FormalityUpgradeWizardTest extends AbstractDeepLTestCase
             require __DIR__ . '/../Fixtures/ExtensionConfig.php',
             [
                 'EXTENSIONS' => [
-                    'wv_deepltranslate' => [
+                    'deepltranslate_core' => [
                         'deeplFormality' => 'default',
                     ],
                 ],

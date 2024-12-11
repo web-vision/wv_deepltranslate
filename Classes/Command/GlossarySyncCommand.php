@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Command;
+namespace WebVision\Deepltranslate\Core\Command;
 
 use Exception;
 use Symfony\Component\Console\Command\Command;

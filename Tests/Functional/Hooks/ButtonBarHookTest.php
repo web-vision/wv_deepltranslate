@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Hooks;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Hooks;
 
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\Buttons\LinkButton;
@@ -12,12 +12,12 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
-use WebVision\WvDeepltranslate\Hooks\ButtonBarHook;
+use WebVision\Deepltranslate\Core\Hooks\ButtonBarHook;
 
 class ButtonBarHookTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = [
-        'web-vision/wv_deepltranslate',
+        'web-vision/deepltranslate-core',
     ];
 
     public function setUp(): void

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Service;
+namespace WebVision\Deepltranslate\Core\Service;
 
 use TYPO3\CMS\Core\Site\Entity\Site;
-use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
-use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
+use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
+use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
 
 final class LanguageService
 {
@@ -37,11 +37,7 @@ final class LanguageService
      */
     public function getSourceLanguage(Site $currentSite): array
     {
-        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
-            $languageIsoCode = $currentSite->getDefaultLanguage()->getLocale()->getLanguageCode();
-        } else {
-            $languageIsoCode = $currentSite->getDefaultLanguage()->getTwoLetterIsoCode();
-        }
+        $languageIsoCode = $currentSite->getDefaultLanguage()->getLocale()->getLanguageCode();
         $sourceLanguageRecord = [
             'uid' => $currentSite->getDefaultLanguage()->getLanguageId(),
             'title' => $currentSite->getDefaultLanguage()->getTitle(),

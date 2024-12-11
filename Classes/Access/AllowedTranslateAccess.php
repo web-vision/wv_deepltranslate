@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Access;
+namespace WebVision\Deepltranslate\Core\Access;
 
 final class AllowedTranslateAccess implements AccessItemInterface
 {
@@ -15,12 +15,12 @@ final class AllowedTranslateAccess implements AccessItemInterface
 
     public function getTitle(): string
     {
-        return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:be_groups.deepltranslate_access.items.translateAllowed.title';
+        return 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:be_groups.deepltranslate_access.items.translateAllowed.title';
     }
 
     public function getDescription(): string
     {
-        return 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:be_groups.deepltranslate_access.items.translateAllowed.description';
+        return 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:be_groups.deepltranslate_access.items.translateAllowed.description';
     }
 
     public function getIconIdentifier(): string

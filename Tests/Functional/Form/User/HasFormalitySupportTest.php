@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Form\User;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Form\User;
 
 use TYPO3\CMS\Backend\Form\FormDataProvider\EvaluateDisplayConditions;
-use WebVision\WvDeepltranslate\Form\User\HasFormalitySupport;
-use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\Deepltranslate\Core\Form\User\HasFormalitySupport;
+use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
 
 /**
- * @covers \WebVision\WvDeepltranslate\Form\User\HasFormalitySupport
+ * @covers \WebVision\Deepltranslate\Core\Form\User\HasFormalitySupport
  */
 class HasFormalitySupportTest extends AbstractDeepLTestCase
 {

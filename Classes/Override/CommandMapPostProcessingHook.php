@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Override;
+namespace WebVision\Deepltranslate\Core\Override;
 
 use B13\Container\Domain\Factory\Exception;
 use TYPO3\CMS\Core\DataHandling\DataHandler;

@@ -3,7 +3,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use WebVision\WvDeepltranslate\ClientInterface;
+use WebVision\Deepltranslate\Core\ClientInterface;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
     $services = $containerConfigurator->services();

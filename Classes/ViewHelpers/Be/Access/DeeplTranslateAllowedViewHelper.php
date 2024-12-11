@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\ViewHelpers\Be\Access;
+namespace WebVision\Deepltranslate\Core\ViewHelpers\Be\Access;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
-use WebVision\WvDeepltranslate\Access\AllowedTranslateAccess;
+use WebVision\Deepltranslate\Core\Access\AllowedTranslateAccess;
 
 final class DeeplTranslateAllowedViewHelper extends AbstractConditionViewHelper
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Hooks;
+namespace WebVision\Deepltranslate\Core\Hooks;
 
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -14,7 +14,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use WebVision\WvDeepltranslate\Access\AllowedGlossarySyncAccess;
+use WebVision\Deepltranslate\Core\Access\AllowedGlossarySyncAccess;
 
 class ButtonBarHook
 {
@@ -56,7 +56,7 @@ class ButtonBarHook
         $parameters = $this->buildParamsArrayForListView((int)$page['uid']);
         $title = (string)LocalizationUtility::translate(
             'glossary.sync.button.all',
-            'wv_deepltranslate'
+            'deepltranslate_core'
         );
         // Style button
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);

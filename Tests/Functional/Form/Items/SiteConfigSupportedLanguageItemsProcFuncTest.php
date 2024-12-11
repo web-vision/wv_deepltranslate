@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Form\Items;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Form\Items;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
-use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\Deepltranslate\Core\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
+use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
 
 /**
- * @covers \WebVision\WvDeepltranslate\Form\Item\SiteConfigSupportedLanguageItemsProcFunc
+ * @covers \WebVision\Deepltranslate\Core\Form\Item\SiteConfigSupportedLanguageItemsProcFunc
  */
 final class SiteConfigSupportedLanguageItemsProcFuncTest extends AbstractDeepLTestCase
 {

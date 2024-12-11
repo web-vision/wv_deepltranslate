@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Exception;
+namespace WebVision\Deepltranslate\Core\Exception;
 
 class GlossaryEntriesNotExistException extends \Exception
 {

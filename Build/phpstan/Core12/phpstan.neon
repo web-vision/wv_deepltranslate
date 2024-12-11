@@ -16,4 +16,3 @@ parameters:
     - ../../../.Build/*
     - ../../../Tests/Functional/Updates/Fixtures/Extension/test_extension/ext_emconf.php
     - ../../../Tests/Functional/Fixtures/Extensions/test_services_override/ext_emconf.php
-    - ../../../Classes/Override/Core11/*

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Form\User;
+namespace WebVision\Deepltranslate\Core\Form\User;
 
 use TYPO3\CMS\Backend\Form\FormDataProvider\EvaluateDisplayConditions;
-use WebVision\WvDeepltranslate\Service\DeeplService;
+use WebVision\Deepltranslate\Core\Service\DeeplService;
 
 class HasFormalitySupport
 {

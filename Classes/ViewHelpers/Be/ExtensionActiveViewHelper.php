@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\ViewHelpers\Be;
+namespace WebVision\Deepltranslate\Core\ViewHelpers\Be;
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;

@@ -5,7 +5,7 @@
 [![Total Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/downloads.svg?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 [![Monthly Downloads](https://poser.pugx.org/web-vision/wv_deepltranslate/d/monthly?style=for-the-badge)](https://packagist.org/packages/web-vision/wv_deepltranslate)
 
-# TYPO3 extension `wv_deepltranslate`
+# TYPO3 extension `deepltranslate_core`
 
 This extension provides automated translation of pages, content and records in TYPO3
 for languages supported by [DeepL](https://www.deepl.com/de/docs-api/).
@@ -40,13 +40,13 @@ Find out more: https://www.web-vision.de/en/deepl.html
 
 Install with your favour:
 
-* [Composer](https://packagist.org/packages/web-vision/wv_deepltranslate)
-* [TER / Extension Manager](https://extensions.typo3.org/extension/wv_deepltranslate/)
-* [Git](https://github.com/web-vision/wv_deepltranslate)
+* [Composer](https://packagist.org/packages/web-vision/deepltranslate-core)
+* [TER / Extension Manager](https://extensions.typo3.org/extension/deepltranslate_core/)
+* [Git](https://github.com/web-vision/deepltranslate-core)
 
 We prefer composer installation:
 ```bash
-composer req web-vision/wv_deepltranslate
+composer require web-vision/deepltranslate-core
 ```
 
 The DeepL translation buttons are only displayed once you have set up the API
@@ -54,7 +54,7 @@ and desired target languages. Read the documentation to find out how to do this.
 
 ## Documentation
 
-Read online: https://docs.typo3.org/p/web-vision/wv_deepltranslate/main/en-us/
+Read online: https://docs.typo3.org/p/web-vision/deepltranslate-core/main/en-us/
 
 ## Sponsors
 

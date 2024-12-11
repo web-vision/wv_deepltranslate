@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Service;
+namespace WebVision\Deepltranslate\Core\Service;
 
 use DateTime;
 use DeepL\GlossaryEntries;
@@ -11,10 +11,10 @@ use DeepL\GlossaryLanguagePair;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use WebVision\WvDeepltranslate\ClientInterface;
-use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
-use WebVision\WvDeepltranslate\Exception\FailedToCreateGlossaryException;
-use WebVision\WvDeepltranslate\Exception\GlossaryEntriesNotExistException;
+use WebVision\Deepltranslate\Core\ClientInterface;
+use WebVision\Deepltranslate\Core\Domain\Repository\GlossaryRepository;
+use WebVision\Deepltranslate\Core\Exception\FailedToCreateGlossaryException;
+use WebVision\Deepltranslate\Core\Exception\GlossaryEntriesNotExistException;
 
 final class DeeplGlossaryService
 {

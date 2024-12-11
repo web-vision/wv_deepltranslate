@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:glossaryentry',
+        'title' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:glossaryentry',
         'label' => 'term',
-        'iconfile' => 'EXT:wv_deepltranslate/Resources/Public/Icons/deepl.svg',
+        'iconfile' => 'EXT:deepltranslate_core/Resources/Public/Icons/deepl.svg',
         'default_sortby' => 'term ASC',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -82,7 +82,7 @@ return [
             ],
         ],
         'term' => [
-            'label' => 'LLL:EXT:wv_deepltranslate/Resources/Private/Language/locallang.xlf:entry.source',
+            'label' => 'LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:entry.source',
             'l10n_mode' => '',
             'config' => (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12
                 ? [

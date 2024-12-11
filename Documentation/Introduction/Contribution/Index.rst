@@ -7,12 +7,12 @@ Contribution
 
 Contributions are essential to the success of open source projects, but they are by no means
 limited to contributing code. Much more can be done, for example by
-improving the `documentation <https://docs.typo3.org/p/web-vision/wv_deepltranslate/main/en-us/>`__.
+improving the `documentation <https://docs.typo3.org/p/web-vision/deepltranslate-core/main/en-us/>`__.
 
 Contribution workflow
 ---------------------
 
-#.  Please always create an issue on `Github <https://github.com/web-vision/wv_deepltranslate/issues>`__
+#.  Please always create an issue on `Github <https://github.com/web-vision/deepltranslate-core/issues>`__
     before starting a change. This is very helpful to understand what kind of problem the
     pull request solves, and whether your change will be accepted.
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Hooks;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Hooks;
 
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
@@ -12,14 +12,14 @@ use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Hooks\TranslateHook;
-use WebVision\WvDeepltranslate\Service\LanguageService;
-use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
-use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
-use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
+use WebVision\Deepltranslate\Core\Hooks\TranslateHook;
+use WebVision\Deepltranslate\Core\Service\LanguageService;
+use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
+use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
 /**
- * @covers \WebVision\WvDeepltranslate\Hooks\TranslateHook
+ * @covers \WebVision\Deepltranslate\Core\Hooks\TranslateHook
  */
 final class TranslateHookTest extends AbstractDeepLTestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Utility;
+namespace WebVision\Deepltranslate\Core\Utility;
 
 // @todo Make class final. Overriding a static utility class does not make much sense, but better to enforce it.
 // @todo Complete class and no method are used anyway. Deprecate / remove it ?

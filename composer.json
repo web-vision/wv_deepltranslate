@@ -1,5 +1,5 @@
 {
-	"name": "web-vision/wv_deepltranslate",
+	"name": "web-vision/deepltranslate-core",
 	"type": "typo3-cms-extension",
 	"description": "This extension provides option to translate content element, and TCA record texts to DeepL supported languages using DeepL API services with TYPO3 CMS",
 	"license": ["GPL-2.0-or-later"],
@@ -32,14 +32,20 @@
 		{
 			"name": "Riad Zejnilagic Trumic",
 			"role": "Developer"
+		},
+		{
+			"name": "Stefan Bürk",
+			"role": "Developer",
+			"email": "stefan@buerk.tech"
 		}
 	],
 	"support": {
-		"issues": "https://github.com/web-vision/wv_deepltranslate/issues",
-		"source": "https://github.com/web-vision/wv_deepltranslate"
+		"issues": "https://github.com/web-vision/deepltranslate-core/issues",
+		"source": "https://github.com/web-vision/deepltranslate-core"
 	},
 	"conflict": {
-		"studiomitte/recordlist-thumbnail": "*"
+		"studiomitte/recordlist-thumbnail": "*",
+		"webvision/wv_deepltranslate": "*"
 	},
 	"config": {
 		"vendor-dir": ".Build/vendor",
@@ -56,28 +62,28 @@
 	"extra": {
 		"typo3/cms": {
 			"cms-package-dir": "{$vendor-dir}/typo3/cms",
-			"extension-key": "wv_deepltranslate",
+			"extension-key": "deepltranslate_core",
 			"ignore-as-root": false,
 			"web-dir": ".Build/Web",
 			"app-dir": ".Build"
 		},
 		"branch-alias": {
-			"dev-main": "4.x.x-dev"
+			"dev-main": "5.x.x-dev"
 		}
 	},
 	"require": {
-		"php": "^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3",
+		"php": "^8.1 || ^8.2 || ^8.3 || ^8.4",
 		"ext-curl": "*",
 		"ext-json": "*",
 		"ext-pdo": "*",
 		"deeplcom/deepl-php": ">=1.6.0 <=1.8.0",
-		"typo3/cms-backend": "^11.5 || ^12.4",
-		"typo3/cms-core": "^11.5 || ^12.4",
-		"typo3/cms-extbase": "^11.5 || ^12.4",
-		"typo3/cms-fluid": "^11.5 || ^12.4",
-		"typo3/cms-install": "^11.5 || ^12.4",
-		"typo3/cms-setup": "^11.5 || ^12.4",
-		"typo3/cms-scheduler": "^11.5 || ^12.4"
+		"typo3/cms-backend": "^12.4.2",
+		"typo3/cms-core": "^12.4.2",
+		"typo3/cms-extbase": "^12.4.2",
+		"typo3/cms-fluid": "^12.4.2",
+		"typo3/cms-install": "^12.4.2",
+		"typo3/cms-scheduler": "^12.4.2",
+		"typo3/cms-setup": "^12.4.2"
 	},
 	"require-dev": {
 		"b13/container": "^2.2",
@@ -88,21 +94,21 @@
 		"nikic/php-parser": "^4.15.1",
 		"php-mock/php-mock-phpunit": "^2.6",
 		"phpstan/phpstan": "^1.10",
-		"phpunit/phpunit": "^9.6.8 || ^10.1",
+		"phpunit/phpunit": "^10.5",
 		"ramsey/uuid": "^4.2",
 		"saschaegerer/phpstan-typo3": "^1.9",
-		"typo3/cms-belog": "^11.5 || ^12.4",
-		"typo3/cms-dashboard": "^11.5 || ^12.4",
-		"typo3/cms-extensionmanager": "^11.5 || ^12.4",
-		"typo3/cms-filelist": "^11.5 || ^12.4",
-		"typo3/cms-fluid-styled-content": "^11.5 || ^12.4",
-		"typo3/cms-frontend": "^11.5 || ^12.4",
-		"typo3/cms-info": "^11.5 || ^12.4",
-		"typo3/cms-lowlevel": "^11.5 || ^12.4",
-		"typo3/cms-rte-ckeditor": "^11.5 || ^12.4",
-		"typo3/cms-tstemplate": "^11.5 || ^12.4",
-		"typo3/cms-workspaces": "^11.5 || ^12.4",
-		"typo3/testing-framework": "^7.0"
+		"typo3/cms-belog": "^12.4.2",
+		"typo3/cms-dashboard": "^12.4.2",
+		"typo3/cms-extensionmanager": "^12.4.2",
+		"typo3/cms-filelist": "^12.4.2",
+		"typo3/cms-fluid-styled-content": "^12.4.2",
+		"typo3/cms-frontend": "^12.4.2",
+		"typo3/cms-info": "^12.4.2",
+		"typo3/cms-lowlevel": "^12.4.2",
+		"typo3/cms-rte-ckeditor": "^12.4.2",
+		"typo3/cms-tstemplate": "^12.4.2",
+		"typo3/cms-workspaces": "^12.4.2",
+		"typo3/testing-framework": "^7.1.1"
 	},
 	"suggest": {
         "b13/container": "Just to be loaded after EXT:container",
@@ -112,26 +118,23 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"WebVision\\WvDeepltranslate\\": "Classes"
+			"WebVision\\Deepltranslate\\Core\\": "Classes"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"WebVision\\WvDeepltranslate\\Tests\\": "Tests"
+			"WebVision\\Deepltranslate\\Core\\Tests\\": "Tests"
 		}
 	},
 	"scripts": {
-		"cs": ".Build/bin/php-cs-fixer",
-		"tl": ".Build/bin/typoscript-lint",
-		"phpstan": ".Build/bin/phpstan",
-		"phpunit": ".Build/bin/phpunit",
+		"cs": "@php .Build/bin/php-cs-fixer",
+		"tl": "@php .Build/bin/typoscript-lint",
+		"phpstan": "@php .Build/bin/phpstan",
+		"phpunit": "@php .Build/bin/phpunit",
 		"cs:check": "@cs fix --config Build/php-cs-fixer/php-cs-rules.php --ansi --diff --verbose --dry-run",
 		"cs:fix": "@cs fix --config Build/php-cs-fixer/php-cs-rules.php --ansi",
-		"analyze:php": "@phpstan analyse --ansi --no-progress --memory-limit=768M",
-		"analyze:php:11": "@analyze:php --configuration=Build/phpstan/Core11/phpstan.neon",
-		"analyze:baseline:11": "@analyze:php --configuration=Build/phpstan/Core11/phpstan.neon --generate-baseline=Build/phpstan/Core11/phpstan-baseline.neon",
-		"analyze:php:12": "@analyze:php --configuration=Build/phpstan/Core12/phpstan.neon",
-		"analyze:baseline:12": "@analyze:php --configuration=Build/phpstan/Core11/phpstan.neon --generate-baseline=Build/phpstan/Core12/phpstan-baseline.neon",
+		"analyze:php:12": "@phpstan analyse --ansi --no-progress --memory-limit=768M --configuration=Build/phpstan/Core12/phpstan.neon",
+		"analyze:baseline:12": "@phpstan analyse --ansi --no-progress --memory-limit=768M --configuration=Build/phpstan/Core11/phpstan.neon --generate-baseline=Build/phpstan/Core12/phpstan-baseline.neon",
 		"lint:typoscript": "@tl --ansi --config=./Build/typoscript-lint/typoscript-lint.yml",
 		"lint:php": "find .*.php *.php Classes Configuration Tests -name '*.php' -print0 | xargs -r -0 -n 1 -P 4 php -l",
 		"test:php": [

@@ -1,6 +1,6 @@
 <?php
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Traits;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
@@ -10,7 +10,7 @@ use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\AbstractI
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\ArrayValueInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\TypoScriptInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
-use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Frontend\PhpError;
+use WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Frontend\PhpError;
 
 /**
  * Trait used for test classes that want to set up (= write) site configuration files.

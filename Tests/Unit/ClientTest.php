@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Unit;
+namespace WebVision\Deepltranslate\Core\Tests\Unit;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-use WebVision\WvDeepltranslate\Client;
-use WebVision\WvDeepltranslate\ConfigurationInterface;
-use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
+use WebVision\Deepltranslate\Core\Client;
+use WebVision\Deepltranslate\Core\ConfigurationInterface;
+use WebVision\Deepltranslate\Core\Exception\ApiKeyNotSetException;
 
 class ClientTest extends UnitTestCase
 {

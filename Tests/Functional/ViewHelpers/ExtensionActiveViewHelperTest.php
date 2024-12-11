@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\ViewHelpers;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\ViewHelpers;
 
 use TYPO3\CMS\Fluid\View\TemplateView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -13,7 +13,7 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
 {
     protected bool $initializeDatabase = false;
 
-    protected array $testExtensionsToLoad = ['web-vision/wv_deepltranslate'];
+    protected array $testExtensionsToLoad = ['web-vision/deepltranslate-core'];
 
     protected static FluidCacheInterface $cache;
 
@@ -43,7 +43,7 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
             'elseArgument',
         ];
         yield 'extension set to own, await then' => [
-            '<deepl:be.extensionActive extension="wv_deepltranslate" then="thenArgument" else="elseArgument" />',
+            '<deepl:be.extensionActive extension="deepltranslate_core" then="thenArgument" else="elseArgument" />',
             [],
             'thenArgument',
         ];
@@ -70,7 +70,7 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
     {
         $view = new TemplateView();
         $view->assignMultiple($variables);
-        $view->getRenderingContext()->getViewHelperResolver()->addNamespace('deepl', 'WebVision\\WvDeepltranslate\\ViewHelpers');
+        $view->getRenderingContext()->getViewHelperResolver()->addNamespace('deepl', 'WebVision\\Deepltranslate\\Core\\ViewHelpers');
         $view->getRenderingContext()->setCache(self::$cache);
         $view->getRenderingContext()->getTemplatePaths()->setTemplateSource($template);
         static::assertSame($expected, $view->render());

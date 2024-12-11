@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Services;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Services;
 
 use DeepL\Usage;
 use DeepL\UsageDetail;
-use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\ProcessingInstruction;
-use WebVision\WvDeepltranslate\Service\UsageService;
-use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\Deepltranslate\Core\Service\DeeplService;
+use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
+use WebVision\Deepltranslate\Core\Service\UsageService;
+use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
 
 final class UsageServiceTest extends AbstractDeepLTestCase
 {

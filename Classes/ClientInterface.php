@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate;
+namespace WebVision\Deepltranslate\Core;
 
 use DeepL\GlossaryEntries;
 use DeepL\GlossaryInfo;
@@ -11,7 +11,7 @@ use DeepL\Language;
 use DeepL\TextResult;
 use DeepL\Usage;
 use Psr\Log\LoggerAwareInterface;
-use WebVision\WvDeepltranslate\Exception\ApiKeyNotSetException;
+use WebVision\Deepltranslate\Core\Exception\ApiKeyNotSetException;
 
 /**
  * Interface for custom client implementation and which methods are expected.

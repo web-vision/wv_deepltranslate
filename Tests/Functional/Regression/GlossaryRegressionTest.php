@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Tests\Functional\Regression;
+namespace WebVision\Deepltranslate\Core\Tests\Functional\Regression;
 
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
-use WebVision\WvDeepltranslate\Tests\Functional\AbstractDeepLTestCase;
-use WebVision\WvDeepltranslate\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
+use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
+use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
+use WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
 final class GlossaryRegressionTest extends AbstractDeepLTestCase
 {
@@ -42,7 +42,7 @@ final class GlossaryRegressionTest extends AbstractDeepLTestCase
 
     protected array $configurationToUseInTestInstance = [
         'EXTENSIONS' => [
-            'wv_deepltranslate' => [
+            'deepltranslate_core' => [
                 'apiKey' => 'mock_server',
             ],
         ],
@@ -93,7 +93,7 @@ final class GlossaryRegressionTest extends AbstractDeepLTestCase
         $dataHandler->start([], $commandMap);
         $dataHandler->process_cmdmap();
 
-        self::assertEmpty($dataHandler->errorLog);
+        static::assertEmpty($dataHandler->errorLog);
         self::assertCSVDataSet(__DIR__ . '/Fixtures/Results/translateWithGlossary.csv');
     }
 }

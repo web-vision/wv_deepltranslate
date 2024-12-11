@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\WvDeepltranslate\Domain\Repository;
+namespace WebVision\Deepltranslate\Core\Domain\Repository;
 
 use DeepL\GlossaryInfo;
 use Doctrine\DBAL\DBALException;
@@ -13,11 +13,10 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use WebVision\WvDeepltranslate\Service\DeeplGlossaryService;
+use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
 
 // @todo Consider to rename/move this as service class.
 final class GlossaryRepository
@@ -51,11 +50,7 @@ final class GlossaryRepository
         $localizationLanguageIds = $this->getAvailableLocalizations($pageId);
         $site = GeneralUtility::makeInstance(SiteFinder::class)
             ->getSiteByPageId($pageId);
-        if ((new Typo3Version())->getMajorVersion() >= 12) {
-            $sourceLangIsoCode = $site->getDefaultLanguage()->getLocale()->getLanguageCode();
-        } else {
-            $sourceLangIsoCode = $site->getDefaultLanguage()->getTwoLetterIsoCode();
-        }
+        $sourceLangIsoCode = $site->getDefaultLanguage()->getLocale()->getLanguageCode();
 
         $localizationArray[$sourceLangIsoCode] = $entries;
 
@@ -416,11 +411,7 @@ final class GlossaryRepository
 
     protected function getTargetLanguageIsoCode(Site $site, int $languageId): string
     {
-        if ((new Typo3Version())->getMajorVersion() >= 12) {
-            return $site->getLanguageById($languageId)->getLocale()->getLanguageCode();
-        } else {
-            return $site->getLanguageById($languageId)->getTwoLetterIsoCode();
-        }
+        return $site->getLanguageById($languageId)->getLocale()->getLanguageCode();
     }
 
     /**

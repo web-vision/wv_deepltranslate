@@ -3,82 +3,51 @@
 defined('TYPO3') or die();
 
 (static function (): void {
-    $typo3version = new \TYPO3\CMS\Core\Information\Typo3Version();
-
-    if ($typo3version->getMajorVersion() < 12) {
-        // @todo Remove this after TYPO3 v12 is minimal supported version.
-        // Since TYPO3 v12 `Configuration/page.tsconfig` is auto loaded and contains a include to that file, therefore
-        // it needs to be only loaded manually for TYPO3 v11 as global PageTSConfig.
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-            '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:wv_deepltranslate/Configuration/TsConfig/Page/pagetsconfig.tsconfig">'
-        );
-    }
-
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['wvDeepltranslate_updateGlossary']
-        = \WebVision\WvDeepltranslate\Upgrades\GlossaryUpgradeWizard::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['wvDeepltranslate_formalityUpgrade']
-        = \WebVision\WvDeepltranslate\Upgrades\FormalityUpgradeWizard::class;
+        = \WebVision\Deepltranslate\Core\Upgrades\FormalityUpgradeWizard::class;
 
     //allowLanguageSynchronizationHook manipulates l10n_state
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
-        = \WebVision\WvDeepltranslate\Hooks\AllowLanguageSynchronizationHook::class;
+        = \WebVision\Deepltranslate\Core\Hooks\AllowLanguageSynchronizationHook::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
-        = \WebVision\WvDeepltranslate\Hooks\Glossary\UpdatedGlossaryEntryTermHook::class;
+        = \WebVision\Deepltranslate\Core\Hooks\Glossary\UpdatedGlossaryEntryTermHook::class;
 
     //hook for translate content
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processTranslateToClass']['deepl']
-        = \WebVision\WvDeepltranslate\Hooks\TranslateHook::class;
+        = \WebVision\Deepltranslate\Core\Hooks\TranslateHook::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['deepl']
-        = \WebVision\WvDeepltranslate\Hooks\TranslateHook::class;
+        = \WebVision\Deepltranslate\Core\Hooks\TranslateHook::class;
 
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][\WebVision\WvDeepltranslate\Hooks\UsageProcessAfterFinishHook::class]
-        = \WebVision\WvDeepltranslate\Hooks\UsageProcessAfterFinishHook::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][\WebVision\Deepltranslate\Core\Hooks\UsageProcessAfterFinishHook::class]
+        = \WebVision\Deepltranslate\Core\Hooks\UsageProcessAfterFinishHook::class;
 
     //hook to checkModifyAccessList for editors
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkModifyAccessList']['deepl']
-        = \WebVision\WvDeepltranslate\Hooks\TCEmainHook::class;
+        = \WebVision\Deepltranslate\Core\Hooks\TCEmainHook::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all']['deepl-1675946132'] =
-        \WebVision\WvDeepltranslate\Hooks\DeeplPreviewFlagGeneratePageHook::class . '->renderDeeplPreviewFlag';
+        \WebVision\Deepltranslate\Core\Hooks\DeeplPreviewFlagGeneratePageHook::class . '->renderDeeplPreviewFlag';
 
     //xclass localizationcontroller for localizeRecords() and process() action
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\Page\LocalizationController::class] = [
-        'className' => \WebVision\WvDeepltranslate\Override\LocalizationController::class,
+        'className' => \WebVision\Deepltranslate\Core\Override\LocalizationController::class,
     ];
 
-    if ($typo3version->getMajorVersion() >= 12) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\RecordListController::class] = [
-            'className' => \WebVision\WvDeepltranslate\Override\Core12\DeeplRecordListController::class,
-        ];
-        //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\RecordList\DatabaseRecordList::class] = [
-            'className' => \WebVision\WvDeepltranslate\Override\Core12\DatabaseRecordList::class,
-        ];
-    } else {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\Controller\RecordListController::class] = [
-            'className' => \WebVision\WvDeepltranslate\Override\Core11\DeeplRecordListController::class,
-        ];
-        //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class] = [
-            'className' => \WebVision\WvDeepltranslate\Override\Core11\DatabaseRecordList::class,
-        ];
-
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\PageLayoutController::class] = [
-            'className' => \WebVision\WvDeepltranslate\Override\Core11\PageLayoutController::class,
-        ];
-
-        // button hook changed to event, registration here only needed for v11
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['wv_deepltranslate'] =
-            \WebVision\WvDeepltranslate\Hooks\ButtonBarHook::class . '->getButtons';
-    }
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\RecordListController::class] = [
+        'className' => \WebVision\Deepltranslate\Core\Override\Core12\DeeplRecordListController::class,
+    ];
+    //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\RecordList\DatabaseRecordList::class] = [
+        'className' => \WebVision\Deepltranslate\Core\Override\Core12\DatabaseRecordList::class,
+    ];
 
     if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('container')) {
         //xclass CommandMapPostProcessingHook for translating contents within containers
         if (class_exists(\B13\Container\Hooks\Datahandler\CommandMapPostProcessingHook::class)) {
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\B13\Container\Hooks\Datahandler\CommandMapPostProcessingHook::class] = [
-                'className' => \WebVision\WvDeepltranslate\Override\CommandMapPostProcessingHook::class,
+                'className' => \WebVision\Deepltranslate\Core\Override\CommandMapPostProcessingHook::class,
             ];
         }
     }
@@ -87,7 +56,7 @@ defined('TYPO3') or die();
     // cannot be done and checking the context (FE/BE) directly. Instantiating PageRenderer here directly would be
     // emitted an exception as the cache configuration manager cannot be retrieved in this early stage.
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][1684661135]
-        = \WebVision\WvDeepltranslate\Hooks\PageRendererHook::class . '->renderPreProcess';
+        = \WebVision\Deepltranslate\Core\Hooks\PageRendererHook::class . '->renderPreProcess';
 
     //add caching for DeepL API-supported Languages
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']
@@ -95,7 +64,7 @@ defined('TYPO3') or die();
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']['backend']
         ??= \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
 
-    $accessRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\WebVision\WvDeepltranslate\Access\AccessRegistry::class);
-    $accessRegistry->addAccess((new \WebVision\WvDeepltranslate\Access\AllowedTranslateAccess()));
-    $accessRegistry->addAccess((new \WebVision\WvDeepltranslate\Access\AllowedGlossarySyncAccess()));
+    $accessRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\WebVision\Deepltranslate\Core\Access\AccessRegistry::class);
+    $accessRegistry->addAccess((new \WebVision\Deepltranslate\Core\Access\AllowedTranslateAccess()));
+    $accessRegistry->addAccess((new \WebVision\Deepltranslate\Core\Access\AllowedGlossarySyncAccess()));
 })();
