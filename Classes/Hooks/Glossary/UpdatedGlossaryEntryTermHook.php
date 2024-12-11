@@ -7,9 +7,9 @@ namespace WebVision\Deepltranslate\Core\Hooks\Glossary;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\Deepltranslate\Core\Domain\Repository\GlossaryEntryRepository;
@@ -69,7 +69,7 @@ class UpdatedGlossaryEntryTermHook
                 'glossary.not-sync.title',
                 'DeepltranslateCore'
             ),
-            AbstractMessage::INFO,
+            ContextualFeedbackSeverity::INFO,
             true
         );
 
