@@ -21,7 +21,7 @@ class DeeplPreviewFlagGeneratePageHook
             && $controller->getContext()->getPropertyFromAspect('frontend.preview', 'isPreview');
         if (
             !$isInPreviewMode
-            || $controller->doWorkspacePreview()
+            || $controller->getContext()->getPropertyFromAspect('workspace', 'isOffline', false)
             || ($controller->config['config']['disablePreviewNotification'] ?? false)
             || (
                 isset($controller->page['tx_wvdeepltranslate_translated_time'])
