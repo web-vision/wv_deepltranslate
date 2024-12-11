@@ -66,7 +66,7 @@ final class GlossarySyncButtonProvider
         $parameters = $this->buildParamsArrayForListView((int)$id);
         $title = (string)LocalizationUtility::translate(
             'glossary.sync.button.all',
-            'deepltranslate_core'
+            'DeepltranslateCore'
         );
         // Style button
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);

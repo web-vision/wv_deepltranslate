@@ -58,7 +58,7 @@ class GlossarySyncController
                 sprintf('Page "%d" not configured for glossary synchronization.', $pages['uid']),
                 (string)LocalizationUtility::translate(
                     'glossary.sync.title.invalid',
-                    'deepltranslate_core'
+                    'DeepltranslateCore'
                 ),
                 2,
                 true
@@ -69,15 +69,15 @@ class GlossarySyncController
         try {
             $this->deeplGlossaryService->syncGlossaries((int)$processingParameters['uid']);
             $this->flashMessageService->getMessageQueueByIdentifier()->enqueue(new FlashMessage(
-                (string)LocalizationUtility::translate('glossary.sync.message', 'deepltranslate_core'),
-                (string)LocalizationUtility::translate('glossary.sync.title', 'deepltranslate_core'),
+                (string)LocalizationUtility::translate('glossary.sync.message', 'DeepltranslateCore'),
+                (string)LocalizationUtility::translate('glossary.sync.title', 'DeepltranslateCore'),
                 0, // OK
                 true
             ));
         } catch (FailedToCreateGlossaryException $exception) {
             $this->flashMessageService->getMessageQueueByIdentifier()->enqueue(new FlashMessage(
-                (string)LocalizationUtility::translate('glossary.sync.message.invalid', 'deepltranslate_core'),
-                (string)LocalizationUtility::translate('glossary.sync.title.invalid', 'deepltranslate_core'),
+                (string)LocalizationUtility::translate('glossary.sync.message.invalid', 'DeepltranslateCore'),
+                (string)LocalizationUtility::translate('glossary.sync.title.invalid', 'DeepltranslateCore'),
                 2, // Error
                 true
             ));

@@ -63,11 +63,11 @@ class UpdatedGlossaryEntryTermHook
         $flashMessage = new FlashMessage(
             (string)LocalizationUtility::translate(
                 'glossary.not-sync.message',
-                'deepltranslate_core'
+                'DeepltranslateCore'
             ),
             (string)LocalizationUtility::translate(
                 'glossary.not-sync.title',
-                'deepltranslate_core'
+                'DeepltranslateCore'
             ),
             AbstractMessage::INFO,
             true

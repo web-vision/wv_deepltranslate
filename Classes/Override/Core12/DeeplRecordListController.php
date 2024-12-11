@@ -136,7 +136,7 @@ final class DeeplRecordListController extends RecordListController
         $output = '<option value="">' . htmlspecialchars(
             LocalizationUtility::translate(
                 'pages.glossary.translate',
-                'deepltranslate_core'
+                'DeepltranslateCore'
             )
         ) . '</option>';
 

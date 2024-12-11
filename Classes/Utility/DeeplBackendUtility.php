@@ -93,7 +93,7 @@ class DeeplBackendUtility
         $title =
             (string)LocalizationUtility::translate(
                 'backend.button.translate',
-                'deepltranslate_core',
+                'DeepltranslateCore',
                 [
                     htmlspecialchars($languageTitle),
                 ]
@@ -208,7 +208,7 @@ class DeeplBackendUtility
             if ($output !== '') {
                 $output = sprintf(
                     '<option value="">%s</option>%s',
-                    htmlspecialchars((string)LocalizationUtility::translate('backend.label', 'deepltranslate_core')),
+                    htmlspecialchars((string)LocalizationUtility::translate('backend.label', 'DeepltranslateCore')),
                     $output
                 );
             }

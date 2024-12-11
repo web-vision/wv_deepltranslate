@@ -56,7 +56,7 @@ class ButtonBarHook
         $parameters = $this->buildParamsArrayForListView((int)$page['uid']);
         $title = (string)LocalizationUtility::translate(
             'glossary.sync.button.all',
-            'deepltranslate_core'
+            'DeepltranslateCore'
         );
         // Style button
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
