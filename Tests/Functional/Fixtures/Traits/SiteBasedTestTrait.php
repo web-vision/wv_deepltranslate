@@ -2,6 +2,8 @@
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Traits;
 
+use Exception;
+use LogicException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -58,7 +60,7 @@ trait SiteBasedTestTrait
             // ensure no previous site configuration influences the test
             GeneralUtility::rmdir($this->instancePath . '/typo3conf/sites/' . $identifier, true);
             $siteConfiguration->write($identifier, $configuration);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->markTestSkipped($exception->getMessage());
         }
     }
@@ -72,7 +74,7 @@ trait SiteBasedTestTrait
         $configuration = array_merge($configuration, $overrides);
         try {
             $siteConfiguration->write($identifier, $configuration);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->markTestSkipped($exception->getMessage());
         }
     }
@@ -206,7 +208,7 @@ trait SiteBasedTestTrait
                 'errorPhpClassFQCN' => PhpError::class,
             ];
         } else {
-            throw new \LogicException(
+            throw new LogicException(
                 sprintf('Invalid handler "%s"', $handler),
                 1533894782
             );
@@ -229,7 +231,7 @@ trait SiteBasedTestTrait
     protected function resolveLanguagePreset(string $identifier)
     {
         if (!isset(static::LANGUAGE_PRESETS[$identifier])) {
-            throw new \LogicException(
+            throw new LogicException(
                 sprintf('Undefined preset identifier "%s"', $identifier),
                 1533893665
             );
@@ -262,7 +264,7 @@ trait SiteBasedTestTrait
     protected function mergeInstruction(AbstractInstruction $current, AbstractInstruction $other): AbstractInstruction
     {
         if (get_class($current) !== get_class($other)) {
-            throw new \LogicException('Cannot merge different instruction types', 1565863174);
+            throw new LogicException('Cannot merge different instruction types', 1565863174);
         }
 
         if ($current instanceof TypoScriptInstruction) {

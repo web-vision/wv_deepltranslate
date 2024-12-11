@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Hooks;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\Buttons\LinkButton;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
@@ -33,9 +34,7 @@ class ButtonBarHookTest extends FunctionalTestCase
 
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function showGlossarySynchronizationButton(): void
     {
         // User with Access
@@ -54,9 +53,7 @@ class ButtonBarHookTest extends FunctionalTestCase
         static::assertInstanceOf(LinkButton::class, $button);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function displayGlossarySynchronizationButtonBecauseNotRightModel(): void
     {
         // Backend-Admin User
@@ -70,9 +67,7 @@ class ButtonBarHookTest extends FunctionalTestCase
         static::assertFalse(isset($buttons[ButtonBar::BUTTON_POSITION_LEFT][5]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function displayGlossarySynchronizationButtonBecauseNotAllowed(): void
     {
         // Backend-Admin User

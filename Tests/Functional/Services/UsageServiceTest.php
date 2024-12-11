@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Services;
 
+use PHPUnit\Framework\Attributes\Test;
 use DeepL\Usage;
 use DeepL\UsageDetail;
 use WebVision\Deepltranslate\Core\Service\DeeplService;
@@ -29,9 +30,7 @@ final class UsageServiceTest extends AbstractDeepLTestCase
         $processingInstruction->setProcessingInstruction(null, null, true);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function classLoadable(): void
     {
         $usageService = $this->get(UsageService::class);
@@ -39,9 +38,7 @@ final class UsageServiceTest extends AbstractDeepLTestCase
         static::assertInstanceOf(UsageService::class, $usageService);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function usageReturnsValue(): void
     {
         /** @var UsageService $usageService */
@@ -52,9 +49,7 @@ final class UsageServiceTest extends AbstractDeepLTestCase
         static::assertInstanceOf(Usage::class, $usage);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function limitExceedReturnsFalse(): void
     {
         /** @var UsageService $usageService */
@@ -63,9 +58,7 @@ final class UsageServiceTest extends AbstractDeepLTestCase
         static::assertFalse($usageService->checkTranslateLimitWillBeExceeded(''));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function limitExceedReturnsTrueIfLimitIsReached(): void
     {
         $translateContent = 'proton beam';
@@ -87,9 +80,7 @@ final class UsageServiceTest extends AbstractDeepLTestCase
         static::assertTrue($isLimitExceeded);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkHTMLMarkupsIsNotPartOfLimit(): void
     {
         $translateContent = 'proton beam';

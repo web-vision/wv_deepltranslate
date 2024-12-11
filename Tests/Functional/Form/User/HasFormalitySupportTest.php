@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Form\User;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Backend\Form\FormDataProvider\EvaluateDisplayConditions;
 use WebVision\Deepltranslate\Core\Form\User\HasFormalitySupport;
 use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
 
-/**
- * @covers \WebVision\Deepltranslate\Core\Form\User\HasFormalitySupport
- */
+#[CoversClass(HasFormalitySupport::class)]
 class HasFormalitySupportTest extends AbstractDeepLTestCase
 {
     protected function setUp(): void
@@ -23,9 +23,7 @@ class HasFormalitySupportTest extends AbstractDeepLTestCase
         parent::setUp();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasFormalitySupportIsSupported(): void
     {
         /** @var HasFormalitySupport $subject */
@@ -43,9 +41,7 @@ class HasFormalitySupportTest extends AbstractDeepLTestCase
         static::assertTrue($isFormalitySupported);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasFormalitySupportIsNotSupported(): void
     {
         /** @var HasFormalitySupport $subject */
@@ -63,9 +59,7 @@ class HasFormalitySupportTest extends AbstractDeepLTestCase
         static::assertFalse($isFormalitySupported);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function formalityIsNotSupportedWhenRecordNotExist(): void
     {
         /** @var HasFormalitySupport $subject */
@@ -77,9 +71,7 @@ class HasFormalitySupportTest extends AbstractDeepLTestCase
         static::assertFalse($isFormalitySupported);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function formalityIsNotSupportedWhenDeeplTargetLanguageNotExistOrEmpty(): void
     {
         /** @var HasFormalitySupport $subject */

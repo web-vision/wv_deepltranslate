@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\ViewHelpers;
 
+use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Fluid\View\TemplateView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3Fluid\Fluid\Core\Cache\FluidCacheInterface;
@@ -35,7 +38,7 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
         rmdir(self::$cachePath);
     }
 
-    public static function renderDataProvider(): \Generator
+    public static function renderDataProvider(): Generator
     {
         yield 'extension name empty, await else' => [
             '<deepl:be.extensionActive extension="" then="thenArgument" else="elseArgument" />',
@@ -62,10 +65,10 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
     }
 
     /**
-     * @test
-     * @dataProvider renderDataProvider
      * @param array<array-key, mixed> $variables
      */
+    #[DataProvider('renderDataProvider')]
+    #[Test]
     public function render(string $template, array $variables, string $expected): void
     {
         $view = new TemplateView();

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Hooks;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -18,9 +20,7 @@ use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
 use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
 use WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Traits\SiteBasedTestTrait;
 
-/**
- * @covers \WebVision\Deepltranslate\Core\Hooks\TranslateHook
- */
+#[CoversClass(TranslateHook::class)]
 final class TranslateHookTest extends AbstractDeepLTestCase
 {
     use SiteBasedTestTrait;
@@ -99,9 +99,7 @@ final class TranslateHookTest extends AbstractDeepLTestCase
         $processingInstruction->setProcessingInstruction(null, null, true);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function contentTranslateWithDeepl(): void
     {
         $translateContent = 'proton beam';
@@ -125,9 +123,7 @@ final class TranslateHookTest extends AbstractDeepLTestCase
         static::assertSame($expectedTranslation, $content);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function contentNotTranslateWithDeeplWhenLanguageNotSupported(): void
     {
         $serverParams = array_replace($_SERVER, ['HTTP_HOST' => 'example.com', 'SCRIPT_NAME' => '/typo3/index.php']);
@@ -152,9 +148,7 @@ final class TranslateHookTest extends AbstractDeepLTestCase
         static::assertSame('', $content);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function translateContentElementsAndUpdatePagesProperties(): void
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/BeUsersTranslateDeeplFlag.csv');
@@ -195,6 +189,7 @@ final class TranslateHookTest extends AbstractDeepLTestCase
             1,
         )->fetchAssociative();
 
+        static::assertIsArray($pageRow);
         static::assertArrayHasKey('tx_wvdeepltranslate_content_not_checked', $pageRow);
         static::assertSame(1, (int)$pageRow['tx_wvdeepltranslate_content_not_checked']);
         static::assertArrayHasKey('tx_wvdeepltranslate_translated_time', $pageRow);

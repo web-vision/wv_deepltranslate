@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Updates;
 
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -92,9 +93,7 @@ class FormalityUpgradeWizardTest extends AbstractDeepLTestCase
         $this->setUpFrontendRootPage(1, [], []);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function executeSuccessMigrationProcess(): void
     {
         $wizard = GeneralUtility::makeInstance(FormalityUpgradeWizard::class);

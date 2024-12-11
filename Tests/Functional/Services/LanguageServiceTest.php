@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Services;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
@@ -106,9 +107,7 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
         $this->setUpFrontendRootPage(3, [], []);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSourceLanguageInformationIsValid(): void
     {
         /** @var LanguageService $languageService */
@@ -127,9 +126,7 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
         static::assertSame('EN', $sourceLanguageRecord['language_isocode']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setAutoDetectOptionForSourceLanguageNotSupported(): void
     {
         /** @var LanguageService $languageService */
@@ -143,9 +140,7 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
         static::assertContains('auto', $sourceLanguageRecord);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTargetLanguageInformationIsValid(): void
     {
         /** @var LanguageService $languageService */
@@ -164,9 +159,7 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
         static::assertSame('DE', $sourceLanguageRecord['language_isocode']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTargetLanguageExceptionWhenLanguageNotExist(): void
     {
         /** @var LanguageService $languageService */
@@ -180,9 +173,7 @@ final class LanguageServiceTest extends AbstractDeepLTestCase
         $languageService->getTargetLanguage($siteInformation, 1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTargetLanguageExceptionWhenLanguageIsoNotSupported(): void
     {
         /** @var LanguageService $languageService */
