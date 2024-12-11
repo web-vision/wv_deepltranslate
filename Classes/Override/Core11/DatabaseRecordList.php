@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Override\Core11;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Configuration\Features;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\WvDeepltranslate\Access\AllowedTranslateAccess;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
@@ -34,7 +36,10 @@ class DatabaseRecordList extends \TYPO3\CMS\Recordlist\RecordList\DatabaseRecord
             return $out;
         }
 
-        if (!$this->getBackendUserAuthentication()->check('custom_options', AllowedTranslateAccess::ALLOWED_TRANSLATE_OPTION_VALUE)) {
+        if (
+            GeneralUtility::makeInstance(Features::class)->isFeatureEnabled('deeplTranslationUserConfigured')
+            && !$this->getBackendUserAuthentication()->check('custom_options', AllowedTranslateAccess::ALLOWED_TRANSLATE_OPTION_VALUE)
+        ) {
             return $out;
         }
 

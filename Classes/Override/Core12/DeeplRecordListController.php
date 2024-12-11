@@ -7,6 +7,7 @@ namespace WebVision\WvDeepltranslate\Override\Core12;
 use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Backend\Controller\RecordListController;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
+use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -46,7 +47,10 @@ final class DeeplRecordListController extends RecordListController
             return $originalOutput;
         }
 
-        if (!$this->getBackendUserAuthentication()->check('custom_options', AllowedTranslateAccess::ALLOWED_TRANSLATE_OPTION_VALUE)) {
+        if (
+            GeneralUtility::makeInstance(Features::class)->isFeatureEnabled('deeplTranslationUserConfigured')
+            && !$this->getBackendUserAuthentication()->check('custom_options', AllowedTranslateAccess::ALLOWED_TRANSLATE_OPTION_VALUE)
+        ) {
             return $originalOutput;
         }
 
@@ -84,7 +88,10 @@ final class DeeplRecordListController extends RecordListController
             return '';
         }
 
-        if (!$this->getBackendUserAuthentication()->check('custom_options', AllowedGlossarySyncAccess::ALLOWED_GLOSSARY_SYNC)) {
+        if (
+            GeneralUtility::makeInstance(Features::class)->isFeatureEnabled('deeplTranslationUserConfigured')
+            && !$this->getBackendUserAuthentication()->check('custom_options', AllowedGlossarySyncAccess::ALLOWED_GLOSSARY_SYNC)
+        ) {
             return '';
         }
 
