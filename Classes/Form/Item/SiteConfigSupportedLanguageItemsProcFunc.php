@@ -17,7 +17,7 @@ class SiteConfigSupportedLanguageItemsProcFunc
         $this->deeplService = $deeplService;
     }
 
-    public function getSupportedLanguageForField(array &$configuration)
+    public function getSupportedLanguageForField(array &$configuration): void
     {
         $supportedLanguages = $this->deeplService->getSupportLanguage()['target'];
 

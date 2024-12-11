@@ -19,7 +19,7 @@ class TCEmainHook implements DataHandlerCheckModifyAccessListHookInterface
      * @param string $table The name of the table to be modified
      * @param DataHandler $parent The calling parent object
      */
-    public function checkModifyAccessList(&$accessAllowed, $table, DataHandler $parent)
+    public function checkModifyAccessList(&$accessAllowed, $table, DataHandler $parent): void
     {
         if ($table == 'localization') {
             $accessAllowed = true;
