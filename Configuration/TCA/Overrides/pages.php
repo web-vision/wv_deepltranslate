@@ -58,30 +58,12 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
         'displayCond' => 'FIELD:sys_language_uid:>:0',
         'label' => $ll('pages.tx_wvdeepltranslate_translated_time'),
         'config' => [
-            'type' => 'input',
-            'renderType' => 'inputDateTime',
-            'eval' => 'datetime',
+            'type' => 'datetime',
+            'format' => 'datetime',
             'readOnly' => true,
             'default' => 0,
         ],
     ];
-    if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 12) {
-        // 4.   https://review.typo3.org/c/Packages/TYPO3.CMS/+/74027
-        //      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Feature-97232-NewTCATypeDatetime.html
-        //      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Breaking-97358-RemovedEvalintFromTCATypeDatetime.html
-        $columns['tx_wvdeepltranslate_translated_time'] = [
-            'exclude' => 0,
-            'l10n_display' => 'hideDiff',
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'label' => $ll('pages.tx_wvdeepltranslate_translated_time'),
-            'config' => [
-                'type' => 'datetime',
-                'format' => 'datetime',
-                'readOnly' => true,
-                'default' => 0,
-            ],
-        ];
-    }
 
     ExtensionManagementUtility::addTCAcolumns('pages', $columns);
 
