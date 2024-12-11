@@ -61,11 +61,6 @@ parameters:
 			path: ../../../Classes/Event/Listener/GlossarySyncButtonProvider.php
 
 		-
-			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Form\\\\Item\\\\SiteConfigSupportedLanguageItemsProcFunc\\:\\:getSupportedLanguageForField\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php
-
-		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Form\\\\Item\\\\SiteConfigSupportedLanguageItemsProcFunc\\:\\:getSupportedLanguageForField\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php
@@ -94,11 +89,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$uid of method WebVision\\\\Deepltranslate\\\\Core\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntryByUid\\(\\) expects int, int\\|string given\\.$#"
 			count: 1
 			path: ../../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
-
-		-
-			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Hooks\\\\TCEmainHook\\:\\:checkModifyAccessList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: ../../../Classes/Hooks/TCEmainHook.php
 
 		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Override\\\\Core12\\\\DatabaseRecordList\\:\\:makeLocalizationPanel\\(\\) has parameter \\$translations with no value type specified in iterable type array\\.$#"

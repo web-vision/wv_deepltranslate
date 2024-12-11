@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Unit\Access;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use WebVision\Deepltranslate\Core\Access\AccessItemInterface;
 use WebVision\Deepltranslate\Core\Access\AllowedGlossarySyncAccess;
@@ -17,41 +18,31 @@ class AllowedGlossarySyncAccessTest extends UnitTestCase
         $this->accessInstance = new AllowedGlossarySyncAccess();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasInterfaceImplementation(): void
     {
         static::assertInstanceOf(AccessItemInterface::class, $this->accessInstance);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getIdentifier(): void
     {
         static::assertSame('allowedGlossarySync', $this->accessInstance->getIdentifier());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTitle(): void
     {
         static::assertIsString($this->accessInstance->getTitle());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDescription(): void
     {
         static::assertIsString($this->accessInstance->getDescription());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getIconIdentifier(): void
     {
         static::assertSame('deepl-logo', $this->accessInstance->getIconIdentifier());

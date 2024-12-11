@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Unit\Access;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use WebVision\Deepltranslate\Core\Access\AccessItemInterface;
 use WebVision\Deepltranslate\Core\Access\AccessRegistry;
 
-/**
- * @covers \WebVision\Deepltranslate\Core\Access\AccessRegistry.php
- */
+#[CoversClass(AccessRegistry::class)]
 class AccessRegistryTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function registerAccessStoresTheAccessCorrectly(): void
     {
         $accessRegistry = new AccessRegistry();
@@ -31,9 +29,7 @@ class AccessRegistryTest extends UnitTestCase
         static::assertSame($accessObject, $object);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAccessReturnsNullForNonExistentIdentifier(): void
     {
         $accessRegistry = new AccessRegistry();

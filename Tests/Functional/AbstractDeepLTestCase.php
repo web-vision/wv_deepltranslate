@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional;
 
+use RuntimeException;
+use Closure;
+use Exception;
 use DeepL\Translator;
 use DeepL\TranslatorOptions;
 use phpmock\phpunit\PHPMock;
@@ -123,14 +126,14 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
         if ($this->isMockServer) {
             $this->authKey = 'mock_server';
             if ($this->serverUrl === false) {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     'DEEPL_SERVER_URL environment variable must be set if using a mock server',
                     1733938285,
                 );
             }
         } else {
             if (getenv('DEEPL_AUTH_KEY') === false) {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     'DEEPL_AUTH_KEY environment variable must be set unless using a mock server',
                     1733938290,
                 );
@@ -207,7 +210,7 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
 
         // use closure to set private option for translation
         $translator = new Translator(self::getInstanceIdentifier(), $mergedOptions);
-        \Closure::bind(
+        Closure::bind(
             function (Translator $translator) {
                 $this->translator = $translator;
             },
@@ -262,11 +265,11 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
         return [$tempDir, $exampleDocument, $exampleLargeDocument, $outputDocumentPath];
     }
 
-    public function assertExceptionContains(string $needle, callable $function): \Exception
+    public function assertExceptionContains(string $needle, callable $function): Exception
     {
         try {
             $function();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             static::assertStringContainsString($needle, $exception->getMessage());
             return $exception;
         }
@@ -276,11 +279,11 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
     /**
      * @param class-string $class
      */
-    public function assertExceptionClass(string $class, callable $function): \Exception
+    public function assertExceptionClass(string $class, callable $function): Exception
     {
         try {
             $function();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             static::assertEquals($class, get_class($exception));
             return $exception;
         }

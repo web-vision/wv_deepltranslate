@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Services;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use DeepL\Language;
 use WebVision\Deepltranslate\Core\Domain\Dto\TranslateContext;
 use WebVision\Deepltranslate\Core\Service\DeeplService;
 use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
 use WebVision\Deepltranslate\Core\Tests\Functional\AbstractDeepLTestCase;
 
-/**
- * @covers \WebVision\Deepltranslate\Core\Service\DeeplService
- */
+#[CoversClass(DeeplService::class)]
 final class DeeplServiceTest extends AbstractDeepLTestCase
 {
     protected function setUp(): void
@@ -31,9 +31,9 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
     }
 
     /**
-     * @test
      * @deprecated if the @see DeeplService::translateRequest() function has been removed
      */
+    #[Test]
     public function translateContentFromDeToEn(): void
     {
         /** @var DeeplService $deeplService */
@@ -49,9 +49,9 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
     }
 
     /**
-     * @test
      * @deprecated if the @see DeeplService::translateRequest() function has been removed
      */
+    #[Test]
     public function translateContentFromEnToDe(): void
     {
         $translateContent = 'proton beam';
@@ -69,9 +69,9 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
     }
 
     /**
-     * @test
      * @deprecated entfällt wenn die Funktion @see DeeplService::translateRequest() entfernt wurde
      */
+    #[Test]
     public function translateContentWithAutoDetectSourceParam(): void
     {
         $translateContent = 'proton beam';
@@ -88,9 +88,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         static::assertSame($expectedTranslation, $translateContent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function translateContentWithTranslateContextFromDeToEn(): void
     {
         /** @var DeeplService $deeplService */
@@ -105,9 +103,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         static::assertSame('proton beam', $translateContent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function translateContentWithTranslateContextFromEnToDe(): void
     {
         /** @var DeeplService $deeplService */
@@ -122,9 +118,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         static::assertSame('Protonenstrahl', $translateContent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function translateContentWithTranslateContextWithAutoDetectSourceParam(): void
     {
         /** @var DeeplService $deeplService */
@@ -139,9 +133,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         static::assertSame('Protonenstrahl', $translateContent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkSupportedTargetLanguages(): void
     {
         /** @var DeeplService $deeplService */
@@ -157,9 +149,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         static::assertNull($deeplService->detectTargetLanguage('BS'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkIsTargetLanguageSupported(): void
     {
         /** @var DeeplService $deeplService */
@@ -171,9 +161,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         static::assertFalse($deeplService->isTargetLanguageSupported('BS'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkSupportedSourceLanguages(): void
     {
         /** @var DeeplService $deeplService */
@@ -187,9 +175,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         static::assertNull($deeplService->detectSourceLanguage('BS'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkIsSourceLanguageSupported(): void
     {
         /** @var DeeplService $deeplService */
@@ -198,9 +184,7 @@ final class DeeplServiceTest extends AbstractDeepLTestCase
         static::assertTrue($deeplService->isSourceLanguageSupported('DE'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkHasLanguageFormalitySupport(): void
     {
         /** @var DeeplService $deeplService */

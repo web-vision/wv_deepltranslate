@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use WebVision\Deepltranslate\Core\Client;
@@ -25,9 +26,7 @@ class ClientTest extends UnitTestCase
         return $mockConfiguration;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwErrorGetSupportedLanguageByTypeWhenApiKeyNotSet(): void
     {
         /** @var ConfigurationInterface $configurationMock */
@@ -41,9 +40,7 @@ class ClientTest extends UnitTestCase
         $client->getSupportedLanguageByType();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwErrorGetGlossaryLanguagePairsWhenApiKeyNotSet(): void
     {
         /** @var ConfigurationInterface $configurationMock */
@@ -57,9 +54,7 @@ class ClientTest extends UnitTestCase
         $client->getGlossaryLanguagePairs();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwErrorCreateGlossaryEntriesWhenApiKeyNotSet(): void
     {
         /** @var ConfigurationInterface $configurationMock */
@@ -83,9 +78,7 @@ class ClientTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwErrorGetGlossaryWhenApiKeyNotSet(): void
     {
         /** @var ConfigurationInterface $configurationMock */
@@ -99,9 +92,7 @@ class ClientTest extends UnitTestCase
         $response = $client->getGlossary('61567955-8db8-493d-aa20-28bbba6fb438');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwErrorDeletedGlossaryWhenApiKeyNotSet(): void
     {
         /** @var ConfigurationInterface $configurationMock */
@@ -115,9 +106,7 @@ class ClientTest extends UnitTestCase
         $client->deleteGlossary('25d90db6-bcab-4130-ab36-4514dd5d87ec');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwErrorGlossaryEntriesWhenApiKeyNotSet(): void
     {
         /** @var ConfigurationInterface $configurationMock */
@@ -131,9 +120,7 @@ class ClientTest extends UnitTestCase
         $response = $client->getGlossaryEntries('a44703d5-ece7-4230-a67b-1a07153768d6');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwErrorTranslationExceptionWhenApiKeyNotSet(): void
     {
         /** @var ConfigurationInterface $configurationMock */

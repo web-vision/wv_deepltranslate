@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Regression;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -72,9 +73,7 @@ final class GlossaryRegressionTest extends AbstractDeepLTestCase
             ->syncGlossaries(2);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function glossaryIsRespectedOnLocalization(): void
     {
         $commandMap = [
