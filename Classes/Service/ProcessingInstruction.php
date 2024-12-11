@@ -29,6 +29,14 @@ final class ProcessingInstruction
             'id' => $id,
             'deeplMode' => $deeplMode,
         ];
+        // if processing instructions are already set, detect the current DeepL mode.
+        // this is needed for sub instances of DataHandler, mostly
+        // when translating inline elements via command and the DataMapProcessor
+        // manually triggers an inline translation
+        // which leads to loss of deepl mode information from original request
+        if ($this->runtimeCache->has(self::PROCESSING_CACHE_IDENTIFIER)) {
+            $processingInformation['deeplMode'] = $this->isDeeplMode();
+        }
         $this->runtimeCache->set(self::PROCESSING_CACHE_IDENTIFIER, $processingInformation);
     }
 

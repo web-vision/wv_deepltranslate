@@ -1,0 +1,12 @@
+pages
+,"uid","pid","title","sys_language_uid","slug","media"
+,1,0,"proton beam",0,"/",1
+sys_file
+,uid,pid,name,identifier,storage
+,1,0,clear.gif,/clear.gif,1
+sys_file_metadata
+,uid,pid,file
+,1,0,1
+sys_file_reference
+,uid,pid,uid_local,uid_foreign,tablenames,fieldname,sys_language_uid,title,l10n_parent
+,1,1,1,1,pages,media,0,"proton beam",0
