@@ -524,9 +524,7 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     functional)
-        PHPUNIT_CONFIG_FILE="Build/phpunit/FunctionalTests-10.xml"
-        # @todo Remove version switch after TYPO3 v11 / phpunit 9 support has been dropped.
-        [[ "${CORE_VERSION}" -eq 11 ]] && PHPUNIT_CONFIG_FILE="Build/phpunit/FunctionalTests.xml"
+        PHPUNIT_CONFIG_FILE="Build/phpunit/FunctionalTests.xml"
         COMMAND=(.Build/bin/phpunit -c ${PHPUNIT_CONFIG_FILE} --exclude-group not-${DBMS} "$@")
         echo "Using deepl-mockserver"
         ${CONTAINER_BIN} run --rm ${CI_PARAMS} --name deepl-func-${SUFFIX} --network ${NETWORK} -d ${IMAGE_DEEPL} >/dev/null
@@ -600,17 +598,13 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     unit)
-        PHPUNIT_CONFIG_FILE="Build/phpunit/UnitTests-10.xml"
-        # @todo Remove version switch after TYPO3 v11 / phpunit 9 support has been dropped.
-        [[ "${CORE_VERSION}" -eq 11 ]] && PHPUNIT_CONFIG_FILE="Build/phpunit/UnitTests.xml"
+        PHPUNIT_CONFIG_FILE="Build/phpunit/UnitTests.xml"
         COMMAND=(.Build/bin/phpunit -c ${PHPUNIT_CONFIG_FILE} "$@")
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name unit-${SUFFIX} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${IMAGE_PHP} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;
     unitRandom)
-        PHPUNIT_CONFIG_FILE="Build/phpunit/UnitTests-10.xml"
-        # @todo Remove version switch after TYPO3 v11 / phpunit 9 support has been dropped.
-        [[ "${CORE_VERSION}" -eq 11 ]] && PHPUNIT_CONFIG_FILE="Build/phpunit/UnitTests.xml"
+        PHPUNIT_CONFIG_FILE="Build/phpunit/UnitTests.xml"
         COMMAND=(.Build/bin/phpunit -c ${PHPUNIT_CONFIG_FILE} --order-by=random ${PHPUNIT_RANDOM} "$@")
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name unit-random-${SUFFIX} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${IMAGE_PHP} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
