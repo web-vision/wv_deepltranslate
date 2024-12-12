@@ -36,24 +36,9 @@ parameters:
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
 
 		-
-			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception is not subtype of Throwable$#"
-			count: 3
-			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
-			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|Doctrine\\\\DBAL\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception\\\\SiteNotFoundException is not subtype of Throwable$#"
-			count: 1
-			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
 			message: "#^Parameter \\#3 \\$page of method WebVision\\\\Deepltranslate\\\\Core\\\\Domain\\\\Repository\\\\GlossaryRepository\\:\\:getGlossaryBySourceAndTargetForSync\\(\\) expects array\\{uid\\: int, title\\: string\\}, array\\|null given\\.$#"
 			count: 1
 			path: ../../../Classes/Domain/Repository/GlossaryRepository.php
-
-		-
-			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception is not subtype of Throwable$#"
-			count: 1
-			path: ../../../Classes/Domain/Repository/PageTreeRepository.php
 
 		-
 			message: "#^Cannot call method getRequestUri\\(\\) on TYPO3\\\\CMS\\\\Core\\\\Http\\\\NormalizedParams\\|null\\.$#"
@@ -79,11 +64,6 @@ parameters:
 			message: "#^There is no aspect \"frontend\\.preview\" configured so we can't figure out the exact type to return when calling TYPO3\\\\CMS\\\\Core\\\\Context\\\\Context\\:\\:getPropertyFromAspect$#"
 			count: 1
 			path: ../../../Classes/Hooks/DeeplPreviewFlagGeneratePageHook.php
-
-		-
-			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception is not subtype of Throwable$#"
-			count: 1
-			path: ../../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
 
 		-
 			message: "#^Parameter \\#1 \\$uid of method WebVision\\\\Deepltranslate\\\\Core\\\\Domain\\\\Repository\\\\GlossaryEntryRepository\\:\\:findEntryByUid\\(\\) expects int, int\\|string given\\.$#"

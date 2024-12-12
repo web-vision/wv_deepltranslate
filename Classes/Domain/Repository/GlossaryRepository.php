@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace WebVision\Deepltranslate\Core\Domain\Repository;
 
 use DeepL\GlossaryInfo;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception as DBALException;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\Connection;
