@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional\Services;
 
-use PHPUnit\Framework\Attributes\Test;
 use DeepL\Usage;
 use DeepL\UsageDetail;
+use PHPUnit\Framework\Attributes\Test;
 use WebVision\Deepltranslate\Core\Service\DeeplService;
 use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
 use WebVision\Deepltranslate\Core\Service\UsageService;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional;
 
-use RuntimeException;
 use Closure;
-use Exception;
 use DeepL\Translator;
 use DeepL\TranslatorOptions;
+use Exception;
 use phpmock\phpunit\PHPMock;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Container;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
