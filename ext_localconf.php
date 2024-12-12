@@ -3,9 +3,6 @@
 defined('TYPO3') or die();
 
 (static function (): void {
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['wvDeepltranslate_formalityUpgrade']
-        = \WebVision\Deepltranslate\Core\Upgrades\FormalityUpgradeWizard::class;
-
     //allowLanguageSynchronizationHook manipulates l10n_state
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
         = \WebVision\Deepltranslate\Core\Hooks\AllowLanguageSynchronizationHook::class;

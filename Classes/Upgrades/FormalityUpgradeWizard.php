@@ -10,11 +10,13 @@ use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\ChattyInterface;
 use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 use WebVision\Deepltranslate\Core\Service\DeeplService;
 
+#[UpgradeWizard('wvDeepltranslate_formalityUpgrade')]
 class FormalityUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 {
     protected OutputInterface $output;
