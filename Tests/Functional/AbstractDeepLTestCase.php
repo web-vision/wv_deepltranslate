@@ -101,6 +101,14 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
     /**
      * @var non-empty-string[]
      */
+    protected array $coreExtensionsToLoad = [
+        'typo3/cms-setup',
+        'typo3/cms-scheduler',
+    ];
+
+    /**
+     * @var non-empty-string[]
+     */
     protected array $testExtensionsToLoad = [
         'web-vision/deepltranslate-core',
         __DIR__ . '/Fixtures/Extensions/test_services_override',

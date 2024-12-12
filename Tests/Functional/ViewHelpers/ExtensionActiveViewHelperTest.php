@@ -16,7 +16,14 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
 {
     protected bool $initializeDatabase = false;
 
-    protected array $testExtensionsToLoad = ['web-vision/deepltranslate-core'];
+    protected array $coreExtensionsToLoad = [
+        'typo3/cms-setup',
+        'typo3/cms-scheduler',
+    ];
+
+    protected array $testExtensionsToLoad = [
+        'web-vision/deepltranslate-core',
+    ];
 
     protected static FluidCacheInterface $cache;
 
