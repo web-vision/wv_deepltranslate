@@ -261,11 +261,6 @@ parameters:
 			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$current of method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Hooks\\\\TranslateHookTest\\:\\:mergeInstruction\\(\\) expects TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction, TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction\\|null given\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
-
-		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\GlossaryRegressionTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Regression/GlossaryRegressionTest.php
@@ -316,11 +311,6 @@ parameters:
 			path: ../../../Tests/Functional/Regression/GlossaryRegressionTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$current of method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\GlossaryRegressionTest\\:\\:mergeInstruction\\(\\) expects TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction, TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction\\|null given\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/Regression/GlossaryRegressionTest.php
-
-		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\LocalizationInlineRegressionTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
@@ -367,11 +357,6 @@ parameters:
 
 		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\LocalizationInlineRegressionTest\\:\\:writeSiteConfiguration\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$current of method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\LocalizationInlineRegressionTest\\:\\:mergeInstruction\\(\\) expects TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction, TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction\\|null given\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
 
@@ -431,11 +416,6 @@ parameters:
 			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$current of method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Services\\\\LanguageServiceTest\\:\\:mergeInstruction\\(\\) expects TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction, TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction\\|null given\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
-
-		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Updates\\\\FormalityUpgradeWizardTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
@@ -482,10 +462,5 @@ parameters:
 
 		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Updates\\\\FormalityUpgradeWizardTest\\:\\:writeSiteConfiguration\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$current of method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Updates\\\\FormalityUpgradeWizardTest\\:\\:mergeInstruction\\(\\) expects TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction, TYPO3\\\\TestingFramework\\\\Core\\\\Functional\\\\Framework\\\\Frontend\\\\Internal\\\\AbstractInstruction\\|null given\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
