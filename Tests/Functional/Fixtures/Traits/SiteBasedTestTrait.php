@@ -8,8 +8,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\AbstractInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\ArrayValueInstruction;
+use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\InstructionInterface;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\TypoScriptInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Frontend\PhpError;
@@ -242,13 +242,13 @@ trait SiteBasedTestTrait
     /**
      * @todo Instruction handling should be part of Testing Framework (multiple instructions per identifier, merge in interface)
      */
-    protected function applyInstructions(InternalRequest $request, AbstractInstruction ...$instructions): InternalRequest
+    protected function applyInstructions(InternalRequest $request, InstructionInterface ...$instructions): InternalRequest
     {
         $modifiedInstructions = [];
-
+        $instructions = array_filter($instructions);
         foreach ($instructions as $instruction) {
             $identifier = $instruction->getIdentifier();
-            if (isset($modifiedInstructions[$identifier]) || $request->getInstruction($identifier) !== null) {
+            if (($modifiedInstructions[$identifier] ?? $request->getInstruction($identifier)) !== null) {
                 $modifiedInstructions[$identifier] = $this->mergeInstruction(
                     $modifiedInstructions[$identifier] ?? $request->getInstruction($identifier),
                     $instruction
@@ -261,7 +261,7 @@ trait SiteBasedTestTrait
         return $request->withInstructions($modifiedInstructions);
     }
 
-    protected function mergeInstruction(AbstractInstruction $current, AbstractInstruction $other): AbstractInstruction
+    protected function mergeInstruction(InstructionInterface $current, InstructionInterface $other): InstructionInterface
     {
         if (get_class($current) !== get_class($other)) {
             throw new LogicException('Cannot merge different instruction types', 1565863174);
