@@ -106,9 +106,11 @@
 		"typo3/cms-info": "^12.4.2",
 		"typo3/cms-lowlevel": "^12.4.2",
 		"typo3/cms-rte-ckeditor": "^12.4.2",
+		"typo3/cms-styleguide": "^12.0.5",
 		"typo3/cms-tstemplate": "^12.4.2",
 		"typo3/cms-workspaces": "^12.4.2",
-		"typo3/testing-framework": "^8.2.7"
+		"typo3/testing-framework": "^8.2.7",
+		"web-vision/contribution": "@dev"
 	},
 	"suggest": {
         "b13/container": "Just to be loaded after EXT:container",
@@ -143,5 +145,11 @@
 		],
 		"test:php:unit": "@phpunit --colors=always --configuration Build/phpunit/UnitTests.xml",
 		"test:php:functional": "@test:php:unit --configuration Build/phpunit/FunctionalTests.xml"
+	},
+	"repositories": {
+		"local": {
+			"type": "path",
+			"url": "packages/*"
+		}
 	}
 }
