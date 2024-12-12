@@ -93,7 +93,7 @@ final class GlossaryRegressionTest extends AbstractDeepLTestCase
         $dataHandler->start([], $commandMap);
         $dataHandler->process_cmdmap();
 
-        self::assertEmpty($dataHandler->errorLog);
+        static::assertEmpty($dataHandler->errorLog);
         self::assertCSVDataSet(__DIR__ . '/Fixtures/Results/translateWithGlossary.csv');
     }
 }
