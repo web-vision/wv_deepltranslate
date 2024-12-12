@@ -53,7 +53,7 @@ jobs:
         run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s lintPhp"
 
       - name: "Validate CGL"
-        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s cgl"
+        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s cgl -n"
 
       - name: "Ensure tests methods do not start with \"test\""
         run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s checkTestMethodsPrefix"
