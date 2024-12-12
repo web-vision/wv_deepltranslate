@@ -108,7 +108,7 @@
 		"typo3/cms-rte-ckeditor": "^12.4.2",
 		"typo3/cms-tstemplate": "^12.4.2",
 		"typo3/cms-workspaces": "^12.4.2",
-		"typo3/testing-framework": "^7.1.1"
+		"typo3/testing-framework": "^8.2.7"
 	},
 	"suggest": {
         "b13/container": "Just to be loaded after EXT:container",
