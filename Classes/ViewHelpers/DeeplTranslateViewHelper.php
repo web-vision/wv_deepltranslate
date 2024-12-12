@@ -44,8 +44,8 @@ class DeeplTranslateViewHelper extends AbstractViewHelper
             ) {
                 if ($mode === self::GLOSSARY_MODE) {
                     if (!DeeplBackendUtility::checkGlossaryCanCreated(
-                        $context->getSiteLanguage()->getTwoLetterIsoCode(),
-                        $siteLanguage->getTwoLetterIsoCode()
+                        $context->getSiteLanguage()->getLocale()->getLanguageCode(),
+                        $siteLanguage->getLocale()->getLanguageCode()
                     )
                     ) {
                         continue;
