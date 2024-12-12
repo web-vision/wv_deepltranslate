@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Tests\Functional;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use WebVision\Deepltranslate\Core\Client;
-use PHPUnit\Framework\Attributes\Test;
 use DateTime;
 use DeepL\GlossaryEntries;
 use DeepL\GlossaryInfo;
@@ -14,6 +11,9 @@ use DeepL\GlossaryLanguagePair;
 use DeepL\Language;
 use DeepL\TextResult;
 use Helmich\JsonAssert\JsonAssertions;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use WebVision\Deepltranslate\Core\Client;
 use WebVision\Deepltranslate\Core\ClientInterface;
 
 #[CoversClass(Client::class)]
