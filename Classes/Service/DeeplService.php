@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace WebVision\WvDeepltranslate\Service;
 
 use GuzzleHttp\Exception\ClientException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\Request;
@@ -17,8 +19,10 @@ use WebVision\WvDeepltranslate\Domain\Repository\GlossaryRepository;
 use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Utility\DeeplBackendUtility;
 
-class DeeplService
+class DeeplService implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * Default supported languages
      *
@@ -84,8 +88,12 @@ class DeeplService
             if(!isset($glossary['glossary_id'])) {
                 $glossary['glossary_id'] = '';
             }
+            $this->logger->debug('Request: ' . print_r([$content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']], true));
             $response = $this->client->translate($content, $sourceLanguage, $targetLanguage, $glossary['glossary_id']);
+            $response = json_decode($response->getBody()->getContents(), true);
+            $this->logger->debug('Response: ' . print_r($response, true));
         } catch (ClientException $e) {
+            $this->logger->error($e->getMessage());
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
                 $e->getMessage(),
@@ -99,7 +107,7 @@ class DeeplService
             return [];
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return $response;
     }
 
     private function loadSupportedLanguages(): void
