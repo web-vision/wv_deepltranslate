@@ -5,27 +5,19 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
-use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\DependencyInjection\SingletonPass;
 use TYPO3\CMS\Dashboard\WidgetRegistry;
 use WebVision\Deepltranslate\Core\Client;
 use WebVision\Deepltranslate\Core\ClientInterface;
-use WebVision\Deepltranslate\Core\Command\GlossaryCleanupCommand;
-use WebVision\Deepltranslate\Core\Command\GlossaryListCommand;
-use WebVision\Deepltranslate\Core\Command\GlossarySyncCommand;
 use WebVision\Deepltranslate\Core\Controller\Backend\AjaxController;
-use WebVision\Deepltranslate\Core\Controller\GlossarySyncController;
-use WebVision\Deepltranslate\Core\Event\Listener\GlossarySyncButtonProvider;
 use WebVision\Deepltranslate\Core\Event\Listener\RenderTranslatedFlagInFrontendPreviewMode;
 use WebVision\Deepltranslate\Core\Event\Listener\UsageToolBarEventListener;
 use WebVision\Deepltranslate\Core\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 use WebVision\Deepltranslate\Core\Form\User\HasFormalitySupport;
-use WebVision\Deepltranslate\Core\Hooks\Glossary\UpdatedGlossaryEntryTermHook;
 use WebVision\Deepltranslate\Core\Hooks\TranslateHook;
 use WebVision\Deepltranslate\Core\Hooks\UsageProcessAfterFinishHook;
-use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
 use WebVision\Deepltranslate\Core\Service\DeeplService;
 use WebVision\Deepltranslate\Core\Service\IconOverlayGenerator;
 use WebVision\Deepltranslate\Core\Service\LanguageService;
@@ -45,38 +37,6 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->load('WebVision\\Deepltranslate\\Core\\', '../Classes/')
         ->exclude('../Classes/{Domain/Model,Override/Core12}');
 
-    // register console commands
-    $services
-        ->set(GlossaryCleanupCommand::class)
-        ->tag(
-            'console.command',
-            [
-                'command' => 'deepl:glossary:cleanup',
-                'description' => 'Cleanup Glossary entries in DeepL Database',
-                'schedulable' => true,
-            ]
-        );
-    $services
-        ->set(GlossarySyncCommand::class)
-        ->tag(
-            'console.command',
-            [
-                'command' => 'deepl:glossary:sync',
-                'description' => 'Sync all glossaries to DeepL API',
-                'schedulable' => true,
-            ]
-        );
-    $services
-        ->set(GlossaryListCommand::class)
-        ->tag(
-            'console.command',
-            [
-                'command' => 'deepl:glossary:list',
-                'description' => 'List Glossary entries or entries by glossary_id',
-                'schedulable' => false,
-            ]
-        );
-
     // add caching
     $services->set('cache.wvdeepltranslate')
         ->class(FrontendInterface::class)
@@ -88,10 +48,6 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->arg('$runtimeCache', service('cache.runtime'));
     $services
         ->set(DeeplService::class)
-        ->public()
-        ->arg('$cache', service('cache.wvdeepltranslate'));
-    $services
-        ->set(DeeplGlossaryService::class)
         ->public()
         ->arg('$cache', service('cache.wvdeepltranslate'));
     $services
@@ -110,15 +66,9 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
     $services
         ->set(AjaxController::class)
         ->public();
-    $services
-        ->set(GlossarySyncController::class)
-        ->public();
 
     $services->alias(ClientInterface::class, Client::class);
 
-    $containerBuilder
-        ->registerForAutoconfiguration(UpdatedGlossaryEntryTermHook::class)
-        ->addTag('deepl.UpdatedGlossaryEntryTermHook');
     $containerBuilder
         ->registerForAutoconfiguration(TranslateHook::class)
         ->addTag('deepl.TranslateHook');
@@ -130,8 +80,6 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->addTag('deepl.HasFormalitySupport');
 
     $containerBuilder
-        ->addCompilerPass(new SingletonPass('deepl.UpdatedGlossaryEntryTermHook'));
-    $containerBuilder
         ->addCompilerPass(new SingletonPass('deepl.TranslateHook'));
     $containerBuilder
         ->addCompilerPass(new SingletonPass('deepl.SiteConfigSupportedLanguageItemsProcFunc'));
@@ -139,16 +87,6 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
         ->addCompilerPass(new SingletonPass('deepl.HasFormalitySupport'));
 
     // register Events
-    $services
-        ->set(GlossarySyncButtonProvider::class)
-        ->tag(
-            'event.listener',
-            [
-                'identifier' => 'glossary.syncbutton',
-                'event' => ModifyButtonBarEvent::class,
-            ]
-        );
-
     $services
         ->set(UsageToolBarEventListener::class)
         ->tag(

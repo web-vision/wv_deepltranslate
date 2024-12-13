@@ -38,10 +38,6 @@
 				<source>Last Translated Date</source>
 				<target>Date de la dernière traduction</target>
 			</trans-unit>
-			<trans-unit id="pages.glossary_information">
-				<source>Glossary Information</source>
-				<target>Informations sur le glossaire</target>
-			</trans-unit>
 			<trans-unit id="preview.flag">
 				<source>Translated with DeepL</source>
 				<target>Traduit avec DeepL</target>
@@ -49,15 +45,6 @@
 			<trans-unit id="translated_with_deepl">
 				<source>Translated with DeepL</source>
 				<target>Traduit avec DeepL</target>
-			</trans-unit>
-
-			<trans-unit id="glossary.sync.button.single">
-				<source>Synchronise Glossary</source>
-				<target>Synchroniser le glossaire</target>
-			</trans-unit>
-			<trans-unit id="glossary.sync.button.all">
-				<source>Synchronise Glossaries</source>
-				<target>Synchroniser les glossaires</target>
 			</trans-unit>
 		</body>
 	</file>

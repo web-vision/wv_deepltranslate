@@ -31,32 +31,6 @@
 				<source>DeepL</source>
 			</trans-unit>
 
-			<trans-unit id="glossary.term" xml:space="preserve">
-				<source>Term</source>
-			</trans-unit>
-			<trans-unit id="glossary.description" xml:space="preserve">
-				<source>Description</source>
-			</trans-unit>
-
-			<trans-unit id="glossary.glossary_id" xml:space="preserve">
-				<source>Glossary Id</source>
-			</trans-unit>
-			<trans-unit id="glossary.lang.palette.description" xml:space="preserve">
-				<source>The Source Language must be selected before the Target Language can be selected.</source>
-			</trans-unit>
-			<trans-unit id="glossary.source_lang" xml:space="preserve">
-				<source>Source Language</source>
-			</trans-unit>
-			<trans-unit id="glossary.target_lang" xml:space="preserve">
-				<source>Target Language</source>
-			</trans-unit>
-			<trans-unit id="glossary.entries" xml:space="preserve">
-				<source>Entries</source>
-			</trans-unit>
-			<trans-unit id="glossary.entries.description">
-				<source>The glossaries are only passed to the API if entries are available.</source>
-			</trans-unit>
-
 			<trans-unit id="pages.deepl.tab.label">
 				<source>DeepL Translate</source>
 			</trans-unit>
@@ -65,9 +39,6 @@
 			</trans-unit>
 			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
 				<source>Last Translated Date</source>
-			</trans-unit>
-			<trans-unit id="pages.glossary_information">
-				<source>Glossary Information</source>
 			</trans-unit>
 			<trans-unit id="preview.flag">
 				<source>Translated with DeepL</source>
@@ -106,74 +77,6 @@
 			</trans-unit>
 			<trans-unit id="site_configuration.deepl.field.formality.items.prefer_less">
 				<source>Prefer informal language, fallback default</source>
-			</trans-unit>
-
-			<trans-unit id="glossary.title.count">
-				<source>entries</source>
-			</trans-unit>
-			<trans-unit id="glossary.title.count.single">
-				<source>entry</source>
-			</trans-unit>
-			<trans-unit id="glossary.title.sync.true">
-				<source>Synced with DeepL API</source>
-			</trans-unit>
-			<trans-unit id="glossary.title.sync.false">
-				<source>Not synced with DeepL API</source>
-			</trans-unit>
-			<trans-unit id="glossary">
-				<source>Glossary</source>
-			</trans-unit>
-			<trans-unit id="glossary.glossary_name">
-				<source>Glossary name</source>
-			</trans-unit>
-			<trans-unit id="glossary.glossary_lastsync">
-				<source>Last synchronization with DeepL</source>
-			</trans-unit>
-			<trans-unit id="glossary.glossary_ready">
-				<source>DeepL marked glossary as ready to use</source>
-			</trans-unit>
-			<trans-unit id="glossary.tab.sync">
-				<source>DeepL Sync</source>
-			</trans-unit>
-
-			<trans-unit id="pages.glossary.translate">
-				<source>Create new Glossary translation</source>
-			</trans-unit>
-
-			<trans-unit id="glossary.sync.title">
-				<source>DeepL sync ready</source>
-			</trans-unit>
-			<trans-unit id="glossary.sync.message">
-				<source>Synchronization with DeepL is done. Your glossaries are ready to use.</source>
-			</trans-unit>
-			<trans-unit id="glossary.sync.title.invalid">
-				<source>DeepL glossary sync invalid</source>
-			</trans-unit>
-			<trans-unit id="glossary.sync.message.invalid">
-				<source>Glossary synchronization with DeepL error. Your glossaries has no entries or is invalid.</source>
-			</trans-unit>
-			<trans-unit id="glossary.not-sync.title">
-				<source>DeepL glossary is out of sync</source>
-			</trans-unit>
-			<trans-unit id="glossary.not-sync.message">
-				<source>Glossary synchronization with DeepL is pending. Your glossaries are not operational.</source>
-			</trans-unit>
-
-			<trans-unit id="glossaryentry">
-				<source>Glossary entry</source>
-			</trans-unit>
-			<trans-unit id="entry.source">
-				<source>Term</source>
-			</trans-unit>
-			<trans-unit id="entry.target">
-				<source>Target</source>
-			</trans-unit>
-
-			<trans-unit id="glossary.sync.button.single">
-				<source>Synchronise Glossary</source>
-			</trans-unit>
-			<trans-unit id="glossary.sync.button.all">
-				<source>Synchronise Glossaries</source>
 			</trans-unit>
 
 			<trans-unit id="usages.toolbar-label">

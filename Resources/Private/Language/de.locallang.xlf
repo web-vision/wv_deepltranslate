@@ -37,32 +37,6 @@
 				<target>DeepL</target>
 			</trans-unit>
 
-			<trans-unit id="glossary.term" xml:space="preserve">
-				<source>Term</source>
-				<target>Begriff</target>
-			</trans-unit>
-
-			<trans-unit id="glossary.glossary_id" xml:space="preserve">
-				<source>Glossary Id</source>
-				<target>Glossar Id</target>
-			</trans-unit>
-			<trans-unit id="glossary.source_lang" xml:space="preserve">
-				<source>Source Language</source>
-				<target>Originale Sprache</target>
-			</trans-unit>
-			<trans-unit id="glossary.target_lang" xml:space="preserve">
-				<source>Target Language</source>
-				<target>Zielsprache</target>
-			</trans-unit>
-			<trans-unit id="glossary.entries" xml:space="preserve">
-				<source>Entries</source>
-				<target>Einträge</target>
-			</trans-unit>
-			<trans-unit id="glossary.entries.description">
-				<source>The glossaries are only passed to the API if entries are available.</source>
-				<target>The glossaries are only passed to the API if entries are available.</target>
-			</trans-unit>
-
 			<trans-unit id="pages.deepl.tab.label">
 				<source>DeepL Translate</source>
 				<target>DeepL Übersetzung</target>
@@ -74,10 +48,6 @@
 			<trans-unit id="pages.tx_wvdeepltranslate_translated_time">
 				<source>Last translation date</source>
 				<target>Letzte Übersetzung Datum</target>
-			</trans-unit>
-			<trans-unit id="pages.glossary_information">
-				<source>Glossary Information</source>
-				<target>Glossary Informationen</target>
 			</trans-unit>
 			<trans-unit id="preview.flag">
 				<source>Translated with DeepL</source>
@@ -128,78 +98,6 @@
 			<trans-unit id="site_configuration.deepl.field.formality.items.prefer_less">
 				<source>Prefer informal language, fallback default</source>
 				<target>Informelle Sprache bevorzugen, Fallback-Standard</target>
-			</trans-unit>
-
-			<trans-unit id="glossary.title.count">
-				<source>entries</source>
-				<target>Einträge</target>
-			</trans-unit>
-			<trans-unit id="glossary.title.count.single">
-				<source>entry</source>
-				<target>Eintrag</target>
-			</trans-unit>
-			<trans-unit id="glossary.title.sync.true">
-				<source>Synced with DeepL API</source>
-				<target>Synchronisiert mit DeepL API</target>
-			</trans-unit>
-			<trans-unit id="glossary.title.sync.false">
-				<source>Not synced with DeepL API</source>
-				<target>Nicht synchronisiert mit DeepL API</target>
-			</trans-unit>
-			<trans-unit id="glossary">
-				<source>Glossary</source>
-				<target>Glossar</target>
-			</trans-unit>
-			<trans-unit id="glossary.glossary_name">
-				<source>Glossary name</source>
-				<target>Name des Glossars</target>
-			</trans-unit>
-			<trans-unit id="glossary.glossary_lastsync">
-				<source>Last synchronization with DeepL</source>
-				<target>Letzte Synchronisierung mit DeepL</target>
-			</trans-unit>
-			<trans-unit id="glossary.glossary_ready">
-				<source>DeepL marked glossary as ready to use</source>
-				<target>DeepL markierte Glossar als benutzbar</target>
-			</trans-unit>
-
-			<trans-unit id="glossary.sync.message">
-				<source>Synchronization with DeepL is done. Your glossaries are ready to use.</source>
-				<target>Die Synchronisation mit DeepL ist abgeschlossen. Ihre Glossare werden jetzt benutzt.</target>
-			</trans-unit>
-			<trans-unit id="glossary.sync.title">
-				<source>DeepL Sync ready</source>
-				<target>DeepL Sync abgeschlossen</target>
-			</trans-unit>
-			<trans-unit id="glossary.not-sync.message">
-				<source>Glossary synchronization with DeepL is pending. Your glossaries are not operational.</source>
-				<target>Die Glossar-Synchronisierung mit DeepL ist steht aus. Ihre Glossare sind nicht einsatzbereit.</target>
-			</trans-unit>
-			<trans-unit id="glossary.not-sync.title">
-				<source>DeepL Glossary is out of Sync</source>
-				<taget>DeepL Glossar ist nicht synchronisiert</taget>
-			</trans-unit>
-
-			<trans-unit id="glossaryentry">
-				<source>Glossary entry</source>
-				<target>Glossareintrag</target>
-			</trans-unit>
-			<trans-unit id="entry.source">
-				<source>Term</source>
-				<target>Begriff</target>
-			</trans-unit>
-			<trans-unit id="entry.target">
-				<source>Target</source>
-				<target>Ziel</target>
-			</trans-unit>
-
-			<trans-unit id="glossary.sync.button.single">
-				<source>Synchronise Glossary</source>
-				<target>Glossar synchronisieren</target>
-			</trans-unit>
-			<trans-unit id="glossary.sync.button.all">
-				<source>Synchronise Glossaries</source>
-				<target>Glossare synchronisieren</target>
 			</trans-unit>
 
 			<trans-unit id="usages.toolbar-label">
