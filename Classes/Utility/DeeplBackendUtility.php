@@ -22,7 +22,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\Deepltranslate\Core\Configuration;
 use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
-use WebVision\Deepltranslate\Core\Service\DeeplGlossaryService;
 use WebVision\Deepltranslate\Core\Service\IconOverlayGenerator;
 use WebVision\Deepltranslate\Core\Service\LanguageService;
 use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
@@ -232,19 +231,6 @@ class DeeplBackendUtility
         }
 
         return true;
-    }
-
-    public static function checkGlossaryCanCreated(string $sourceLanguage, string $targetLanguage): bool
-    {
-        $possibleGlossaryMatches = GeneralUtility::makeInstance(DeeplGlossaryService::class)
-            ->getPossibleGlossaryLanguageConfig();
-        if (!isset($possibleGlossaryMatches[$sourceLanguage])) {
-            return false;
-        }
-        if (in_array($targetLanguage, $possibleGlossaryMatches[$sourceLanguage])) {
-            return true;
-        }
-        return false;
     }
 
     private static function getBackendUserAuthentication(): BackendUserAuthentication

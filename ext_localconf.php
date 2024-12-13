@@ -9,9 +9,6 @@ defined('TYPO3') or die();
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
         = \WebVision\Deepltranslate\Core\Hooks\AllowLanguageSynchronizationHook::class;
 
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
-        = \WebVision\Deepltranslate\Core\Hooks\Glossary\UpdatedGlossaryEntryTermHook::class;
-
     //hook for translate content
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processTranslateToClass']['deepl']
         = \WebVision\Deepltranslate\Core\Hooks\TranslateHook::class;
