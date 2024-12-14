@@ -9,7 +9,6 @@ use TYPO3\CMS\Backend\Template\Components\ModifyButtonBarEvent;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\DependencyInjection\SingletonPass;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Dashboard\WidgetRegistry;
 use WebVision\Deepltranslate\Core\Client;
 use WebVision\Deepltranslate\Core\ClientInterface;
@@ -35,8 +34,6 @@ use WebVision\Deepltranslate\Core\Service\UsageService;
 use WebVision\Deepltranslate\Core\Widgets\UsageWidget;
 
 return function (ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder) {
-    $typo3version = new Typo3Version();
-
     $services = $containerConfigurator
         ->services();
     $services->defaults()
@@ -162,17 +159,14 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
             ]
         );
 
-    if ((new Typo3Version())->getMajorVersion() >= 12) {
-        // @todo Unnest this in next major when TYPO3 v11 support has been removed.
-        $services
-            ->set(RenderTranslatedFlagInFrontendPreviewMode::class)
-            ->tag(
-                'event.listener',
-                [
-                    'identifier' => 'deepltranslate-core/render-translated-flag-in-frontend-preview-mode',
-                ]
-            );
-    }
+    $services
+        ->set(RenderTranslatedFlagInFrontendPreviewMode::class)
+        ->tag(
+            'event.listener',
+            [
+                'identifier' => 'deepltranslate-core/render-translated-flag-in-frontend-preview-mode',
+            ]
+        );
 
     /**
      * Check if WidgetRegistry is defined, which means that EXT:dashboard is available.

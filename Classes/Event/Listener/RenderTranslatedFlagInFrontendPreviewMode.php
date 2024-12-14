@@ -7,13 +7,11 @@ namespace WebVision\Deepltranslate\Core\Event\Listener;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Event\AfterCacheableContentIsGeneratedEvent;
-use WebVision\Deepltranslate\Core\Hooks\DeeplPreviewFlagGeneratePageHook;
 
 /**
  * Event listener to render the frontend preview flag information.
  *
- * TYPO3 v12+ only and this is the counter-part of the {@see DeeplPreviewFlagGeneratePageHook} for older TYPO3 versions.
- * https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Breaking-97862-HooksRelatedToGeneratingPageContentRemoved.html
+ * @internal for `deepltranslate-core` internal usage and not part of public API.
  */
 final class RenderTranslatedFlagInFrontendPreviewMode
 {
