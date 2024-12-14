@@ -16,3 +16,7 @@ parameters:
     - ../../../.Build/*
     - ../../../Tests/Functional/Updates/Fixtures/Extension/test_extension/ext_emconf.php
     - ../../../Tests/Functional/Fixtures/Extensions/test_services_override/ext_emconf.php
+
+  typo3:
+    contextApiGetAspectMapping:
+      'frontend.preview': TYPO3\CMS\Frontend\Aspect\PreviewAspect
