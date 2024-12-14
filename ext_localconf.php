@@ -26,12 +26,6 @@ defined('TYPO3') or die();
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkModifyAccessList']['deepl']
         = \WebVision\Deepltranslate\Core\Hooks\TCEmainHook::class;
 
-    if ($typo3version->getMajorVersion() < 12) {
-        // @todo Remove when TYPO3 v11 support is removed.
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all']['deepl-1675946132'] =
-            \WebVision\WvDeepltranslate\Hooks\DeeplPreviewFlagGeneratePageHook::class . '->renderDeeplPreviewFlag';
-    }
-
     //xclass localizationcontroller for localizeRecords() and process() action
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\Page\LocalizationController::class] = [
         'className' => \WebVision\Deepltranslate\Core\Override\LocalizationController::class,
