@@ -19,6 +19,7 @@ use WebVision\Deepltranslate\Core\Command\GlossarySyncCommand;
 use WebVision\Deepltranslate\Core\Controller\Backend\AjaxController;
 use WebVision\Deepltranslate\Core\Controller\GlossarySyncController;
 use WebVision\Deepltranslate\Core\Event\Listener\GlossarySyncButtonProvider;
+use WebVision\Deepltranslate\Core\Event\Listener\RenderTranslatedFlagInFrontendPreviewMode;
 use WebVision\Deepltranslate\Core\Event\Listener\UsageToolBarEventListener;
 use WebVision\Deepltranslate\Core\Form\Item\SiteConfigSupportedLanguageItemsProcFunc;
 use WebVision\Deepltranslate\Core\Form\User\HasFormalitySupport;
@@ -160,6 +161,18 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
                 'event' => SystemInformationToolbarCollectorEvent::class,
             ]
         );
+
+    if ((new Typo3Version())->getMajorVersion() >= 12) {
+        // @todo Unnest this in next major when TYPO3 v11 support has been removed.
+        $services
+            ->set(RenderTranslatedFlagInFrontendPreviewMode::class)
+            ->tag(
+                'event.listener',
+                [
+                    'identifier' => 'deepltranslate-core/render-translated-flag-in-frontend-preview-mode',
+                ]
+            );
+    }
 
     /**
      * Check if WidgetRegistry is defined, which means that EXT:dashboard is available.
