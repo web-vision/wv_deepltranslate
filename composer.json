@@ -125,7 +125,8 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"WebVision\\Deepltranslate\\Core\\Tests\\": "Tests"
+			"WebVision\\Deepltranslate\\Core\\Tests\\": "Tests",
+			"WebVision\\TestingFrameworkBackendUserHandlerReplacement\\": "Tests/Functional/Fixtures/Extensions/testing_framework_backenduserhandler_replacement/Classes"
 		}
 	},
 	"scripts": {
