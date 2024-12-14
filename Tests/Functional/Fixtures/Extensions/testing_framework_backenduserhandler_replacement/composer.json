@@ -1,0 +1,20 @@
+{
+	"name": "web-vision/testing-framework-backenduserhandler-replacement",
+	"type": "typo3-cms-extension",
+	"description": "Change service registrations for testing purposes.",
+	"license": ["GPL-2.0-or-later"],
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "testing_framework_backenduserhandler_replacement"
+		}
+	},
+	"require": {
+		"typo3/cms-core": "12.*.*@dev || 13.*.*@dev",
+		"typo3/testing-json-response": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"WebVision\\TestingFrameworkBackendUserHandlerReplacement\\": "Classes"
+		}
+	}
+}

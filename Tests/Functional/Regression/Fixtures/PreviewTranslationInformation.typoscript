@@ -1,0 +1,9 @@
+page = PAGE
+page.100 = CONTENT
+page.100 {
+    table = tt_content
+    select {
+        orderBy = sorting
+        where = {#colPos}=0
+    }
+}
