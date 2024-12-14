@@ -81,11 +81,6 @@ parameters:
 			path: ../../../Classes/Hooks/ButtonBarHook.php
 
 		-
-			message: "#^There is no aspect \"frontend\\.preview\" configured so we can't figure out the exact type to return when calling TYPO3\\\\CMS\\\\Core\\\\Context\\\\Context\\:\\:getPropertyFromAspect$#"
-			count: 1
-			path: ../../../Classes/Hooks/DeeplPreviewFlagGeneratePageHook.php
-
-		-
 			message: "#^PHPDoc tag @throws with type Doctrine\\\\DBAL\\\\DBALException\\|Doctrine\\\\DBAL\\\\Driver\\\\Exception\\|TYPO3\\\\CMS\\\\Core\\\\Exception is not subtype of Throwable$#"
 			count: 1
 			path: ../../../Classes/Hooks/Glossary/UpdatedGlossaryEntryTermHook.php
