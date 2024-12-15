@@ -97,6 +97,7 @@
 		"phpunit/phpunit": "^10.5",
 		"ramsey/uuid": "^4.2",
 		"saschaegerer/phpstan-typo3": "^1.9",
+		"sbuerk/typo3-cms-styleguide-version-sync": "^12",
 		"typo3/cms-belog": "^12.4.2",
 		"typo3/cms-dashboard": "^12.4.2",
 		"typo3/cms-extensionmanager": "^12.4.2",
