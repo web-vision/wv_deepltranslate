@@ -92,6 +92,7 @@
 		"phpunit/phpunit": "^9.6.8 || ^10.1",
 		"ramsey/uuid": "^4.2",
 		"saschaegerer/phpstan-typo3": "^1.9",
+		"sbuerk/typo3-styleguide-selector": "^11.5.5 || ^12.0.5",
 		"typo3/cms-belog": "^11.5 || ^12.4",
 		"typo3/cms-dashboard": "^11.5 || ^12.4",
 		"typo3/cms-extensionmanager": "^11.5 || ^12.4",
@@ -101,6 +102,7 @@
 		"typo3/cms-info": "^11.5 || ^12.4",
 		"typo3/cms-lowlevel": "^11.5 || ^12.4",
 		"typo3/cms-rte-ckeditor": "^11.5 || ^12.4",
+		"typo3/cms-styleguide": "^11 || ^12",
 		"typo3/cms-tstemplate": "^11.5 || ^12.4",
 		"typo3/cms-workspaces": "^11.5 || ^12.4",
 		"typo3/testing-framework": "^7.0"
