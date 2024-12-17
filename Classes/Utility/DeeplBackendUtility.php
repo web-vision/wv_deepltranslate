@@ -20,23 +20,25 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use WebVision\Deepltranslate\Core\Configuration;
+use WebVision\Deepltranslate\Core\Domain\Dto\CurrentPage;
 use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
 use WebVision\Deepltranslate\Core\Service\IconOverlayGenerator;
 use WebVision\Deepltranslate\Core\Service\LanguageService;
 use WebVision\Deepltranslate\Core\Service\ProcessingInstruction;
 
-// @todo Make class final. Overriding a static utility class does not make much sense, but better to enforce it.
-class DeeplBackendUtility
+/**
+ * Utility helper methods for DeepL-translate
+ *
+ * Main entry point for detecting API key and current working page
+ */
+final class DeeplBackendUtility
 {
     private static string $apiKey = '';
 
     private static bool $configurationLoaded = false;
 
-    /**
-     * @var array{uid: int, title: string}|array<empty>
-     */
-    protected static array $currentPage;
+    protected static ?CurrentPage $currentPage = null;
 
     /**
      * @return string
@@ -125,16 +127,6 @@ class DeeplBackendUtility
     {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($route, $parameters);
-    }
-
-    /**
-     * @deprecated This function will no longer be used and will be removed in a later version please use it \WebVision\Deepltranslate\Core\Service\IconOverlayGenerator
-     * @see IconOverlayGenerator::get()
-     */
-    public static function getIcon(string $iconFlag): Icon
-    {
-        $iconOverlayGenerator = GeneralUtility::makeInstance(IconOverlayGenerator::class);
-        return $iconOverlayGenerator->get($iconFlag);
     }
 
     /**
@@ -233,20 +225,11 @@ class DeeplBackendUtility
         return true;
     }
 
-    private static function getBackendUserAuthentication(): BackendUserAuthentication
+    public static function detectCurrentPage(ProcessingInstruction $processingInstruction): ?CurrentPage
     {
-        return $GLOBALS['BE_USER'];
-    }
-
-    /**
-     * @return array{uid: int, title: string}|array<empty>
-     */
-    public static function detectCurrentPage(ProcessingInstruction $processingInstruction): array
-    {
-        self::$currentPage = [];
-
+        $pageId = null;
         if ($processingInstruction->getProcessingTable() === 'pages') {
-            self::$currentPage = self::getPageRecord((int)$processingInstruction->getProcessingId());
+            $pageId = (int)$processingInstruction->getProcessingId();
         } elseif (
             $processingInstruction->getProcessingTable() !== null
             && strlen($processingInstruction->getProcessingTable()) > 0
@@ -256,23 +239,34 @@ class DeeplBackendUtility
                 (string)$processingInstruction->getProcessingTable(),
                 (int)$processingInstruction->getProcessingId()
             );
-            self::$currentPage = self::getPageRecord($pageId);
+        }
+        if ($pageId !== null && $pageId > 0) {
+            $pageRecord = self::getPageRecord($pageId);
+            if ($pageRecord !== null) {
+                self::$currentPage = new CurrentPage((int)$pageRecord['uid'], (string)$pageRecord['title']);
+            }
         }
 
         return self::$currentPage;
     }
 
-    /**
-     * @return array{uid: int, title: string}|array<empty>
-     */
-    private static function getPageRecord(int $id): array
+    private static function getBackendUserAuthentication(): BackendUserAuthentication
     {
+        return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * @return array{uid: int, title: string}|null
+     */
+    private static function getPageRecord(int $id): ?array
+    {
+        /** @var array{uid: int, title: string}|null $page */
         $page = BackendUtility::getRecord(
             'pages',
             $id,
             'uid, title'
         );
-        return $page ?? [];
+        return $page;
     }
 
     private static function getPageIdFromRecord(string $table, int $id): int
