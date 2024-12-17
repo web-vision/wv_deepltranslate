@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebVision\Deepltranslate\Core\Widgets;
+namespace WebVision\Deepltranslate\Core\Core12\Widgets;
 
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -11,6 +11,12 @@ use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use WebVision\Deepltranslate\Core\Service\UsageService;
 
+/**
+ * `EXT:dashboard` widget compatible with TYPO3 v12 to display deepl api usage.
+ *
+ * @internal implementation only and not part of public API.
+ * @todo Remove this class when TYPO3 v12 support is dropped along with registration in {@see Configuration/Services.php}.
+ */
 class UsageWidget implements WidgetInterface
 {
     private WidgetConfigurationInterface $configuration;
