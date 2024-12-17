@@ -1,5 +1,12 @@
 # Changelog
 
+### 4.4.2
+
+* [TASK] Ensure failing php-cs-fixer within Github Action pipeline (backport #384) by @sbuerk in https://github.com/web-vision/deepltranslate-core/pull/385
+* [BUGFIX] Render preview translated flag information in TYPO3 v12 (4.x) by @sbuerk in https://github.com/web-vision/deepltranslate-core/pull/397
+* [TASK] Add `typo3/cms-styleguide` along with version selector meta package by @sbuerk in https://github.com/web-vision/deepltranslate-core/pull/402
+* [TASK] Make ProcessingInstructions public service for 4.x by @calien666 in https://github.com/web-vision/deepltranslate-core/pull/403
+
 ### 4.4.1
 
 * [BUGFIX] Refactor to ProcessingInstruction lost DeepL mode information by @calien666 in https://github.com/web-vision/deepltranslate-core/pull/378
