@@ -88,7 +88,8 @@ return function (ContainerConfigurator $containerConfigurator, ContainerBuilder 
 
     $services
         ->set(ProcessingInstruction::class)
-        ->arg('$runtimeCache', service('cache.runtime'));
+        ->arg('$runtimeCache', service('cache.runtime'))
+        ->public();
     $services
         ->set(DeeplService::class)
         ->public()
