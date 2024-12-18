@@ -225,10 +225,7 @@ final class DeeplService implements LoggerAwareInterface
         try {
             return $this->client->getSupportedLanguageByType($type);
         } catch (ApiKeyNotSetException $exception) {
-            // @todo Can be replaced with `$this->logger?->` when TYPO3 v11 and therefore PHP 7.4/8.0 support is dropped.
-            if ($this->logger !== null) {
-                $this->logger->error(sprintf('%s (%d)', $exception->getMessage(), $exception->getCode()));
-            }
+            $this->logger?->error(sprintf('%s (%d)', $exception->getMessage(), $exception->getCode()));
             return [];
         }
     }

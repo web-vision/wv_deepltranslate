@@ -28,9 +28,6 @@ defined('TYPO3') or die();
         'className' => \WebVision\Deepltranslate\Core\Override\LocalizationController::class,
     ];
 
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\RecordListController::class] = [
-        'className' => \WebVision\Deepltranslate\Core\Override\Core12\DeeplRecordListController::class,
-    ];
     //xclass databaserecordlist for rendering custom checkboxes to toggle deepl selection in recordlist
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\RecordList\DatabaseRecordList::class] = [
         'className' => \WebVision\Deepltranslate\Core\Override\Core12\DatabaseRecordList::class,
@@ -52,9 +49,9 @@ defined('TYPO3') or die();
         = \WebVision\Deepltranslate\Core\Hooks\PageRendererHook::class . '->renderPreProcess';
 
     //add caching for DeepL API-supported Languages
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['deepltranslate_core']
         ??= [];
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['wvdeepltranslate']['backend']
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['deepltranslate_core']['backend']
         ??= \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class;
 
     $accessRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\WebVision\Deepltranslate\Core\Access\AccessRegistry::class);

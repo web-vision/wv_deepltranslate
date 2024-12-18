@@ -1,0 +1,54 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  WebVision\Deepltranslate\Core\:
+    resource: '../Classes/*'
+    exclude: '../Classes/{Domain/Model,Override/Core12}'
+
+  cache.deepltranslateCore:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['deepltranslate_core']
+
+  WebVision\Deepltranslate\Core\Service\:
+    resource: '../Classes/Service/*'
+    public: true
+
+  WebVision\Deepltranslate\Core\Hooks\:
+    resource: '../Classes/Hooks/*'
+    public: true
+
+  WebVision\Deepltranslate\Core\Service\ProcessingInstruction:
+    arguments:
+      $runtimeCache: '@cache.runtime'
+
+  WebVision\Deepltranslate\Core\Service\DeeplService:
+    public: true
+    arguments:
+      $cache: '@cache.deepltranslateCore'
+
+  WebVision\Deepltranslate\Core\Controller\Backend\AjaxController:
+    public: true
+
+  WebVision\Deepltranslate\Core\ClientInterface:
+    class: WebVision\Deepltranslate\Core\Client
+
+  WebVision\Deepltranslate\Core\Event\Listener\RenderLocalizationSelect:
+    tags:
+      - name: 'event.listener'
+        identifier: 'deepltranslate/coreSelector'
+        event: TYPO3\CMS\Backend\Controller\Event\RenderAdditionalContentToRecordListEvent
+
+  WebVision\Deepltranslate\Core\Event\Listener\RenderTranslatedFlagInFrontendPreviewMode:
+    tags:
+      - name: 'event.listener'
+        identifier: 'deepltranslate-core/render-translated-flag-in-frontend-preview-mode'
+
+  WebVision\Deepltranslate\Core\Event\Listener\UsageToolBarEventListener:
+    tags:
+      - name: 'event.listener'
+        identifier: 'deepltranslate-core/usages'
+        event: TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent
