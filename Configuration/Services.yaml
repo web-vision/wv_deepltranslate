@@ -46,6 +46,7 @@ services:
     tags:
       - name: 'event.listener'
         identifier: 'deepltranslate-core/render-translated-flag-in-frontend-preview-mode'
+        event: TYPO3\CMS\Frontend\Event\AfterCacheableContentIsGeneratedEvent
 
   WebVision\Deepltranslate\Core\Event\Listener\UsageToolBarEventListener:
     tags:
