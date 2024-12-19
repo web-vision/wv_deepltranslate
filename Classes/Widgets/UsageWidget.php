@@ -2,58 +2,52 @@
 
 declare(strict_types=1);
 
-namespace WebVision\Deepltranslate\Core\Core12\Widgets;
+namespace WebVision\Deepltranslate\Core\Widgets;
 
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\View\BackendViewFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Dashboard\Widgets\RequestAwareWidgetInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 use WebVision\Deepltranslate\Core\Service\UsageService;
 
 /**
  * `EXT:dashboard` widget compatible with TYPO3 v12 to display deepl api usage.
  *
  * @internal implementation only and not part of public API.
- * @todo Remove this class when TYPO3 v12 support is dropped along with registration in {@see Configuration/Services.php}.
  */
-class UsageWidget implements WidgetInterface
+final class UsageWidget implements RequestAwareWidgetInterface, WidgetInterface
 {
-    private WidgetConfigurationInterface $configuration;
-
-    private StandaloneView $view;
-
     /**
      * @var array<string, mixed>
      */
     private array $options;
 
+    private ServerRequestInterface $request;
+
     /**
      * @param array<string, mixed> $options
      */
     public function __construct(
-        WidgetConfigurationInterface $configuration,
-        StandaloneView $view,
+        private readonly WidgetConfigurationInterface $configuration,
+        private readonly BackendViewFactory $backendViewFactory,
+        private readonly UsageService $usageService,
         array $options = []
     ) {
-        $this->configuration = $configuration;
-        $this->view = $view;
         $this->options = $options;
+    }
+
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
     }
 
     public function renderWidgetContent(): string
     {
-        /** @var UsageService $usageService */
-        $usageService = GeneralUtility::makeInstance(UsageService::class);
-
-        // Workaround to make the widget template available in two TYPO3 versions
-        $templateRootPaths = $this->view->getTemplateRootPaths();
-        $templateRootPaths[1718368476557] = 'EXT:deepltranslate_core/Resources/Private/Backend/Templates/';
-        $this->view->setTemplateRootPaths($templateRootPaths);
-
-        $currentUsage = $usageService->getCurrentUsage();
-
-        $this->view->assignMultiple([
+        $currentUsage = $this->usageService->getCurrentUsage();
+        $view = $this->backendViewFactory->create($this->request, ['typo3/cms-dashboard', 'web-vision/deepltranslate-core']);
+        $view->assignMultiple([
             'usages' => [
                 [
                     'label' => $this->getLanguageService()->sL('LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.character'),
@@ -64,7 +58,7 @@ class UsageWidget implements WidgetInterface
             'configuration' => $this->configuration,
         ]);
 
-        return $this->view->render('Widget/UsageWidget');
+        return $view->render('Widget/UsageWidget');
     }
 
     /**
