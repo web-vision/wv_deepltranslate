@@ -82,13 +82,13 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
      */
     protected function process($params): void
     {
+        $deeplTranslateActions = [static::ACTION_LOCALIZEDEEPL, static::ACTION_LOCALIZEDEEPL_AUTO];
         $destLanguageId = (int)$params['destLanguageId'];
 
         // Build command map
         $cmd = [
             'tt_content' => [],
         ];
-
         if (isset($params['uidList']) && is_array($params['uidList'])) {
             foreach ($params['uidList'] as $currentUid) {
                 if (
@@ -96,17 +96,10 @@ class LocalizationController extends \TYPO3\CMS\Backend\Controller\Page\Localiza
                     || $params['action'] === static::ACTION_LOCALIZEDEEPL
                     || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO
                 ) {
+                    $dataHandlerCommandName = (in_array($params['action'], $deeplTranslateActions, true) ? 'deepltranslate' : 'localize');
                     $cmd['tt_content'][$currentUid] = [
-                        'localize' => $destLanguageId,
+                        $dataHandlerCommandName => $destLanguageId,
                     ];
-                    //setting mode and source language for deepl translate.
-                    if (
-                        $params['action'] === static::ACTION_LOCALIZEDEEPL
-                        || $params['action'] === static::ACTION_LOCALIZEDEEPL_AUTO
-                    ) {
-                        $cmd['localization']['custom']['mode']          = 'deepl';
-                        $cmd['localization']['custom']['srcLanguageId'] = $params['srcLanguageId'];
-                    }
                 } else {
                     $cmd['tt_content'][$currentUid] = [
                         'copyToLanguage' => $destLanguageId,

@@ -93,14 +93,9 @@ final class LocalizationInlineRegressionTest extends AbstractDeepLTestCase
     public function ensureInlineElementsTranslationOnLocalization(): void
     {
         $commandMap = [
-            'localization' => [
-                'custom' => [
-                    'mode' => 'deepl',
-                ],
-            ],
             'pages' => [
                 1 => [
-                    'localize' => 1,
+                    'deepltranslate' => 1,
                 ],
             ],
         ];

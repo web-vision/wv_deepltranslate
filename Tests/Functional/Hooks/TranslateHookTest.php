@@ -159,12 +159,7 @@ final class TranslateHookTest extends AbstractDeepLTestCase
         $cmdMap = [
             'tt_content' => [
                 1 => [
-                    'localize' => 2,
-                ],
-            ],
-            'localization' => [
-                'custom' => [
-                    'mode' => 'deepl',
+                    'deepltranslate' => 2,
                 ],
             ],
         ];
