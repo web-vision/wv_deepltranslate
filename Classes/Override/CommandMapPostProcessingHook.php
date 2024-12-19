@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WebVision\Deepltranslate\Core\Override;
 
-use B13\Container\Domain\Factory\Exception;
+use B13\Container\Domain\Factory\Exception as B13ContainerFactoryException;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -31,7 +31,7 @@ class CommandMapPostProcessingHook extends \B13\Container\Hooks\Datahandler\Comm
                 $localDataHandler->start([], $cmd, $dataHandler->BE_USER);
                 $localDataHandler->process_cmdmap();
             }
-        } catch (Exception $e) {
+        } catch (B13ContainerFactoryException) {
             // exception is expected, if CE is not a container
         }
     }
