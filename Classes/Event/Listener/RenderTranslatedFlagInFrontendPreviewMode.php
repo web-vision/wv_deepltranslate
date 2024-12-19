@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace WebVision\Deepltranslate\Core\Event\Listener;
 
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Event\AfterCacheableContentIsGeneratedEvent;
 
@@ -18,7 +20,9 @@ final class RenderTranslatedFlagInFrontendPreviewMode
     public function __invoke(AfterCacheableContentIsGeneratedEvent $event): void
     {
         $controller = $this->getTypoScriptFrontendController($event);
-        $context = $controller->getContext();
+        $context = ((new Typo3Version())->getMajorVersion() >= 13)
+            ? GeneralUtility::makeInstance(Context::class)
+            : $controller->getContext();
         if (
             !$this->isInPreviewMode($context)
             || $this->processWorkspacePreview($context)
