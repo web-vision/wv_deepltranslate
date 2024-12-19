@@ -7,6 +7,7 @@ namespace WebVision\Deepltranslate\Core\Tests\Functional\ViewHelpers;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Fluid\View\TemplateView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3Fluid\Fluid\Core\Cache\FluidCacheInterface;
@@ -43,6 +44,14 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
     {
         self::$cache->flush();
         rmdir(self::$cachePath);
+    }
+
+    protected function setUp(): void
+    {
+        if ((new Typo3Version())->getMajorVersion() >= 13) {
+            $this->coreExtensionsToLoad[] = 'typo3/cms-install';
+        }
+        parent::setUp();
     }
 
     public static function renderDataProvider(): Generator

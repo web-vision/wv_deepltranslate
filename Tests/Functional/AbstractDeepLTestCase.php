@@ -13,6 +13,7 @@ use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Container;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use WebVision\Deepltranslate\Core\Client;
@@ -124,6 +125,9 @@ abstract class AbstractDeepLTestCase extends FunctionalTestCase
 
     protected function setUp(): void
     {
+        if ((new Typo3Version())->getMajorVersion() >= 13) {
+            $this->coreExtensionsToLoad[] = 'typo3/cms-install';
+        }
         $this->EXAMPLE_LARGE_DOCUMENT_INPUT = str_repeat(AbstractDeepLTestCase::EXAMPLE_TEXT['en'] . PHP_EOL, 1000);
         $this->EXAMPLE_LARGE_DOCUMENT_OUTPUT = str_repeat(AbstractDeepLTestCase::EXAMPLE_TEXT['de'] . PHP_EOL, 1000);
         $this->serverUrl = getenv('DEEPL_SERVER_URL');
