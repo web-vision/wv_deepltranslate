@@ -10,6 +10,7 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\Deepltranslate\Core\Domain\Dto\TranslateContext;
 use WebVision\Deepltranslate\Core\Domain\Repository\PageRepository;
@@ -98,7 +99,7 @@ abstract class AbstractTranslateHook
         return $pageId;
     }
 
-    protected function flashMessages(string $message, string $title, int $severity): void
+    protected function flashMessages(string $message, string $title, ContextualFeedbackSeverity $severity): void
     {
         if (Environment::isCli() || Environment::getContext()->isTesting()) {
             return;
