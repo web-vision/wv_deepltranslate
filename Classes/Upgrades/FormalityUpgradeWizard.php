@@ -8,7 +8,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
+use TYPO3\CMS\Core\Configuration\SiteWriter;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\ChattyInterface;
@@ -48,7 +50,9 @@ class FormalityUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 
     public function executeUpdate(): bool
     {
-        $siteConfiguration = GeneralUtility::makeInstance(SiteConfiguration::class);
+        $siteConfiguration = (((new Typo3Version())->getMajorVersion() < 13)
+            ? GeneralUtility::makeInstance(SiteConfiguration::class)
+            : GeneralUtility::makeInstance(SiteWriter::class));
         $deeplService = GeneralUtility::makeInstance(DeeplService::class);
 
         $globalFormality = 'default';
