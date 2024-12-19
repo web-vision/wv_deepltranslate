@@ -56,5 +56,4 @@ defined('TYPO3') or die();
 
     $accessRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\WebVision\Deepltranslate\Core\Access\AccessRegistry::class);
     $accessRegistry->addAccess((new \WebVision\Deepltranslate\Core\Access\AllowedTranslateAccess()));
-    $accessRegistry->addAccess((new \WebVision\Deepltranslate\Core\Access\AllowedGlossarySyncAccess()));
 })();

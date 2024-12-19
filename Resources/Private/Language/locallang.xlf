@@ -105,12 +105,6 @@
 			<trans-unit id="be_groups.deepltranslate_access.items.translateAllowed.description">
 				<source></source>
 			</trans-unit>
-			<trans-unit id="be_groups.deepltranslate_access.items.allowedGlossarySync.title">
-				<source>Allowed Glossary Sync</source>
-			</trans-unit>
-			<trans-unit id="be_groups.deepltranslate_access.items.allowedGlossarySync.description">
-				<source></source>
-			</trans-unit>
 
 			<!-- Widget -->
 			<trans-unit id="widgets.deepltranslate.widget.useswidget.title">
