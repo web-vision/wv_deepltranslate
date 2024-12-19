@@ -10,7 +10,6 @@ use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Configuration\SiteWriter;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\ChattyInterface;
@@ -50,9 +49,9 @@ class FormalityUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 
     public function executeUpdate(): bool
     {
-        $siteConfiguration = (((new Typo3Version())->getMajorVersion() < 13)
-            ? GeneralUtility::makeInstance(SiteConfiguration::class)
-            : GeneralUtility::makeInstance(SiteWriter::class));
+        $siteConfiguration = (class_exists(SiteWriter::class))
+            ? GeneralUtility::makeInstance(SiteWriter::class)
+            : GeneralUtility::makeInstance(SiteConfiguration::class);
         $deeplService = GeneralUtility::makeInstance(DeeplService::class);
 
         $globalFormality = 'default';
@@ -93,8 +92,11 @@ class FormalityUpgradeWizard implements UpgradeWizardInterface, ChattyInterface
 
                 $explodedSiteConfigPath = explode(DIRECTORY_SEPARATOR, $file->getPath());
                 $siteIdentifier = array_pop($explodedSiteConfigPath);
-
-                $siteConfiguration->write($siteIdentifier, $loadedSiteConfiguration);
+                if (method_exists($siteConfiguration, 'write')) {
+                    $siteConfiguration->write($siteIdentifier, $loadedSiteConfiguration);
+                } else {
+                    throw new \RuntimeException(__CLASS__ . ' does not implement write().', 1734624531);
+                }
             }
 
             return true;

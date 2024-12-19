@@ -41,6 +41,11 @@ parameters:
 			path: ../../../Classes/Service/LanguageService.php
 
 		-
+			message: "#^Call to method write\\(\\) on an unknown class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteWriter\\.$#"
+			count: 1
+			path: ../../../Classes/Upgrades/FormalityUpgradeWizard.php
+
+		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Utility\\\\DeeplBackendUtility\\:\\:buildBackendRoute\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Utility/DeeplBackendUtility.php
@@ -106,6 +111,16 @@ parameters:
 			path: ../../../Tests/Functional/Fixtures/Frontend/PhpError.php
 
 		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 7 parameters, 2\\-3 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry not found\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Hooks\\\\TranslateHookTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
@@ -154,6 +169,26 @@ parameters:
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Hooks\\\\TranslateHookTest\\:\\:writeSiteConfiguration\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$eventDispatcher of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects Psr\\\\EventDispatcher\\\\EventDispatcherInterface, TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$coreCache of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Frontend\\\\PhpFrontend\\|null, TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 7 parameters, 2\\-3 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry not found\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
 
 		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\LocalizationInlineRegressionTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -206,6 +241,26 @@ parameters:
 			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
 
 		-
+			message: "#^Parameter \\#2 \\$eventDispatcher of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects Psr\\\\EventDispatcher\\\\EventDispatcherInterface, TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$coreCache of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Frontend\\\\PhpFrontend\\|null, TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 7 parameters, 2\\-3 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry not found\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
+
+		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\PreviewTranslationInformationTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
@@ -256,9 +311,29 @@ parameters:
 			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
 
 		-
+			message: "#^Parameter \\#2 \\$eventDispatcher of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects Psr\\\\EventDispatcher\\\\EventDispatcherInterface, TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$coreCache of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Frontend\\\\PhpFrontend\\|null, TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
+
+		-
 			message: "#^Cannot access property \\$code on DeepL\\\\Language\\|null\\.$#"
 			count: 7
 			path: ../../../Tests/Functional/Services/DeeplServiceTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 7 parameters, 2\\-3 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry not found\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
 
 		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Services\\\\LanguageServiceTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -311,6 +386,26 @@ parameters:
 			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
 
 		-
+			message: "#^Parameter \\#2 \\$eventDispatcher of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects Psr\\\\EventDispatcher\\\\EventDispatcherInterface, TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$coreCache of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Frontend\\\\PhpFrontend\\|null, TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 7 parameters, 2\\-3 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry not found\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Updates\\\\FormalityUpgradeWizardTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
@@ -359,3 +454,28 @@ parameters:
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Updates\\\\FormalityUpgradeWizardTest\\:\\:writeSiteConfiguration\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$eventDispatcher of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects Psr\\\\EventDispatcher\\\\EventDispatcherInterface, TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$coreCache of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Frontend\\\\PhpFrontend\\|null, TYPO3\\\\CMS\\\\Core\\\\Site\\\\Set\\\\SetRegistry given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
+			message: "#^Call to method create\\(\\) on an unknown class TYPO3\\\\CMS\\\\Core\\\\View\\\\ViewFactoryInterface\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/ViewHelpers/ExtensionActiveViewHelperTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\View\\\\ViewFactoryInterface not found\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/ViewHelpers/ExtensionActiveViewHelperTest.php
+
+		-
+			message: "#^Instantiated class TYPO3\\\\CMS\\\\Core\\\\View\\\\ViewFactoryData not found\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/ViewHelpers/ExtensionActiveViewHelperTest.php

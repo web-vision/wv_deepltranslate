@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Frontend\\\\Controller\\\\TypoScriptFrontendController\\:\\:getContext\\(\\)\\.$#"
+			count: 1
+			path: ../../../Classes/Event/Listener/RenderTranslatedFlagInFrontendPreviewMode.php
+
+		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Form\\\\Item\\\\SiteConfigSupportedLanguageItemsProcFunc\\:\\:getSupportedLanguageForField\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php
@@ -106,6 +111,16 @@ parameters:
 			path: ../../../Tests/Functional/Fixtures/Frontend/PhpError.php
 
 		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration\\:\\:write\\(\\)\\.$#"
+			count: 2
+			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 3 parameters, 7 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Hooks\\\\TranslateHookTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
@@ -154,6 +169,21 @@ parameters:
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Hooks\\\\TranslateHookTest\\:\\:writeSiteConfiguration\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$siteSettingsFactory of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory, Psr\\\\EventDispatcher\\\\EventDispatcherInterface given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Hooks/TranslateHookTest.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration\\:\\:write\\(\\)\\.$#"
+			count: 2
+			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 3 parameters, 7 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
 
 		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\LocalizationInlineRegressionTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -206,6 +236,21 @@ parameters:
 			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
 
 		-
+			message: "#^Parameter \\#2 \\$siteSettingsFactory of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory, Psr\\\\EventDispatcher\\\\EventDispatcherInterface given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/LocalizationInlineRegressionTest.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration\\:\\:write\\(\\)\\.$#"
+			count: 2
+			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 3 parameters, 7 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
+
+		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Regression\\\\PreviewTranslationInformationTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
@@ -256,9 +301,24 @@ parameters:
 			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
 
 		-
+			message: "#^Parameter \\#2 \\$siteSettingsFactory of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory, Psr\\\\EventDispatcher\\\\EventDispatcherInterface given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Regression/PreviewTranslationInformationTest.php
+
+		-
 			message: "#^Cannot access property \\$code on DeepL\\\\Language\\|null\\.$#"
 			count: 7
 			path: ../../../Tests/Functional/Services/DeeplServiceTest.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration\\:\\:write\\(\\)\\.$#"
+			count: 2
+			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 3 parameters, 7 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
 
 		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Services\\\\LanguageServiceTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -311,6 +371,21 @@ parameters:
 			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
 
 		-
+			message: "#^Parameter \\#2 \\$siteSettingsFactory of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory, Psr\\\\EventDispatcher\\\\EventDispatcherInterface given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Services/LanguageServiceTest.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration\\:\\:write\\(\\)\\.$#"
+			count: 2
+			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
+			message: "#^Class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor invoked with 3 parameters, 7 required\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Updates\\\\FormalityUpgradeWizardTest\\:\\:buildDefaultLanguageConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
@@ -359,3 +434,13 @@ parameters:
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Tests\\\\Functional\\\\Updates\\\\FormalityUpgradeWizardTest\\:\\:writeSiteConfiguration\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$siteSettingsFactory of class TYPO3\\\\CMS\\\\Core\\\\Configuration\\\\SiteConfiguration constructor expects TYPO3\\\\CMS\\\\Core\\\\Site\\\\SiteSettingsFactory, Psr\\\\EventDispatcher\\\\EventDispatcherInterface given\\.$#"
+			count: 1
+			path: ../../../Tests/Functional/Updates/FormalityUpgradeWizardTest.php
+
+		-
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Core\\\\View\\\\ViewInterface\\:\\:getRenderingContext\\(\\)\\.$#"
+			count: 3
+			path: ../../../Tests/Functional/ViewHelpers/ExtensionActiveViewHelperTest.php

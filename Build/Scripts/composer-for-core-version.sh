@@ -6,6 +6,7 @@
 composer_cleanup() {
     echo -e "💥 Cleanup folders"
     rm -Rf \
+        .cache/phpstan/* \
         .Build/vendor/* \
         .Build/var/* \
         .Build/bin/* \
