@@ -8,6 +8,9 @@ use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Fluid\View\TemplateView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3Fluid\Fluid\Core\Cache\FluidCacheInterface;
@@ -87,11 +90,18 @@ final class ExtensionActiveViewHelperTest extends FunctionalTestCase
     #[Test]
     public function render(string $template, array $variables, string $expected): void
     {
-        $view = new TemplateView();
+        if ((new Typo3Version())->getMajorVersion() < 13) {
+            $view = new TemplateView();
+            $view->getRenderingContext()->getViewHelperResolver()->addNamespace('deepl', 'WebVision\\Deepltranslate\\Core\\ViewHelpers');
+            $view->getRenderingContext()->setCache(self::$cache);
+            $view->getRenderingContext()->getTemplatePaths()->setTemplateSource($template);
+        } else {
+            $view = GeneralUtility::makeInstance(ViewFactoryInterface::class)->create(new ViewFactoryData());
+            $view->getRenderingContext()->getViewHelperResolver()->addNamespace('deepl', 'WebVision\\Deepltranslate\\Core\\ViewHelpers');
+            $view->getRenderingContext()->setCache(self::$cache);
+            $view->getRenderingContext()->getTemplatePaths()->setTemplateSource($template);
+        }
         $view->assignMultiple($variables);
-        $view->getRenderingContext()->getViewHelperResolver()->addNamespace('deepl', 'WebVision\\Deepltranslate\\Core\\ViewHelpers');
-        $view->getRenderingContext()->setCache(self::$cache);
-        $view->getRenderingContext()->getTemplatePaths()->setTemplateSource($template);
         static::assertSame($expected, $view->render());
     }
 }
