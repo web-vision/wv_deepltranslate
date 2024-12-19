@@ -215,15 +215,16 @@ Options:
             - 15    maintained until 2027-11-11
             - 16    maintained until 2028-11-09
 
-    -t <12>
+    -t <12|13>
         Only with -s composerInstall|composerInstallMin|composerInstallMax
         Specifies the TYPO3 CORE Version to be used
             - 12: (default) use TYPO3 v12
+            - 12: use TYPO3 v13
 
     -p <8.1|8.2|8.3|8.4>
         Specifies the PHP minor version to be used
-            - 8.1: (default) use PHP 8.1
-            - 8.2: use PHP 8.2
+            - 8.1: use PHP 8.1
+            - 8.2: (default) use PHP 8.2
             - 8.3: use PHP 8.3
             - 8.4: use PHP 8.4
 
@@ -294,7 +295,7 @@ fi
 TEST_SUITE="unit"
 CORE_VERSION="12"
 DBMS="sqlite"
-PHP_VERSION="8.1"
+PHP_VERSION="8.2"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
 PHPUNIT_RANDOM=""
@@ -338,7 +339,7 @@ while getopts "a:b:s:d:i:p:t:xy:o:nhu" OPT; do
             ;;
         t)
             CORE_VERSION=${OPTARG}
-            if ! [[ ${CORE_VERSION} =~ ^(12)$ ]]; then
+            if ! [[ ${CORE_VERSION} =~ ^(12|13)$ ]]; then
                 INVALID_OPTIONS+=("t ${OPTARG}")
             fi
             ;;
