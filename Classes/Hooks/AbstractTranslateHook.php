@@ -121,13 +121,23 @@ abstract class AbstractTranslateHook
         string $table,
         $id,
         $value,
-        bool $commandIsProcessed,
+        bool &$commandIsProcessed,
         DataHandler $dataHandler,
         $pasteUpdate
     ): void {
-        if ($commandIsProcessed !== false) {
+        if ($command !== 'deepltranslate' || $commandIsProcessed !== false) {
             return;
         }
-        $this->processingInstruction->setProcessingInstruction($table, $id, $dataHandler->cmdmap['localization']['custom']['mode'] ?? false);
+        $this->processingInstruction->setProcessingInstruction($table, $id, true);
+
+        // Following lines are copied from `DataHandler::process_cmdmap()` from 'localize' command switch. Property
+        // is protected and the reason we need to use PHP powerfull reflection API to set the wanted value.
+        $dataHandlerPropertyReflection = (new \ReflectionProperty($dataHandler, 'useTransOrigPointerField'));
+        $backupUseTransOrigPointerField = $dataHandlerPropertyReflection->getValue($dataHandler);
+        $dataHandlerPropertyReflection->setValue($dataHandler, true);
+        $dataHandler->localize($table, (int)$id, $value);
+        $dataHandlerPropertyReflection->setValue($dataHandler, $backupUseTransOrigPointerField);
+
+        $commandIsProcessed = true;
     }
 }

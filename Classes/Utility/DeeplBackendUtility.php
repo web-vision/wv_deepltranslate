@@ -83,8 +83,9 @@ final class DeeplBackendUtility
         );
         $params = [];
         $params['redirect'] = $redirectUrl;
-        $params['cmd'][$table][$id]['localize'] = $lUid_OnPage;
-        $params['cmd']['localization']['custom']['mode'] = 'deepl';
+        //$params['cmd'][$table][$id]['localize'] = $lUid_OnPage;
+        //$params['cmd']['localization']['custom']['mode'] = 'deepl';
+        $params['cmd'][$table][$id]['deepltranslate'] = $lUid_OnPage;
         $href = self::buildBackendRoute('tce_db', $params);
         $title =
             (string)LocalizationUtility::translate(
