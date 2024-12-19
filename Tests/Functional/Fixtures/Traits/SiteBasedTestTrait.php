@@ -5,8 +5,12 @@ namespace WebVision\Deepltranslate\Core\Tests\Functional\Fixtures\Traits;
 use Exception;
 use LogicException;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
+use TYPO3\CMS\Core\Configuration\SiteWriter;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Site\Set\SetRegistry;
+use TYPO3\CMS\Core\Site\SiteSettingsFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\ArrayValueInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\InstructionInterface;
@@ -54,14 +58,17 @@ trait SiteBasedTestTrait
         if (!empty($errorHandling)) {
             $configuration['errorHandling'] = $errorHandling;
         }
-        $siteConfiguration = $this->createSiteConfiguration($this->instancePath . '/typo3conf/sites/');
 
         try {
             // ensure no previous site configuration influences the test
             GeneralUtility::rmdir($this->instancePath . '/typo3conf/sites/' . $identifier, true);
-            $siteConfiguration->write($identifier, $configuration);
+            if (((new Typo3Version())->getMajorVersion() < 13)) {
+                $this->createSiteConfiguration($this->instancePath . '/typo3conf/sites/')->write($identifier, $configuration);
+            } else {
+                $this->get(SiteWriter::class)->write($identifier, $configuration);
+            }
         } catch (Exception $exception) {
-            $this->markTestSkipped($exception->getMessage());
+            self::fail($exception->getMessage());
         }
     }
 
@@ -73,9 +80,13 @@ trait SiteBasedTestTrait
         $configuration = $siteConfiguration->load($identifier);
         $configuration = array_merge($configuration, $overrides);
         try {
-            $siteConfiguration->write($identifier, $configuration);
+            if (((new Typo3Version())->getMajorVersion() < 13)) {
+                $this->createSiteConfiguration($this->instancePath . '/typo3conf/sites/')->write($identifier, $configuration);
+            } else {
+                $this->get(SiteWriter::class)->write($identifier, $configuration);
+            }
         } catch (Exception $exception) {
-            $this->markTestSkipped($exception->getMessage());
+            self::fail($exception->getMessage());
         }
     }
 
@@ -98,17 +109,22 @@ trait SiteBasedTestTrait
 
     protected function createSiteConfiguration(string $path): SiteConfiguration
     {
-        if ((new Typo3Version())->getMajorVersion() < 12) {
+        if ((new Typo3Version())->getMajorVersion() < 13) {
             return new SiteConfiguration(
                 $path,
+                $this->get(EventDispatcherInterface::class),
                 $this->get('cache.core')
             );
         }
 
         return new SiteConfiguration(
             $path,
+            $this->get(SiteSettingsFactory::class),
+            $this->get(SetRegistry::class),
             $this->get(EventDispatcherInterface::class),
-            $this->get('cache.core')
+            $this->get('cache.core'),
+            $this->get(YamlFileLoader::class),
+            $this->get('cache.runtime')
         );
     }
 
