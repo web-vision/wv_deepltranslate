@@ -11,16 +11,6 @@ parameters:
 			path: ../../../Classes/Form/Item/SiteConfigSupportedLanguageItemsProcFunc.php
 
 		-
-			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Hooks\\\\ButtonBarHook\\:\\:buildParamsArrayForListView\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../../Classes/Hooks/ButtonBarHook.php
-
-		-
-			message: "#^Parameter \\#1 \\$href of method TYPO3\\\\CMS\\\\Backend\\\\Template\\\\Components\\\\Buttons\\\\LinkButton\\:\\:setHref\\(\\) expects string, Psr\\\\Http\\\\Message\\\\UriInterface given\\.$#"
-			count: 1
-			path: ../../../Classes/Hooks/ButtonBarHook.php
-
-		-
 			message: "#^Method WebVision\\\\Deepltranslate\\\\Core\\\\Override\\\\Core12\\\\DatabaseRecordList\\:\\:makeLocalizationPanel\\(\\) has parameter \\$translations with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../../Classes/Override/Core12/DatabaseRecordList.php
