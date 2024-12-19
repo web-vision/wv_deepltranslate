@@ -17,13 +17,11 @@
             <f:if condition="{percentage} >= 100">
                 <f:variable name="severity" value="danger" />
             </f:if>
-            <p>
-                <f:translate
-                    key="LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.message"
-                    arguments="{0: count, 1: limit}"
-                />
-            </p>
-            <div class="progress" role="progressbar" aria-label="Usage" aria-valuenow="{procss}" aria-valuemin="0" aria-valuemax="100" style="height: 50%">
+            <span><f:translate
+                key="LLL:EXT:deepltranslate_core/Resources/Private/Language/locallang.xlf:widgets.deepltranslate.widget.useswidget.message"
+                arguments="{0: count, 1: limit}"
+            /></span>
+            <div class="progress" role="progressbar" aria-label="Usage" aria-valuenow="{procss}" aria-valuemin="0" aria-valuemax="100" style="height: 20%">
                 <div class="progress-bar" style="width: {percentage}%; --bs-progress-bar-bg: var(--bs-{severity -> f:or(alternative: 'info')});">&nbsp;</div>
             </div>
         </div>
