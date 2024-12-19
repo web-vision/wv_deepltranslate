@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace WebVision\Deepltranslate\Core\Override\Core12;
 
 use WebVision\Deepltranslate\Core\Access\AllowedTranslateAccess;
+use WebVision\Deepltranslate\Core\Event\DisallowTableFromDeeplTranslateEvent;
 use WebVision\Deepltranslate\Core\Utility\DeeplBackendUtility;
 
 /**
  * Class for rendering of Web>List module
+ *
+ * @internal
+ * @override
  */
 class DatabaseRecordList extends \TYPO3\CMS\Backend\RecordList\DatabaseRecordList
 {
@@ -28,8 +32,9 @@ class DatabaseRecordList extends \TYPO3\CMS\Backend\RecordList\DatabaseRecordLis
             return $out;
         }
 
-        // glossaries should not be auto translated by DeepL
-        if ($table === 'tx_wvdeepltranslate_glossaryentry') {
+        $tableDisallowedEvent = new DisallowTableFromDeeplTranslateEvent($table);
+        $this->eventDispatcher->dispatch($tableDisallowedEvent);
+        if ($tableDisallowedEvent->isTranslateButtonsAllowed() === false) {
             return $out;
         }
 
