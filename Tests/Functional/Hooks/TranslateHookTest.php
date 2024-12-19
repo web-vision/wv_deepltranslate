@@ -6,12 +6,12 @@ namespace WebVision\Deepltranslate\Core\Tests\Functional\Hooks;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\Deepltranslate\Core\Hooks\TranslateHook;
@@ -153,7 +153,7 @@ final class TranslateHookTest extends AbstractDeepLTestCase
     {
         $this->importCSVDataSet(__DIR__ . '/Fixtures/BeUsersTranslateDeeplFlag.csv');
         $this->setUpBackendUser(2);
-        Bootstrap::initializeLanguageObject();
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceFactory::class)->createFromUserPreferences($GLOBALS['BE_USER']);
 
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $cmdMap = [
