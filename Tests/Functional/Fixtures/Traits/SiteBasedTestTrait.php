@@ -8,7 +8,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Configuration\SiteWriter;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Set\SetRegistry;
 use TYPO3\CMS\Core\Site\SiteSettingsFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -62,7 +61,7 @@ trait SiteBasedTestTrait
         try {
             // ensure no previous site configuration influences the test
             GeneralUtility::rmdir($this->instancePath . '/typo3conf/sites/' . $identifier, true);
-            if (((new Typo3Version())->getMajorVersion() < 13)) {
+            if (!class_exists(SiteWriter::class)) {
                 $this->createSiteConfiguration($this->instancePath . '/typo3conf/sites/')->write($identifier, $configuration);
             } else {
                 $this->get(SiteWriter::class)->write($identifier, $configuration);
@@ -80,7 +79,7 @@ trait SiteBasedTestTrait
         $configuration = $siteConfiguration->load($identifier);
         $configuration = array_merge($configuration, $overrides);
         try {
-            if (((new Typo3Version())->getMajorVersion() < 13)) {
+            if (!class_exists(SiteWriter::class)) {
                 $this->createSiteConfiguration($this->instancePath . '/typo3conf/sites/')->write($identifier, $configuration);
             } else {
                 $this->get(SiteWriter::class)->write($identifier, $configuration);
@@ -109,7 +108,7 @@ trait SiteBasedTestTrait
 
     protected function createSiteConfiguration(string $path): SiteConfiguration
     {
-        if ((new Typo3Version())->getMajorVersion() < 13) {
+        if (!class_exists(SiteSettingsFactory::class)) {
             return new SiteConfiguration(
                 $path,
                 $this->get(EventDispatcherInterface::class),
@@ -155,24 +154,6 @@ trait SiteBasedTestTrait
             'flag' => $preset['flag'] ?? $preset['iso'] ?? '',
             'fallbackType' => $fallbackType ?? (empty($fallbackIdentifiers) ? 'strict' : 'fallback'),
         ];
-        if ((new Typo3Version())->getMajorVersion() < 12) {
-            // TYPO3 v12 changed locale api, and therefore removed some language configurations from the
-            // siteConfiguration. As we are using this trait for v12 AND v11 in parallel, we add the pre
-            // v12 values only for versions before v12 to be in line with core behaviour.
-            // See: https://review.typo3.org/c/Packages/TYPO3.CMS/+/77807 [TASK] Remove "hreflang" from site configuration
-            //      https://review.typo3.org/c/Packages/TYPO3.CMS/+/77597 [TASK] Remove "ISO 639-1" option from site configuration
-            //      https://review.typo3.org/c/Packages/TYPO3.CMS/+/77726 [TASK] Remove "typo3Language" configuration option
-            //      https://review.typo3.org/c/Packages/TYPO3.CMS/+/77814 [TASK] Remove "direction" from site configuration
-            $configuration = array_replace(
-                $configuration,
-                [
-                    'hreflang' => $preset['hrefLang'] ?? '',
-                    'typo3Language' => $preset['iso'] ?? '',
-                    'iso-639-1' => $preset['iso'] ?? '',
-                    'direction' => $preset['direction'] ?? '',
-                ]
-            );
-        }
         if ($preset['custom']) {
             $configuration = array_replace(
                 $configuration,
