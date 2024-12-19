@@ -27,7 +27,12 @@ class NodeVisitor extends NodeVisitorAbstract
     }
 }
 
-$parser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
+if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 13) {
+    $parser = (new ParserFactory())->createForVersion(\PhpParser\PhpVersion::fromComponents(8, 1));
+} else {
+    $parser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
+}
+
 
 $finder = new Symfony\Component\Finder\Finder();
 $finder->files()

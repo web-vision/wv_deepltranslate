@@ -86,12 +86,12 @@
 		"typo3/cms-setup": "^12.4.2 || ^13.4"
 	},
 	"require-dev": {
-		"b13/container": "^2.2",
+		"b13/container": "^2.3.6 || ^3.1.1",
 		"friendsofphp/php-cs-fixer": "^3.41",
 		"helhum/typo3-console": "^7.1.6 || ^8.0.2",
 		"helmich/phpunit-json-assert": "^3.4.3 || ^3.5.1",
 		"helmich/typo3-typoscript-lint": "^3.1.0",
-		"nikic/php-parser": "^4.15.1",
+		"nikic/php-parser": "^4.15.1 || ^5.1.0",
 		"php-mock/php-mock-phpunit": "^2.6",
 		"phpstan/phpstan": "^1.10",
 		"phpunit/phpunit": "^10.5",
