@@ -7,6 +7,7 @@ namespace WebVision\Deepltranslate\Core\Hooks;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use WebVision\Deepltranslate\Core\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\Deepltranslate\Core\Exception\LanguageRecordNotFoundException;
@@ -65,14 +66,14 @@ class TranslateHook extends AbstractTranslateHook
                 $this->flashMessages(
                     'Translation not successful', // ToDo use locallang label
                     '',
-                    -1
+                    ContextualFeedbackSeverity::INFO
                 );
             }
         } catch (LanguageIsoCodeNotFoundException|LanguageRecordNotFoundException $e) {
             $this->flashMessages(
                 $e->getMessage(),
                 '',
-                -1 // Info
+                ContextualFeedbackSeverity::INFO
             );
         }
 
